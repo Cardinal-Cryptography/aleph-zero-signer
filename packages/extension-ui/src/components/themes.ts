@@ -26,6 +26,7 @@ const darkTheme = {
   connectedDotColor: 'seagreen',
   errorBorderColor: '#7E3530',
   errorColor: '#E42F2F',
+  fontFamily: 'Karla, sans-serif',
   fontFamilyGilroy: 'Gilroy, sans-serif',
   fontFamilyKarla: 'Karla, sans-serif',
   fontSize: '16px',
