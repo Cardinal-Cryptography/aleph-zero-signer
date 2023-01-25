@@ -19,6 +19,8 @@ module.exports = {
   rules: {
     ...base.rules,
     // this seems very broken atm, false positives
-    '@typescript-eslint/unbound-method': 'off'
+    '@typescript-eslint/unbound-method': 'off',
+    '@typescript-eslint/indent': ["error", 2, {"ignoredNodes": ["JSXElement", "JSXElement *"]}],
+    "indent": ["error", 2, {"ignoredNodes": ["JSXElement", "JSXElement *"]}],
   }
 };
