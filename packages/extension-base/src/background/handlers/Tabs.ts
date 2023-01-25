@@ -220,53 +220,53 @@ export default class Tabs {
     }
 
     switch (type) {
-      case 'pub(authorize.tab)':
-        return this.authorize(url, request as RequestAuthorizeTab);
+    case 'pub(authorize.tab)':
+      return this.authorize(url, request as RequestAuthorizeTab);
 
-      case 'pub(accounts.list)':
-        return this.accountsListAuthorized(url, request as RequestAccountList);
+    case 'pub(accounts.list)':
+      return this.accountsListAuthorized(url, request as RequestAccountList);
 
-      case 'pub(accounts.subscribe)':
-        return port && this.accountsSubscribeAuthorized(url, id, port);
+    case 'pub(accounts.subscribe)':
+      return port && this.accountsSubscribeAuthorized(url, id, port);
 
-      case 'pub(accounts.unsubscribe)':
-        return this.accountsUnsubscribe(url, request as RequestAccountUnsubscribe);
+    case 'pub(accounts.unsubscribe)':
+      return this.accountsUnsubscribe(url, request as RequestAccountUnsubscribe);
 
-      case 'pub(bytes.sign)':
-        return this.bytesSign(url, request as SignerPayloadRaw);
+    case 'pub(bytes.sign)':
+      return this.bytesSign(url, request as SignerPayloadRaw);
 
-      case 'pub(extrinsic.sign)':
-        return this.extrinsicSign(url, request as SignerPayloadJSON);
+    case 'pub(extrinsic.sign)':
+      return this.extrinsicSign(url, request as SignerPayloadJSON);
 
-      case 'pub(metadata.list)':
-        return this.metadataList(url);
+    case 'pub(metadata.list)':
+      return this.metadataList(url);
 
-      case 'pub(metadata.provide)':
-        return this.metadataProvide(url, request as MetadataDef);
+    case 'pub(metadata.provide)':
+      return this.metadataProvide(url, request as MetadataDef);
 
-      case 'pub(ping)':
-        return Promise.resolve(true);
+    case 'pub(ping)':
+      return Promise.resolve(true);
 
-      case 'pub(rpc.listProviders)':
-        return this.rpcListProviders();
+    case 'pub(rpc.listProviders)':
+      return this.rpcListProviders();
 
-      case 'pub(rpc.send)':
-        return port && this.rpcSend(request as RequestRpcSend, port);
+    case 'pub(rpc.send)':
+      return port && this.rpcSend(request as RequestRpcSend, port);
 
-      case 'pub(rpc.startProvider)':
-        return port && this.rpcStartProvider(request as string, port);
+    case 'pub(rpc.startProvider)':
+      return port && this.rpcStartProvider(request as string, port);
 
-      case 'pub(rpc.subscribe)':
-        return port && this.rpcSubscribe(request as RequestRpcSubscribe, id, port);
+    case 'pub(rpc.subscribe)':
+      return port && this.rpcSubscribe(request as RequestRpcSubscribe, id, port);
 
-      case 'pub(rpc.subscribeConnected)':
-        return port && this.rpcSubscribeConnected(request as null, id, port);
+    case 'pub(rpc.subscribeConnected)':
+      return port && this.rpcSubscribeConnected(request as null, id, port);
 
-      case 'pub(rpc.unsubscribe)':
-        return port && this.rpcUnsubscribe(request as RequestRpcUnsubscribe, port);
+    case 'pub(rpc.unsubscribe)':
+      return port && this.rpcUnsubscribe(request as RequestRpcUnsubscribe, port);
 
-      default:
-        throw new Error(`Unable to handle message of type ${type}`);
+    default:
+      throw new Error(`Unable to handle message of type ${type}`);
     }
   }
 }

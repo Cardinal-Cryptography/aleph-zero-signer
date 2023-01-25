@@ -32,12 +32,12 @@ function Qr ({ address, className, cmd, genesisHash, onSignature, payload }: Pro
   const payloadU8a = useMemo(
     () => {
       switch (cmd) {
-        case CMD_MORTAL:
-          return (payload as ExtrinsicPayload).toU8a();
-        case CMD_SIGN_MESSAGE:
-          return wrapBytes(payload as string);
-        default:
-          return null;
+      case CMD_MORTAL:
+        return (payload as ExtrinsicPayload).toU8a();
+      case CMD_SIGN_MESSAGE:
+        return wrapBytes(payload as string);
+      default:
+        return null;
       }
     },
     [cmd, payload]
