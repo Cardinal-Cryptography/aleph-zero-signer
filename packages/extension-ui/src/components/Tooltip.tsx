@@ -1,3 +1,6 @@
+// Copyright 2019-2023 @polkadot/extension authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 /* eslint-disable react/jsx-no-bind */
 
 import React, { useEffect, useRef, useState } from 'react';
