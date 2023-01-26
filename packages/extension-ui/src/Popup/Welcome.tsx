@@ -50,14 +50,13 @@ const Welcome = function ({ className }: Props): React.ReactElement<Props> {
 };
 
 export default styled(Welcome)(({ theme }: Props) => `
- 
-  .centered{
+  .centered {
     justify-content: center;
     display: flex;
     margin: 24px auto;
   }
   
-  .heading{
+  .heading {
     font-family: ${theme.secondaryFontFamily};
     font-weight: 700;
     font-size: 20px;

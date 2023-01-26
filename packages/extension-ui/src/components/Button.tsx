@@ -97,7 +97,6 @@ export default styled(Button)(({ isDanger, theme }: Props) => `
     background: rgba(96,96,96,0.15);
 
     .children {
-      /* opacity: 0.25; */
       font-family: ${theme.secondaryFontFamily};
       border: 1px solid ${theme.buttonTextColor};
     }
