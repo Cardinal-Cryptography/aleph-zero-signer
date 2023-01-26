@@ -3,11 +3,13 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { ReactNode } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 interface Props {
-  content: ReactNode;
+  // TODO: COMEBACK TO THIS
+  // eslint-disable-next-line deprecation/deprecation 
+  content: React.ReactChild;
   className?: string;
 }
 

@@ -50,10 +50,14 @@ const Tooltip: React.FC<Props> = function ({ children, text }: Props) {
   }, [isVisible]);
 
   return (
-    <StyledTooltipContainer onMouseEnter={_handleMouseEnter} onMouseLeave={_handleMouseLeave}>
+    <StyledTooltipContainer 
+    onMouseEnter={_handleMouseEnter} 
+    onMouseLeave={_handleMouseLeave}>
       {children}
       {isVisible && (
-        <StyledTooltip className='tooltip' ref={tooltipRef}>
+        <StyledTooltip 
+        className='tooltip' 
+        ref={tooltipRef}>
           <span>{text}</span>
         </StyledTooltip>
       )}
