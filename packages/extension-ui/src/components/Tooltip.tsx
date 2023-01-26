@@ -1,6 +1,3 @@
-// Copyright 2019-2023 @polkadot/extension-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 /* eslint-disable react/jsx-no-bind */
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -13,11 +10,13 @@ interface Props {
   text: string;
 }
 
+const TOOLTIP_MARGIN = 14;
+
 const Tooltip: React.FC<Props> = function ({ children, text }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  function _checkBoundaries () {
+  function _checkBoundaries() {
     const tooltip = tooltipRef.current;
 
     if (!tooltip) {
@@ -27,20 +26,20 @@ const Tooltip: React.FC<Props> = function ({ children, text }: Props) {
     const tooltipRect = tooltip.getBoundingClientRect();
 
     if (tooltipRect.left < 0) {
-      tooltip.style.left = `${(tooltipRect.width / 2) - 14}px`;
+      tooltip.style.left = `${tooltipRect.width / 2 - TOOLTIP_MARGIN}px`;
     }
 
     if (tooltipRect.right > window.innerWidth) {
-      tooltip.style.left = `${window.innerWidth - tooltipRect.right - 14}px`;
+      tooltip.style.left = `${window.innerWidth - tooltipRect.right - TOOLTIP_MARGIN}px`;
     }
   }
 
-  function _handleMouseEnter () {
+  function _handleMouseEnter() {
     setIsVisible(true);
     _checkBoundaries();
   }
 
-  function _handleMouseLeave () {
+  function _handleMouseLeave() {
     setIsVisible(false);
   }
 
@@ -51,17 +50,13 @@ const Tooltip: React.FC<Props> = function ({ children, text }: Props) {
   }, [isVisible]);
 
   return (
-    <StyledTooltipContainer
-      onMouseEnter={_handleMouseEnter}
-      onMouseLeave={_handleMouseLeave}
-    >
+    <StyledTooltipContainer onMouseEnter={_handleMouseEnter} onMouseLeave={_handleMouseLeave}>
       {children}
-      {isVisible && <StyledTooltip
-        className='tooltip'
-        ref={tooltipRef}
-                    >
-        <span>{text}</span></StyledTooltip>}
-
+      {isVisible && (
+        <StyledTooltip className='tooltip' ref={tooltipRef}>
+          <span>{text}</span>
+        </StyledTooltip>
+      )}
     </StyledTooltipContainer>
   );
 };
