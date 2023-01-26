@@ -7,9 +7,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface Props {
-  // TODO: COMEBACK TO THIS
-  // eslint-disable-next-line deprecation/deprecation 
-  content: React.ReactChild;
+  // TODO: COMEBACK TO THIS BLOCKING REACTNODE
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  content: any;
   className?: string;
 }
 
