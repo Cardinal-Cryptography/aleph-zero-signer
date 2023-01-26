@@ -535,128 +535,128 @@ export default class Extension {
   // eslint-disable-next-line @typescript-eslint/require-await
   public async handle<TMessageType extends MessageTypes> (id: string, type: TMessageType, request: RequestTypes[TMessageType], port?: chrome.runtime.Port): Promise<ResponseType<TMessageType>> {
     switch (type) {
-    case 'pri(authorize.approve)':
-      return this.authorizeApprove(request as RequestAuthorizeApprove);
+      case 'pri(authorize.approve)':
+        return this.authorizeApprove(request as RequestAuthorizeApprove);
 
-    case 'pri(authorize.list)':
-      return this.getAuthList();
+      case 'pri(authorize.list)':
+        return this.getAuthList();
 
-    case 'pri(authorize.remove)':
-      return this.removeAuthorization(request as string);
+      case 'pri(authorize.remove)':
+        return this.removeAuthorization(request as string);
 
-    case 'pri(authorize.delete.request)':
-      return this.deleteAuthRequest(request as string);
+      case 'pri(authorize.delete.request)':
+        return this.deleteAuthRequest(request as string);
 
-    case 'pri(authorize.requests)':
-      return port && this.authorizeSubscribe(id, port);
+      case 'pri(authorize.requests)':
+        return port && this.authorizeSubscribe(id, port);
 
-    case 'pri(authorize.update)':
-      return this.authorizeUpdate(request as RequestUpdateAuthorizedAccounts);
+      case 'pri(authorize.update)':
+        return this.authorizeUpdate(request as RequestUpdateAuthorizedAccounts);
 
-    case 'pri(accounts.create.external)':
-      return this.accountsCreateExternal(request as RequestAccountCreateExternal);
+      case 'pri(accounts.create.external)':
+        return this.accountsCreateExternal(request as RequestAccountCreateExternal);
 
-    case 'pri(accounts.create.hardware)':
-      return this.accountsCreateHardware(request as RequestAccountCreateHardware);
+      case 'pri(accounts.create.hardware)':
+        return this.accountsCreateHardware(request as RequestAccountCreateHardware);
 
-    case 'pri(accounts.create.suri)':
-      return this.accountsCreateSuri(request as RequestAccountCreateSuri);
+      case 'pri(accounts.create.suri)':
+        return this.accountsCreateSuri(request as RequestAccountCreateSuri);
 
-    case 'pri(accounts.changePassword)':
-      return this.accountsChangePassword(request as RequestAccountChangePassword);
+      case 'pri(accounts.changePassword)':
+        return this.accountsChangePassword(request as RequestAccountChangePassword);
 
-    case 'pri(accounts.edit)':
-      return this.accountsEdit(request as RequestAccountEdit);
+      case 'pri(accounts.edit)':
+        return this.accountsEdit(request as RequestAccountEdit);
 
-    case 'pri(accounts.export)':
-      return this.accountsExport(request as RequestAccountExport);
+      case 'pri(accounts.export)':
+        return this.accountsExport(request as RequestAccountExport);
 
-    case 'pri(accounts.batchExport)':
-      return this.accountsBatchExport(request as RequestAccountBatchExport);
+      case 'pri(accounts.batchExport)':
+        return this.accountsBatchExport(request as RequestAccountBatchExport);
 
-    case 'pri(accounts.forget)':
-      return this.accountsForget(request as RequestAccountForget);
+      case 'pri(accounts.forget)':
+        return this.accountsForget(request as RequestAccountForget);
 
-    case 'pri(accounts.show)':
-      return this.accountsShow(request as RequestAccountShow);
+      case 'pri(accounts.show)':
+        return this.accountsShow(request as RequestAccountShow);
 
-    case 'pri(accounts.subscribe)':
-      return port && this.accountsSubscribe(id, port);
+      case 'pri(accounts.subscribe)':
+        return port && this.accountsSubscribe(id, port);
 
-    case 'pri(accounts.tie)':
-      return this.accountsTie(request as RequestAccountTie);
+      case 'pri(accounts.tie)':
+        return this.accountsTie(request as RequestAccountTie);
 
-    case 'pri(accounts.validate)':
-      return this.accountsValidate(request as RequestAccountValidate);
+      case 'pri(accounts.validate)':
+        return this.accountsValidate(request as RequestAccountValidate);
 
-    case 'pri(metadata.approve)':
-      return this.metadataApprove(request as RequestMetadataApprove);
+      case 'pri(metadata.approve)':
+        return this.metadataApprove(request as RequestMetadataApprove);
 
-    case 'pri(metadata.get)':
-      return this.metadataGet(request as string);
+      case 'pri(metadata.get)':
+        return this.metadataGet(request as string);
 
-    case 'pri(metadata.list)':
-      return this.metadataList();
+      case 'pri(metadata.list)':
+        return this.metadataList();
 
-    case 'pri(metadata.reject)':
-      return this.metadataReject(request as RequestMetadataReject);
+      case 'pri(metadata.reject)':
+        return this.metadataReject(request as RequestMetadataReject);
 
-    case 'pri(metadata.requests)':
-      return port && this.metadataSubscribe(id, port);
+      case 'pri(metadata.requests)':
+        return port && this.metadataSubscribe(id, port);
 
-    case 'pri(activeTabsUrl.update)':
-      return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate);
+      case 'pri(activeTabsUrl.update)':
+        return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate);
 
-    case 'pri(connectedTabsUrl.get)':
-      return this.getConnectedTabsUrl();
+      case 'pri(connectedTabsUrl.get)':
+        return this.getConnectedTabsUrl();
 
-    case 'pri(derivation.create)':
-      return this.derivationCreate(request as RequestDeriveCreate);
+      case 'pri(derivation.create)':
+        return this.derivationCreate(request as RequestDeriveCreate);
 
-    case 'pri(derivation.validate)':
-      return this.derivationValidate(request as RequestDeriveValidate);
+      case 'pri(derivation.validate)':
+        return this.derivationValidate(request as RequestDeriveValidate);
 
-    case 'pri(json.restore)':
-      return this.jsonRestore(request as RequestJsonRestore);
+      case 'pri(json.restore)':
+        return this.jsonRestore(request as RequestJsonRestore);
 
-    case 'pri(json.batchRestore)':
-      return this.batchRestore(request as RequestBatchRestore);
+      case 'pri(json.batchRestore)':
+        return this.batchRestore(request as RequestBatchRestore);
 
-    case 'pri(json.account.info)':
-      return this.jsonGetAccountInfo(request as KeyringPair$Json);
+      case 'pri(json.account.info)':
+        return this.jsonGetAccountInfo(request as KeyringPair$Json);
 
-    case 'pri(ping)':
-      return Promise.resolve(true);
+      case 'pri(ping)':
+        return Promise.resolve(true);
 
-    case 'pri(seed.create)':
-      return this.seedCreate(request as RequestSeedCreate);
+      case 'pri(seed.create)':
+        return this.seedCreate(request as RequestSeedCreate);
 
-    case 'pri(seed.validate)':
-      return this.seedValidate(request as RequestSeedValidate);
+      case 'pri(seed.validate)':
+        return this.seedValidate(request as RequestSeedValidate);
 
-    case 'pri(settings.notification)':
-      return this.#state.setNotification(request as string);
+      case 'pri(settings.notification)':
+        return this.#state.setNotification(request as string);
 
-    case 'pri(signing.approve.password)':
-      return this.signingApprovePassword(request as RequestSigningApprovePassword);
+      case 'pri(signing.approve.password)':
+        return this.signingApprovePassword(request as RequestSigningApprovePassword);
 
-    case 'pri(signing.approve.signature)':
-      return this.signingApproveSignature(request as RequestSigningApproveSignature);
+      case 'pri(signing.approve.signature)':
+        return this.signingApproveSignature(request as RequestSigningApproveSignature);
 
-    case 'pri(signing.cancel)':
-      return this.signingCancel(request as RequestSigningCancel);
+      case 'pri(signing.cancel)':
+        return this.signingCancel(request as RequestSigningCancel);
 
-    case 'pri(signing.isLocked)':
-      return this.signingIsLocked(request as RequestSigningIsLocked);
+      case 'pri(signing.isLocked)':
+        return this.signingIsLocked(request as RequestSigningIsLocked);
 
-    case 'pri(signing.requests)':
-      return port && this.signingSubscribe(id, port);
+      case 'pri(signing.requests)':
+        return port && this.signingSubscribe(id, port);
 
-    case 'pri(window.open)':
-      return this.windowOpen(request as AllowedPath);
+      case 'pri(window.open)':
+        return this.windowOpen(request as AllowedPath);
 
-    default:
-      throw new Error(`Unable to handle message of type ${type}`);
+      default:
+        throw new Error(`Unable to handle message of type ${type}`);
     }
   }
 }

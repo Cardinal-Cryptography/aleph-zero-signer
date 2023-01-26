@@ -18,9 +18,12 @@ module.exports = {
   },
   rules: {
     ...base.rules,
+    'header/header': 'off',
     // this seems very broken atm, false positives
     '@typescript-eslint/unbound-method': 'off',
     '@typescript-eslint/indent': ["error", 2, {"ignoredNodes": ["JSXElement", "JSXElement *"]}],
     "indent": ["error", 2, {"ignoredNodes": ["JSXElement", "JSXElement *"]}],
-  }
+  },
+  extends:[...base.extends, 'prettier'],
+  pluging:[...base.plugins, 'prettier']
 };
