@@ -3,11 +3,11 @@
 
 import type { ThemeProps } from '../../types';
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 interface Props {
-  content: React.ReactChild;
+  content: ReactNode;
   className?: string;
 }
 
