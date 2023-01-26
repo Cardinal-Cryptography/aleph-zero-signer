@@ -25,5 +25,5 @@ module.exports = {
     "indent": ["error", 2, {"ignoredNodes": ["JSXElement", "JSXElement *"]}],
   },
   extends:[...base.extends, 'prettier'],
-  pluging:[...base.plugins, 'prettier']
+  plugin:[...base.plugins, 'prettier']
 };
