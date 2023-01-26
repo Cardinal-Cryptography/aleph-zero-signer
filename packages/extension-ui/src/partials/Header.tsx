@@ -8,12 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import logo from '../assets/azeroLogo.svg';
-import tabStripe from '../assets/tabStripe.svg';
+import logo from '../assets/pjs.svg';
 import { ActionContext } from '../components';
 import InputFilter from '../components/InputFilter';
 import Link from '../components/Link';
-// import Tooltip from '../components/Tooltip'; @TODO: uncomment when Tooltip is implemented
 import useOutsideClick from '../hooks/useOutsideClick';
 import useTranslation from '../hooks/useTranslation';
 import { getConnectedTabsUrl } from '../messaging';
@@ -44,7 +42,8 @@ function Header ({ children, className = '', onFilter, showAdd, showBackArrow, s
   const addMenuRef = useRef(null);
   const setIconRef = useRef(null);
   const setMenuRef = useRef(null);
-  const isConnected = useMemo(() => connectedTabsUrl.length >= 1, [connectedTabsUrl]);
+  const isConnected = useMemo(() => connectedTabsUrl.length >= 1
+    , [connectedTabsUrl]);
   const onAction = useContext(ActionContext);
 
   useEffect(() => {
@@ -65,9 +64,15 @@ function Header ({ children, className = '', onFilter, showAdd, showBackArrow, s
     isSettingsOpen && setShowSettings(!isSettingsOpen);
   });
 
-  const _toggleAdd = useCallback(() => setShowAdd((isAddOpen) => !isAddOpen), []);
+  const _toggleAdd = useCallback(
+    () => setShowAdd((isAddOpen) => !isAddOpen),
+    []
+  );
 
-  const _toggleSettings = useCallback(() => setShowSettings((isSettingsOpen) => !isSettingsOpen), []);
+  const _toggleSettings = useCallback(
+    () => setShowSettings((isSettingsOpen) => !isSettingsOpen),
+    []
+  );
 
   const _onChangeFilter = useCallback(
     (filter: string) => {
@@ -77,40 +82,71 @@ function Header ({ children, className = '', onFilter, showAdd, showBackArrow, s
     [onFilter]
   );
 
-  const _toggleSearch = useCallback((): void => {
-    if (isSearchOpen) {
-      _onChangeFilter('');
-    }
+  const _toggleSearch = useCallback(
+    (): void => {
+      if (isSearchOpen) {
+        _onChangeFilter('');
+      }
 
-    setShowSearch((isSearchOpen) => !isSearchOpen);
-  }, [_onChangeFilter, isSearchOpen]);
+      setShowSearch((isSearchOpen) => !isSearchOpen);
+    },
+    [_onChangeFilter, isSearchOpen]
+  );
 
-  const _onBackArrowClick = useCallback(() => onAction('..'), [onAction]);
+  const _onBackArrowClick = useCallback(
+    () => onAction('..')
+    , [onAction]);
 
   return (
     <div className={`${className} ${smallMargin ? 'smallMargin' : ''}`}>
       <div className='container'>
         <div className='branding'>
-          {showBackArrow ? (
-            <FontAwesomeIcon
-              className='arrowLeftIcon'
-              icon={faArrowLeft}
-              onClick={_onBackArrowClick}
-            />
-          ) : (
-            // <Tooltip text='Open Web Wallet'>
-            <div style={{ display: 'flex' }}>
+          {showBackArrow
+            ? (
+              <FontAwesomeIcon
+                className='arrowLeftIcon'
+                icon={faArrowLeft}
+                onClick={_onBackArrowClick}
+              />
+            )
+            : (
               <img
                 className='logo'
                 src={logo}
               />
-            </div>
-            // </Tooltip>@TODO: uncomment when Tooltip is implemented
-          )}
-        </div>
-        <div className='logoText-container'>
+            )
+          }
           <span className='logoText'>{text || 'polkadot{.js}'}</span>
         </div>
+        {showSearch && (
+          <div className={`searchBarWrapper ${isSearchOpen ? 'selected' : ''}`}>
+            {showConnectedAccounts && !!isConnected && !isSearchOpen && (
+              <div className='connectedAccountsWrapper'>
+                <Link
+                  className='connectedAccounts'
+                  to={connectedTabsUrl.length === 1 ? `/url/manage/${connectedTabsUrl[0]}` : '/auth-list'}
+                >
+                  <span className='greenDot'>•</span>Connected
+                </Link>
+              </div>
+            )}
+            {isSearchOpen && (
+              <InputFilter
+                className='inputFilter'
+                onChange={_onChangeFilter}
+                placeholder={t<string>('Search by name or network...')}
+                value={filter}
+                withReset
+              />
+            )}
+            <FontAwesomeIcon
+              className={`searchIcon ${isSearchOpen ? 'selected' : ''}`}
+              icon={faSearch}
+              onClick={_toggleSearch}
+              size='lg'
+            />
+          </div>
+        )}
         <div className='popupMenus'>
           {showAdd && (
             <div
@@ -118,13 +154,11 @@ function Header ({ children, className = '', onFilter, showAdd, showBackArrow, s
               onClick={_toggleAdd}
               ref={addIconRef}
             >
-              {/* <Tooltip text='Open Web Wallet'> */}
               <FontAwesomeIcon
                 className={`plusIcon ${isAddOpen ? 'selected' : ''}`}
                 icon={faPlusCircle}
                 size='lg'
               />
-              {/* </Tooltip> @TODO: uncomment when Tooltip is implemented*/}
             </div>
           )}
           {showSettings && (
@@ -134,26 +168,27 @@ function Header ({ children, className = '', onFilter, showAdd, showBackArrow, s
               onClick={_toggleSettings}
               ref={setIconRef}
             >
-              {/* <Tooltip text='Open Web Wallet'> */}
               <FontAwesomeIcon
                 className={`cogIcon ${isSettingsOpen ? 'selected' : ''}`}
                 icon={faCog}
                 size='lg'
               />
-              {/* </Tooltip> @TODO: uncomment when Tooltip is implemented */}
             </div>
           )}
         </div>
-        {isAddOpen && <MenuAdd reference={addMenuRef} />}
-        {isSettingsOpen && <MenuSettings reference={setMenuRef} />}
+        {isAddOpen && (
+          <MenuAdd reference={addMenuRef} />
+        )}
+        {isSettingsOpen && (
+          <MenuSettings reference={setMenuRef} />
+        )}
         {children}
       </div>
     </div>
   );
 }
 
-export default React.memo(
-  styled(Header)(({ theme }: ThemeProps) => `
+export default React.memo(styled(Header)(({ theme }: Props) => `
   max-width: 100%;
   box-sizing: border-box;
   font-weight: normal;
@@ -169,37 +204,29 @@ export default React.memo(
     display: flex;
     justify-content: space-between;
     width: 100%;
-    background: url(${tabStripe}) repeat-x;
-    background-position: 0 26px;
-    background-size: 100% 100%;
+    border-bottom: 1px solid ${theme.inputBorderColor};
     min-height: 70px;
 
     .branding {
       display: flex;
+      justify-content: center;
       align-items: center;
       color: ${theme.labelColor};
       font-family: ${theme.secondaryFontFamily};
       text-align: center;
       margin-left: 24px;
-      .logo {
-        height: 24px;
-        width: 24px;
-      }
-    }
 
-    .logoText-container {
-      display:flex;
-      align-items: center;
-      justify-content: center;
-      
+      .logo {
+        height: 28px;
+        width: 28px;
+        margin: 8px 12px 12px 0;
+      }
+
       .logoText {
         color: ${theme.textColor};
         font-family: ${theme.secondaryFontFamily};
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 120%;
-        letter-spacing: 0.07em;
-
+        font-size: 20px;
+        line-height: 27px;
       }
     }
 
@@ -281,6 +308,4 @@ export default React.memo(
   &.smallMargin {
     margin-bottom: 15px;
   }
-`
-  )
-);
+`));
