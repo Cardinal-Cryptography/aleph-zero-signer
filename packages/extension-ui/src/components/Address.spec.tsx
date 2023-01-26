@@ -108,9 +108,7 @@ const mountComponent = async (
         hierarchy: buildHierarchy(contextAccounts)
       }}
     >
-      <Address
-actions={actions as ReactNode}
-{...addressComponentProps} />
+      <Address actions={actions as ReactNode} {...addressComponentProps} />
     </AccountContext.Provider>
   );
 
