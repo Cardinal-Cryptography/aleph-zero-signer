@@ -8426,6 +8426,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-config-prettier@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "eslint-config-prettier@npm:8.6.0"
+  peerDependencies:
+    eslint: ">=7.0.0"
+  bin:
+    eslint-config-prettier: bin/cli.js
+  checksum: ff0d0dfc839a556355422293428637e8d35693de58dabf8638bf0b6529131a109d0b2ade77521aa6e54573bb842d7d9d322e465dd73dd61c7590fa3834c3fa81
+  languageName: node
+  linkType: hard
+
 "eslint-config-standard@npm:^17.0.0":
   version: 17.0.0
   resolution: "eslint-config-standard@npm:17.0.0"
@@ -15294,6 +15305,7 @@ __metadata:
     "@babel/core": ^7.20.12
     "@polkadot/dev": ^0.67.177
     "@types/jest": ^29.2.5
+    eslint-config-prettier: ^8.6.0
     eslint-plugin-prettier: ^4.2.1
     i18next-scanner: ^4.1.0
     sinon-chrome: ^3.0.1
