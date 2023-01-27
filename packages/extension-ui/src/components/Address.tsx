@@ -180,8 +180,6 @@ function Address({ actions, address, children, className, genesisHash, isExterna
     const firstHalf = input.slice(0, 4);
     const secondHalf = input.slice(-4);
 
-    console.log(firstHalf + '...' + secondHalf);
-
     return firstHalf + '...' + secondHalf;
   }, []);
 
