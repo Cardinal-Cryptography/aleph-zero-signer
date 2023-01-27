@@ -11,7 +11,7 @@ import { PHISHING_PAGE_REDIRECT } from '@polkadot/extension-base/defaults';
 import { canDerive } from '@polkadot/extension-base/utils';
 import uiSettings from '@polkadot/ui-settings';
 
-import { ErrorBoundary, Loading } from '../components';
+import { ErrorBoundary, Loading, Video } from '../components';
 import { AccountContext, ActionContext, AuthorizeReqContext, MediaContext, MetadataReqContext, SettingsContext, SigningReqContext } from '../components/contexts';
 import ToastProvider from '../components/Toast/ToastProvider';
 import { subscribeAccounts, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests } from '../messaging';
@@ -37,7 +37,7 @@ import Welcome from './Welcome';
 const startSettings = uiSettings.get();
 
 // Request permission for video, based on access we can hide/show import
-async function requestMediaAccess (cameraOn: boolean): Promise<boolean> {
+async function requestMediaAccess(cameraOn: boolean): Promise<boolean> {
   if (!cameraOn) {
     return false;
   }
@@ -53,7 +53,7 @@ async function requestMediaAccess (cameraOn: boolean): Promise<boolean> {
   return false;
 }
 
-function initAccountContext ({ accounts, selectedAccounts, setSelectedAccounts }: Omit<AccountsContext, 'hierarchy' | 'master'>): AccountsContext {
+function initAccountContext({ accounts, selectedAccounts, setSelectedAccounts }: Omit<AccountsContext, 'hierarchy' | 'master'>): AccountsContext {
   const hierarchy = buildHierarchy(accounts);
   const master = hierarchy.find(({ isExternal, type }) => !isExternal && canDerive(type));
 
@@ -66,7 +66,8 @@ function initAccountContext ({ accounts, selectedAccounts, setSelectedAccounts }
   };
 }
 
-export default function Popup (): React.ReactElement {
+export default function Popup(): React.ReactElement {
+  const [splashOn, setSplashState] = useState<boolean>(true);
   const [accounts, setAccounts] = useState<null | AccountJson[]>(null);
   const [accountCtx, setAccountCtx] = useState<AccountsContext>({ accounts: [], hierarchy: [] });
   const [selectedAccounts, setSelectedAccounts] = useState<AccountJson['address'][]>([]);
@@ -87,23 +88,17 @@ export default function Popup (): React.ReactElement {
         return;
       }
 
-      to === '..'
-        // if we can't go gack from there, go to the home
+      to === '..' // if we can't go gack from there, go to the home
         ? history.length === 1
           ? history.push('/')
           : history.goBack()
-        : window.location.hash = to;
+        : (window.location.hash = to);
     },
     [history]
   );
 
   useEffect((): void => {
-    Promise.all([
-      subscribeAccounts(setAccounts),
-      subscribeAuthorizeRequests(setAuthRequests),
-      subscribeMetadataRequests(setMetaRequests),
-      subscribeSigningRequests(setSignRequests)
-    ]).catch(console.error);
+    Promise.all([subscribeAccounts(setAccounts), subscribeAuthorizeRequests(setAuthRequests), subscribeMetadataRequests(setMetaRequests), subscribeSigningRequests(setSignRequests)]).catch(console.error);
 
     uiSettings.on('change', (settings): void => {
       setSettingsCtx(settings);
@@ -111,7 +106,7 @@ export default function Popup (): React.ReactElement {
     });
 
     _onAction();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect((): void => {
@@ -119,64 +114,63 @@ export default function Popup (): React.ReactElement {
   }, [accounts, selectedAccounts]);
 
   useEffect((): void => {
-    requestMediaAccess(cameraOn)
-      .then(setMediaAllowed)
-      .catch(console.error);
+    requestMediaAccess(cameraOn).then(setMediaAllowed).catch(console.error);
   }, [cameraOn]);
 
-  function wrapWithErrorBoundary (component: React.ReactElement, trigger?: string): React.ReactElement {
+  function wrapWithErrorBoundary(component: React.ReactElement, trigger?: string): React.ReactElement {
     return <ErrorBoundary trigger={trigger}>{component}</ErrorBoundary>;
   }
 
-  const Root = isWelcomeDone
-    ? authRequests && authRequests.length
-      ? wrapWithErrorBoundary(<Authorize />, 'authorize')
-      : metaRequests && metaRequests.length
-        ? wrapWithErrorBoundary(<Metadata />, 'metadata')
-        : signRequests && signRequests.length
-          ? wrapWithErrorBoundary(<Signing />, 'signing')
-          : wrapWithErrorBoundary(<Accounts />, 'accounts')
-    : wrapWithErrorBoundary(<Welcome />, 'welcome');
+  const Root = isWelcomeDone ? (authRequests && authRequests.length ? wrapWithErrorBoundary(<Authorize />, 'authorize') : metaRequests && metaRequests.length ? wrapWithErrorBoundary(<Metadata />, 'metadata') : signRequests && signRequests.length ? wrapWithErrorBoundary(<Signing />, 'signing') : wrapWithErrorBoundary(<Accounts />, 'accounts')) : wrapWithErrorBoundary(<Welcome />, 'welcome');
 
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && (
-      <ActionContext.Provider value={_onAction}>
-        <SettingsContext.Provider value={settingsCtx}>
-          <AccountContext.Provider value={accountCtx}>
-            <AuthorizeReqContext.Provider value={authRequests}>
-              <MediaContext.Provider value={cameraOn && mediaAllowed}>
-                <MetadataReqContext.Provider value={metaRequests}>
-                  <SigningReqContext.Provider value={signRequests}>
-                    <ToastProvider>
-                      <Switch>
-                        <Route path='/auth-list'>{wrapWithErrorBoundary(<AuthList />, 'auth-list')}</Route>
-                        <Route path='/account/create'>{wrapWithErrorBoundary(<CreateAccount />, 'account-creation')}</Route>
-                        <Route path='/account/forget/:address'>{wrapWithErrorBoundary(<Forget />, 'forget-address')}</Route>
-                        <Route path='/account/export/:address'>{wrapWithErrorBoundary(<Export />, 'export-address')}</Route>
-                        <Route path='/account/export-all'>{wrapWithErrorBoundary(<ExportAll />, 'export-all-address')}</Route>
-                        <Route path='/account/import-ledger'>{wrapWithErrorBoundary(<ImportLedger />, 'import-ledger')}</Route>
-                        <Route path='/account/import-qr'>{wrapWithErrorBoundary(<ImportQr />, 'import-qr')}</Route>
-                        <Route path='/account/import-seed'>{wrapWithErrorBoundary(<ImportSeed />, 'import-seed')}</Route>
-                        <Route path='/account/restore-json'>{wrapWithErrorBoundary(<RestoreJson />, 'restore-json')}</Route>
-                        <Route path='/account/derive/:address/locked'>{wrapWithErrorBoundary(<Derive isLocked />, 'derived-address-locked')}</Route>
-                        <Route path='/account/derive/:address'>{wrapWithErrorBoundary(<Derive />, 'derive-address')}</Route>
-                        <Route path='/url/manage/:url'>{wrapWithErrorBoundary(<AccountManagement />, 'manage-url')}</Route>
-                        <Route path={`${PHISHING_PAGE_REDIRECT}/:website`}>{wrapWithErrorBoundary(<PhishingDetected />, 'phishing-page-redirect')}</Route>
-                        <Route
-                          exact
-                          path='/'
-                        >
-                          {Root}
-                        </Route>
-                      </Switch>
-                    </ToastProvider>
-                  </SigningReqContext.Provider>
-                </MetadataReqContext.Provider>
-              </MediaContext.Provider>
-            </AuthorizeReqContext.Provider>
-          </AccountContext.Provider>
-        </SettingsContext.Provider>
-      </ActionContext.Provider>
-    )}</Loading>
+    <Loading>
+      {accounts && authRequests && metaRequests && signRequests && (
+        <ActionContext.Provider value={_onAction}>
+          <SettingsContext.Provider value={settingsCtx}>
+            <AccountContext.Provider value={accountCtx}>
+              <AuthorizeReqContext.Provider value={authRequests}>
+                <MediaContext.Provider value={cameraOn && mediaAllowed}>
+                  <MetadataReqContext.Provider value={metaRequests}>
+                    <SigningReqContext.Provider value={signRequests}>
+                      <ToastProvider>
+                        {splashOn && (
+                          <Video
+                            onEnded={setSplashState}
+                            source='splash.mov'
+                            type='video/mp4'
+                          />
+                        )}
+                        <Switch>
+                          <Route path='/auth-list'>{wrapWithErrorBoundary(<AuthList />, 'auth-list')}</Route>
+                          <Route path='/account/create'>{wrapWithErrorBoundary(<CreateAccount />, 'account-creation')}</Route>
+                          <Route path='/account/forget/:address'>{wrapWithErrorBoundary(<Forget />, 'forget-address')}</Route>
+                          <Route path='/account/export/:address'>{wrapWithErrorBoundary(<Export />, 'export-address')}</Route>
+                          <Route path='/account/export-all'>{wrapWithErrorBoundary(<ExportAll />, 'export-all-address')}</Route>
+                          <Route path='/account/import-ledger'>{wrapWithErrorBoundary(<ImportLedger />, 'import-ledger')}</Route>
+                          <Route path='/account/import-qr'>{wrapWithErrorBoundary(<ImportQr />, 'import-qr')}</Route>
+                          <Route path='/account/import-seed'>{wrapWithErrorBoundary(<ImportSeed />, 'import-seed')}</Route>
+                          <Route path='/account/restore-json'>{wrapWithErrorBoundary(<RestoreJson />, 'restore-json')}</Route>
+                          <Route path='/account/derive/:address/locked'>{wrapWithErrorBoundary(<Derive isLocked />, 'derived-address-locked')}</Route>
+                          <Route path='/account/derive/:address'>{wrapWithErrorBoundary(<Derive />, 'derive-address')}</Route>
+                          <Route path='/url/manage/:url'>{wrapWithErrorBoundary(<AccountManagement />, 'manage-url')}</Route>
+                          <Route path={`${PHISHING_PAGE_REDIRECT}/:website`}>{wrapWithErrorBoundary(<PhishingDetected />, 'phishing-page-redirect')}</Route>
+                          <Route
+                            exact
+                            path='/'
+                          >
+                            {Root}
+                          </Route>
+                        </Switch>
+                      </ToastProvider>
+                    </SigningReqContext.Provider>
+                  </MetadataReqContext.Provider>
+                </MediaContext.Provider>
+              </AuthorizeReqContext.Provider>
+            </AccountContext.Provider>
+          </SettingsContext.Provider>
+        </ActionContext.Provider>
+      )}
+    </Loading>
   );
 }

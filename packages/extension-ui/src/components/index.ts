@@ -38,6 +38,7 @@ export { default as ValidatedInput } from './ValidatedInput';
 export { default as VerticalSpace } from './VerticalSpace';
 export { default as View } from './View';
 export { default as Warning } from './Warning';
+export { default as Video } from './Video';
 
 export { Input, TextArea } from './TextInputs';
 
