@@ -135,14 +135,16 @@ function Header({
             </Tooltip>
           )}
           {showSettings && (
-            <Tooltip text={t<string>('Settings')}>
+            <Tooltip 
+              text={t<string>('Settings')}>
               <Link to={'/account/settings'}>
-                <img
-                  className='popupToggle'
-                  onClick={_toggleSettings}
-                  ref={setIconRef}
-                  src={settingsIcon}
-                />
+              <img
+                className='popupToggle'
+                data-toggle-settings
+                onClick={_toggleSettings}
+                ref={setIconRef}
+                src={settingsIcon}
+              />
               </Link>
             </Tooltip>
           )}
