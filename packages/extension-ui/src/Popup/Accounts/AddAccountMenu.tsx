@@ -81,5 +81,5 @@ export default React.memo(styled(AddAccountMenu)(({ theme }: Props) => `
     display: none;
   }
   `
-)
+  )
 );
