@@ -1,25 +1,24 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeProps } from '../../types';
+import type { ThemeProps } from '../types';
 
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import { MenuCard } from '@polkadot/extension-ui/components';
 
-import addIcon from '../../assets/add.svg';
-import uploadIcon from '../../assets/upload.svg';
-import usbIcon from '../../assets/usb.svg';
-import {ActionContext} from '../../components';
-import useTranslation from '../../hooks/useTranslation';
-import Header from '../../partials/Header';
+import addIcon from '../assets/add.svg';
+import uploadIcon from '../assets/upload.svg';
+import {ActionContext} from '../components';
+import useTranslation from '../hooks/useTranslation';
+import Header from '../partials/Header';
 
 interface Props extends ThemeProps {
   className?: string;
 }
 
-function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
+function ConnectHardwareMenu({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
 
@@ -32,39 +31,28 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
     () => onAction('/account/import-seed'),
     [onAction]
   );
-
-  const _goToImportHardwareMenu = useCallback(
-    () => onAction('/account/import-hardware-menu'),
-    [onAction]
-  );
-
+  // TODO: PLACEHOLDER work on this in the next PR
 
   return (
     <>
       <Header
         showBackArrow
         showHelp
-        text={t<string>('Add Account')}
+        text={t<string>('Connect hardware wallet')}
       />
       <div className={className}>
         <div className='add-account-menu'>
           <MenuCard
-            description={t<string>('Generate a new public address')}
+            description={t<string>('via QR code')}
             onClick={_goToAccountCreate}
             preIcon={<img src={addIcon} />}
-            title={t<string>('Create a new account')}
+            title={t<string>('via QR code')}
           />
           <MenuCard
-            description={t<string>('Accounts created in other \n wallets are also supported')}
+            description={t<string>('via USB')}
             onClick={_goToImportSeed}
             preIcon={<img src={uploadIcon} />}
-            title={t<string>('Import an existing account')}
-          />
-          <MenuCard
-            description={t<string>('Use your Ledger or Parity Signer wallet')}
-            onClick={_goToImportHardwareMenu}
-            preIcon={<img src={usbIcon} />}
-            title={t<string>('Connect hardware wallet')}
+            title={t<string>('via USB')}
           />
         </div>
       </div>
@@ -72,7 +60,7 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
   );
 }
 
-export default React.memo(styled(AddAccountMenu)(({ theme }: Props) => `
+export default React.memo(styled(ConnectHardwareMenu)(({ theme }: Props) => `
   color: ${theme.textColor};
   height: 100%;
   height: calc(100vh - 2px);
