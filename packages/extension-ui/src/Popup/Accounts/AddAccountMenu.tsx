@@ -10,8 +10,7 @@ import { MenuCard } from '@polkadot/extension-ui/components';
 
 import addIcon from '../../assets/add.svg';
 import uploadIcon from '../../assets/upload.svg';
-import usbIcon from '../../assets/usb.svg';
-import {ActionContext} from '../../components';
+import { ActionContext, Button, ButtonArea } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import Header from '../../partials/Header';
 
@@ -23,21 +22,11 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
 
-  const _goToAccountCreate = useCallback(
-    () => onAction('/account/create'),
-    [onAction]
-  );
+  const _goToAccountCreate = useCallback(() => onAction('/account/create'), [onAction]);
 
-  const _goToImportSeed = useCallback(
-    () => onAction('/account/import-seed'),
-    [onAction]
-  );
+  const _goHome = useCallback(() => onAction('/'), [onAction]);
 
-  const _goToImportHardwareMenu = useCallback(
-    () => onAction('/account/import-hardware-menu'),
-    [onAction]
-  );
-
+  const _goToImportSeed = useCallback(() => onAction('/account/import-seed'), [onAction]);
 
   return (
     <>
@@ -60,14 +49,16 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
             preIcon={<img src={uploadIcon} />}
             title={t<string>('Import an existing account')}
           />
-          <MenuCard
-            description={t<string>('Use your Ledger or Parity Signer wallet')}
-            onClick={_goToImportHardwareMenu}
-            preIcon={<img src={usbIcon} />}
-            title={t<string>('Connect hardware wallet')}
-          />
         </div>
       </div>
+      <ButtonArea>
+        <Button
+          onClick={_goHome}
+          secondary
+        >
+          {t<string>('Cancel')}
+        </Button>
+      </ButtonArea>
     </>
   );
 }
