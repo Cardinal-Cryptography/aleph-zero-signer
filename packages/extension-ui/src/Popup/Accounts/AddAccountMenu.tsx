@@ -22,11 +22,7 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
 
-  const _goToAccountCreate = useCallback(() => onAction('/account/create'), [onAction]);
-
-  const _goHome = useCallback(() => onAction('/'), [onAction]);
-
-  const _goToImportSeed = useCallback(() => onAction('/account/import-seed'), [onAction]);
+  const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
   return (
     <>
@@ -39,13 +35,13 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
         <div className='add-account-menu'>
           <MenuCard
             description={t<string>('Generate a new public address')}
-            onClick={_goToAccountCreate}
+            onClick={goTo('/account/create')}
             preIcon={<img src={addIcon} />}
             title={t<string>('Create a new account')}
           />
           <MenuCard
             description={t<string>('Accounts created in other \n wallets are also supported')}
-            onClick={_goToImportSeed}
+            onClick={goTo('/account/import-seed')}
             preIcon={<img src={uploadIcon} />}
             title={t<string>('Import an existing account')}
           />
@@ -53,7 +49,7 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
       </div>
       <ButtonArea>
         <Button
-          onClick={_goHome}
+          onClick={goTo('/')}
           secondary
         >
           {t<string>('Cancel')}
