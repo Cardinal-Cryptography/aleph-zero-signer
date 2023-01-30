@@ -37,6 +37,7 @@ function Accounts({ className }: Props): React.ReactElement {
   }, []);
 
   const _handleMenuCardClick = useCallback(() => {
+    // TODO: temponary
     console.log('clicked');
   }, []);
 
@@ -85,14 +86,13 @@ function Accounts({ className }: Props): React.ReactElement {
   );
 }
 
-export default styled(Accounts)(
-  ({ theme }: Props) => `
+export default styled(Accounts)(({ theme }: Props) => `
   height: calc(100vh - 2px);
   overflow-y: scroll;
   margin-top: -25px;
   padding-top: 25px;
   scrollbar-width: none;
-
+  
   &::-webkit-scrollbar {
     display: none;
   }

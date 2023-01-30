@@ -33,8 +33,11 @@ export default React.memo(styled(Help)(({ theme }: Props) => `
   height: 100%;
   height: calc(100vh - 2px);
   overflow-y: scroll;
-    scrollbar-width: none;
-      &::-webkit-scrollbar {
+  scrollbar-width: none;
+      
+  &::-webkit-scrollbar {
     display: none;
   }
-  `));
+  `
+)
+);

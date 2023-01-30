@@ -138,7 +138,7 @@ function Address({ actions, address, children, className, genesisHash, isExterna
 
   const _onCopy = useCallback(() => show(t('Copied')), [show, t]);
 
-  // this will be reused
+  // TODO: this will be reused
   // const _toggleVisibility = useCallback((): void => {
   //   address && showAccount(address, isHidden || false).catch(console.error);
   // }, [address, isHidden]);
@@ -238,7 +238,7 @@ function Address({ actions, address, children, className, genesisHash, isExterna
             >
               {_ellipsisName(formatted) || _ellipsisName(address) || t('<unknown>')}
             </div>
-            {/* this logic will be reused */}
+            {/* TODO: this logic will be reused */}
             {/* <CopyToClipboard text={(formatted && formatted) || ''}>
               <FontAwesomeIcon
                 className='copyIcon'
