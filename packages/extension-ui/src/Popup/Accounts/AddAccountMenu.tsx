@@ -74,7 +74,6 @@ export default React.memo(styled(AddAccountMenu)(({ theme }: Props) => `
     display: flex;
     flex-direction: column;
     gap: 8px;
-
   }
 
   &::-webkit-scrollbar {
