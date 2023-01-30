@@ -23,7 +23,6 @@ import AccountManagement from './AuthManagement/AccountManagement';
 import Accounts from './Accounts';
 import AuthList from './AuthManagement';
 import Authorize from './Authorize';
-import ConnectHardwareMenu from './ConnectHardwareMenu';
 import CreateAccount from './CreateAccount';
 import Derive from './Derive';
 import Export from './Export';
@@ -165,7 +164,6 @@ export default function Popup (): React.ReactElement {
                         <Route path='/account/forget/:address'>{wrapWithErrorBoundary(<Forget />, 'forget-address')}</Route>
                         <Route path='/account/export/:address'>{wrapWithErrorBoundary(<Export />, 'export-address')}</Route>
                         <Route path='/account/export-all'>{wrapWithErrorBoundary(<ExportAll />, 'export-all-address')}</Route>
-                        <Route path='/account/import-hardware-menu'>{wrapWithErrorBoundary(<ConnectHardwareMenu />, 'import-hardware-menu')}</Route>
                         <Route path='/account/import-ledger'>{wrapWithErrorBoundary(<ImportLedger />, 'import-ledger')}</Route>
                         <Route path='/account/import-qr'>{wrapWithErrorBoundary(<ImportQr />, 'import-qr')}</Route>
                         <Route path='/account/import-seed'>{wrapWithErrorBoundary(<ImportSeed />, 'import-seed')}</Route>
