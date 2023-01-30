@@ -42,6 +42,7 @@ export default styled(AddButton)(({ theme }: ThemeProps) => `
   border-radius: 50%;
   padding:0px;
   transition: 0.4s ease-in-out;
+  
   &:disabled {
     cursor: default;
     background: ${theme.addButtonBackground};
@@ -56,12 +57,11 @@ export default styled(AddButton)(({ theme }: ThemeProps) => `
   &:not(:disabled):hover, &:active {
     background: ${theme.addButtonHoverBackground};
     box-shadow: ${theme.addButtonHoverBoxShadow};
-    
   }
 
   & svg path {
   fill: ${theme.primaryColor}
-}
+  }
 
   .icon {
     width: 15px;

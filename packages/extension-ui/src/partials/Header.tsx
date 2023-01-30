@@ -15,7 +15,7 @@ import { ActionContext, Link,Tooltip } from '../components';
 import useOutsideClick from '../hooks/useOutsideClick';
 import useTranslation from '../hooks/useTranslation';
 import { getConnectedTabsUrl } from '../messaging';
-// these will be reused in the future
+// TODO: these will be reused in the future
 // import MenuAdd from './MenuAdd';
 // import MenuSettings from './MenuSettings';
 
@@ -133,7 +133,7 @@ function Header({ children, className = '', onFilter, showAdd, showBackArrow, sh
             </Tooltip>
           )}
         </div>
-        {/* will be reused */}
+        {/* TODO: will be reused */}
         {/* {isAddOpen && <MenuAdd reference={addMenuRef} />} */}
         {/* {isSettingsOpen && <MenuSettings reference={setMenuRef} />} */}
         {children}

@@ -15,8 +15,6 @@ interface Props extends ThemeProps {
 
 function MenuCard({className, description, extra, title }: Props): React.ReactElement<Props> {
   return (
-
-    
     <div className={className}>
       <div className='flex-group'>
       <div className='title'>{title}</div>
@@ -32,7 +30,7 @@ export default styled(MenuCard)(({ theme }: Props) => `
   justify-content: space-between;
   align-items: center;
   padding: 0px 16px;
-  height: 73px;
+  height: 74px;
   background: ${theme.menuBackground};
   border-radius: 8px;
   
