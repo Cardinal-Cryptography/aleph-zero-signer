@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import Header from './Header';
 
-interface Props extends ThemeProps {
+interface Props {
   className?: string;
   step: number;
   text: string;
