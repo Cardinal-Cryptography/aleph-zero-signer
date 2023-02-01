@@ -11,7 +11,7 @@ interface Props extends ThemeProps {
 
 const TextInput = css(({ theme, withError }: Props) => `
   background: ${theme.inputBackground};
-  border-radius: ${theme.borderRadius};
+  border-radius: 2px;
   border: 1px solid ${theme.inputBorderColor};
   border-color: ${withError ? theme.errorBorderColor : theme.inputBorderColor};
   box-sizing: border-box;
@@ -19,16 +19,22 @@ const TextInput = css(({ theme, withError }: Props) => `
   display: block;
   font-family: ${theme.primaryFontFamily};
   font-size: ${theme.fontSize};
-  height: 40px;
+  height: 56px;
   outline: none;
-  padding: 0.5rem 0.75rem;
+  padding-top: 8px;
+  padding-left: 16px;
   resize: none;
   width: 100%;
 
   &:read-only {
-    background: ${theme.readonlyInputBackground};
+    background: ${theme.inputBorderColor};
     box-shadow: none;
     outline: none;
+  }
+
+  &:focus {
+    border-color: ${theme.inputFocusBorderColor};
+    caret-color: ${theme.inputFocusBorderColor};
   }
 `);
 
