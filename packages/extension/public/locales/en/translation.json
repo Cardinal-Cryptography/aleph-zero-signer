@@ -174,5 +174,18 @@
   "\"Allow use on any network\" is not supported to show a QR code. You must associate this account with a network.": "",
   "An error occurred": "",
   "Got it!": "",
-  "Your privacy is protected": ""
+  "Your privacy is protected": "",
+  "Help": "",
+  "Settings": "",
+  "Edit Account": "",
+  "Add your accounts and keep exploring the Aleph Zero ecosystem!": "",
+  "Hello!": "",
+  "Create a new account": "",
+  "Generate a new public address": "",
+  "Accounts created in other \n wallets are also supported.": "",
+  "Import an existing account": "",
+  "Use your Ledger or Parity Signer wallet": "",
+  "Connect hardware wallet": "",
+  "via QR code": "",
+  "via USB": ""
 }

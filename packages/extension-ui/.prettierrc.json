@@ -6,7 +6,7 @@
     "htmlWhitespaceSensitivity": "ignore",
     "jsxSingleQuote": true,
     "parser": "babel-ts",
-    "printWidth": 2048,
+    "printWidth": 120,
     "proseWrap": "preserve",
     "quoteProps": "as-needed",
     "semi": true,

@@ -14,29 +14,40 @@ interface Props extends ThemeProps {
   isBusy?: boolean;
   isDanger?: boolean;
   isDisabled?: boolean;
+  isSuccess?: boolean;
+  secondary?: boolean;
   onClick?: () => void | Promise<void | boolean>;
   to?: string;
 }
 
-function Button ({ children, className = '', isBusy, isDisabled, onClick, to }: Props): React.ReactElement<Props> {
-  const _onClick = useCallback(
-    (): void => {
-      if (isBusy || isDisabled) {
-        return;
-      }
+function Button({
+  children,
+  className = '',
+  isBusy,
+  // isDanger,
+  isDisabled,
+  // isSuccess,
+  onClick,
+  secondary,
+  to
+}: Props): React.ReactElement<Props> {
+  const _onClick = useCallback((): void => {
+    if (isBusy || isDisabled) {
+      return;
+    }
 
-      onClick && onClick();
+    onClick && onClick();
 
-      if (to) {
-        window.location.hash = to;
-      }
-    },
-    [isBusy, isDisabled, onClick, to]
-  );
+    if (to) {
+      window.location.hash = to;
+    }
+  }, [isBusy, isDisabled, onClick, to]);
 
   return (
     <button
-      className={`${className}${(isDisabled || isBusy) ? ' isDisabled' : ''}${isBusy ? ' isBusy' : ''}`}
+      className={`${className}${isDisabled || isBusy ? ' isDisabled' : ''}${isBusy ? ' isBusy' : ''}${
+        secondary ? ' secondary' : ''
+      }`}
       disabled={isDisabled || isBusy}
       onClick={_onClick}
     >
@@ -47,8 +58,16 @@ function Button ({ children, className = '', isBusy, isDisabled, onClick, to }: 
   );
 }
 
-export default styled(Button)(({ isDanger, theme }: Props) => `
-  background: ${isDanger ? theme.buttonBackgroundDanger : theme.buttonBackground};
+export default styled(Button)(({ isDanger, isSuccess, secondary, theme }: Props) => `
+  background: ${
+    isDanger
+      ? theme.buttonBackgroundDanger
+      : isSuccess
+      ? theme.buttonBackgroundSuccess
+      : secondary
+      ? theme.buttonSecondaryBackground
+      : theme.buttonBackground
+  };
   cursor: pointer;
   display: block;
   width: 100%;
@@ -56,7 +75,7 @@ export default styled(Button)(({ isDanger, theme }: Props) => `
   box-sizing: border-box;
   border: none;
   border-radius: ${theme.buttonBorderRadius};
-  color: ${theme.buttonTextColor};
+  color: ${secondary ? theme.buttonSecondaryTextColor : theme.buttonTextColor};
   font-family: ${theme.secondaryFontFamily};
   font-weigth: 500;
   font-size: 16px;
@@ -65,22 +84,38 @@ export default styled(Button)(({ isDanger, theme }: Props) => `
   position: relative;
   text-align: center;
   letter-spacing: 0.05em;
+  transition: .4s ease-in-out;
 
   &:disabled {
     cursor: default;
+    background: ${secondary ? theme.buttonSecondaryBackgroundDisabled : theme.buttonBackgroundDisabled};
   }
 
-  &:not(:disabled):hover {
-    background: ${isDanger ? theme.buttonBackgroundDangerHover : theme.buttonBackgroundHover};
+  &:focus{
+    outline: none;
+    border: ${secondary ? theme.buttonSecondaryBorderFocused : theme.buttonBorderFocused};
   }
 
+  &:not(:disabled):hover, &:active {
+    background: ${
+      isDanger
+        ? theme.buttonBackgroundDangerHover
+        : secondary
+        ? theme.buttonSecondaryBackgroundHover
+        : theme.buttonBackgroundHover
+    };
+    box-shadow: ${secondary ? theme.buttonSecondaryHoverBoxShadow : theme.buttonHoverBoxShadow};
+  }
+  
+  
   .busyOverlay,
   .disabledOverlay {
     visibility: hidden;
+
   }
 
   .disabledOverlay {
-    background: rgba(96,96,96,0.75);
+    background: rgba(96,96,96,0.15);
     border-radius: ${theme.buttonBorderRadius};
     bottom: 0;
     left: 0;
@@ -99,6 +134,7 @@ export default styled(Button)(({ isDanger, theme }: Props) => `
     .children {
       font-family: ${theme.secondaryFontFamily};
       border: 1px solid ${theme.buttonTextColor};
+      color: ${theme.buttonTextColor};
     }
 
     .busyOverlay {
@@ -109,4 +145,6 @@ export default styled(Button)(({ isDanger, theme }: Props) => `
   &.isDisabled .disabledOverlay {
     visibility: visible;
   }
-`);
+
+`
+);

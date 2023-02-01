@@ -1,7 +1,13 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AccountJson, AccountsContext, AuthorizeRequest, MetadataRequest, SigningRequest } from '@polkadot/extension-base/background/types';
+import type {
+  AccountJson,
+  AccountsContext,
+  AuthorizeRequest,
+  MetadataRequest,
+  SigningRequest
+} from '@polkadot/extension-base/background/types';
 import type { SettingsStruct } from '@polkadot/ui-settings/types';
 
 import React, { useCallback, useEffect, useState } from 'react';
@@ -12,10 +18,26 @@ import { canDerive } from '@polkadot/extension-base/utils';
 import uiSettings from '@polkadot/ui-settings';
 
 import { ErrorBoundary, Loading, Video } from '../components';
-import { AccountContext, ActionContext, AuthorizeReqContext, MediaContext, MetadataReqContext, SettingsContext, SigningReqContext } from '../components/contexts';
+import {
+  AccountContext,
+  ActionContext,
+  AuthorizeReqContext,
+  MediaContext,
+  MetadataReqContext,
+  SettingsContext,
+  SigningReqContext
+} from '../components/contexts';
 import ToastProvider from '../components/Toast/ToastProvider';
-import { subscribeAccounts, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests } from '../messaging';
+import {
+  subscribeAccounts,
+  subscribeAuthorizeRequests,
+  subscribeMetadataRequests,
+  subscribeSigningRequests
+} from '../messaging';
 import { buildHierarchy } from '../util/buildHierarchy';
+import AddAccountMenu from './Accounts/AddAccountMenu';
+import CreateAccountMenu from './Accounts/CreateAccountMenu';
+import EditAccountMenu from './Accounts/EditAccountMenu';
 import AccountManagement from './AuthManagement/AccountManagement';
 import Accounts from './Accounts';
 import AuthList from './AuthManagement';
@@ -25,12 +47,14 @@ import Derive from './Derive';
 import Export from './Export';
 import ExportAll from './ExportAll';
 import Forget from './Forget';
+import Help from './Help';
 import ImportLedger from './ImportLedger';
 import ImportQr from './ImportQr';
 import ImportSeed from './ImportSeed';
 import Metadata from './Metadata';
 import PhishingDetected from './PhishingDetected';
 import RestoreJson from './RestoreJson';
+import Settings from './Settings';
 import Signing from './Signing';
 import Welcome from './Welcome';
 
@@ -53,7 +77,11 @@ async function requestMediaAccess(cameraOn: boolean): Promise<boolean> {
   return false;
 }
 
-function initAccountContext({ accounts, selectedAccounts, setSelectedAccounts }: Omit<AccountsContext, 'hierarchy' | 'master'>): AccountsContext {
+function initAccountContext({
+  accounts,
+  selectedAccounts,
+  setSelectedAccounts
+}: Omit<AccountsContext, 'hierarchy' | 'master'>): AccountsContext {
   const hierarchy = buildHierarchy(accounts);
   const master = hierarchy.find(({ isExternal, type }) => !isExternal && canDerive(type));
 
@@ -88,8 +116,9 @@ export default function Popup(): React.ReactElement {
         return;
       }
 
-      to === '..' // if we can't go gack from there, go to the home
-        ? history.length === 1
+      to === '..'
+        ? // if we can't go gack from there, go to the home
+          history.length === 1
           ? history.push('/')
           : history.goBack()
         : (window.location.hash = to);
@@ -98,7 +127,12 @@ export default function Popup(): React.ReactElement {
   );
 
   useEffect((): void => {
-    Promise.all([subscribeAccounts(setAccounts), subscribeAuthorizeRequests(setAuthRequests), subscribeMetadataRequests(setMetaRequests), subscribeSigningRequests(setSignRequests)]).catch(console.error);
+    Promise.all([
+      subscribeAccounts(setAccounts),
+      subscribeAuthorizeRequests(setAuthRequests),
+      subscribeMetadataRequests(setMetaRequests),
+      subscribeSigningRequests(setSignRequests)
+    ]).catch(console.error);
 
     uiSettings.on('change', (settings): void => {
       setSettingsCtx(settings);
@@ -121,7 +155,15 @@ export default function Popup(): React.ReactElement {
     return <ErrorBoundary trigger={trigger}>{component}</ErrorBoundary>;
   }
 
-  const Root = isWelcomeDone ? (authRequests && authRequests.length ? wrapWithErrorBoundary(<Authorize />, 'authorize') : metaRequests && metaRequests.length ? wrapWithErrorBoundary(<Metadata />, 'metadata') : signRequests && signRequests.length ? wrapWithErrorBoundary(<Signing />, 'signing') : wrapWithErrorBoundary(<Accounts />, 'accounts')) : wrapWithErrorBoundary(<Welcome />, 'welcome');
+  const Root = isWelcomeDone
+    ? authRequests && authRequests.length
+      ? wrapWithErrorBoundary(<Authorize />, 'authorize')
+      : metaRequests && metaRequests.length
+      ? wrapWithErrorBoundary(<Metadata />, 'metadata')
+      : signRequests && signRequests.length
+      ? wrapWithErrorBoundary(<Signing />, 'signing')
+      : wrapWithErrorBoundary(<Accounts />, 'accounts')
+    : wrapWithErrorBoundary(<Welcome />, 'welcome');
 
   return (
     <Loading>
@@ -143,18 +185,51 @@ export default function Popup(): React.ReactElement {
                         )}
                         <Switch>
                           <Route path='/auth-list'>{wrapWithErrorBoundary(<AuthList />, 'auth-list')}</Route>
-                          <Route path='/account/create'>{wrapWithErrorBoundary(<CreateAccount />, 'account-creation')}</Route>
-                          <Route path='/account/forget/:address'>{wrapWithErrorBoundary(<Forget />, 'forget-address')}</Route>
-                          <Route path='/account/export/:address'>{wrapWithErrorBoundary(<Export />, 'export-address')}</Route>
-                          <Route path='/account/export-all'>{wrapWithErrorBoundary(<ExportAll />, 'export-all-address')}</Route>
-                          <Route path='/account/import-ledger'>{wrapWithErrorBoundary(<ImportLedger />, 'import-ledger')}</Route>
+                          <Route path='/help'>{wrapWithErrorBoundary(<Help />, 'help')}</Route>
+                          <Route path='/account/settings'>{wrapWithErrorBoundary(<Settings />, 'settings')}</Route>
+                          <Route path='/account/add-menu'>
+                            {wrapWithErrorBoundary(<AddAccountMenu />, 'adding-account-menu')}
+                          </Route>
+                          <Route path='/account/create-menu'>
+                            {wrapWithErrorBoundary(<CreateAccountMenu />, 'account-creation-menu')}
+                          </Route>
+                          <Route path='/account/create'>
+                            {wrapWithErrorBoundary(<CreateAccount />, 'account-creation')}
+                          </Route>
+                          <Route path='/account/edit-menu'>
+                            {wrapWithErrorBoundary(<EditAccountMenu />, 'account-creation-menu')}
+                          </Route>
+                          <Route path='/account/forget/:address'>
+                            {wrapWithErrorBoundary(<Forget />, 'forget-address')}
+                          </Route>
+                          <Route path='/account/export/:address'>
+                            {wrapWithErrorBoundary(<Export />, 'export-address')}
+                          </Route>
+                          <Route path='/account/export-all'>
+                            {wrapWithErrorBoundary(<ExportAll />, 'export-all-address')}
+                          </Route>
+                          <Route path='/account/import-ledger'>
+                            {wrapWithErrorBoundary(<ImportLedger />, 'import-ledger')}
+                          </Route>
                           <Route path='/account/import-qr'>{wrapWithErrorBoundary(<ImportQr />, 'import-qr')}</Route>
-                          <Route path='/account/import-seed'>{wrapWithErrorBoundary(<ImportSeed />, 'import-seed')}</Route>
-                          <Route path='/account/restore-json'>{wrapWithErrorBoundary(<RestoreJson />, 'restore-json')}</Route>
-                          <Route path='/account/derive/:address/locked'>{wrapWithErrorBoundary(<Derive isLocked />, 'derived-address-locked')}</Route>
-                          <Route path='/account/derive/:address'>{wrapWithErrorBoundary(<Derive />, 'derive-address')}</Route>
-                          <Route path='/url/manage/:url'>{wrapWithErrorBoundary(<AccountManagement />, 'manage-url')}</Route>
-                          <Route path={`${PHISHING_PAGE_REDIRECT}/:website`}>{wrapWithErrorBoundary(<PhishingDetected />, 'phishing-page-redirect')}</Route>
+                          <Route path='/account/import-seed'>
+                            {wrapWithErrorBoundary(<ImportSeed />, 'import-seed')}
+                          </Route>
+                          <Route path='/account/restore-json'>
+                            {wrapWithErrorBoundary(<RestoreJson />, 'restore-json')}
+                          </Route>
+                          <Route path='/account/derive/:address/locked'>
+                            {wrapWithErrorBoundary(<Derive isLocked />, 'derived-address-locked')}
+                          </Route>
+                          <Route path='/account/derive/:address'>
+                            {wrapWithErrorBoundary(<Derive />, 'derive-address')}
+                          </Route>
+                          <Route path='/url/manage/:url'>
+                            {wrapWithErrorBoundary(<AccountManagement />, 'manage-url')}
+                          </Route>
+                          <Route path={`${PHISHING_PAGE_REDIRECT}/:website`}>
+                            {wrapWithErrorBoundary(<PhishingDetected />, 'phishing-page-redirect')}
+                          </Route>
                           <Route
                             exact
                             path='/'

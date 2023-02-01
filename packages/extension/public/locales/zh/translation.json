@@ -104,5 +104,18 @@
   "You are exporting your account. Keep it safe and don't share it with anyone.": "您正在导出帐户。保管好它，不要与任何人分享。",
   "Manage Website Access": "管理网站访问",
   "Notifications": "通知",
-  "Your privacy is protected": ""
+  "Your privacy is protected": "",
+  "Help": "",
+  "Settings":"",
+  "Edit Account": "",
+  "Add your accounts and keep exploring the Aleph Zero ecosystem!": "",
+  "Hello!": "",
+  "Create a new account": "",
+  "Generate a new public address": "",
+  "Accounts created in other wallets are also supported.": "",
+  "Import an existing account": "",
+  "Use your Ledger or Parity Signer wallet": "",
+  "Connect hardware wallet": "",
+  "via QR code": "",
+  "via USB": ""
 }
