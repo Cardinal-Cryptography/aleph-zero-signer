@@ -9,18 +9,21 @@ import { ThemeProps } from '@polkadot/extension-ui/types';
 interface VideoProps extends ThemeProps {
   source: string;
   onEnded: (state: boolean) => void;
+  onStarted: (state: boolean) => void;
   type: string;
   className?: string;
 }
 
-function Video({ className, onEnded, source, type }: VideoProps): React.ReactElement<VideoProps> {
+function Video({ className, onEnded, onStarted, source, type }: VideoProps): React.ReactElement<VideoProps> {
   const handleEnd = useCallback(() => onEnded(false), [onEnded]);
+  const handleStart = useCallback(() => onStarted(true), [onStarted]);
 
   return (
     <video
       autoPlay
       className={className}
       onEnded={handleEnd}
+      onPlaying={handleStart}
     >
       <source
         src={source}
