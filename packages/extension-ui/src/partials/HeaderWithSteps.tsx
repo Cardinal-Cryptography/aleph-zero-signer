@@ -31,9 +31,7 @@ const Step = styled.div<StepProps>`
 const Steps = styled.div`
   display: flex;
   justify-content: center;
-  margin-left: -16px;
-  margin-right: -16px;
-  margin-top: 8px;
+  margin: 8px -16px 0;
   gap: 8px;
 
   :first-child {
@@ -46,7 +44,6 @@ const Steps = styled.div`
 `;
 
 function HeaderWithSteps({ className, step, text, total }: Props): React.ReactElement<Props> {
-
   return (
     <>
       <Header

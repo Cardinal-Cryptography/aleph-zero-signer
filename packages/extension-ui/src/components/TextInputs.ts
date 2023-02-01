@@ -9,7 +9,8 @@ interface Props extends ThemeProps {
   withError?: boolean;
 }
 
-const TextInput = css(({ theme, withError }: Props) => `
+const TextInput = css(
+  ({ theme, withError }: Props) => `
   background: ${theme.inputBackground};
   border-radius: 2px;
   border: 1px solid ${theme.inputBorderColor};
@@ -33,10 +34,11 @@ const TextInput = css(({ theme, withError }: Props) => `
   }
 
   &:focus {
-    border-color: ${theme.inputFocusBorderColor};
-    caret-color: ${theme.inputFocusBorderColor};
+    border-color: ${withError ? theme.iconDangerColor : theme.inputFocusBorderColor};
+    caret-color: ${withError ? theme.iconDangerColor : theme.inputFocusBorderColor};
   }
-`);
+`
+);
 
 export const TextArea = styled.textarea<Props>`${TextInput}`;
 export const Input = styled.input<Props>`${TextInput}`;

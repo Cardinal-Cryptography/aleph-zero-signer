@@ -24,9 +24,7 @@ function SaveMnemonic({ className, onNextStep, onPreviousStep, seed }: Props): R
   const { show } = useToast();
   const seedArray = seed.split(' ');
 
-  console.log(seedArray);
-
-  const _onCopy = useCallback(() => show(t('Secret phrase copied to clipboard')), [show, t]);
+  const _onCopy = useCallback(() => show(t('Secret phrase copied to clipboard'), 'success'), [show, t]);
 
   return (
     <>

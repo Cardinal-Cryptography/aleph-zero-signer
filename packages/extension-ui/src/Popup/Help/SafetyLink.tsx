@@ -16,22 +16,24 @@ interface Props extends ThemeProps {
 function SafetyLink({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
-  return <>
-          <Header
-            showBackArrow
-            showHelp
-            text={t<string>('SafetyLink')}
-        />
-          {/* TODO: */}
-        <div className={className}>PLACEHOLDER</div>
-
-  </>;
+  return (
+    <>
+      <Header
+        showBackArrow
+        showHelp
+        text={t<string>('SafetyLink')}
+      />
+      {/* TODO: */}
+      <div className={className}>PLACEHOLDER</div>
+    </>
+  );
 }
 
-export default React.memo(styled(SafetyLink)(({ theme }: Props) => `
+export default React.memo(
+  styled(SafetyLink)(
+    ({ theme }: Props) => `
   color: ${theme.textColor};
   height: 100%;
-  height: calc(100vh - 2px);
   overflow-y: scroll;
   scrollbar-width: none;
       
@@ -39,5 +41,5 @@ export default React.memo(styled(SafetyLink)(({ theme }: Props) => `
     display: none;
   }
   `
-)
+  )
 );

@@ -5,6 +5,7 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { Address, Button } from '../components';
+import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
 import { Name, Password } from '../partials';
 import { ThemeProps } from '../types';
@@ -36,8 +37,13 @@ function AccountNamePasswordCreation({
   const [name, setName] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const { t } = useTranslation();
+  const { show } = useToast();
 
-  const _onCreate = useCallback(() => name && password && onCreate(name, password), [name, password, onCreate]);
+  const _onCreate = useCallback(() => {
+    show(t('Account created successfully!'), 'success');
+
+    return name && password && onCreate(name, password);
+  }, [show, t, name, password, onCreate]);
 
   const _onNameChange = useCallback(
     (name: string | null) => {

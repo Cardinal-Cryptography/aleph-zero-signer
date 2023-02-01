@@ -44,8 +44,7 @@ function Header({
   showSettings,
   smallMargin = false,
   text,
-  // withStepper = false
-  
+  withStepper = false
 }: Props): React.ReactElement<Props> {
   const [isAddOpen, setShowAdd] = useState(false);
   const [isSettingsOpen, setShowSettings] = useState(false);
@@ -138,16 +137,15 @@ function Header({
             </Tooltip>
           )}
           {showSettings && (
-            <Tooltip 
-              text={t<string>('Settings')}>
+            <Tooltip text={t<string>('Settings')}>
               <Link to={'/account/settings'}>
-              <img
-                className='popupToggle'
-                data-toggle-settings
-                onClick={_toggleSettings}
-                ref={setIconRef}
-                src={settingsIcon}
-              />
+                <img
+                  className='popupToggle'
+                  data-toggle-settings
+                  onClick={_toggleSettings}
+                  ref={setIconRef}
+                  src={settingsIcon}
+                />
               </Link>
             </Tooltip>
           )}
@@ -161,13 +159,15 @@ function Header({
   );
 }
 
-export default React.memo(styled(Header)(({ showSettings, theme, withStepper }: Props) => `
+export default React.memo(
+  styled(Header)(
+    ({ showSettings, theme, withStepper }: Props) => `
   max-width: 100%;
   box-sizing: border-box;
   font-weight: normal;
   margin: 0;
   position: relative;
-  margin-bottom: ${withStepper? '0px':'25px'};
+  margin-bottom: ${withStepper ? '0px' : '25px'};
 
   && {
     padding: 0 0 0;

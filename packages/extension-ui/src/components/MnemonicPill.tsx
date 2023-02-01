@@ -15,7 +15,7 @@ interface Props extends ThemeProps {
 const MnemonicPill = ({ className, index, word }: Props) => {
   return (
     <div className={className}>
-         <div className='mnemonic-index'>{index}</div>
+      <div className='mnemonic-index'>{index}</div>
       <input
         readOnly
         value={word}
@@ -24,7 +24,8 @@ const MnemonicPill = ({ className, index, word }: Props) => {
   );
 };
 
-export default styled(MnemonicPill)(({ theme }: Props) => `
+export default styled(MnemonicPill)(
+  ({ theme }: Props) => `
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -64,5 +65,5 @@ export default styled(MnemonicPill)(({ theme }: Props) => `
     line-height: 130%;
     border-radius: 50%;
   }
-`);
-
+`
+);

@@ -6,10 +6,7 @@ import type { SnackbarTypes, ThemeProps } from '../../types';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import successIcon from '../../assets/checkmark.svg';
-import criticalIcon from '../../assets/critical.svg';
-import infoIcon from '../../assets/information.svg';
-import warningIcon from '../../assets/warning.svg';
+import * as icons from './iconsList';
 import ToastCloseIcon from './ToastCloseIcon';
 import { TOAST_TIMEOUT } from './ToastProvider';
 
@@ -20,20 +17,9 @@ interface Props extends ThemeProps {
 }
 
 function Toast({ className, content, type }: Props): React.ReactElement<Props> {
-  const _getIconByType = useCallback((type: SnackbarTypes): string => {
-    switch (type) {
-      case 'success':
-        return successIcon;
-      case 'info':
-        return infoIcon;
-      case 'warning':
-        return warningIcon;
-      case 'critical':
-        return criticalIcon;
-      default:
-        return infoIcon;
-    }
-  }, []);
+  const _getIconByType = useCallback((type: SnackbarTypes): string => icons?.[type] ?? icons.info, []);
+
+  console.log('type', type);
 
   return (
     <div className={className}>
