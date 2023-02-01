@@ -2775,6 +2775,7 @@ __metadata:
     "@types/react-dom": ^18.0.10
     "@types/react-router": ^5.1.20
     "@types/react-router-dom": ^5.3.3
+    "@types/react-transition-group": ^4.4.5
     "@types/sinon-chrome": ^2.2.11
     "@types/styled-components": ^5.1.26
     "@wojtekmaj/enzyme-adapter-react-17": ^0.8.0
@@ -15335,7 +15336,6 @@ __metadata:
     "@babel/core": ^7.20.12
     "@polkadot/dev": ^0.67.177
     "@types/jest": ^29.2.5
-    "@types/react-transition-group": ^4.4.5
     eslint-config-prettier: ^8.6.0
     eslint-plugin-prettier: ^4.2.1
     i18next-scanner: ^4.1.0
