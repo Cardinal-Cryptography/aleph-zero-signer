@@ -37,13 +37,11 @@ const darkTheme = {
   buttonSecondaryBorderFocused: '1px dashed #415566;',
   buttonSecondaryHoverBoxShadow: '0px 0px 16px rgba(165, 181, 194, 0.2);',
   buttonSecondaryTextColor: '#BCCBD6',
-
   buttonTertiaryBackground: 'transparent',
   buttonTertiaryBorder: '1px dashed rgba(0, 204, 171, 0.3);',
   buttonTertiaryDisabledOpacity: '0.3',
   buttonTertiaryHoverTextColor: '#7FF4E3',
   buttonTertiaryTextColor: '#00CCAB',
-
   buttonTextColor: '#111B24',
   connectedDotColor: 'seagreen',
   errorBorderColor: '#7E3530',
@@ -72,6 +70,8 @@ const darkTheme = {
   readonlyInputBackground: '#1A1B20',
   secondaryFontFamily: 'Gilroy, sans-serif',
   skeletonBackground: '#14212A',
+  stepsActiveColor: '#00EAC7',
+  stepsInactiveColor: '#415566',
   subTextColor: '#BCCBD6',
   textColor: '#FFFFFF',
   textColorDanger: '#00CCAB',
