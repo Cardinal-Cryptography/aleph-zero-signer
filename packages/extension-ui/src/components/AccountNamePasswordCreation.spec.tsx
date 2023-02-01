@@ -52,6 +52,7 @@ const repeat = (password: string) => (): Promise<void> => type(wrapper.find('inp
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const mountComponent = (isBusy = false): ReactWrapper =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   mount(
     <AccountNamePasswordCreation
       buttonLabel={buttonLabel}
