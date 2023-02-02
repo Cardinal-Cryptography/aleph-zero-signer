@@ -3,38 +3,59 @@
 
 import type { ThemeProps } from '../types';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 interface Props extends ThemeProps {
   className?: string;
   index: number;
   word: string;
+  name: string;
+  readonly?: boolean;
+  isError?: boolean;
+  onChange?: (value: string, index: number) => void;
 }
 
-const MnemonicPill = ({ className, index, word }: Props) => {
+const MnemonicPill = ({ className, index, isError = false, name, onChange, readonly = true, word }: Props) => {
+  const _handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (onChange) {
+        // because idx starts from 1
+        onChange(event.target.value, index - 1);
+      }
+    },
+    [index, onChange]
+  );
+
   return (
     <div className={className}>
       <div className='mnemonic-index'>{index}</div>
       <input
-        readOnly
-        value={word}
+        defaultValue={word}
+        name={name}
+        onChange={_handleChange}
+        readOnly={!!readonly}
+        // value={word}
       />
     </div>
   );
 };
 
 export default styled(MnemonicPill)(
-  ({ theme }: Props) => `
+  ({ isError, theme }: Props) => `
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 4px;
-  border: 1px solid ${theme.boxBorderColor};
+  border: 1px solid ${isError ? theme.textColorDanger : theme.boxBorderColor};
   background: ${theme.mnemonicBackground};
   border-radius: ${theme.buttonBorderRadius};
   padding: 4px;
   max-width: 106px;
+
+  &:focus-within {
+    border: 1px solid ${isError ? theme.textColorDanger : theme.primaryColor};
+  }
 
   input {
     background: transparent;
@@ -46,10 +67,14 @@ export default styled(MnemonicPill)(
     color: ${theme.textColor};
     flex: 1;
     text-align: left;
-    max-width: 80px;
+    max-width: 60px;
     border-radius: ${theme.buttonBorderRadius};
     outline: none;
-    cursor: default;
+
+    :read-only {
+      cursor: default;
+    }
+
   }
 
   .mnemonic-index {
