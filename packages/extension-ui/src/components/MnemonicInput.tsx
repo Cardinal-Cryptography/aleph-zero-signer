@@ -61,9 +61,10 @@ const MnemonicInput = ({
   setError,
   type
 }: Props) => {
-  const [mnemonicWords, setMnemonicWords] = useState<MnemonicWords>(MNEMONIC_WORDS_INITIAL_STATE);
+  const [mnemonicWords, setMnemonicWords] = useState<MnemonicWords>({ ...MNEMONIC_WORDS_INITIAL_STATE });
   const [focused, setFocused] = useState<number | null>(null);
   const { t } = useTranslation();
+  const isValid = !!error && !!seed;
 
   const _handlePaste = useCallback(
     (event: React.ClipboardEvent) => {
@@ -71,7 +72,7 @@ const MnemonicInput = ({
 
       const pastedWords = event.clipboardData.getData('text').trim().split(' ').slice(0, 12);
 
-      const newMnemonicWords: { [key in MnemonicWordKeys]: string } = MNEMONIC_WORDS_INITIAL_STATE;
+      const newMnemonicWords: { [key in MnemonicWordKeys]: string } = { ...MNEMONIC_WORDS_INITIAL_STATE };
 
       pastedWords.forEach((word, index) => {
         const key = index.toString() as MnemonicWordKeys;
@@ -93,10 +94,6 @@ const MnemonicInput = ({
 
   const _handleChange = useCallback(
     (value: string, key: MnemonicWordKeys) => {
-      if (Object.values(mnemonicWords).every((word) => word === '')) {
-        return;
-      }
-
       const newMnemonicWords = { ...mnemonicWords };
 
       newMnemonicWords[key] = value;
@@ -108,25 +105,23 @@ const MnemonicInput = ({
   );
 
   useEffect(() => {
+    if (!seed) {
+      return;
+    }
+
     setMnemonicWords(
-      seed
-        ? seed.split(' ').reduce((obj: MnemonicWords, word, index) => {
-            const key = index.toString() as MnemonicWordKeys;
+      seed.split(' ').reduce(
+        (obj: MnemonicWords, word, index) => {
+          const key = index.toString() as MnemonicWordKeys;
 
-            obj[key] = word;
+          obj[key] = word;
 
-            return obj;
-          }, MNEMONIC_WORDS_INITIAL_STATE)
-        : MNEMONIC_WORDS_INITIAL_STATE
+          return obj;
+        },
+        { ...MNEMONIC_WORDS_INITIAL_STATE }
+      )
     );
   }, [seed, setMnemonicWords]);
-
-  useEffect(() => {
-    return () => {
-      setMnemonicWords(MNEMONIC_WORDS_INITIAL_STATE);
-      onChange(Object.values(MNEMONIC_WORDS_INITIAL_STATE).join(' '));
-    };
-  }, [onChange]);
 
   useEffect(() => {
     // No need to validate an empty seed
@@ -152,21 +147,17 @@ const MnemonicInput = ({
       });
   }, [t, genesis, seed, path, onAccountChange, type, setError, setAddress]);
 
-  useEffect(() => {
-    console.log(Object.entries(mnemonicWords));
-  }, [mnemonicWords]);
-
   return (
     <div
       className={className}
       onPaste={_handlePaste}
     >
       <div className='mnemonic-container'>
-        {Object.entries(mnemonicWords).map(([key]) => (
+        {Object.keys(mnemonicWords).map((key) => (
           <MnemonicPill
             className='mnemonic-pill'
             index={parseInt(key, 10)}
-            isError={!!error && !!seed}
+            isError={isValid}
             key={key}
             name={`input${key}`}
             onChange={_handleChange}
@@ -176,7 +167,7 @@ const MnemonicInput = ({
           />
         ))}
       </div>
-      {!!error && !!seed && <Warning isDanger>{error}</Warning>}
+      {isValid && <Warning isDanger>{error}</Warning>}
     </div>
   );
 };

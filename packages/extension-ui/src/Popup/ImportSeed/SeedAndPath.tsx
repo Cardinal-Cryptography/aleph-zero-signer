@@ -38,13 +38,7 @@ function SeedAndPath({
   const [genesis, setGenesis] = useState('');
   const onAction = useContext(ActionContext);
 
-  const goTo = useCallback(
-    (path: string) => () => {
-      setSeed('');
-      onAction(path);
-    },
-    [onAction, setSeed]
-  );
+  const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
   return (
     <>
@@ -100,7 +94,7 @@ export default styled(SeedAndPath)(
     margin-top: 32px;
     gap: 8px;
     margin-bottom: 40px;
-    
+
     .heading {
       font-family: ${theme.secondaryFontFamily};
       color: ${theme.textColor};
@@ -118,7 +112,7 @@ export default styled(SeedAndPath)(
       text-align: center;
       letter-spacing: 0.07em;
       white-space: pre-line;
-      
+
       & .bold {
         font-weight: 600;
       }
