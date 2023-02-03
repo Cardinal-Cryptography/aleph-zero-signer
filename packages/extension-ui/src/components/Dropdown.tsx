@@ -6,7 +6,6 @@ import type { ThemeProps } from '../types';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import arrow from '../assets/arrow-down.svg';
 import Label from './Label';
 
 interface DropdownOption {
@@ -104,18 +103,6 @@ export default React.memo(
       outline: none;
     }
   }
-
-  // label::after {
-  //   content: '';
-  //   position: absolute;
-  //   top: ${label ? 'calc(50% + 14px)' : '50%'};
-  //   transform: translateY(-50%);
-  //   right: 12px;
-  //   width: 8px;
-  //   height: 6px;
-  //   background: url(${arrow}) center no-repeat;
-  //   pointer-events: none;
-  // }
 `
   )
 );

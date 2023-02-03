@@ -39,6 +39,7 @@ export default styled(Label)(
     top: ${active ? '8px' : '26px'};
     left: 16px;
     transition: all 0.2s ease-out;
+    pointer-events: none;
   }
 `
 );
