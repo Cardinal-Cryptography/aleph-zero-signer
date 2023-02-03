@@ -79,7 +79,6 @@ function ImportSeed(): React.ReactElement {
           onNextStep={_onNextStep}
           path={path}
           seed={seed}
-          setPath={setPath}
           setSeed={setSeed}
           type={type}
         />

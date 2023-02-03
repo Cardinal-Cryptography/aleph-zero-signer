@@ -22,14 +22,13 @@ interface Props extends ThemeProps {
   seed: string | null;
   genesis: string;
   path: string | null;
-  address: string;
   setAddress: (address: string) => void;
   error: string;
   setError: (error: string) => void;
   onChange: (seed: string) => void;
 }
 
-type MnemonicWordKeys = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11';
+export type MnemonicWordKeys = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11';
 type MnemonicWords = { [key in MnemonicWordKeys]: string };
 
 const MNEMONIC_WORDS_INITIAL_STATE: MnemonicWords = {
@@ -49,7 +48,6 @@ const MNEMONIC_WORDS_INITIAL_STATE: MnemonicWords = {
 };
 
 const MnemonicInput = ({
-  address,
   className,
   error,
   genesis,
@@ -62,7 +60,6 @@ const MnemonicInput = ({
   type
 }: Props) => {
   const [mnemonicWords, setMnemonicWords] = useState<MnemonicWords>({ ...MNEMONIC_WORDS_INITIAL_STATE });
-  const [focused, setFocused] = useState<number | null>(null);
   const { t } = useTranslation();
   const isValid = !!error && !!seed;
 
@@ -83,13 +80,6 @@ const MnemonicInput = ({
       onChange(pastedWords.join(' '));
     },
     [onChange, setMnemonicWords]
-  );
-
-  const _handleFocus = useCallback(
-    (index: number) => {
-      setFocused(index);
-    },
-    [setFocused]
   );
 
   const _handleChange = useCallback(
@@ -161,7 +151,6 @@ const MnemonicInput = ({
             key={key}
             name={`input${key}`}
             onChange={_handleChange}
-            onFocus={_handleFocus}
             readonly={false}
             word={mnemonicWords[key as MnemonicWordKeys]}
           />

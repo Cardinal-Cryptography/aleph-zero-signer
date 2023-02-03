@@ -14,27 +14,16 @@ interface Props extends ThemeProps {
   readonly?: boolean;
   isError?: boolean;
   onChange?: (value: string, key: any) => void;
-  onFocus?: (index: number) => void;
 }
 
-const MnemonicPill = ({ className, index, isError = false, name, onChange, onFocus, readonly = true, word }: Props) => {
+const MnemonicPill = ({ className, index, name, onChange, readonly = true, word }: Props) => {
   const _handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
-        // because idx starts from 1
         onChange(event.target.value, index);
       }
     },
     [index, onChange]
-  );
-
-  const _onFocus = useCallback(
-    (event: React.FocusEvent<HTMLInputElement>) => {
-      if (onFocus) {
-        onFocus(index);
-      }
-    },
-    [index, onFocus]
   );
 
   return (
@@ -43,7 +32,6 @@ const MnemonicPill = ({ className, index, isError = false, name, onChange, onFoc
       <input
         name={name}
         onChange={_handleChange}
-        onFocus={_onFocus}
         readOnly={!!readonly}
         value={word}
       />

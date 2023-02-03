@@ -16,22 +16,12 @@ interface Props {
   path: string | null;
   seed: string | null;
   setSeed: (seed: string) => void;
-  setPath: (path: string) => void;
   onNextStep: () => void;
   onAccountChange: (account: AccountInfo | null) => void;
   type: KeypairType;
 }
 
-function SeedAndPath({
-  className,
-  onAccountChange,
-  onNextStep,
-  path,
-  seed,
-  setPath,
-  setSeed,
-  type
-}: Props): React.ReactElement {
+function SeedAndPath({ className, onAccountChange, onNextStep, path, seed, setSeed, type }: Props): React.ReactElement {
   const { t } = useTranslation();
   const [address, setAddress] = useState('');
   const [error, setError] = useState('');
@@ -51,7 +41,6 @@ function SeedAndPath({
           </span>
         </div>
         <MnemonicInput
-          address={address}
           error={error}
           genesis={genesis}
           onAccountChange={onAccountChange}

@@ -75,9 +75,9 @@ function Dropdown({
 
 export default React.memo(
   styled(Dropdown)(
-    ({ isError, label, theme }: Props) => `
+    ({ isError, theme }: Props) => `
   position: relative;
-
+  
   select {
     -webkit-appearance: none;
     -moz-appearance: none;
