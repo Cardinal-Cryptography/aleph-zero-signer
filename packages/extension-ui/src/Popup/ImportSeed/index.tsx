@@ -30,7 +30,9 @@ function ImportSeed(): React.ReactElement {
   const [name, setName] = useState<string | null>(null);
   const [step, setStep] = useState<number>(1);
   const [type, setType] = useState(DEFAULT_TYPE);
+  const [path, setPath] = useState<string | null>(null);
   const [genesis, setGenesis] = useState('');
+  const [seed, setSeed] = useState<string | null>(null);
   const chain = useMetadata(account && account.genesis, true);
   const genesisOptions = useGenesisHashOptions();
 
@@ -75,6 +77,10 @@ function ImportSeed(): React.ReactElement {
         <SeedAndPath
           onAccountChange={setAccount}
           onNextStep={_onNextStep}
+          path={path}
+          seed={seed}
+          setPath={setPath}
+          setSeed={setSeed}
           type={type}
         />
       )}
@@ -82,11 +88,15 @@ function ImportSeed(): React.ReactElement {
         <>
           <NetworkSelection
             address={account?.address}
-            name={name}
+            onAccountChange={setAccount}
             onChange={setGenesis}
             onNextStep={_onNextStep}
             onPreviousStep={_onPreviousStep}
             options={genesisOptions}
+            path={path}
+            seed={seed}
+            setPath={setPath}
+            type={type}
             value={genesis}
           />
         </>

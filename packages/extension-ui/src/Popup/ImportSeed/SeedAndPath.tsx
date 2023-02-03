@@ -13,22 +13,38 @@ import useTranslation from '../../hooks/useTranslation';
 
 interface Props {
   className?: string;
+  path: string | null;
+  seed: string | null;
+  setSeed: (seed: string) => void;
+  setPath: (path: string) => void;
   onNextStep: () => void;
   onAccountChange: (account: AccountInfo | null) => void;
   type: KeypairType;
 }
 
-function SeedAndPath({ className, onAccountChange, onNextStep, type }: Props): React.ReactElement {
+function SeedAndPath({
+  className,
+  onAccountChange,
+  onNextStep,
+  path,
+  seed,
+  setPath,
+  setSeed,
+  type
+}: Props): React.ReactElement {
   const { t } = useTranslation();
   const [address, setAddress] = useState('');
-  const [seed, setSeed] = useState<string | null>(null);
-  const [path, setPath] = useState<string | null>(null);
-  const [advanced, setAdvances] = useState(false);
   const [error, setError] = useState('');
   const [genesis, setGenesis] = useState('');
   const onAction = useContext(ActionContext);
 
-  const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
+  const goTo = useCallback(
+    (path: string) => () => {
+      setSeed('');
+      onAction(path);
+    },
+    [onAction, setSeed]
+  );
 
   return (
     <>
