@@ -23,19 +23,24 @@ import { showAccount } from '../../messaging';
 import Header from '../../partials/Header';
 import { ellipsisName } from '../../util/ellipsisName';
 
-interface Props extends RouteComponentProps<{ address: string; isExternal: string }>, ThemeProps {
+interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
   className?: string;
+  isExternal?: string;
 }
 
 function EditAccountMenu({
   className,
+  location: { search },
   match: {
-    params: { address, isExternal }
+    params: { address }
   }
 }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { accounts, hierarchy } = useContext(AccountContext);
   const { show } = useToast();
+
+  const searchParams = new URLSearchParams(search);
+  const isExternal = searchParams.get('isExternal');
 
   function findAccountInHierarchy(accounts: AccountJson[], _address: string) {
     return hierarchy.find(({ address }): boolean => address === _address) || null;
@@ -47,8 +52,6 @@ function EditAccountMenu({
 
   const [isHidden, setIsHidden] = useState(account?.isHidden);
 
-  console.log('account', account);
-
   const chain = useMetadata(account?.genesisHash, true);
 
   const settings = useContext(SettingsContext);
@@ -58,8 +61,7 @@ function EditAccountMenu({
   const theme = (account && account.type === 'ethereum' ? 'ethereum' : chain?.icon || 'polkadot') as IconTheme;
 
   const _toggleVisibility = useCallback((): void => {
-    console.log('toggleVisibility from address', address, isHidden);
-    address &&
+    if (address) {
       showAccount(address, isHidden || false)
         .then((data) => {
           if (account) {
@@ -72,6 +74,7 @@ function EditAccountMenu({
           setIsHidden(data);
         })
         .catch(console.error);
+    }
   }, [address, isHidden, account]);
 
   return (
@@ -119,9 +122,9 @@ function EditAccountMenu({
             <>
               <Switch
                 checked={!account?.isHidden || false}
-                checkedLabel={t<string>('')}
+                checkedLabel=''
                 onChange={_toggleVisibility}
-                uncheckedLabel={t<string>('')}
+                uncheckedLabel=''
               />
             </>
           }

@@ -26,7 +26,7 @@ interface ExtraProps {
   extra?: 'chevron' | 'copy';
 }
 
-const ExtraContent = ({ extra = 'chevron' }: ExtraProps): React.ReactElement<ExtraProps> => {
+const ExtraContent = ({ extra = 'chevron' }: ExtraProps): React.ReactElement<ExtraProps> | null => {
   switch (extra) {
     case 'chevron':
       return <FontAwesomeIcon icon={faChevronRight} />;
@@ -38,7 +38,7 @@ const ExtraContent = ({ extra = 'chevron' }: ExtraProps): React.ReactElement<Ext
         />
       );
     default:
-      return <></>;
+      return null;
   }
 };
 

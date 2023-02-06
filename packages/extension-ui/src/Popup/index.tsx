@@ -191,7 +191,7 @@ export default function Popup(): React.ReactElement {
                             <Route path='/account/create'>
                               {wrapWithErrorBoundary(<CreateAccount />, 'account-creation')}
                             </Route>
-                            <Route path='/account/edit-menu/:address/:isExternal'>
+                            <Route path='/account/edit-menu/:address'>
                               {wrapWithErrorBoundary(<EditAccountMenu />, 'edit-menu')}
                             </Route>
                             <Route path='/account/forget/:address'>

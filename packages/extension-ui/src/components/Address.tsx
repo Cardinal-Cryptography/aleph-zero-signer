@@ -166,7 +166,9 @@ function Address({
   const _onCopy = useCallback(() => show(t('Copied')), [show, t]);
 
   const _toggleVisibility = useCallback((): void => {
-    address && showAccount(address, isHidden || false).catch(console.error);
+    if (address) {
+      showAccount(address, isHidden || false).catch(console.error);
+    }
   }, [address, isHidden]);
 
   const Name = () => {
@@ -266,7 +268,7 @@ function Address({
         </div>
         {actions && (
           <>
-            <Link to={`/account/edit-menu/${address || ''}/${isExternal ? 'true' : 'false'}`}>
+            <Link to={`/account/edit-menu/${address || ''}${isExternal ? '?isExternal=true' : '?isExternal=false'}`}>
               <div
                 className='settings'
                 onClick={_onClick}
