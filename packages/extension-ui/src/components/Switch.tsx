@@ -7,14 +7,14 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 interface Props {
-  checked: boolean;
+  checked: boolean | undefined;
   onChange: (checked: boolean) => void;
   uncheckedLabel: string;
   checkedLabel: string;
   className?: string;
 }
 
-function Switch ({ checked, checkedLabel, className, onChange, uncheckedLabel }: Props): React.ReactElement<Props> {
+function Switch({ checked, checkedLabel, className, onChange, uncheckedLabel }: Props): React.ReactElement<Props> {
   const _onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.checked),
     [onChange]
@@ -37,7 +37,8 @@ function Switch ({ checked, checkedLabel, className, onChange, uncheckedLabel }:
   );
 }
 
-export default styled(Switch)(({ theme }: ThemeProps) => `
+export default styled(Switch)(
+  ({ theme }: ThemeProps) => `
   label {
     position: relative;
     display: inline-block;
@@ -80,4 +81,5 @@ export default styled(Switch)(({ theme }: ThemeProps) => `
       border-radius: 50%;
     }
   }
-`);
+`
+);

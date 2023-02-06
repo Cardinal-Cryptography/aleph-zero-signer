@@ -9,7 +9,7 @@ import type { KeypairType } from '@polkadot/util-crypto/types';
 import type { ThemeProps } from '../types';
 
 import { faUsb } from '@fortawesome/free-brands-svg-icons';
-import { faCodeBranch, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faCodeBranch, faEyeSlash, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -22,8 +22,9 @@ import useMetadata from '../hooks/useMetadata';
 import useOutsideClick from '../hooks/useOutsideClick';
 import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
+import { showAccount } from '../messaging';
 import { DEFAULT_TYPE } from '../util/defaultType';
-import {ellipsisName}  from '../util/ellipsisName';
+import { ellipsisName } from '../util/ellipsisName';
 import getParentNameSuri from '../util/getParentNameSuri';
 import { AccountContext, SettingsContext } from './contexts';
 import Identicon from './Identicon';
@@ -102,7 +103,7 @@ function Address({
   genesisHash,
   isExternal,
   isHardware,
-  // isHidden,
+  isHidden,
   name,
   parentName,
   // showVisibilityAction = false,
@@ -163,10 +164,10 @@ function Address({
 
   const _onCopy = useCallback(() => show(t('Copied')), [show, t]);
 
-  // TODO: this will be reused
-  // const _toggleVisibility = useCallback((): void => {
-  //   address && showAccount(address, isHidden || false).catch(console.error);
-  // }, [address, isHidden]);
+  const _toggleVisibility = useCallback((): void => {
+    console.log('toggleVisibility from address', address, isHidden);
+    address && showAccount(address, isHidden || false).catch(console.error);
+  }, [address, isHidden]);
 
   const Name = () => {
     const accountName = name || account?.name;
@@ -255,29 +256,20 @@ function Address({
               {_ellipsisName(formatted) || _ellipsisName(address) || t('<unknown>')}
             </div>
             {/* TODO: this logic will be reused */}
-            {/* <CopyToClipboard text={(formatted && formatted) || ''}>
-              <FontAwesomeIcon
-                className='copyIcon'
-                icon={faCopy}
-                onClick={_onCopy}
-                size='sm'
-                title={t('copy address')}
-              />
-            </CopyToClipboard>
-            {(actions || showVisibilityAction) && (
-              <FontAwesomeIcon
-                className={isHidden ? 'hiddenIcon' : 'visibleIcon'}
-                icon={isHidden ? faEyeSlash : faEye}
-                onClick={_toggleVisibility}
-                size='sm'
-                title={t('account visibility')}
-              />
-            )} */}
+
+            <FontAwesomeIcon
+              className={isHidden ? 'hiddenIcon' : 'visibleIcon'}
+              icon={isHidden ? faEyeSlash : faEyeSlash}
+              onClick={_toggleVisibility}
+              size='sm'
+              title={t('account visibility')}
+            />
           </div>
         </div>
         {actions && (
           <>
-            <Link to='/account/edit-menu'>
+            {console.log(address)}
+            <Link to={`/account/edit-menu/${address || ''}/${isExternal ? 'true' : 'false'}`}>
               <div
                 className='settings'
                 onClick={_onClick}
@@ -368,6 +360,7 @@ export default styled(Address)(
   .identityIcon {
     margin-left: 15px;
     margin-right: 10px;
+    width: 50px;
 
     & svg {
       width: 50px;
