@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
@@ -13,6 +13,8 @@ import { EditMenuCard, Identicon } from '@polkadot/extension-ui/components';
 import useMetadata from '@polkadot/extension-ui/hooks/useMetadata';
 import { IconTheme } from '@polkadot/react-identicon/types';
 
+import forgetIcon from '../../assets/forget.svg';
+import subAccountIcon from '../../assets/subAccount.svg';
 import { Switch } from '../../components';
 import { AccountContext, SettingsContext } from '../../components/contexts';
 import useToast from '../../hooks/useToast';
@@ -35,28 +37,20 @@ function EditAccountMenu({
   const { accounts, hierarchy } = useContext(AccountContext);
   const { show } = useToast();
 
-  // console.log(accounts);
-  // console.log('hierarchy', hierarchy);
-
-  function findAccountByAddress(accounts: AccountJson[], _address: string): AccountJson | null {
-    return accounts.find(({ address }): boolean => address === _address) || null;
-  }
-
   function findAccountInHierarchy(accounts: AccountJson[], _address: string) {
     return hierarchy.find(({ address }): boolean => address === _address) || null;
   }
 
-  const _onCopy = useCallback(() => show(t('Copied'), 'success'), [show, t]);
+  const _onCopy = useCallback(() => show(t<string>('Public address copied to your clipboard'), 'success'), [show, t]);
 
-  // const account = findAccountByAddress(accounts, address);
   const [account, setAccount] = useState(findAccountInHierarchy(accounts, address));
 
-  console.log('account', account?.isHidden);
   const [isHidden, setIsHidden] = useState(account?.isHidden);
 
   console.log('account', account);
 
-  const chain = useMetadata(account && account.genesisHash, true);
+  const chain = useMetadata(account?.genesisHash, true);
+
   const settings = useContext(SettingsContext);
 
   const prefix = chain ? chain.ss58Format : settings.prefix === -1 ? 42 : settings.prefix;
@@ -79,14 +73,6 @@ function EditAccountMenu({
         })
         .catch(console.error);
   }, [address, isHidden, account]);
-  //   {
-  //     "address": "5Co7EFHvAxbdW2o2TdK8wycB6V98G5UqZCr1idG5tx175Q3t",
-  //     "isDefaultAuthSelected": false,
-  //     "genesisHash": "",
-  //     "name": "maTEUSZ",
-  //     "whenCreated": 1675359808197,
-  //     "type": "sr25519"
-  // }
 
   return (
     <>
@@ -95,7 +81,6 @@ function EditAccountMenu({
         showHelp
         text={t<string>('Edit Account')}
       />
-      {/* TODO: */}
       <div className={className}>
         <Identicon
           className='identityIcon'
@@ -105,15 +90,8 @@ function EditAccountMenu({
           prefix={prefix}
           value={address}
         />
-        {/* 
-className?: string;
-  preIcon?: React.ReactNode;
-  title: string;
-  description: string;
-  extra?: 'chevron' | 'copy' | 'toggle';
-  onClick?: () => void; */}
         <EditMenuCard
-          description='Controller'
+          description={account?.name || ''}
           extra='chevron'
           position='top'
           title='Name'
@@ -128,10 +106,10 @@ className?: string;
           />
         </CopyToClipboard>
         <EditMenuCard
-          description='Network'
+          description={chain?.genesisHash ? 'testnet' : 'Mainnet'}
           extra='chevron'
           position='middle'
-          title='Name'
+          title='Network'
         />
         <EditMenuCard
           description=''
@@ -140,7 +118,7 @@ className?: string;
           toggle={
             <>
               <Switch
-                checked={account?.isHidden || false}
+                checked={!account?.isHidden || false}
                 checkedLabel={t<string>('')}
                 onChange={_toggleVisibility}
                 uncheckedLabel={t<string>('')}
@@ -152,16 +130,17 @@ className?: string;
           description=''
           extra='chevron'
           position='both'
+          preIcon={<img src={subAccountIcon} />}
           title='Create a sub-account'
         />
         <EditMenuCard
           description=''
           extra='chevron'
+          isDanger
           position='both'
+          preIcon={<img src={forgetIcon} />}
           title='Forget'
         />
-        {address}
-        {isExternal}
       </div>
     </>
   );
