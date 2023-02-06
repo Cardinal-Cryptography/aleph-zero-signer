@@ -9,7 +9,7 @@ import type { KeypairType } from '@polkadot/util-crypto/types';
 import type { ThemeProps } from '../types';
 
 import { faUsb } from '@fortawesome/free-brands-svg-icons';
-import { faCodeBranch, faEyeSlash, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faCodeBranch, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -18,6 +18,7 @@ import styled from 'styled-components';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 
 import details from '../assets/details.svg';
+import viewOff from '../assets/viewOff.svg';
 import useMetadata from '../hooks/useMetadata';
 import useOutsideClick from '../hooks/useOutsideClick';
 import useToast from '../hooks/useToast';
@@ -31,7 +32,7 @@ import Identicon from './Identicon';
 import Menu from './Menu';
 import Svg from './Svg';
 
-export interface Props {
+export interface Props extends ThemeProps {
   actions?: React.ReactNode;
   address?: string | null;
   children?: React.ReactNode;
@@ -165,7 +166,6 @@ function Address({
   const _onCopy = useCallback(() => show(t('Copied')), [show, t]);
 
   const _toggleVisibility = useCallback((): void => {
-    console.log('toggleVisibility from address', address, isHidden);
     address && showAccount(address, isHidden || false).catch(console.error);
   }, [address, isHidden]);
 
@@ -255,20 +255,17 @@ function Address({
             >
               {_ellipsisName(formatted) || _ellipsisName(address) || t('<unknown>')}
             </div>
-            {/* TODO: this logic will be reused */}
-
-            <FontAwesomeIcon
-              className={isHidden ? 'hiddenIcon' : 'visibleIcon'}
-              icon={isHidden ? faEyeSlash : faEyeSlash}
-              onClick={_toggleVisibility}
-              size='sm'
-              title={t('account visibility')}
-            />
+            {isHidden && (
+              <img
+                className='hiddenIcon'
+                onClick={_toggleVisibility}
+                src={viewOff}
+              />
+            )}
           </div>
         </div>
         {actions && (
           <>
-            {console.log(address)}
             <Link to={`/account/edit-menu/${address || ''}/${isExternal ? 'true' : 'false'}`}>
               <div
                 className='settings'
@@ -298,8 +295,7 @@ function Address({
 }
 
 export default styled(Address)(
-  ({ theme }: ThemeProps) => `
-  background: ${theme.boxBackground};
+  ({ isHidden, theme }: Props) => `
   border: 1px solid ${theme.boxBorderColor};
   box-sizing: border-box;
   border-radius: 8px;
@@ -340,12 +336,13 @@ export default styled(Address)(
     .hiddenIcon, .visibleIcon {
       position: absolute;
       right: 2px;
-      top: -18px;
+      top: -12px;
     }
 
     .hiddenIcon {
       color: ${theme.errorColor};
       &:hover {
+        cursor: pointer;
         color: ${theme.accountDotsIconColor};
       }
     }
@@ -358,9 +355,10 @@ export default styled(Address)(
   }
 
   .identityIcon {
-    margin-left: 15px;
-    margin-right: 10px;
+    margin-left: 16px;
+    margin-right: 14px;
     width: 50px;
+    opacity: ${isHidden ? 0.6 : 1};
 
     & svg {
       width: 50px;
@@ -391,12 +389,18 @@ export default styled(Address)(
 
   .name {
     font-size: 16px;
-    line-height: 22px;
+    line-height: 125%;
+    letter-spacing: 0.06em;
+    font-family: ${theme.secondaryFontFamily};
+    font-weight: 500;
     margin: 2px 0;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 300px;
     white-space: nowrap;
+    color: ${isHidden ? theme.textColor : theme.subTextColor};
+    opacity: ${isHidden ? 0.6 : 1};
+  } 
 
     &.displaced {
       padding-top: 10px;
@@ -418,15 +422,18 @@ export default styled(Address)(
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100px;
-    color: ${theme.labelColor};
-    font-size: 12px;
-    line-height: 16px;
+    color: ${theme.subTextColor};
+    font-size: 14px;
+    line-height: 145%;
+    font-weight: 300;
+    letter-spacing: 0.07em;
+    opacity: ${isHidden ? 0.5 : 1};}  
   }
 
   .detailsIcon {
     background: ${theme.accountDotsIconColor};
-    width: 3px;
-    height: 19px;
+    width: 24px;
+    height: 24px;
 
     &.active {
       background: ${theme.accountDotsIconColor};
