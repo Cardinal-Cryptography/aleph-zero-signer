@@ -32,14 +32,16 @@ interface Props extends ThemeProps {
   smallMargin?: boolean;
   text?: React.ReactNode;
   withStepper?: boolean;
+  goToRoot?: boolean;
 }
 
 function Header({
   children,
   className = '',
   // onFilter,
-  showBackArrow,
+  goToRoot = false,
   // showConnectedAccounts,
+  showBackArrow,
   showHelp,
   showSettings,
   smallMargin = false,
@@ -102,6 +104,7 @@ function Header({
   // }, [_onChangeFilter, isSearchOpen]);
 
   const _onBackArrowClick = useCallback(() => onAction('..'), [onAction]);
+  const _goToRoot = useCallback(() => onAction('/'), [onAction]);
 
   return (
     <div className={`${className} ${smallMargin ? 'smallMargin' : ''} header`}>
@@ -111,7 +114,7 @@ function Header({
             <FontAwesomeIcon
               className='arrowLeftIcon'
               icon={faArrowLeft}
-              onClick={_onBackArrowClick}
+              onClick={goToRoot ? _goToRoot : _onBackArrowClick}
             />
           ) : (
             <div className='flex'>
