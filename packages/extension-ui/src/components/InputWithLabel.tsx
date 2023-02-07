@@ -59,6 +59,7 @@ function InputWithLabel({
         autoFocus={isFocused}
         defaultValue={defaultValue || undefined}
         disabled={disabled}
+        emptyLabel={label === ' '}
         onBlur={onBlur}
         onChange={_onChange}
         placeholder={placeholder}
