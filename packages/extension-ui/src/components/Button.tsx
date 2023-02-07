@@ -17,7 +17,7 @@ interface Props extends ThemeProps {
   isSuccess?: boolean;
   secondary?: boolean;
   tertiary?: boolean;
-  onClick?: () => void | '' | Promise<boolean | void> | null;
+  onClick?: () => void | Promise<void | boolean>;
   to?: string;
 }
 
@@ -47,9 +47,7 @@ function Button({
 
   return (
     <button
-      className={`${className}${isDisabled || isBusy ? ' isDisabled' : ''}${isBusy ? ' isBusy' : ''}${
-        secondary ? ' secondary' : ''
-      }${tertiary ? ' tertiary' : ''}`}
+      className={`${className}${isDisabled || isBusy ? ' isDisabled' : ''}${isBusy ? ' isBusy' : ''}`}
       disabled={isDisabled || isBusy}
       onClick={_onClick}
     >
@@ -97,7 +95,9 @@ export default styled(Button)(
   &:disabled {
     cursor: default;
     background: ${
-      secondary
+      isDanger
+        ? theme.buttonBackgroundDangerDisabled
+        : secondary
         ? theme.buttonSecondaryBackgroundDisabled
         : tertiary
         ? theme.buttonTertiaryBackground
