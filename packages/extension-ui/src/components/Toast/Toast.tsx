@@ -67,6 +67,11 @@ export default styled(Toast)<{ visible: boolean }>`
 
   .snackbar-content {
     min-width: 200px;
+    font-family:  ${({ theme }: Props): string => theme.secondaryFontFamily};
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 120%;
+    letter-spacing: 0.07em;
   }
 
   && {
