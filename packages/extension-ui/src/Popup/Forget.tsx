@@ -42,6 +42,24 @@ function Forget({
       });
   }, [address, onAction]);
 
+  const footer = (
+    <HelperFooter>
+      <img
+        className='icon'
+        src={helpIcon}
+      />
+      <span>
+        {t<string>('How to restore your account? ')}
+        <span
+          className='link'
+          onClick={_goTo('/help-restore')}
+        >
+          {` ${t<string>('Learn more')}`}
+        </span>
+      </span>
+    </HelperFooter>
+  );
+
   return (
     <>
       <Header
@@ -64,22 +82,7 @@ function Forget({
         />
       </div>
       <VerticalSpace />
-      <HelperFooter>
-        <img
-          className='icon'
-          src={helpIcon}
-        />
-        <span>
-          {t<string>('How to restore your account? ')}
-          <span
-            className='link'
-            onClick={_goTo('/help-restore')}
-          >
-            {` ${t<string>('Learn more')}`}
-          </span>
-        </span>
-      </HelperFooter>
-      <ButtonArea>
+      <ButtonArea footer={footer}>
         <Button
           isDisabled={isBusy}
           onClick={_goTo(`/account/edit-menu/${address}`)}

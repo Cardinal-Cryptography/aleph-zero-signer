@@ -10,6 +10,8 @@ import styled, { CSSProperties } from 'styled-components';
 
 import { Video } from '@polkadot/extension-ui/components/index';
 
+import BottomWrapper from './BottomWrapper';
+
 interface SplashHandlerProps extends ThemeProps {
   className?: string;
   children: ReactNode;
@@ -71,11 +73,16 @@ export default styled(SplashHandler)`
   flex-direction: column;
   height: 100%;
 
+
   > *:not(.splash):not(.header) {
     padding-left: 16px;
     padding-right: 16px;
   }
 
+  ${BottomWrapper} {
+  margin-right: -16px;
+  margin-left: -16px;
+}
   .splash {
     position: absolute;
     z-index: 101;

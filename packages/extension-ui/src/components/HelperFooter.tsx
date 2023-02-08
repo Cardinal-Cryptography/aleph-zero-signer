@@ -31,7 +31,7 @@ export default styled(HelperFooter)(
     content: '';
     width: calc(100% - 32px);
     border-top: 1px solid ${theme.boxBorderColor};
-    top: -16px;
+    top: -8px;
    }
   
     img.icon {

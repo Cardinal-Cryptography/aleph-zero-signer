@@ -169,9 +169,9 @@ export default React.memo(
   box-sizing: border-box;
   font-weight: normal;
   margin: 0;
-  position: relative;
+  position: sticky;
   margin-bottom: ${withStepper ? '0px' : '25px'};
-
+ 
 
   && {
     padding: 0 0 0;
