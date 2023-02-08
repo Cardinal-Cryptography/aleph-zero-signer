@@ -77,10 +77,10 @@ export default styled(InputWithLabel)(
   ({ label }: Props) => `
   margin-bottom: 16px;
  
-  > ${Input}{
+  > ${Input} {
   padding-top: ${!label.trim() ? '0px' : '8px'};
  }
- 
+
   &.withoutMargin {
     margin-bottom: 0px;
 
