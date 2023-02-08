@@ -79,9 +79,10 @@ export default styled(SplashHandler)`
   }
 
   ${BottomWrapper} {
-  margin-right: -16px;
-  margin-left: -16px;
-}
+    margin-right: -16px;
+    margin-left: -16px;
+  }
+
   .splash {
     position: absolute;
     z-index: 101;

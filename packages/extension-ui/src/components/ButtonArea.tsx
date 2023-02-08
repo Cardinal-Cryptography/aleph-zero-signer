@@ -34,18 +34,17 @@ export default styled(ButtonArea)(
   padding-left: 16px;
   padding-right: 16px;
 
-.footer{
-  display: flex;
-}
-.children {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  & > button:not(:last-of-type) {
-    margin-right: 16px;
+  .footer{
+    display: flex;
   }
-}
-
-
+  .children {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    & > button:not(:last-of-type) {
+      margin-right: 16px;
+    }
+  }
 `
 );

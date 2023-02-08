@@ -29,12 +29,12 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
         src={helpIcon}
       />
       <span>
-        {t<string>('Why it is critical to store your secret phrase in a safe place?')}
+        {t<string>('Why it is critical to store your secret phrase in a safe place?')}&nbsp;
         <span
           className='link'
           onClick={goTo('/help-safety')}
         >
-          {` ${t<string>('Learn more')}`}
+          {t<string>('Learn more')}
         </span>
       </span>
     </HelperFooter>
@@ -85,7 +85,7 @@ export default React.memo(
         
       .icon {
         margin: 0 auto;
-        }
+      }
 
       .heading {
         font-family: ${theme.secondaryFontFamily};

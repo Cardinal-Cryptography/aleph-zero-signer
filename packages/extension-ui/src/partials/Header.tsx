@@ -5,7 +5,7 @@ import type { ThemeProps } from '../types';
 
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import styled from 'styled-components';
 
 import logo from '../assets/azeroLogo.svg';
@@ -236,7 +236,6 @@ export default React.memo(
     .inputFilter {
       width: 100%
     }
-
   }
 
   .plusIcon, .cogIcon, .searchIcon {

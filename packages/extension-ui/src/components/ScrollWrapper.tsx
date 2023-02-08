@@ -27,17 +27,14 @@ export default styled(ScrollWrapper)(
   padding-right: 4px;
 
   ::-webkit-scrollbar-thumb {
-      background:${theme.boxBorderColor};
-      border-radius: 50px;  
-      width: 4px;  
-      border-right: 4px solid #111B24;
-
+    background:${theme.boxBorderColor};
+    border-radius: 50px;  
+    width: 4px;  
+    border-right: 4px solid #111B24;
   }
 
-
   ::-webkit-scrollbar {
-      width: 8px;
-
+    width: 8px;
   }
 
 `

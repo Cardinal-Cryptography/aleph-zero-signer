@@ -147,7 +147,6 @@ export default withRouter(
     height: 96px;
   }
 
-
 `
   )
 );
