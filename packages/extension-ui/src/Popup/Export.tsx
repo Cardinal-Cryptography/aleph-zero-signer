@@ -59,9 +59,9 @@ function Export({
   return (
     <>
       <Header
-        showBackArrow
-        showHelp
         text={t<string>('Export account')}
+        withBackArrow
+        withHelp
       />
       <div className={className}>
         <Address address={address}>

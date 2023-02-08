@@ -48,7 +48,7 @@ export interface Props extends ThemeProps {
   suri?: string;
   toggleActions?: number;
   type?: KeypairType;
-  shouldExport?: boolean;
+  withExport?: boolean;
 }
 
 interface Recoded {
@@ -109,11 +109,11 @@ function Address({
   isHidden,
   name,
   parentName,
-  shouldExport,
-  // showVisibilityAction = false,
   suri,
+  // showVisibilityAction = false,
   toggleActions,
-  type: givenType
+  type: givenType,
+  withExport
 }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { accounts } = useContext(AccountContext);
@@ -271,7 +271,7 @@ function Address({
             )}
           </div>
         </div>
-        {shouldExport && address && (
+        {withExport && address && (
           <div
             className='export'
             onClick={_goTo(`/account/export/${address}`)}

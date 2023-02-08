@@ -46,9 +46,9 @@ function Forget({
   return (
     <>
       <Header
-        showBackArrow
-        showHelp
         text={t<string>('Forget account')}
+        withBackArrow
+        withHelp
       />
       <div className={className}>
         <div className='text-container'>
@@ -68,7 +68,7 @@ function Forget({
         </div>
         <Address
           address={address}
-          shouldExport
+          withExport
         />
       </div>
       <VerticalSpace />
