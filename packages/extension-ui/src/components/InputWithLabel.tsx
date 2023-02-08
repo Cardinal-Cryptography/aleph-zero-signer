@@ -4,10 +4,11 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
+import { ThemeProps } from '../types';
 import Label from './Label';
 import { Input } from './TextInputs';
 
-interface Props {
+interface Props extends ThemeProps {
   className?: string;
   defaultValue?: string | null;
   disabled?: boolean;
@@ -59,7 +60,6 @@ function InputWithLabel({
         autoFocus={isFocused}
         defaultValue={defaultValue || undefined}
         disabled={disabled}
-        emptyLabel={label === ' '}
         onBlur={onBlur}
         onChange={_onChange}
         placeholder={placeholder}
@@ -73,9 +73,14 @@ function InputWithLabel({
   );
 }
 
-export default styled(InputWithLabel)`
+export default styled(InputWithLabel)(
+  ({ label }: Props) => `
   margin-bottom: 16px;
-
+ 
+  > ${Input}{
+  padding-top: ${!label.trim() ? '0px' : '8px'};
+ }
+ 
   &.withoutMargin {
     margin-bottom: 0px;
 
@@ -83,4 +88,5 @@ export default styled(InputWithLabel)`
       margin-top: 6px;
     }
   }
-`;
+`
+);

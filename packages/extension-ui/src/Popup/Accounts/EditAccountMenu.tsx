@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
@@ -42,8 +42,8 @@ function EditAccountMenu({
   const searchParams = new URLSearchParams(search);
   const isExternal = searchParams.get('isExternal');
 
-  const foundAccount = accounts.find((account) => account.address === address);
-  const [account, setAccount] = useState(foundAccount);
+  const account = useMemo(() => accounts.find((account) => account.address === address), [accounts, address]);
+
   const [isHidden, setIsHidden] = useState(account?.isHidden);
 
   const chain = useMetadata(account?.genesisHash, true);
@@ -59,35 +59,22 @@ function EditAccountMenu({
   const _toggleVisibility = useCallback((): void => {
     if (address) {
       showAccount(address, isHidden || false)
-        .then((data) => {
-          if (account) {
-            setAccount({
-              ...account,
-              isHidden: !account.isHidden
-            });
-          }
-
-          setIsHidden(data);
+        .then(() => {
+          setIsHidden(!isHidden);
         })
         .catch(console.error);
     }
-  }, [address, isHidden, account]);
+  }, [address, isHidden]);
 
   const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
-
-  useEffect(() => {
-    if (account) {
-      setAccount(foundAccount);
-    }
-  }, [account, foundAccount]);
 
   return (
     <>
       <Header
-        goToRoot
         showBackArrow
         showHelp
         text={t<string>('Edit Account')}
+        withGoToRoot
       />
       <div className={className}>
         <Identicon
@@ -127,7 +114,7 @@ function EditAccountMenu({
           toggle={
             <>
               <Switch
-                checked={!account?.isHidden || false}
+                checked={!account?.isHidden}
                 checkedLabel=''
                 onChange={_toggleVisibility}
                 uncheckedLabel=''

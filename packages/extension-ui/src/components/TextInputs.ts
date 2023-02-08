@@ -7,11 +7,10 @@ import styled, { css } from 'styled-components';
 
 interface Props extends ThemeProps {
   withError?: boolean;
-  emptyLabel?: boolean;
 }
 
 const TextInput = css(
-  ({ emptyLabel = false, theme, withError }: Props) => `
+  ({ theme, withError }: Props) => `
   background: ${theme.inputBackground};
   border-radius: 2px;
   border: 1px solid ${theme.inputBorderColor};
@@ -23,7 +22,6 @@ const TextInput = css(
   font-size: ${theme.fontSize};
   height: 56px;
   outline: none;
-  padding-top: ${emptyLabel ? '0px' : '8px'};
   padding-left: 12px;
   resize: none;
   width: 100%;

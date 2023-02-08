@@ -34,10 +34,6 @@ function EditName({
 
   const [editedName, setName] = useState<string | undefined | null>(account?.name);
 
-  const _onNameChange = useCallback((name: string | null): void => {
-    setName(name);
-  }, []);
-
   const _saveChanges = useCallback(async (): Promise<void> => {
     if (editedName) {
       try {
@@ -62,7 +58,7 @@ function EditName({
         <div className='name'>
           <Name
             label=' '
-            onChange={_onNameChange}
+            onChange={setName}
             value={account?.name}
           />
         </div>

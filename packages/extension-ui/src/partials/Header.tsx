@@ -32,20 +32,20 @@ interface Props extends ThemeProps {
   smallMargin?: boolean;
   text?: React.ReactNode;
   withStepper?: boolean;
-  goToRoot?: boolean;
+  withGoToRoot?: boolean;
 }
 
 function Header({
   children,
   className = '',
   // onFilter,
-  goToRoot = false,
-  // showConnectedAccounts,
   showBackArrow,
+  // showConnectedAccounts,
   showHelp,
   showSettings,
   smallMargin = false,
   text,
+  withGoToRoot = false,
   withStepper = false
 }: Props): React.ReactElement<Props> {
   const [isAddOpen, setShowAdd] = useState(false);
@@ -114,7 +114,7 @@ function Header({
             <FontAwesomeIcon
               className='arrowLeftIcon'
               icon={faArrowLeft}
-              onClick={goToRoot ? _goToRoot : _onBackArrowClick}
+              onClick={withGoToRoot ? _goToRoot : _onBackArrowClick}
             />
           ) : (
             <div className='flex'>
