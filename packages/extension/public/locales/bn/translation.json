@@ -96,7 +96,7 @@
     "Before we start, just a couple of notes regarding use:": "আমরা শুরু করার আগে, ব্যবহার সংক্রান্ত কয়েকটি নোটঃ",
     "Aleph Zero Signer does not send any clicks, pageviews, and events to external servers": "আমরা কেন্দ্রীয় সার্ভারে কোনো ক্লিক, পেজভিউ বা ইভেন্ট পাঠাই না",
     "Aleph Zero Signer does not use any analytics": "আমরা কোনো ট্র্যাকার বা বিশ্লেষণ ব্যবহার করি না",
-    "All your data stays on this device–your secret phrases, addresses, and any other information are only stored locally": "আমরা কী, ঠিকানা বা অন্য কোনো তথ্য সংগ্রহ করি না - আপনার তথ্য কখনোই এই মেশিনের বাইরে যাবে না",
+    "All your data stays on this device:\nyour secret phrases, addresses, and\nany other information are only stored locally": "আমরা কী, ঠিকানা বা অন্য কোনো তথ্য সংগ্রহ করি না - আপনার তথ্য কখনোই এই মেশিনের বাইরে যাবে না",
     "Understood, let me continue": "বুঝেছি, আমাকে চালিয়ে যেতে দিন",
     "An error occured": "একটি সমস্যা হয়েছে",
     "Something went wrong with the query and rendering of this component. {{message}}": "এই উপাদানটির কুয়েরী এবং রেন্ডারিং নিয়ে কিছু সমস্যা হয়েছে। {{message}}",

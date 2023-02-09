@@ -96,7 +96,7 @@
   "Before we start, just a couple of notes regarding use:": "ก่อนจะเริ่มใช้งาน มีข้อความเกี่ยวกับการใช้งานที่อยากจะแจ้งให้ทราบ",
   "Aleph Zero Signer does not send any clicks, pageviews, and events to external servers": "โปรแกรมนี้ไม่มีการส่งข้อมูลการคลิก หน้าต่างที่เปิดดู หรือกิจกรรมต่างๆไปยังเซิร์ฟเวอร์กลาง",
   "Aleph Zero Signer does not use any analytics": "โปรแกรมนี้ไม่มีการแอบติดตามหรือดักฟังข้อมูลหรือนำข้อมูลไปใช้",
-  "All your data stays on this device–your secret phrases, addresses, and any other information are only stored locally": "โปรแกรมไม่มีการเก็บข้อมูลkey ที่อยู่แอดเดรส หรือข้อมูลอื่นๆ -ข้อมูลของคุณจะอยู่แค่ในเครื่องของคุณ",
+  "All your data stays on this device:\nyour secret phrases, addresses, and\nany other information are only stored locally": "โปรแกรมไม่มีการเก็บข้อมูลkey ที่อยู่แอดเดรส หรือข้อมูลอื่นๆ -ข้อมูลของคุณจะอยู่แค่ในเครื่องของคุณ",
   "Understood, let me continue": "เข้าใจแล้ว ให้ฉันไปต่อ",
   "An error occured": "มีข้อผิดพลาดเกิดขึ้น",
   "Something went wrong with the query and rendering of this component. {{message}}": "มีบางอย่างผิดพลาดเกี่ยวกับquery และการเรนเดอร์ส่วนของหน้านี้ {{message}}",

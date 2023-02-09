@@ -96,7 +96,7 @@
     "Before we start, just a couple of notes regarding use:": "اسسےپہلےکہہمشروعکریں،استعمالکےحوالےسےصرفچندنوٹ۔",
     "Aleph Zero Signer does not send any clicks, pageviews, and events to external servers": "ہمکسیبھیکلکس،پیجویوزیاایونٹسکومرکزیسرورپرنہیںبھیجتے۔",
     "Aleph Zero Signer does not use any analytics": "ہمکوئیٹریکریاتجزیاتاستعمالنہیںکرتےہیں",
-    "All your data stays on this device–your secret phrases, addresses, and any other information are only stored locally": "ہمچابیاں،پتےیاکوئیمعلوماتجمعنہیںکرتے–آپکیمعلوماتاسمشینکوکبھینہیںچھوڑتی۔",
+    "All your data stays on this device:\nyour secret phrases, addresses, and\nany other information are only stored locally": "ہمچابیاں،پتےیاکوئیمعلوماتجمعنہیںکرتے–آپکیمعلوماتاسمشینکوکبھینہیںچھوڑتی۔",
     "Understood, let me continue": "سمجھگیا،مجھےجاریرکھنےدو۔",
     "An error occured": "ایکخرابیپیشآگئی۔",
     "Something went wrong with the query and rendering of this component. {{message}}": "اسجزوکےاستفساراورپیشکشمیںکچھغلطہوگیا۔  {{پیغام}}",

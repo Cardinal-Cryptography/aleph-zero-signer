@@ -96,7 +96,7 @@
   "Before we start, just a couple of notes regarding use:": "",
   "Aleph Zero Signer does not send any clicks, pageviews, and events to external servers": "",
   "Aleph Zero Signer does not use any analytics": "",
-  "All your data stays on this device–your secret phrases, addresses, and any other information are only stored locally": "",
+  "All your data stays on this device:\nyour secret phrases, addresses, and\nany other information are only stored locally": "",
   "Understood, let me continue": "",
   "An error occured": "",
   "Something went wrong with the query and rendering of this component. {{message}}": "",
