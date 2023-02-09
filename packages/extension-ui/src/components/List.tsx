@@ -11,16 +11,12 @@ interface Props extends ThemeProps {
   children: React.ReactNode;
 }
 
-const List = ({ children, className }: Props) => (
-  <ul className={className}>
-    {children}
-  </ul>
-);
+const List = ({ children, className }: Props) => <ul className={className}>{children}</ul>;
 
-export default styled(List)(({ theme }: ThemeProps) => `
+export default styled(List)(
+  ({ theme }: ThemeProps) => `
   list-style: none;
-  padding-inline-start: 10px;
-  padding-inline-end: 10px;
+  padding-inline: 16px;
   font-family: ${theme.primaryFontFamily};
   font-weight: 300;
   font-size: 14px;
@@ -38,4 +34,5 @@ export default styled(List)(({ theme }: ThemeProps) => `
     font-size: 15px;
     margin-right: 10px;
   }
-`);
+`
+);
