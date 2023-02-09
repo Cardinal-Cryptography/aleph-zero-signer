@@ -9,15 +9,14 @@ import styled from 'styled-components';
 interface Props extends ThemeProps {
   className?: string;
   children: React.ReactNode;
-  tooltipOnly?: boolean;
 }
 
-function HelperFooter({ children, className, tooltipOnly }: Props): React.ReactElement<Props> {
+function HelperFooter({ children, className }: Props): React.ReactElement<Props> {
   return <div className={className}>{children}</div>;
 }
 
 export default styled(HelperFooter)(
-  ({ theme, tooltipOnly }: Props) => `
+  ({ theme }: Props) => `
     display: flex;
     position: relative;
     flex-direction: row;
@@ -25,7 +24,7 @@ export default styled(HelperFooter)(
     align-items: flex-start;
     gap: 12px;
     padding-top: 0px;
-    margin-bottom: ${tooltipOnly ? '0px' : '16px'};
+    margin-bottom: '16px';
   
     &:before {
       position: absolute;

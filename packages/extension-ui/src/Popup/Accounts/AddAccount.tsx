@@ -16,6 +16,11 @@ interface Props extends ThemeProps {
   className?: string;
 }
 
+const FooterWithoutMargin = styled(HelperFooter)`
+padding: 0 16px;
+margin-bottom: 0px;
+`;
+
 function AddAccount({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
@@ -23,13 +28,13 @@ function AddAccount({ className }: Props): React.ReactElement<Props> {
   const _onClick = useCallback(() => onAction('/account/add-menu'), [onAction]);
 
   const footer = (
-    <HelperFooter tooltipOnly>
+    <FooterWithoutMargin>
       <img
         className='icon'
         src={helpIcon}
       />
       <span>{t<string>('Need help? Look for tooltips such as this one!')}</span>
-    </HelperFooter>
+    </FooterWithoutMargin>
   );
 
   return (
