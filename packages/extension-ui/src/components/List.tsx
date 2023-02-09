@@ -26,6 +26,7 @@ export default styled(List)(
 
   li {
     margin-bottom: 16px;
+    white-space: pre-line;
   }
 
   li::before {

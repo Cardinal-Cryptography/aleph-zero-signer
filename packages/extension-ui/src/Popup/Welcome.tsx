@@ -36,7 +36,7 @@ const Welcome = function ({ className }: Props): React.ReactElement<Props> {
           <li>{t<string>('Aleph Zero Signer does not use any analytics')}</li>
           <li>
             {t<string>(
-              'All your data stays on this device–your secret phrases, addresses, and any other information are only stored locally'
+              'All your data stays on this device:\nyour secret phrases, addresses, and\nany other information are only stored locally'
             )}
           </li>
         </List>
