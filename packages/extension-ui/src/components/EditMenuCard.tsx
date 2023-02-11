@@ -60,7 +60,7 @@ function EditMenuCard({
       <div className='flex-container'>
         <div className='flex-group'>
           <div className={`title ${isDanger ? 'danger' : ''}`}>
-            {preIcon && preIcon}
+            {preIcon}
             {title}
           </div>
           <div className='description'>
@@ -161,7 +161,7 @@ export default styled(EditMenuCard)(
   }
 
   .extra {
-    
+
     &:hover {
       cursor: pointer
     };

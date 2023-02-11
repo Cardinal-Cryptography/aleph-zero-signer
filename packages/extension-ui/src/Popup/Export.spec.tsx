@@ -70,7 +70,7 @@ describe('Export component', () => {
     wrapper.update();
 
     console.log(wrapper.debug());
-    // the first message is "You are exporting your account. Keep it safe and don't share it with anyone."
+
     expect(wrapper.find('.warning-message').text()).toBe('Unable to decode using the supplied passphrase');
     expect(wrapper.find(Button).last().prop('isDisabled')).toBe(true);
     expect(wrapper.find('InputWithLabel').first().prop('isError')).toBe(true);
@@ -89,7 +89,6 @@ describe('Export component', () => {
     wrapper.update();
     enterPassword();
 
-    // the first message is "You are exporting your account. Keep it safe and don't share it with anyone."
     expect(wrapper.find(WarningBox)).toHaveLength(1);
     expect(wrapper.find(Button).last().prop('isDisabled')).toBe(false);
     expect(wrapper.find('InputWithLabel').first().prop('isError')).toBe(false);
