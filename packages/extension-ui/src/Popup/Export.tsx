@@ -45,7 +45,7 @@ function Export({
   const [error, setError] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const _goTo = useCallback((path: string) => () => onAction(path), [onAction]);
+  const _goTo = (path: string) => () => onAction(path);
 
   const onPassChange = useCallback((password: string) => {
     setPass(password);
@@ -91,7 +91,7 @@ function Export({
           <InputWithLabel
             data-export-password
             disabled={isBusy}
-            isError={pass.length < MIN_LENGTH}
+            isError={pass.length < MIN_LENGTH || !!error}
             label={t<string>('Password')}
             onChange={onPassChange}
             type={isPasswordVisible ? 'text' : 'password'}
