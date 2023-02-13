@@ -70,9 +70,7 @@ function Export({
       });
   }, [address, onAction, pass, show, t]);
 
-  const _handleInputTypeChange = useCallback(() => {
-    setIsPasswordVisible(!isPasswordVisible);
-  }, [isPasswordVisible]);
+  const _handleInputTypeChange = useCallback(() => setIsPasswordVisible((isPasswordVisible) => !isPasswordVisible), []);
 
   return (
     <>
