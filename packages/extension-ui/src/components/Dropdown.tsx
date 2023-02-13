@@ -43,15 +43,18 @@ const DropdownLock: React.FC<DropdownLockProps> = ({ isLocked, onClick }) => {
   }, [isLocked, onClick]);
 
   return (
-    <div onClick={handleClick}>
+    <div
+      className='locked-container'
+      onClick={handleClick}
+    >
       {isLocked ? (
         <Svg
-          className='locked-icon'
+          className='lock-icon'
           src={lockedIcon}
         />
       ) : (
         <Svg
-          className='locked-icon'
+          className='lock-icon'
           src={unlockedIcon}
         />
       )}
@@ -180,7 +183,7 @@ export default React.memo(
   }
   
 
-  .locked-icon {
+  .lock-icon {
     background: ${theme.subTextColor};
     width: 24px;
     height: 24px;
