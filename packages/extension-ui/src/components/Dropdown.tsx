@@ -32,6 +32,33 @@ interface Props extends ThemeProps {
   value?: string;
 }
 
+interface DropdownLockProps {
+  isLocked: boolean;
+  onClick: (isLocked: boolean) => void;
+}
+
+const DropdownLock: React.FC<DropdownLockProps> = ({ isLocked, onClick }) => {
+  const handleClick = useCallback(() => {
+    onClick(!isLocked);
+  }, [isLocked, onClick]);
+
+  return (
+    <div onClick={handleClick}>
+      {isLocked ? (
+        <Svg
+          className='locked-icon'
+          src={lockedIcon}
+        />
+      ) : (
+        <Svg
+          className='locked-icon'
+          src={unlockedIcon}
+        />
+      )}
+    </div>
+  );
+};
+
 function Dropdown({
   className,
   defaultValue,
@@ -82,25 +109,13 @@ function Dropdown({
           )}
         </select>
         <FontAwesomeIcon
-          className={`icon ${isLocked ? 'icon-locked' : ''}`}
+          className={`icon ${isLocked ? 'disabled-icon' : ''}`}
           icon={faChevronDown}
         />
-        <div
-          className='locked-container'
+        <DropdownLock
+          isLocked={isLocked}
           onClick={_toggleLocked}
-        >
-          {isLocked ? (
-            <Svg
-              className='locked'
-              src={lockedIcon}
-            />
-          ) : (
-            <Svg
-              className='locked'
-              src={unlockedIcon}
-            />
-          )}
-        </div>
+        />
       </Label>
       {isLocked && <span className='unlock-text'>{t<string>('Unlock to edit')}</span>}
     </div>
@@ -159,11 +174,13 @@ export default React.memo(
     top: 20px;
     color: ${theme.textColor};
   }
-  .icon-locked {
+
+  .disabled-icon {
     opacity: 0.65;
   }
+  
 
-  .locked {
+  .locked-icon {
     background: ${theme.subTextColor};
     width: 24px;
     height: 24px;

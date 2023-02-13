@@ -84,18 +84,16 @@ function CreateAccount(): React.ReactElement {
           />
         )}
         {seed && step === 3 && (
-          <>
-            <AccountNamePasswordCreation
-              address={address}
-              buttonLabel={t<string>('Create')}
-              genesisHash={genesisHash}
-              isBusy={isBusy}
-              onBackClick={_onPreviousStep}
-              onCreate={_onCreate}
-              onNameChange={setName}
-              setGenesis={setGenesis}
-            />
-          </>
+          <AccountNamePasswordCreation
+            address={address}
+            buttonLabel={t<string>('Create')}
+            genesisHash={genesisHash}
+            isBusy={isBusy}
+            onBackClick={_onPreviousStep}
+            onCreate={_onCreate}
+            onNameChange={setName}
+            setGenesis={setGenesis}
+          />
         )}
       </Loading>
     </>

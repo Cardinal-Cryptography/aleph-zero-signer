@@ -111,7 +111,7 @@ function AccountNamePasswordCreation({
           <Password onChange={_onPasswordChange} />
           <Dropdown
             className={className}
-            label={t<string>('Network')}
+            label={t<string>('Show on network')}
             onChange={_onChangeNetwork}
             options={options}
             value={genesisHash}
