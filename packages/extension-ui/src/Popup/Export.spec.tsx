@@ -69,8 +69,6 @@ describe('Export component', () => {
     await act(flushAllPromises);
     wrapper.update();
 
-    console.log(wrapper.debug());
-
     expect(wrapper.find('.warning-message').text()).toBe('Unable to decode using the supplied passphrase');
     expect(wrapper.find(Button).last().prop('isDisabled')).toBe(true);
     expect(wrapper.find('InputWithLabel').first().prop('isError')).toBe(true);
