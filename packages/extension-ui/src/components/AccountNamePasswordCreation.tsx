@@ -5,7 +5,7 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../assets/help.svg';
-import { Address, Button, Dropdown, HelperFooter, ScrollWrapper } from '../components';
+import { Address, Button, Dropdown, HelperFooter, ScrollWrapper, Svg } from '../components';
 import useGenesisHashOptions from '../hooks/useGenesisHashOptions';
 import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
@@ -75,18 +75,30 @@ function AccountNamePasswordCreation({
 
   const _onChangeNetwork = useCallback((newGenesisHash: string) => setGenesis(newGenesisHash), [setGenesis]);
 
+  const CustomFooter = styled(HelperFooter)`
+  flex-direction: row;
+
+  .icon-container {
+    margin-top: 4px;
+  }
+  `;
+
   const footer = (
-    <HelperFooter>
-      <img
-        className='icon'
-        src={helpIcon}
-      />
-      <span>
-        {t<string>('When should you choose the network?')}&nbsp;
-        <br />
-        <span className='link'>{t<string>('Learn more')}</span>
-      </span>
-    </HelperFooter>
+    <CustomFooter>
+      <div className='icon-container'>
+        <Svg
+          className='icon'
+          src={helpIcon}
+        />
+      </div>
+      <div className='text-container'>
+        <span>
+          {t<string>('When should you choose the network?')}&nbsp;
+          <br />
+          <span className='link'>{t<string>('Learn more')}</span>
+        </span>
+      </div>
+    </CustomFooter>
   );
 
   return (

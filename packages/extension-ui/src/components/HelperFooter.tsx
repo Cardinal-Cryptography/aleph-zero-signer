@@ -6,6 +6,8 @@ import type { ThemeProps } from '../types';
 import React from 'react';
 import styled from 'styled-components';
 
+import Svg from './Svg';
+
 interface Props extends ThemeProps {
   className?: string;
   children: React.ReactNode;
@@ -21,11 +23,13 @@ export default styled(HelperFooter)(
     position: relative;
     flex-direction: row;
     justify-content: center;
-    align-items: flex-start;
+    width: 100%;
     gap: 12px;
     padding-top: 0px;
     margin-bottom: 16px;
-    margin-top: 30px;
+    margin-top: 24px;
+    gap: 4px;
+    padding: 0 16px;
   
     &:before {
       position: absolute;
@@ -35,9 +39,10 @@ export default styled(HelperFooter)(
       top: -16px;
    }
   
-    img.icon {
-      margin-top: -4px;
-      align-self: flex-start; 
+    ${Svg} {
+      background: ${theme.iconNeutralColor};      
+      width: 16px;
+      height: 16px;
     }
   
     span {
@@ -46,7 +51,9 @@ export default styled(HelperFooter)(
       line-height: 130%;
       letter-spacing: 0.06em;
       color: ${theme.subTextColor};
-      align-self: flex-start;
+      align-self: center;
+      white-space: pre-line;
+      
   
       .link {
         color: ${theme.primaryColor};

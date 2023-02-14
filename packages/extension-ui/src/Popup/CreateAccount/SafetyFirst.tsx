@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import helpIcon from '../../assets/help.svg';
 import lockIcon from '../../assets/locked.svg';
-import { ActionContext, Button, ButtonArea, HelperFooter, VerticalSpace } from '../../components';
+import { ActionContext, Button, ButtonArea, HelperFooter, Svg, VerticalSpace } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 
 interface Props extends ThemeProps {
@@ -22,22 +22,32 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
 
   const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
+  const CustomFooter = styled(HelperFooter)`
+   .wrapper-row {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+   }`;
+
   const footer = (
-    <HelperFooter>
-      <img
-        className='icon'
-        src={helpIcon}
-      />
-      <span>
-        {t<string>('Why it is critical to store your secret phrase in a safe place?')}&nbsp;
-        <span
-          className='link'
-          onClick={goTo('/help-safety')}
-        >
-          {t<string>('Learn more')}
+    <CustomFooter>
+      <div className='wrapper-row'>
+        <Svg
+          className='icon'
+          src={helpIcon}
+        />
+        <span>
+          {t<string>('Why it is critical to store your secret\nphrase in a safe place?')}&nbsp;
+          <span
+            className='link'
+            onClick={goTo('/help-safety')}
+          >
+            {t<string>('Learn more')}
+          </span>
         </span>
-      </span>
-    </HelperFooter>
+      </div>
+    </CustomFooter>
   );
 
   return (

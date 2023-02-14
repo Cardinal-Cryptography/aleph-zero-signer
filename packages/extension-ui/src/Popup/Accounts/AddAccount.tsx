@@ -17,8 +17,15 @@ interface Props extends ThemeProps {
 }
 
 const FooterWithoutMargin = styled(HelperFooter)`
-padding: 0 16px;
-margin-bottom: 0px;
+  padding: 0 16px;
+  margin-bottom: 0px;
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
+
+  .icon-container {
+    margin-top: 4px;
+  }
 `;
 
 function AddAccount({ className }: Props): React.ReactElement<Props> {
@@ -29,11 +36,15 @@ function AddAccount({ className }: Props): React.ReactElement<Props> {
 
   const footer = (
     <FooterWithoutMargin>
-      <img
-        className='icon'
-        src={helpIcon}
-      />
-      <span>{t<string>('Need help? Look for tooltips such as this one!')}</span>
+      <div className='icon-container'>
+        <Svg
+          className='icon'
+          src={helpIcon}
+        />
+      </div>
+      <div className='text-container'>
+        <span>{t<string>('Need help? Look for tooltips such as this one!')}</span>
+      </div>
     </FooterWithoutMargin>
   );
 
