@@ -72,7 +72,7 @@ function findAccountByAddress(accounts: AccountJson[], _address: string): Accoun
 }
 
 // recodes an supplied address using the prefix/genesisHash, include the actual saved account & chain
-function recodeAddress(
+export function recodeAddress(
   address: string,
   accounts: AccountWithChildren[],
   chain: Chain | null,

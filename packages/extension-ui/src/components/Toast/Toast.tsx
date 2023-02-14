@@ -55,7 +55,8 @@ export default styled(Toast)(
   padding: 16px;
   box-sizing: border-box;
   animation: toast 0.2s, toast  0.2s linear 1.4s reverse;
-  
+  z-index: 100;
+
   @keyframes toast {
   from {
     opacity: 0;

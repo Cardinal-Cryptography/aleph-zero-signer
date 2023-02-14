@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import helpIcon from '../assets/help.svg';
 import forgetIconSVG from '../assets/vanish.svg';
-import { ActionContext, Address, Button, ButtonArea, HelperFooter, VerticalSpace } from '../components';
+import { ActionContext, Address, Button, ButtonArea, HelperFooter, Svg, VerticalSpace } from '../components';
 import useTranslation from '../hooks/useTranslation';
 import { forgetAccount } from '../messaging';
 import { Header } from '../partials';
@@ -45,7 +45,7 @@ function Forget({
 
   const footer = (
     <HelperFooter>
-      <img
+      <Svg
         className='icon'
         src={helpIcon}
       />

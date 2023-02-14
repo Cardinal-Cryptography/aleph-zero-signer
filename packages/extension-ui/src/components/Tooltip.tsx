@@ -101,6 +101,5 @@ const StyledTooltip = styled.div`
 const StyledTooltipContainer = styled.div`
     display: inline-block;
     position: relative;
-    height: 25px;
     z-index: 99;
 `;
