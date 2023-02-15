@@ -16,6 +16,7 @@ import exportAccountIcon from '../../assets/export.svg';
 import subAccountIcon from '../../assets/subAccount.svg';
 import forgetIcon from '../../assets/vanish.svg';
 import { Svg, Switch } from '../../components';
+import { recodeAddress } from '../../components/Address';
 import { AccountContext, ActionContext, SettingsContext } from '../../components/contexts';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
@@ -69,6 +70,11 @@ function EditAccountMenu({
 
   const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
+  const { account: recodedAccount, formatted } = useMemo(
+    () => recodeAddress(address, accounts, chain, settings),
+    [accounts, address, chain, settings]
+  );
+
   return (
     <>
       <Header
@@ -84,7 +90,7 @@ function EditAccountMenu({
           isExternal={isExternal === 'true'}
           onCopy={_onCopy}
           prefix={prefix}
-          value={address}
+          value={formatted || recodedAccount?.address}
         />
         <EditMenuCard
           description={account?.name || ''}
@@ -95,7 +101,7 @@ function EditAccountMenu({
         />
         <CopyToClipboard text={(address && address) || ''}>
           <EditMenuCard
-            description={ellipsisName(address) || ''}
+            description={ellipsisName(formatted) || ellipsisName(address) || t('<unknown>')}
             extra='copy'
             onClick={_onCopy}
             position='middle'
