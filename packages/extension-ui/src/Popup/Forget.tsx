@@ -52,12 +52,7 @@ function Forget({
       />
       <span>
         {t<string>('How to restore your account? ')}
-        <span
-          className='link'
-          onClick={_goTo('/help-restore')}
-        >
-          {` ${t<string>('Learn more')}`}
-        </span>
+        <span className='link'>{` ${t<string>('Learn more')}`}</span>
       </span>
     </HelperFooter>
   );
