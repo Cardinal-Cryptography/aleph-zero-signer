@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { ThemeProps } from '../types';
+import { Z_INDEX } from '../zindex';
 
 interface Props {
   children: React.ReactNode;
@@ -101,5 +102,5 @@ const StyledTooltip = styled.div`
 const StyledTooltipContainer = styled.div`
     display: inline-block;
     position: relative;
-    z-index: 99;
+    z-index: ${Z_INDEX.TOOLTIP};
 `;

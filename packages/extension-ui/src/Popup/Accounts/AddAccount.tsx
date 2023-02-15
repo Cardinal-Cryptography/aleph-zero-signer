@@ -11,6 +11,7 @@ import helpIcon from '../../assets/help.svg';
 import { ActionContext, Button, ButtonArea, HelperFooter, SkeletonCard, Svg } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import Header from '../../partials/Header';
+import { Z_INDEX } from '../../zindex';
 
 interface Props extends ThemeProps {
   className?: string;
@@ -91,7 +92,7 @@ export default React.memo(
     ({ theme }: Props) => `
   color: ${theme.textColor};
   height: 100%;
-  z-index: 100;
+  z-index: ${Z_INDEX.ADD_ACCOUNT_FOREGROUND};
 
   .background {
     display: flex;
@@ -102,7 +103,7 @@ export default React.memo(
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: -100;
+    z-index: ${Z_INDEX.ADD_ACCOUNT_BACKGROUND};
     margin-left: 16px;
     margin-right: 16px;
     opacity: 0.5;

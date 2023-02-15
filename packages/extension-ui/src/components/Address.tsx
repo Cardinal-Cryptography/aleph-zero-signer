@@ -28,6 +28,7 @@ import { showAccount } from '../messaging';
 import { DEFAULT_TYPE } from '../util/defaultType';
 import { ellipsisName } from '../util/ellipsisName';
 import getParentNameSuri from '../util/getParentNameSuri';
+import { Z_INDEX } from '../zindex';
 import { AccountContext, ActionContext, SettingsContext } from './contexts';
 import Identicon from './Identicon';
 import Menu from './Menu';
@@ -333,7 +334,7 @@ export default styled(Address)(
       color: ${theme.subTextColor};
       padding: 0.1rem 0.5rem 0.1rem 0.75rem;
       right: 0;
-      z-index: 1;
+      z-index: ${Z_INDEX.ADDRESS};
     }
   }
 
