@@ -6,8 +6,6 @@ import type { ResponseJsonGetAccountInfo } from '@polkadot/extension-base/backgr
 import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import viewOff from '../assets/viewOff.svg';
-import viewOn from '../assets/viewOn.svg';
 import {
   Address,
   BackButton,
@@ -23,6 +21,8 @@ import {
 import useTranslation from '../../hooks/useTranslation';
 import { DEFAULT_TYPE } from '../../util/defaultType';
 import { isNotShorterThan } from '../../util/validators';
+import viewOff from '../assets/viewOff.svg';
+import viewOn from '../assets/viewOn.svg';
 
 interface Props {
   className?: string;
