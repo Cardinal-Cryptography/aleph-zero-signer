@@ -13,19 +13,14 @@ interface Props extends ThemeProps {
   children: React.ReactNode;
 }
 
-function HelperFooter({ children, className }: Props): React.ReactElement<Props> {
-  return <div className={className}>{children}</div>;
-}
-
-export default styled(HelperFooter)(
-  ({ theme }: Props) => `
+export default React.memo(
+  styled.div(
+    ({ theme }: Props) => `
     display: flex;
     position: relative;
     flex-direction: row;
     justify-content: center;
     width: 100%;
-    gap: 12px;
-    padding-top: 0px;
     margin-bottom: 16px;
     margin-top: 24px;
     gap: 4px;
@@ -34,7 +29,7 @@ export default styled(HelperFooter)(
     &:before {
       position: absolute;
       content: '';
-      width: calc(100% - 32px);
+      width: calc(100%);
       border-top: 1px solid ${theme.boxBorderColor};
       top: -16px;
    }
@@ -54,7 +49,6 @@ export default styled(HelperFooter)(
       align-self: center;
       white-space: pre-line;
       
-  
       .link {
         color: ${theme.primaryColor};
         cursor: pointer;
@@ -65,4 +59,5 @@ export default styled(HelperFooter)(
       }
     }
 `
+  )
 );

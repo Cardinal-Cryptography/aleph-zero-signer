@@ -17,7 +17,6 @@ import {
   ActionContext,
   Button,
   ButtonArea,
-  HelperFooter,
   InputLock,
   InputWithLabel,
   MnemonicInput,
@@ -26,6 +25,7 @@ import {
   VerticalSpace,
   Warning
 } from '../../components';
+import HelperFooter from '../../components/HelperFooter';
 import useTranslation from '../../hooks/useTranslation';
 
 interface Props {

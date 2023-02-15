@@ -8,7 +8,8 @@ import styled from 'styled-components';
 
 import add from '../../assets/add.svg';
 import helpIcon from '../../assets/help.svg';
-import { ActionContext, Button, ButtonArea, HelperFooter, SkeletonCard, Svg } from '../../components';
+import { ActionContext, Button, ButtonArea, SkeletonCard, Svg } from '../../components';
+import HelperFooter from '../../components/HelperFooter';
 import useTranslation from '../../hooks/useTranslation';
 import Header from '../../partials/Header';
 import { Z_INDEX } from '../../zindex';

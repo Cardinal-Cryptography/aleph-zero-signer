@@ -8,7 +8,8 @@ import styled from 'styled-components';
 
 import helpIcon from '../../assets/help.svg';
 import lockIcon from '../../assets/locked.svg';
-import { ActionContext, Button, ButtonArea, HelperFooter, Svg, VerticalSpace } from '../../components';
+import { ActionContext, Button, ButtonArea, Svg, VerticalSpace } from '../../components';
+import HelperFooter from '../../components/HelperFooter';
 import useTranslation from '../../hooks/useTranslation';
 
 interface Props extends ThemeProps {

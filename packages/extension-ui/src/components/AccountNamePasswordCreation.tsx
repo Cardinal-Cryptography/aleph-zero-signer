@@ -5,13 +5,13 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../assets/help.svg';
-import { Address, Button, Dropdown, HelperFooter, ScrollWrapper, Svg } from '../components';
+import { Address, BackButton, Button, ButtonArea, Dropdown, ScrollWrapper, Svg, VerticalSpace } from '../components';
 import useGenesisHashOptions from '../hooks/useGenesisHashOptions';
 import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
 import { Name, Password } from '../partials';
 import { ThemeProps } from '../types';
-import { BackButton, ButtonArea, VerticalSpace } from '.';
+import HelperFooter from './HelperFooter';
 
 interface Props {
   address: string | null;
@@ -28,9 +28,15 @@ interface Props {
 
 const CustomFooter = styled(HelperFooter)`
 flex-direction: row;
+display: flex;
+gap: 8px;
 
 .icon-container {
   margin-top: 4px;
+}
+.text-container {
+  display: flex;
+  gap: 4px;
 }
 `;
 
