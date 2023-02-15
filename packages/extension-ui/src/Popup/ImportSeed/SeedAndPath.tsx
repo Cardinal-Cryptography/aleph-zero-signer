@@ -40,6 +40,32 @@ interface Props {
   type: KeypairType;
 }
 
+const CustomFooter = styled(HelperFooter)`
+display: flex;
+flex-direction: column;
+.flex {
+  display: flex;
+  gap: 8px;
+}
+`;
+
+interface StyledInputWithLabelProps extends ThemeProps {
+  isLocked: boolean;
+}
+
+const StyledInputWithLabel = styled(InputWithLabel)`
+max-width: 284px;
+gap: 4px;
+position: relative;
+margin-bottom: 4px;
+
+label {
+color: ${({ isLocked, theme }: StyledInputWithLabelProps) => (isLocked ? theme.disabledTextColor : theme.subTextColor)};
+opacity: 1;
+
+}
+`;
+
 function SeedAndPath({
   className,
   genesis,
@@ -85,28 +111,6 @@ function SeedAndPath({
   const _toggleLocked = useCallback(() => {
     setLocked((prevState) => !prevState);
   }, []);
-
-  const CustomFooter = styled(HelperFooter)`
-  display: flex;
-  flex-direction: column;
-  .flex {
-    display: flex;
-    gap: 8px;
-  }
-`;
-
-  const StyledInputWithLabel = styled(InputWithLabel)`
-    max-width: 284px;
-    gap: 4px;
-    position: relative;
-    margin-bottom: 4px;
-
-  label {
-    color: ${({ theme }: ThemeProps) => (isLocked ? theme.disabledTextColor : theme.subTextColor)};
-    opacity: 1;
-  
-}
-    `;
 
   const footer = (
     <CustomFooter>
@@ -166,6 +170,7 @@ function SeedAndPath({
               disabled={isLocked}
               isError={!!path && !!error}
               isFocused
+              isLocked={isLocked}
               label={t<string>('Sub-account derivation path')}
               onChange={setPath}
               value={path || ''}

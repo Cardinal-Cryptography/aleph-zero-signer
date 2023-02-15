@@ -26,6 +26,14 @@ interface Props {
   onPasswordChange?: (password: string) => void;
 }
 
+const CustomFooter = styled(HelperFooter)`
+flex-direction: row;
+
+.icon-container {
+  margin-top: 4px;
+}
+`;
+
 function AccountNamePasswordCreation({
   address,
   buttonLabel,
@@ -74,14 +82,6 @@ function AccountNamePasswordCreation({
   }, [_onNameChange, onBackClick]);
 
   const _onChangeNetwork = useCallback((newGenesisHash: string) => setGenesis(newGenesisHash), [setGenesis]);
-
-  const CustomFooter = styled(HelperFooter)`
-  flex-direction: row;
-
-  .icon-container {
-    margin-top: 4px;
-  }
-  `;
 
   const footer = (
     <CustomFooter>

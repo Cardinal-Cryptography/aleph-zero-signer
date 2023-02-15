@@ -16,23 +16,22 @@ interface Props extends ThemeProps {
   onNextStep: () => void;
 }
 
+const WrapperRow = styled.div`
+ display: flex;
+ flex-direction: row;
+ gap: 8px;
+ width: 100%;
+`;
+
 function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
 
   const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
-  const CustomFooter = styled(HelperFooter)`
-   .wrapper-row {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    width: 100%;
-   }`;
-
   const footer = (
-    <CustomFooter>
-      <div className='wrapper-row'>
+    <HelperFooter>
+      <WrapperRow>
         <Svg
           className='icon'
           src={helpIcon}
@@ -46,8 +45,8 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
             {t<string>('Learn more')}
           </span>
         </span>
-      </div>
-    </CustomFooter>
+      </WrapperRow>
+    </HelperFooter>
   );
 
   return (

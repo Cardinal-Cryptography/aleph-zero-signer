@@ -25,17 +25,10 @@ const InputLock: React.FC<InputLockProps> = ({ className, isLocked, onClick }) =
       className={className}
       onClick={handleClick}
     >
-      {isLocked ? (
-        <Svg
-          className='lock-icon'
-          src={lockedIcon}
-        />
-      ) : (
-        <Svg
-          className='lock-icon'
-          src={unlockedIcon}
-        />
-      )}
+      <Svg
+        className='lock-icon'
+        src={isLocked ? lockedIcon : unlockedIcon}
+      />
     </div>
   );
 };

@@ -101,7 +101,7 @@ function EditAccountMenu({
         />
         <CopyToClipboard text={(address && address) || ''}>
           <EditMenuCard
-            description={ellipsisName(formatted) || ellipsisName(address) || t('<unknown>')}
+            description={ellipsisName(formatted || address) || t('<unknown>')}
             extra='copy'
             onClick={_onCopy}
             position='middle'

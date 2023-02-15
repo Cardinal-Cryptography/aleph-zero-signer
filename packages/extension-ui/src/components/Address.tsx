@@ -217,7 +217,7 @@ function Address({
               className='fullAddress'
               data-field='address'
             >
-              {_ellipsisName(formatted) || _ellipsisName(address) || t('<unknown>')}
+              {_ellipsisName(formatted || address) || t('<unknown>')}
             </div>
             {isHidden && (
               <img
