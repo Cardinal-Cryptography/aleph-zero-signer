@@ -1,6 +1,8 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable react/jsx-newline */
+
 import type { KeypairType } from '@polkadot/util-crypto/types';
 import type { ThemeProps } from '../../types';
 import type { AccountInfo } from '.';
@@ -135,7 +137,13 @@ function SeedAndPath({
         />
         <span>
           {t<string>('Have')}&nbsp;
-          <span className='link'>{t<string>('JSON')}</span>&nbsp;
+          <span
+            className='link'
+            onClick={goTo('/account/restore-json')}
+          >
+            {t<string>('JSON')}
+          </span>
+          &nbsp;
           {t<string>('file to import?')}
         </span>
       </div>
