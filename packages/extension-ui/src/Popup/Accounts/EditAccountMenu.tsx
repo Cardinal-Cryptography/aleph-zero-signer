@@ -16,13 +16,13 @@ import exportAccountIcon from '../../assets/export.svg';
 import subAccountIcon from '../../assets/subAccount.svg';
 import forgetIcon from '../../assets/vanish.svg';
 import { Svg, Switch } from '../../components';
-import { recodeAddress } from '../../components/Address';
 import { AccountContext, ActionContext, SettingsContext } from '../../components/contexts';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
 import { showAccount } from '../../messaging';
 import Header from '../../partials/Header';
 import { ellipsisName } from '../../util/ellipsisName';
+import { recodeAddress } from '../../util/recodeAddress';
 
 interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
   className?: string;
