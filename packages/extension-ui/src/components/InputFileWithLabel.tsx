@@ -128,7 +128,7 @@ function InputFile({
               {!file || clearContent
                 ? placeholder || (
                     <span>
-                      {t('Drag & drop JSON file here\nor')}&nbsp;<span className='link'>{t('browse.')}</span>
+                      {t('Drag & drop JSON file here\nor')}&nbsp;<span className='link'>{t('browse')}.</span>
                     </span>
                   )
                 : placeholder ||
