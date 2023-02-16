@@ -22,7 +22,7 @@ function FileNameDisplay({ className, fileName }: Props): React.ReactElement<Pro
           className='icon-dot'
           src={dotIcon}
         />
-        <span>{fileName.slice(0, 32)}...</span>
+        <span>{fileName}</span>
       </div>
     </div>
   );
@@ -59,21 +59,16 @@ export default styled(FileNameDisplay)(
     span {
       color: ${theme.subTextColor};
       align-self: center;
-      white-space: pre-line;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 100%;
+      max-width: 90%;
       margin-left: 2px;
       font-weight: 300;
       font-size: 13px;
       line-height: 130%;
       letter-spacing: 0.06em;
-
     }
   }
-  
-
-
-  
 `
 );

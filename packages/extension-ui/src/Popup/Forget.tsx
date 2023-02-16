@@ -51,7 +51,7 @@ function Forget({
         src={helpIcon}
       />
       <span>
-        {t<string>('How to restore your account? ')}
+        {t<string>('How to restore your account?')}&nbsp;
         <span className='link'>{` ${t<string>('Learn more')}`}</span>
       </span>
     </HelperFooter>
