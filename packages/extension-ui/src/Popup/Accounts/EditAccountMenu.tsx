@@ -79,10 +79,6 @@ function EditAccountMenu({
     [accounts, address, chain, settings]
   );
 
-  console.log('edit menu', !!master && isExternal);
-  console.log('master', master);
-  console.log('isExternal', isExternal);
-
   return (
     <>
       <Header
