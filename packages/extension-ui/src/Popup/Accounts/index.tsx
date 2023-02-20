@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { AccountWithChildren } from '@polkadot/extension-base/background/types';
 import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
 
-import { AccountContext, AddButton } from '../../components';
+import { AccountContext, AddButton, ButtonArea, ScrollWrapper, VerticalSpace } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import { Header } from '../../partials';
 import AccountsTree from './AccountsTree';
@@ -103,17 +103,18 @@ function Accounts({ className }: Props): React.ReactElement {
             withHelp
             withSettings
           />
-          <div className={className}>
-            {filteredAccount.map(
-              (json, index): React.ReactNode => (
-                <AccountsTree
-                  {...json}
-                  key={`${index}:${json.address}`}
-                />
-              )
-            )}
-            {/* TODO: Out of scope */}
-            {/* <div className='bordered mt-20'>
+          <ScrollWrapper>
+            <div className={className}>
+              {filteredAccount.map(
+                (json, index): React.ReactNode => (
+                  <AccountsTree
+                    {...json}
+                    key={`${index}:${json.address}`}
+                  />
+                )
+              )}
+              {/* TODO: Out of scope */}
+              {/* <div className='bordered mt-20'>
               <MenuCard
                 description='Send, Stake and more...'
                 extra={
@@ -126,8 +127,12 @@ function Accounts({ className }: Props): React.ReactElement {
                 title='Go to Web Wallet'
               />
             </div> */}
+            </div>
+          </ScrollWrapper>
+          <VerticalSpace />
+          <ButtonArea>
             <AddButton />
-          </div>
+          </ButtonArea>
         </>
       )}
     </>
@@ -137,8 +142,6 @@ function Accounts({ className }: Props): React.ReactElement {
 export default styled(Accounts)(
   ({ theme }: Props) => `
   height: calc(100vh - 2px);
-  overflow-y: scroll;
-  overflow-x: hidden;
   margin-top: -25px;
   padding-top: 25px;
   scrollbar-width: none;

@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
 import useGenesisHashOptions from '@polkadot/extension-ui/hooks/useGenesisHashOptions';
-import { selectableNetworks } from '@polkadot/networks';
+import { allNetworks, selectableNetworks } from '@polkadot/networks';
 
 import helpIcon from '../../assets/help.svg';
 import {
@@ -65,7 +65,7 @@ function EditNetwork({
     }
   }, [address, genesis, isExternal, onAction, show, t]);
 
-  console.log('selectableNetworks', selectableNetworks);
+  console.log('selectableNetworks', allNetworks);
 
   const footer = (
     <CustomFooter>
