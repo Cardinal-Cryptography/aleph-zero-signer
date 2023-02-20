@@ -165,6 +165,8 @@ function Address({
 
   const _ellipsisName = useCallback(ellipsisName, [ellipsisName]);
 
+  console.log(chain);
+
   return (
     <div className={className}>
       <div className='infoRow'>

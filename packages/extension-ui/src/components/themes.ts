@@ -63,6 +63,7 @@ const darkTheme = {
   inputFileBorderColor: '#1B2B38',
   inputFocusBorderColor: '#00EAC7',
   inputLabelFontSize: '13px',
+  inputRadioBorderColor: '#1B2B38',
   labelColor: '#BCCBD6',
   labelFontSize: '13px',
   labelLineHeight: '130%',

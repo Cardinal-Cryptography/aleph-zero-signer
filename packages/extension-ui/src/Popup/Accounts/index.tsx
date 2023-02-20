@@ -1,6 +1,8 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import type { ThemeProps } from '../../types';
 
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -41,6 +43,52 @@ function Accounts({ className }: Props): React.ReactElement {
   const _onFilter = useCallback((filter: string) => {
     setFilter(filter.toLowerCase());
   }, []);
+
+  console.log('filteredAccount', filteredAccount);
+
+  // knownGenesis.js
+  const accountsByGenesisHash: { [key: string]: AccountWithChildren[] } = filteredAccount.reduce(
+    (result: { [key: string]: AccountWithChildren[] }, account) => {
+      const { genesisHash } = account;
+
+      if (!genesisHash) {
+        if (!result.any) {
+          result.any = [];
+        }
+
+        result.any.push(account);
+
+        return result;
+      }
+
+      if (!result[genesisHash]) {
+        result[genesisHash] = [];
+      }
+
+      const accountWithChildren: AccountWithChildren = { ...account };
+
+      if (account.parentAddress) {
+        const parentAccount = filteredAccount.find(({ address }) => address === account.parentAddress);
+
+        if (parentAccount) {
+          if (!parentAccount.children) {
+            parentAccount.children = [];
+          }
+
+          parentAccount.children.push(accountWithChildren);
+
+          return result;
+        }
+      }
+
+      result[genesisHash].push(accountWithChildren);
+
+      return result;
+    },
+    {}
+  );
+
+  // console.log('accountsByGenesisHash', accountsByGenesisHash);
 
   return (
     <>
