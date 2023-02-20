@@ -64,11 +64,7 @@ function AccountNamePasswordCreation({
 
   const _onCreate = useCallback(async () => {
     if (name && password) {
-      if (isDeriving) {
-        show(t('Creating a sub-account successfully!'), 'success');
-      } else {
-        show(t('Import successful'), 'success');
-      }
+      show(t(isDeriving ? 'Creating a sub-account successfully!' : 'Import successful'), 'success');
 
       await onCreate(name, password);
     }
@@ -153,7 +149,7 @@ function AccountNamePasswordCreation({
       <VerticalSpace />
       {onBackClick && buttonLabel && (
         <ButtonArea footer={!isDeriving && footer}>
-          {!!master && isDeriving ? (
+          {master && isDeriving ? (
             <Button
               onClick={_onBackClick}
               secondary

@@ -24,16 +24,16 @@ interface StyledInputWithLabelProps extends ThemeProps {
 }
 
 const StyledInputWithLabel = styled(InputWithLabel)`
-max-width: 284px;
-gap: 4px;
-position: relative;
-margin-bottom: 4px;
+  max-width: 284px;
+  gap: 4px;
+  position: relative;
+  margin-bottom: 4px;
 
-label {
-color: ${({ isLocked, theme }: StyledInputWithLabelProps) => (isLocked ? theme.disabledTextColor : theme.subTextColor)};
-opacity: 1;
-
-}
+  label {
+    color: ${({ isLocked, theme }: StyledInputWithLabelProps) =>
+      isLocked ? theme.disabledTextColor : theme.subTextColor};
+    opacity: 1;
+  }
 `;
 
 function DerivationPath({ className, defaultPath, isError, onChange, withSoftPath }: Props): React.ReactElement<Props> {

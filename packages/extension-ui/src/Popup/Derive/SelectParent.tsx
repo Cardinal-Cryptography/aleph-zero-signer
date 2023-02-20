@@ -48,6 +48,8 @@ const singleSlashRegex = /([^/]|^)\/([^/]|$)/;
 const StyledFooter = styled(HelperFooter)`
 gap: 8px;`;
 
+const MIN_PASSWORD_LENGTH = 6;
+
 function SelectParent({
   className,
   externalString,
@@ -149,8 +151,7 @@ function SelectParent({
     setIsPasswordVisible(!isPasswordVisible);
   }, [isPasswordVisible]);
 
-  const MIN_LENGTH = 6;
-  const isPasswordValid = useMemo(() => isNotShorterThan(MIN_LENGTH, t<string>('Password is too short')), [t]);
+  const isPasswordValid = useMemo(() => isNotShorterThan(MIN_PASSWORD_LENGTH, t<string>('Password is too short')), [t]);
 
   const footer = (
     <StyledFooter>
@@ -190,12 +191,12 @@ function SelectParent({
             label={t<string>('Main account password')}
             onValidatedChange={_onParentPasswordEnter}
             showPasswordElement={
-              <div className='password-icon'>
+              <button className='password-icon'>
                 <img
                   onClick={_handleInputTypeChange}
                   src={isPasswordVisible ? viewOn : viewOff}
                 />
-              </div>
+              </button>
             }
             type={isPasswordVisible ? 'text' : 'password'}
             validator={isPasswordValid}
@@ -253,9 +254,7 @@ function SelectParent({
 }
 
 export default React.memo(
-  styled(SelectParent)(
-    ({ theme }: Props) => `
+  styled(SelectParent)`
     margin-top: 24px;
 `
-  )
 );

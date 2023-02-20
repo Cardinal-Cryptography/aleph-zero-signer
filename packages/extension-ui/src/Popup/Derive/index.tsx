@@ -44,11 +44,9 @@ function Derive({ isLocked }: Props): React.ReactElement<Props> {
   );
 
   const parentIsExternal = useMemo(
-    () => accounts.find((a) => a.address === parentAddress)?.isExternal || null,
+    () => accounts.find((a) => a.address === parentAddress)?.isExternal || 'false',
     [accounts, parentAddress]
   );
-
-  const isExternalResult = parentIsExternal || 'false';
 
   const _onCreate = useCallback(
     (name: string, password: string) => {
@@ -86,7 +84,7 @@ function Derive({ isLocked }: Props): React.ReactElement<Props> {
       />
       {!account && step === 1 && (
         <SelectParent
-          externalString={isExternalResult}
+          externalString={parentIsExternal}
           isLocked={isLocked}
           onDerivationConfirmed={_onDerivationConfirmed}
           onNextStep={_onNextStep}
@@ -101,7 +99,7 @@ function Derive({ isLocked }: Props): React.ReactElement<Props> {
           genesisHash={parentGenesis}
           isBusy={isBusy}
           isDeriving
-          onBackClick={goTo(`/account/edit-menu/${parentAddress}?isExternal=${isExternalResult?.toString()}`)}
+          onBackClick={goTo(`/account/edit-menu/${parentAddress}?isExternal=${parentIsExternal?.toString()}`)}
           onCreate={_onCreate}
           onNameChange={setName}
         />
