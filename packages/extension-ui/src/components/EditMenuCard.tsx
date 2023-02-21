@@ -7,15 +7,18 @@ import React from 'react';
 import styled from 'styled-components';
 
 import copyIcon from '../assets/copyMenu.svg';
+import externalLinkIcon from '../assets/externalLink.svg';
 import { ThemeProps } from '../types';
+import Svg from './Svg';
 
+type ExtraOptions = 'chevron' | 'copy' | 'link';
 interface Props extends ThemeProps {
   className?: string;
   preIcon?: React.ReactNode;
   title: string;
   description: string;
   position?: 'top' | 'bottom' | 'middle' | 'both';
-  extra?: 'chevron' | 'copy';
+  extra?: ExtraOptions;
   isDanger?: boolean;
   toggle?: React.ReactNode;
   onClick?: () => void;
@@ -23,7 +26,7 @@ interface Props extends ThemeProps {
 
 interface ExtraProps {
   className?: string;
-  extra?: 'chevron' | 'copy';
+  extra?: ExtraOptions;
 }
 
 const ExtraContent = ({ extra = 'chevron' }: ExtraProps): React.ReactElement<ExtraProps> | null => {
@@ -32,9 +35,16 @@ const ExtraContent = ({ extra = 'chevron' }: ExtraProps): React.ReactElement<Ext
       return <FontAwesomeIcon icon={faChevronRight} />;
     case 'copy':
       return (
-        <img
+        <Svg
           className='copy-icon'
           src={copyIcon}
+        />
+      );
+    case 'link':
+      return (
+        <Svg
+          className='link-icon'
+          src={externalLinkIcon}
         />
       );
     default:
@@ -161,10 +171,23 @@ export default styled(EditMenuCard)(
   }
 
   .extra {
+    display: flex;
+    align-items: center;
 
     &:hover {
       cursor: pointer
     };
+  }
+  .copy-icon {
+    width: 16px;
+    height: 20px;
+    background: ${theme.iconNeutralColor};
+  }
+
+  .link-icon {
+    width: 20px;
+    height: 20px;
+    background: ${theme.primaryColor};
   }
 
   .icon {
