@@ -32,7 +32,12 @@ interface ExtraProps {
 const ExtraContent = ({ extra = 'chevron' }: ExtraProps): React.ReactElement<ExtraProps> | null => {
   switch (extra) {
     case 'chevron':
-      return <FontAwesomeIcon icon={faChevronRight} />;
+      return (
+        <FontAwesomeIcon
+          className='chevron'
+          icon={faChevronRight}
+        />
+      );
     case 'copy':
       return (
         <Svg
@@ -109,6 +114,16 @@ export default styled(EditMenuCard)(
       : '2px'
   };
 
+  &:hover {
+    ${Svg}:not(.icon):not(.forgetIcon) {
+      background: ${theme.headerIconBackgroundHover};
+    }
+  
+    .chevron path{
+      fill: ${theme.headerIconBackgroundHover};
+    }
+  }
+
   cursor: ${onClick ? 'pointer' : 'default'};
 
   .flex-container {
@@ -176,8 +191,9 @@ export default styled(EditMenuCard)(
 
     &:hover {
       cursor: pointer
-    };
+    }
   }
+
   .copy-icon {
     width: 16px;
     height: 20px;
