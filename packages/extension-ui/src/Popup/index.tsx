@@ -42,6 +42,7 @@ import EditName from './Accounts/EditName';
 import EditNetwork from './Accounts/EditNetwork';
 import AccountManagement from './AuthManagement/AccountManagement';
 import RestoreJson from './Restore/RestoreJson';
+import About from './About';
 import Accounts from './Accounts';
 import AuthList from './AuthManagement';
 import Authorize from './Authorize';
@@ -180,6 +181,7 @@ export default function Popup(): React.ReactElement {
                         <SplashHandler>
                           <Switch>
                             <Route path='/auth-list'>{wrapWithErrorBoundary(<AuthList />, 'auth-list')}</Route>
+                            <Route path='/about'>{wrapWithErrorBoundary(<About />, 'about')}</Route>
                             <Route path='/help'>{wrapWithErrorBoundary(<Help />, 'help')}</Route>
                             <Route path='/account/settings'>{wrapWithErrorBoundary(<Settings />, 'settings')}</Route>
                             <Route path='/account/add-menu'>
