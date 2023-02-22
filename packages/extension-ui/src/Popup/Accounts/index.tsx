@@ -43,10 +43,6 @@ function Accounts({ className }: Props): React.ReactElement {
     setFilter(filter.toLowerCase());
   }, []);
 
-  console.log('filteredAccount', filteredAccount);
-  console.log('knownGenesis', knownGenesis);
-
-  // knownGenesis.js
   const accountsByGenesisHash: { [key: string]: AccountWithChildren[] } = filteredAccount.reduce(
     (result: { [key: string]: AccountWithChildren[] }, account) => {
       const { genesisHash } = account;
