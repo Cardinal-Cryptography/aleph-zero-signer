@@ -2,9 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
 
-import { ThemeProps } from '../types';
 import RadioCard from './RadioCard';
 
 interface Option {
@@ -12,7 +10,7 @@ interface Option {
   value: string;
 }
 
-interface Props extends ThemeProps {
+interface Props {
   className?: string;
   options: Array<Option>;
   onSelectionChange: (value: string) => void;
@@ -46,10 +44,4 @@ const RadioGroup: React.FC<Props> = ({ className, defaultSelectedValue, onSelect
   );
 };
 
-export default styled(RadioGroup)(
-  ({ theme }: Props) => `
-
-  
-
-`
-);
+export default RadioGroup;

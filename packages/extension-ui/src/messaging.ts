@@ -212,8 +212,6 @@ export async function getMetadata(genesisHash?: string | null, isPartial = false
 
   const def = await request;
 
-  console.log('request', def);
-
   if (def) {
     return metadataExpand(def, isPartial);
   } else if (isPartial) {

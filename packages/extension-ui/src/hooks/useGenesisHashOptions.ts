@@ -3,8 +3,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { selectableNetworks } from '@polkadot/networks';
-
 import { getAllMetadata } from '../messaging';
 import chains from '../util/chains';
 import useTranslation from './useTranslation';
@@ -15,8 +13,6 @@ interface Option {
 }
 
 const RELAY_CHAIN = 'Relay Chain';
-
-console.log('selectableNetworks', selectableNetworks);
 
 export default function (): Option[] {
   const { t } = useTranslation();
@@ -38,11 +34,6 @@ export default function (): Option[] {
         text: t('Allow use on any chain'),
         value: ''
       },
-      // {
-      //   text: t('Aleph Zero'),
-      //   value: '0x70255b4d28de0fc4e1a193d7e175ad1ccef431598211c55538f1018651a0344e'
-      // },
-      // put the relay chains at the top
       ...chains
         .filter(({ chain }) => chain.includes(RELAY_CHAIN))
         .map(({ chain, genesisHash }) => ({

@@ -97,22 +97,15 @@ const AUTH_URLS_KEY = 'authUrls';
 const DEFAULT_AUTH_ACCOUNTS = 'defaultAuthAccounts';
 
 function extractMetadata (store: MetadataStore): void {
-  console.log(store);
   store.allMap((map): void => {
     const knownEntries = Object.entries(knownGenesis);
     const defs: Record<string, { def: MetadataDef, index: number, key: string }> = {};
     const removals: string[] = [];
 
-    // console.log('knownEntries', knownEntries);
-
     Object
       .entries(map)
       .forEach(([key, def]): void => {
         const entry = knownEntries.find(([, hashes]) => hashes.includes(def.genesisHash));
-
-        console.log('entry', entry);
-
-        console.log('def', def);
 
         if (entry) {
           const [name, hashes] = entry;

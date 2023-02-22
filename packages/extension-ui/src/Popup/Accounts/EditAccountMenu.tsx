@@ -114,7 +114,7 @@ function EditAccountMenu({
           />
         </CopyToClipboard>
         <EditMenuCard
-          description={chain?.name.replace(' Relay Chain', '') || ''}
+          description={chain?.name.replace(' Relay Chain', '') || t<string>('Any chain')}
           extra='chevron'
           onClick={goTo(`/account/edit-network/${address}`)}
           position='middle'
