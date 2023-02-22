@@ -3,12 +3,11 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
 import useGenesisHashOptions from '@polkadot/extension-ui/hooks/useGenesisHashOptions';
-import { allNetworks, selectableNetworks } from '@polkadot/networks';
 
 import helpIcon from '../../assets/help.svg';
 import {
@@ -16,6 +15,7 @@ import {
   ActionContext,
   Button,
   ButtonArea,
+  Checkbox,
   RadioGroup,
   ScrollWrapper,
   Svg,
@@ -54,6 +54,9 @@ function EditNetwork({
   const isExternal = account?.isExternal || 'false';
 
   const [genesis, setGenesis] = useState<string | undefined | null>(account?.genesisHash);
+  const [checked, setChecked] = useState(false);
+
+  const toggleChecked = useCallback(() => setChecked((checked) => !checked), []);
 
   const _saveChanges = useCallback(async (): Promise<void> => {
     try {
@@ -65,7 +68,13 @@ function EditNetwork({
     }
   }, [address, genesis, isExternal, onAction, show, t]);
 
-  console.log('selectableNetworks', allNetworks);
+  const [hasGenesisChanged, setHasGenesisChanged] = useState(false);
+
+  useEffect(() => {
+    if (account && genesis !== account.genesisHash) {
+      setHasGenesisChanged(true);
+    }
+  }, [account, genesis]);
 
   const footer = (
     <CustomFooter>
@@ -89,6 +98,14 @@ function EditNetwork({
       />
       <ScrollWrapper>
         <div className={className}>
+          {/* TODO: ask about the checkbox */}
+          <div className='checkbox-container'>
+            <Checkbox
+              checked={checked}
+              label={t<string>('Show test networks')}
+              onChange={toggleChecked}
+            />
+          </div>
           <RadioGroup
             defaultSelectedValue={genesis}
             onSelectionChange={setGenesis}
@@ -104,7 +121,12 @@ function EditNetwork({
         >
           {t<string>('Cancel')}
         </Button>
-        <Button onClick={_saveChanges}>{t<string>('Change')}</Button>
+        <Button
+          isDisabled={!hasGenesisChanged}
+          onClick={_saveChanges}
+        >
+          {t<string>('Change')}
+        </Button>
       </ButtonArea>
     </>
   );
@@ -115,5 +137,12 @@ export default withRouter(
     display: flex;
     flex-direction: column;
     gap: 24px;
+
+    .checkbox-container{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+    }
 `
 );
