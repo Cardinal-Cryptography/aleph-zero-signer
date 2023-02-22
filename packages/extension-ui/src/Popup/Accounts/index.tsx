@@ -10,6 +10,7 @@ import styled from 'styled-components';
 
 import { AccountWithChildren } from '@polkadot/extension-base/background/types';
 import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
+import { knownGenesis } from '@polkadot/networks/defaults';
 
 import { AccountContext, AddButton, ButtonArea, ScrollWrapper, VerticalSpace } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
@@ -45,13 +46,15 @@ function Accounts({ className }: Props): React.ReactElement {
   }, []);
 
   console.log('filteredAccount', filteredAccount);
+  console.log('knownGenesis', knownGenesis);
 
   // knownGenesis.js
   const accountsByGenesisHash: { [key: string]: AccountWithChildren[] } = filteredAccount.reduce(
     (result: { [key: string]: AccountWithChildren[] }, account) => {
       const { genesisHash } = account;
+      const foundKey = Object.keys(knownGenesis).find((key) => knownGenesis[key].includes(genesisHash ?? ''));
 
-      if (!genesisHash) {
+      if (!foundKey) {
         if (!result.any) {
           result.any = [];
         }
@@ -61,8 +64,8 @@ function Accounts({ className }: Props): React.ReactElement {
         return result;
       }
 
-      if (!result[genesisHash]) {
-        result[genesisHash] = [];
+      if (!result[foundKey]) {
+        result[foundKey] = [];
       }
 
       const accountWithChildren: AccountWithChildren = { ...account };
@@ -81,14 +84,14 @@ function Accounts({ className }: Props): React.ReactElement {
         }
       }
 
-      result[genesisHash].push(accountWithChildren);
+      result[foundKey].push(accountWithChildren);
 
       return result;
     },
     {}
   );
 
-  // console.log('accountsByGenesisHash', accountsByGenesisHash);
+  console.log('accountsByGenesisHash', accountsByGenesisHash);
 
   return (
     <>
@@ -105,28 +108,17 @@ function Accounts({ className }: Props): React.ReactElement {
           />
           <ScrollWrapper>
             <div className={className}>
-              {filteredAccount.map(
-                (json, index): React.ReactNode => (
-                  <AccountsTree
-                    {...json}
-                    key={`${index}:${json.address}`}
-                  />
-                )
-              )}
-              {/* TODO: Out of scope */}
-              {/* <div className='bordered mt-20'>
-              <MenuCard
-                description='Send, Stake and more...'
-                extra={
-                  <img
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onClick={_handleMenuCardClick}
-                    src={ExternalLinkIcon}
-                  />
-                }
-                title='Go to Web Wallet'
-              />
-            </div> */}
+              {Object.keys(accountsByGenesisHash).map((genesisHash) => (
+                <div key={genesisHash}>
+                  {genesisHash !== 'any' && <span className='network-heading'>{genesisHash}</span>}
+                  {accountsByGenesisHash[genesisHash].map((json, index) => (
+                    <AccountsTree
+                      {...json}
+                      key={`${index}:${json.address}`}
+                    />
+                  ))}
+                </div>
+              ))}
             </div>
           </ScrollWrapper>
           <VerticalSpace />
@@ -142,21 +134,27 @@ function Accounts({ className }: Props): React.ReactElement {
 export default styled(Accounts)(
   ({ theme }: Props) => `
   height: calc(100vh - 2px);
-  margin-top: -25px;
-  padding-top: 25px;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
     display: none;
   }
 
-  .bordered {
-    border: 1px solid ${theme.warningColor};
-    padding: 20px 10px;
-  }
-
-  .mt-20{
-    margin-top: 20px;
+  .network-heading {
+    display: flex;
+    align-items: center;
+    font-family: ${theme.secondaryFontFamily};
+    font-style: normal;
+    font-weight: 300;
+    font-size: 11px;
+    line-height: 120%;
+    text-align: right;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: ${theme.subTextColor};
+    padding: 8px 0 0 8px;
+    margin: 24px 0 16px 0;
+    border-bottom: 1px solid ${theme.boxBorderColor};
   }
 `
 );
