@@ -85,8 +85,6 @@ function Accounts({ className }: Props): React.ReactElement {
     {}
   );
 
-  console.log('accountsByGenesisHash', accountsByGenesisHash);
-
   return (
     <>
       {hierarchy.length === 0 ? (
