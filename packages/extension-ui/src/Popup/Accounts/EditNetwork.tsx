@@ -32,7 +32,7 @@ interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
 }
 
 const CustomFooter = styled(HelperFooter)`
-  gap:12px;
+  gap: 12px;
 `;
 
 function EditNetwork({
@@ -51,7 +51,7 @@ function EditNetwork({
 
   const account = accounts.find((account) => account.address === address);
 
-  const isExternal = account?.isExternal || 'false';
+  const isExternal = Boolean(account?.isExternal);
 
   const [genesis, setGenesis] = useState<string | undefined | null>(account?.genesisHash);
   const [checked, setChecked] = useState(false);
@@ -142,7 +142,6 @@ export default withRouter(
       display: flex;
       justify-content: center;
       align-items: center;
-
     }
 `
 );

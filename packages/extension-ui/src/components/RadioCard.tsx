@@ -19,16 +19,15 @@ interface Props extends ThemeProps {
   onChange: (value: string) => void;
 }
 
-function RadioCard({
-  className,
-  onChange,
-  option,
-  position = 'middle',
-  selectedValue
-}: Props): React.ReactElement<Props> {
-  const handleChange = useCallback(() => {
-    onChange(option.value);
-  }, [onChange, option.value]);
+function RadioCard({ className, onChange, option, selectedValue }: Props): React.ReactElement<Props> {
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
+
+      onChange(value);
+    },
+    [onChange]
+  );
 
   return (
     <div className={className}>
@@ -46,7 +45,7 @@ function RadioCard({
 }
 
 export default styled(RadioCard)(
-  ({ position, theme }: Props) => `
+  ({ position = 'middle', theme }: Props) => `
   display: flex;
   justify-content: space-between;
   align-items: center;
