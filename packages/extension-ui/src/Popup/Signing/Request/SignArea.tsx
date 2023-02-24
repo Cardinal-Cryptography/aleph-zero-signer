@@ -37,7 +37,6 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
   const [isBusy, setIsBusy] = useState(false);
   const onAction = useContext(ActionContext);
   const { t } = useTranslation();
-  const _goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
   useEffect(() => {
     setIsLocked(null);
@@ -62,24 +61,27 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
     };
   }, [isExternal, signId]);
 
-  const _onSign = useCallback((): void => {
-    setIsBusy(true);
-    approveSignPassword(signId, savePass, password)
-      .then((): void => {
-        setIsBusy(false);
-      })
-      .catch((error: Error): void => {
-        setIsBusy(false);
-        setError(error.message);
-        console.error(error);
-      });
-  }, [password, savePass, setError, signId]);
+  const _onSign = useCallback(async (): Promise<void> => {
+    try {
+      setIsBusy(true);
+      await approveSignPassword(signId, savePass, password);
+      setIsBusy(false);
+      onAction('transaction-status/signed');
+    } catch (error) {
+      setIsBusy(false);
+      setError((error as Error).message);
+      console.error(error);
+    }
+  }, [onAction, password, savePass, setError, signId]);
 
-  const _onCancel = useCallback((): void => {
-    cancelSignRequest(signId)
-      .then(() => _goTo('transaction-declined'))
-      .catch((error: Error) => console.error(error));
-  }, [_goTo, signId]);
+  const _onCancel = useCallback(async (): Promise<void> => {
+    try {
+      await cancelSignRequest(signId);
+      onAction('transaction-status/declined');
+    } catch (error) {
+      console.error(error);
+    }
+  }, [onAction, signId]);
 
   const StyledCheckbox = styled(Checkbox)`
   margin-left: 8px;
@@ -137,11 +139,7 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
           isBusy={isBusy}
           isDisabled={(!!isLocked && !password) || !!error}
           isSuccess
-          // eslint-disable-next-line react/jsx-no-bind
-          onClick={() => {
-            _onSign();
-            onAction('transaction-signed');
-          }}
+          onClick={_onSign}
         >
           {buttonText}
         </Button>

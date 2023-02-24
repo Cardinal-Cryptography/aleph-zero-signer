@@ -272,5 +272,10 @@
   "New Transaction": "",
   "Sign": "",
   "Decline": "",
-  "Remember password for {{expiration}} minutes": ""
+  "Remember password for {{expiration}} minutes": "",
+  "module": "",
+  "Call": "",
+  "value": "",
+  "target": "",
+  "Transaction Signed": ""
 }

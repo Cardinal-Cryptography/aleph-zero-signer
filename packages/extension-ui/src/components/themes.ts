@@ -49,6 +49,7 @@ const darkTheme = {
   buttonTertiaryTextColor: '#00CCAB',
   buttonTextColor: '#111B24',
   connectedDotColor: 'seagreen',
+  dangerBackground: '#FF5E5C',
   disabledTextColor: '#2F4252',
   errorBorderColor: '#7E3530',
   errorColor: '#E42F2F',

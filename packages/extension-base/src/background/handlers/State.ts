@@ -221,13 +221,6 @@ export default class State {
     return this.#authUrls;
   }
 
-  private popupClose (): void {
-    this.#windows.forEach((id: number) =>
-      withErrorLog(() => chrome.windows.remove(id))
-    );
-    this.#windows = [];
-  }
-
   private popupOpen (): void {
     this.#notification !== 'extension' &&
       chrome.windows.create(
@@ -371,10 +364,6 @@ export default class State {
     );
 
     withErrorLog(() => chrome.browserAction.setBadgeText({ text }));
-
-    if (shouldClose && text === '') {
-      this.popupClose();
-    }
   }
 
   public removeAuthorization (url: string): AuthUrls {
