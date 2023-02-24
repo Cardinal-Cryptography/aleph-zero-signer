@@ -6,13 +6,13 @@ import type { ThemeProps } from '../../types';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { AccountJson, AccountWithChildren } from '@polkadot/extension-base/background/types';
+import { AccountWithChildren } from '@polkadot/extension-base/background/types';
 import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
-import { knownGenesis } from '@polkadot/networks/defaults';
 
 import { AccountContext, AddButton, ButtonArea, ScrollWrapper, VerticalSpace } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import { Header } from '../../partials';
+import { createGroupedAccountData } from '../../util/createGroupedAccountData';
 import AccountsTree from './AccountsTree';
 import AddAccount from './AddAccount';
 
@@ -27,6 +27,7 @@ function Accounts({ className }: Props): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
   const networkMap = useMemo(() => getNetworkMap(), []);
   const defaultNetwork = 'any';
+  const { filterChildren, getParentName, groupedParents } = createGroupedAccountData(filteredAccount);
 
   useEffect(() => {
     setFilteredAccount(
@@ -43,62 +44,6 @@ function Accounts({ className }: Props): React.ReactElement {
   const _onFilter = useCallback((filter: string) => {
     setFilter(filter.toLowerCase());
   }, []);
-
-  interface GroupedData {
-    [key: string]: AccountWithChildren[];
-  }
-
-  const flattened: AccountJson[] = filteredAccount.reduce((acc: AccountJson[], next) => {
-    if (next.children) {
-      next.children.forEach((c) => acc.push(c));
-      delete next.children;
-    }
-
-    acc.push(next);
-
-    return acc;
-  }, []);
-
-  const children = flattened.filter((item) => item.parentAddress);
-
-  const parents = flattened.filter((item) => !item.parentAddress);
-
-  const groupedParents: GroupedData = parents.reduce(
-    (acc: GroupedData, next: AccountWithChildren) => {
-      const { genesisHash } = next;
-      const foundKey = Object.keys(knownGenesis).find((key) => knownGenesis[key].includes(genesisHash ?? ''));
-
-      if (!foundKey) {
-        acc.any.push(next);
-      } else {
-        acc[foundKey] = (acc[foundKey] ?? []).concat(next);
-      }
-
-      return acc;
-    },
-    { any: [] }
-  );
-
-  function filterChildren(
-    children: AccountJson[],
-    networkName: string,
-    defaultNetwork: string,
-    details: AccountWithChildren[]
-  ) {
-    return children.filter((child) => {
-      if (!child.genesisHash && networkName === defaultNetwork) {
-        return true;
-      }
-
-      return details.some((d) => d.genesisHash === child.genesisHash);
-    });
-  }
-
-  function getParentName(parents: AccountJson[], child: AccountJson) {
-    const parent = parents.find((i) => i.address === child.parentAddress);
-
-    return parent?.name;
-  }
 
   return (
     <>
@@ -124,11 +69,11 @@ function Accounts({ className }: Props): React.ReactElement {
                       key={json.address}
                     />
                   ))}
-                  {filterChildren(children, networkName, defaultNetwork, details).map((json) => (
+                  {filterChildren(networkName, defaultNetwork, details).map((json) => (
                     <AccountsTree
                       {...json}
                       key={json.address}
-                      parentName={getParentName(parents, json)}
+                      parentName={getParentName(json)}
                     />
                   ))}
                 </div>
