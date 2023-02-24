@@ -13,6 +13,7 @@ import { BN, bnToBn, formatNumber } from '@polkadot/util';
 import { Table } from '../../components';
 import useMetadata from '../../hooks/useMetadata';
 import useTranslation from '../../hooks/useTranslation';
+import { ellipsisName } from '../../util/ellipsisName';
 
 interface Decoded {
   args: AnyJson | null;
@@ -26,11 +27,13 @@ interface Props {
   url: string;
 }
 
-function displayDecodeVersion (message: string, chain: Chain, specVersion: BN): string {
-  return `${message}: chain=${chain.name}, specVersion=${chain.specVersion.toString()} (request specVersion=${specVersion.toString()})`;
+function displayDecodeVersion(message: string, chain: Chain, specVersion: BN): string {
+  return `${message}: chain=${
+    chain.name
+  }, specVersion=${chain.specVersion.toString()} (request specVersion=${specVersion.toString()})`;
 }
 
-function decodeMethod (data: string, chain: Chain, specVersion: BN): Decoded {
+function decodeMethod(data: string, chain: Chain, specVersion: BN): Decoded {
   let args: AnyJson | null = null;
   let method: Call | null = null;
 
@@ -51,7 +54,7 @@ function decodeMethod (data: string, chain: Chain, specVersion: BN): Decoded {
   return { args, method };
 }
 
-function renderMethod (data: string, { args, method }: Decoded, t: TFunction): React.ReactNode {
+function renderMethod(data: string, { args, method }: Decoded, t: TFunction): React.ReactNode {
   if (!args || !method) {
     return (
       <tr>
@@ -67,11 +70,10 @@ function renderMethod (data: string, { args, method }: Decoded, t: TFunction): R
         <td className='label'>{t<string>('method')}</td>
         <td className='data'>
           <details>
-            <summary>{method.section}.{method.method}{
-              method.meta
-                ? `(${method.meta.args.map(({ name }) => name).join(', ')})`
-                : ''
-            }</summary>
+            <summary>
+              {method.section}.{method.method}
+              {method.meta ? `(${method.meta.args.map(({ name }) => name).join(', ')})` : ''}
+            </summary>
             <pre>{JSON.stringify(args, null, 2)}</pre>
           </details>
         </td>
@@ -90,7 +92,7 @@ function renderMethod (data: string, { args, method }: Decoded, t: TFunction): R
   );
 }
 
-function mortalityAsString (era: ExtrinsicEra, hexBlockNumber: string, t: TFunction): string {
+function mortalityAsString(era: ExtrinsicEra, hexBlockNumber: string, t: TFunction): string {
   if (era.isImmortalEra) {
     return t<string>('immortal');
   }
@@ -106,48 +108,47 @@ function mortalityAsString (era: ExtrinsicEra, hexBlockNumber: string, t: TFunct
   });
 }
 
-function Extrinsic ({ className, payload: { era, nonce, tip }, request: { blockNumber, genesisHash, method, specVersion: hexSpec }, url }: Props): React.ReactElement<Props> {
+function Extrinsic({
+  className,
+  payload: { era, nonce, tip },
+  request: { blockNumber, genesisHash, method, specVersion: hexSpec },
+  url
+}: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const chain = useMetadata(genesisHash);
   const specVersion = useRef(bnToBn(hexSpec)).current;
   const decoded = useMemo(
-    () => chain && chain.hasMetadata
-      ? decodeMethod(method, chain, specVersion)
-      : { args: null, method: null },
+    () => (chain && chain.hasMetadata ? decodeMethod(method, chain, specVersion) : { args: null, method: null }),
     [method, chain, specVersion]
   );
 
+  console.log('decoded', decoded);
+
   return (
-    <Table
-      className={className}
-      isFull
-    >
+    <Table className={className}>
       <tr>
         <td className='label'>{t<string>('from')}</td>
         <td className='data'>{url}</td>
       </tr>
       <tr>
-        <td className='label'>{chain ? t<string>('chain') : t<string>('genesis')}</td>
-        <td className='data'>{chain ? chain.name : genesisHash}</td>
+        <td className='label'>{t<string>('module')}</td>
+        <td className='data'>{mortalityAsString(era, blockNumber, t)}</td>
       </tr>
       <tr>
-        <td className='label'>{t<string>('version')}</td>
+        <td className='label'>{t<string>('Call')}</td>
         <td className='data'>{specVersion.toNumber()}</td>
+      </tr>
+      <tr>
+        <td className='label'>{t<string>('value')}</td>
+        <td className='data'>{specVersion.toNumber()}</td>
+      </tr>
+      <tr>
+        <td className='label'>{chain ? t<string>('chain') : t<string>('target')}</td>
+        <td className='data'>{chain ? chain.name : ellipsisName(genesisHash)}</td>
       </tr>
       <tr>
         <td className='label'>{t<string>('nonce')}</td>
         <td className='data'>{formatNumber(nonce)}</td>
-      </tr>
-      {!tip.isEmpty && (
-        <tr>
-          <td className='label'>{t<string>('tip')}</td>
-          <td className='data'>{formatNumber(tip)}</td>
-        </tr>
-      )}
-      {renderMethod(method, decoded, t)}
-      <tr>
-        <td className='label'>{t<string>('lifetime')}</td>
-        <td className='data'>{mortalityAsString(era, blockNumber, t)}</td>
       </tr>
     </Table>
   );

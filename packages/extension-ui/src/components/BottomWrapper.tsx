@@ -18,7 +18,6 @@ const BottomWrapper: React.FC<Props> = ({ children, className }) => {
 
 export default styled(BottomWrapper)`
   display: flex;
-  backdrop-filter: blur(10px);
   flex-direction: column;
   position: sticky;
   bottom: 0;

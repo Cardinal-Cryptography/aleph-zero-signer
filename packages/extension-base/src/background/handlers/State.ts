@@ -78,13 +78,15 @@ const POPUP_WINDOW_OPTS: chrome.windows.CreateData = {
   top: 150,
   type: 'popup',
   url: NOTIFICATION_URL,
-  width: 560
+  width: 360
 };
 
 const NORMAL_WINDOW_OPTS: chrome.windows.CreateData = {
   focused: true,
+  height: 621,
   type: 'normal',
-  url: NOTIFICATION_URL
+  url: NOTIFICATION_URL,
+  width: 360
 };
 
 export enum NotificationOptions {

@@ -79,7 +79,13 @@ export default styled(Button)(
   border: none;
   border-radius: ${tertiary ? '2px' : theme.buttonBorderRadius};
   color: ${
-    secondary ? theme.buttonSecondaryTextColor : tertiary ? theme.buttonTertiaryTextColor : theme.buttonTextColor
+    isDanger
+      ? theme.buttonTextColor
+      : secondary
+      ? theme.buttonSecondaryTextColor
+      : tertiary
+      ? theme.buttonTertiaryTextColor
+      : theme.buttonTextColor
   };
   font-family: ${theme.secondaryFontFamily};
   font-weigth: 500;
@@ -94,10 +100,12 @@ export default styled(Button)(
   &:disabled {
     cursor: default;
     pointer-events: none;
-    color: ${isBusy ? 'transparent' : theme.disabledTextColor};
+    color: ${isSuccess ? theme.buttonTextColor : isBusy ? 'transparent' : theme.disabledTextColor};
     background: ${
       isDanger
         ? theme.buttonBackgroundDangerDisabled
+        : isSuccess
+        ? theme.buttonBackgroundSuccessDisabled
         : secondary
         ? theme.buttonSecondaryBackgroundDisabled
         : tertiary
@@ -124,6 +132,8 @@ export default styled(Button)(
         ? theme.buttonBackgroundDangerHover
         : secondary
         ? theme.buttonSecondaryBackgroundHover
+        : isSuccess
+        ? theme.buttonBackgroundSuccessHover
         : tertiary
         ? theme.buttonTertiaryBackground
         : theme.buttonBackgroundHover

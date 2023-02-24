@@ -12,49 +12,71 @@ interface Props {
   isFull?: boolean;
 }
 
-function Table ({ children, className = '', isFull }: Props): React.ReactElement<Props> {
+function Table({ children, className = '', isFull }: Props): React.ReactElement<Props> {
   return (
     <table className={`${className} ${isFull ? 'isFull' : ''}`}>
-      <tbody>
-        {children}
-      </tbody>
+      <tbody>{children}</tbody>
     </table>
   );
 }
 
-export default React.memo(styled(Table)(({ theme }: ThemeProps) => `
+export default React.memo(
+  styled(Table)(
+    ({ theme }: ThemeProps) => `
   border: 0;
   display: block;
   font-size: ${theme.labelFontSize};
   line-height: ${theme.labelLineHeight};
   margin-bottom: 1rem;
+  padding: 0px 8px;
 
   &.isFull {
     height: 100%;
     overflow: auto;
   }
 
-  td.data {
-    max-width: 0;
-    overflow: hidden;
-    text-align: left;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    width: 100%;
-
-    pre {
-      font-family: inherit;
-      font-size: 0.75rem;
-      margin: 0;
-    }
+  tr {
+    display: flex;
+    width: 312px;
+    max-height: 34px;
+    border-bottom: 1px solid ${theme.boxBorderColor};
+    flex-direction: row;
+    gap: 8px;
+    padding: 6px 4px 8px;
   }
 
   td.label {
-    opacity: 0.5;
-    padding: 0 0.5rem;
-    text-align: right;
+    text-align: left;
     vertical-align: top;
     white-space: nowrap;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 145%;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.07em;
+    color: ${theme.subTextColor};
+    text-transform: capitalize;
+    width: 102px;
+
+  }
+
+  td.data {
+    min-width: 0;
+    text-overflow: ellipsis;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 145%;
+    text-align: right;
+
+
+    text-align: right;
+    letter-spacing: 0.07em;
+    width: 194px;
+
+    white-space:nowrap;
+    overflow: hidden;
   }
 
   details {
@@ -72,4 +94,6 @@ export default React.memo(styled(Table)(({ theme }: ThemeProps) => `
       white-space: normal;
     }
   }
-`));
+`
+  )
+);
