@@ -70,24 +70,6 @@ function Unlock({
         validator={isPasswordValid}
         value={password}
       />
-      {/* <InputWithLabel
-        disabled={isBusy}
-        isError={!password || !!error}
-        isFocused
-        label={t<string>('Password for this account')}
-        onChange={_onChangePassword}
-        showPasswordElement={
-          <div className='password-icon'>
-            <img
-              onClick={_handleInputTypeChange}
-              src={isFirstPasswordVisible ? viewOn : viewOff}
-            />
-          </div>
-        }
-        type='password'
-        value={password}
-        withoutMargin={true}
-      /> */}
       {error && (
         <Warning
           isBelowInput
