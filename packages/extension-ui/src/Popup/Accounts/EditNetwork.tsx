@@ -8,6 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
 import useGenesisHashOptions from '@polkadot/extension-ui/hooks/useGenesisHashOptions';
+import { showNetworks } from '@polkadot/networks';
 
 import helpIcon from '../../assets/help.svg';
 import {
@@ -75,6 +76,8 @@ function EditNetwork({
       setHasGenesisChanged(true);
     }
   }, [account, genesis]);
+
+  console.log('test', showNetworks());
 
   const footer = (
     <CustomFooter>
