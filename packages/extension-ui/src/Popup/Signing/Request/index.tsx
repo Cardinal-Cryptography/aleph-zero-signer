@@ -101,10 +101,6 @@ export default function Request({
   if (payload !== null) {
     const json = request.payload as SignerPayloadJSON;
 
-    console.log('payload', payload);
-
-    console.log('json', json);
-
     return (
       <>
         {isExternal && !isHardware ? (

@@ -122,8 +122,6 @@ function Extrinsic({
     [method, chain, specVersion]
   );
 
-  console.log('decoded', decoded);
-
   return (
     <Table className={className}>
       <tr>
