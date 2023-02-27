@@ -129,7 +129,6 @@ export default function Request({
             setError={setError}
           />
         )}
-        {/* eslint-disable-next-line sort-keys */}
         <Wrapper>
           <StyledAddress
             address={json.address}
