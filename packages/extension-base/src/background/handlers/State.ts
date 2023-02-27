@@ -249,7 +249,7 @@ export default class State {
       this.saveCurrentAuthList();
       this.updateDefaultAuthAccounts(authorizedAccounts);
       delete this.#authRequests[id];
-      this.updateIconAuth(true);
+      this.updateIconAuth();
     };
 
     return {
@@ -291,7 +291,7 @@ export default class State {
 
   public deleteAuthRequest (requestId: string) {
     delete this.#authRequests[requestId];
-    this.updateIconAuth(true);
+    this.updateIconAuth();
   }
 
   private saveCurrentAuthList () {
@@ -310,7 +310,7 @@ export default class State {
   private metaComplete = (id: string, resolve: (result: boolean) => void, reject: (error: Error) => void): Resolver<boolean> => {
     const complete = (): void => {
       delete this.#metaRequests[id];
-      this.updateIconMeta(true);
+      this.updateIconMeta();
     };
 
     return {
@@ -328,7 +328,7 @@ export default class State {
   private signComplete = (id: string, resolve: (result: ResponseSigning) => void, reject: (error: Error) => void): Resolver<ResponseSigning> => {
     const complete = (): void => {
       delete this.#signRequests[id];
-      this.updateIconSign(true);
+      this.updateIconSign();
     };
 
     return {
@@ -351,7 +351,7 @@ export default class State {
     return parts[2];
   }
 
-  private updateIcon (shouldClose?: boolean): void {
+  private updateIcon (): void {
     const authCount = this.numAuthRequests;
     const metaCount = this.numMetaRequests;
     const signCount = this.numSignRequests;
@@ -377,19 +377,19 @@ export default class State {
     return this.#authUrls;
   }
 
-  private updateIconAuth (shouldClose?: boolean): void {
+  private updateIconAuth (): void {
     this.authSubject.next(this.allAuthRequests);
-    this.updateIcon(shouldClose);
+    this.updateIcon();
   }
 
-  private updateIconMeta (shouldClose?: boolean): void {
+  private updateIconMeta (): void {
     this.metaSubject.next(this.allMetaRequests);
-    this.updateIcon(shouldClose);
+    this.updateIcon();
   }
 
-  private updateIconSign (shouldClose?: boolean): void {
+  private updateIconSign (): void {
     this.signSubject.next(this.allSignRequests);
-    this.updateIcon(shouldClose);
+    this.updateIcon();
   }
 
   public updateAuthorizedAccounts (authorizedAccountDiff: AuthorizedAccountsDiff): void {

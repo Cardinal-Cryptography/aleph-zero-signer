@@ -37,7 +37,7 @@ function Button({
       return;
     }
 
-    onClick && onClick();
+    onClick && onClick()?.catch(console.error);
 
     if (to) {
       window.location.hash = to;

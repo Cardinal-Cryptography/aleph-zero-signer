@@ -61,7 +61,7 @@ export default React.memo(
   .content {
     outline: ${match.params.status === 'signed' ? theme.successBackground : theme.dangerBackground} solid 37px;
     border-radius: 32px;
-    height: calc(100vh - 16px);
+    height: 584px;
     margin-top: 8px;
     overflow-y: hidden;
     overflow-x: hidden;

@@ -39,16 +39,15 @@ export default React.memo(
     display: flex;
     width: 312px;
     max-height: 34px;
-    border-bottom: 1px solid ${theme.boxBorderColor};
-    flex-direction: row;
-    gap: 8px;
     padding: 6px 4px 8px;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
   }
 
   td.label {
     text-align: left;
     vertical-align: top;
-    white-space: nowrap;
     font-style: normal;
     font-weight: 300;
     font-size: 14px;
@@ -58,24 +57,39 @@ export default React.memo(
     letter-spacing: 0.07em;
     color: ${theme.subTextColor};
     text-transform: capitalize;
-    width: 102px;
+    justify-content: flex-start;
+  }
 
+  .separator {
+    border-bottom: 1px solid ${theme.boxBorderColor};
+    width: calc(100% - 16px);
+    min-width: 100px;
+    margin: 0px 8px;
   }
 
   td.data {
-    min-width: 0;
     text-overflow: ellipsis;
     font-weight: 300;
     font-size: 14px;
     line-height: 145%;
     text-align: right;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+    display: flex;
+    justify-content: flex-start;
+    text-transform: capitalize;
+  }
 
-
+  td.from {    
+    text-overflow: ellipsis;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 145%;
     text-align: right;
     letter-spacing: 0.07em;
-    width: 194px;
-
-    white-space:nowrap;
+    white-space: nowrap;
+    justify-content: flex-start;
+    text-overflow: ellipsis;
     overflow: hidden;
   }
 

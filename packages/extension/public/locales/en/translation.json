@@ -275,7 +275,8 @@
   "Remember password for {{expiration}} minutes": "",
   "module": "",
   "Call": "",
-  "value": "",
+  "amount": "",
   "target": "",
-  "Transaction Signed": ""
+  "Transaction Signed": "",
+  "Transaction Declined": ""
 }

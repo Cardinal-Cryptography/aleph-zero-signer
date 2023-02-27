@@ -4,13 +4,12 @@
 import type { SignerPayloadJSON } from '@polkadot/types/types';
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Loading, SigningReqContext } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import Request from './Request';
-import TransactionIndex from './TransactionIndex';
 
 interface Props extends ThemeProps {
   className?: string;
@@ -20,10 +19,6 @@ function Signing({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const requests = useContext(SigningReqContext);
   const [requestIndex, setRequestIndex] = useState(0);
-
-  const _onNextClick = useCallback(() => setRequestIndex((requestIndex) => requestIndex + 1), []);
-
-  const _onPreviousClick = useCallback(() => setRequestIndex((requestIndex) => requestIndex - 1), []);
 
   useEffect(() => {
     setRequestIndex((requestIndex) => (requestIndex < requests.length ? requestIndex : requests.length - 1));
@@ -69,7 +64,7 @@ export default React.memo(
     .content {
       outline: ${theme.newTransactionBackground} solid 37px;
       border-radius: 32px;
-      height: calc(100vh - 16px);
+      height: 584px;
       margin-top: 8px;
       overflow-y: hidden;
       overflow-x: hidden;
