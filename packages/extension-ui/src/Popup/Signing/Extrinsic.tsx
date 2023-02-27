@@ -6,8 +6,9 @@ import type { Call, ExtrinsicEra, ExtrinsicPayload } from '@polkadot/types/inter
 import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
 import { TFunction } from 'i18next';
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import { ApiPromise, WsProvider } from '@polkadot/api';
 import { BN, bnToBn, formatNumber } from '@polkadot/util';
 
 import { Table } from '../../components';
@@ -108,6 +109,14 @@ function mortalityAsString(era: ExtrinsicEra, hexBlockNumber: string, t: TFuncti
   });
 }
 
+const decodeMethodApi = async (data: string) => {
+  const provider = new WsProvider('wss://rpc.polkadot.io');
+  const api = await ApiPromise.create({ provider });
+  const methodCall = api.registry.createType('Call', data);
+
+  return (methodCall.toHuman() as { args: AnyJson }) ?? { args: null, method: null };
+};
+
 function Extrinsic({
   className,
   payload: { era, nonce, tip },
@@ -117,10 +126,18 @@ function Extrinsic({
   const { t } = useTranslation();
   const chain = useMetadata(genesisHash);
   const specVersion = useRef(bnToBn(hexSpec)).current;
-  const decoded = useMemo(
-    () => (chain && chain.hasMetadata ? decodeMethod(method, chain, specVersion) : { args: null, method: null }),
-    [method, chain, specVersion]
-  );
+
+  const [methodDetails, setMethodDetails] = useState<any>();
+
+  useEffect(() => {
+    const getDetails = async () => {
+      setMethodDetails(
+        chain && chain.hasMetadata ? decodeMethod(method, chain, specVersion) : await decodeMethodApi(method)
+      );
+    };
+
+    getDetails().catch((e) => console.error(e));
+  }, [chain, method, specVersion]);
 
   return (
     <Table className={className}>
