@@ -36,10 +36,34 @@ const RadioGroup: React.FC<Props> = ({
     [onSelectionChange]
   );
 
-  const alephOptions = withTestNetwork
-    ? options.filter((option) => option.text.includes('Aleph Zero'))
-    : options.filter((option) => option.text === 'Aleph Zero');
-  const otherOptions = options.filter((option) => !option.text.includes('Aleph Zero'));
+  console.log('options', options);
+
+  const { alephOptions, otherOptions } = options.reduce(
+    (acc: { alephOptions: Option[]; otherOptions: Option[] }, option) => {
+      const isAleph = withTestNetwork ? option.text.includes('Aleph Zero') : option.text === 'Aleph Zero';
+
+      if (isAleph) {
+        acc.alephOptions.push(option);
+      } else if (withTestNetwork || !option.text.includes('Aleph Zero')) {
+        acc.otherOptions.push(option);
+      }
+
+      return acc;
+    },
+    { alephOptions: [], otherOptions: [] }
+  );
+
+  function getPositionForOption(options: Option[], index: number): 'top' | 'bottom' | 'both' | 'middle' {
+    if (options.length === 1) {
+      return 'both';
+    } else if (index === 0) {
+      return 'top';
+    } else if (index === options.length - 1) {
+      return 'bottom';
+    } else {
+      return 'middle';
+    }
+  }
 
   return (
     <div className={className}>
@@ -49,7 +73,7 @@ const RadioGroup: React.FC<Props> = ({
             <RadioCard
               onChange={handleChange}
               option={option}
-              position={index === 0 ? 'top' : index === options.length - 1 ? 'bottom' : 'middle'}
+              position={getPositionForOption(alephOptions, index)}
               selectedValue={selectedValue}
             />
           </div>
@@ -60,7 +84,7 @@ const RadioGroup: React.FC<Props> = ({
           <RadioCard
             onChange={handleChange}
             option={option}
-            position={index === 0 ? 'top' : index === options.length - 1 ? 'bottom' : 'middle'}
+            position={getPositionForOption(otherOptions, index)}
             selectedValue={selectedValue}
           />
         </div>

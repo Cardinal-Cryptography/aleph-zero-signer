@@ -12,6 +12,12 @@ interface Option {
   value: string;
 }
 
+interface ChainsAccumulator {
+  alephChains: Option[];
+  relayChains: Option[];
+  otherChains: Option[];
+}
+
 const RELAY_CHAIN = 'Relay Chain';
 const ALEPH_ZERO = 'Aleph Zero';
 
@@ -29,42 +35,35 @@ export default function (): Option[] {
       .catch(console.error);
   }, []);
 
-  const hashes = useMemo(
-    () => [
-      ...chains
-        .filter(({ chain }) => chain.includes(ALEPH_ZERO))
-        .map(({ chain, genesisHash }) => ({
-          text: chain,
-          value: genesisHash
-        })),
-      {
-        text: t('Allow use on any chain'),
-        value: ''
-      },
-      ...chains
-        .filter(({ chain }) => chain.includes(RELAY_CHAIN))
-        .map(({ chain, genesisHash }) => ({
-          text: chain,
-          value: genesisHash
-        })),
-      ...chains
-        .map(({ chain, genesisHash }) => ({
-          text: chain,
-          value: genesisHash
-        }))
-        // remove the relay and aleph zero chains, they are at the top already
-        .filter(({ text }) => !text.includes(RELAY_CHAIN) && !text.includes(ALEPH_ZERO))
+  const hashes = useMemo(() => {
+    const { alephChains, otherChains, relayChains } = chains.reduce(
+      (acc: ChainsAccumulator, { chain, genesisHash }) => {
+        if (chain.includes(ALEPH_ZERO)) {
+          acc.alephChains.push({ text: chain, value: genesisHash });
+        } else if (chain.includes(RELAY_CHAIN)) {
+          acc.relayChains.push({ text: chain, value: genesisHash });
+        } else {
+          acc.otherChains.push({ text: chain, value: genesisHash });
+        }
 
-        .concat(
-          // get any chain present in the metadata and not already part of chains
-          ...metadataChains.filter(({ value }) => {
-            return !chains.find(({ genesisHash }) => genesisHash === value);
-          })
-        )
-        .sort((a, b) => a.text.localeCompare(b.text))
-    ],
-    [metadataChains, t]
-  );
+        return acc;
+      },
+      { alephChains: [], relayChains: [], otherChains: [] }
+    );
+
+    const newChains = [
+      ...alephChains,
+      { text: t('Allow use on any chain'), value: '' },
+      ...relayChains,
+      ...otherChains.filter(({ text }) => !text.includes(RELAY_CHAIN) && !text.includes(ALEPH_ZERO))
+    ];
+
+    const extraChains = metadataChains.filter(({ value }) => {
+      return !chains.find(({ genesisHash }) => genesisHash === value);
+    });
+
+    return [...newChains, ...extraChains];
+  }, [metadataChains, t]);
 
   return hashes;
 }

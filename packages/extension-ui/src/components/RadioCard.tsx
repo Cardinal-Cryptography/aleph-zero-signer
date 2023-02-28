@@ -14,7 +14,7 @@ interface Option {
 interface Props extends ThemeProps {
   className?: string;
   option: Option;
-  position?: 'top' | 'bottom' | 'middle';
+  position?: 'top' | 'bottom' | 'middle' | 'both';
   selectedValue: string;
   onChange: (value: string) => void;
 }
@@ -55,7 +55,15 @@ export default styled(RadioCard)(
   height: 48px;
   margin-bottom: 2px;
   margin-top: 0px;
-  border-radius: ${position === 'top' ? '8px 8px 2px 2px' : position === 'bottom' ? '2px 2px 8px 8px' : '2px'};
+  border-radius: ${
+    position === 'top'
+      ? '8px 8px 2px 2px'
+      : position === 'bottom'
+      ? '2px 2px 8px 8px'
+      : position === 'both'
+      ? '8px'
+      : '2px'
+  };
 
   label {
     display: flex;

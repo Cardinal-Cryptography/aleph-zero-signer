@@ -39,7 +39,6 @@ export const createGroupedAccountData = (filteredAccount: AccountWithChildren[])
 
       return acc;
     },
-    // eslint-disable-next-line sort-keys
     { any: [], 'aleph zero': [], 'aleph zero testnet': [] }
   );
 

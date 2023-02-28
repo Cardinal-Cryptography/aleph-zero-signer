@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
+import { ALEPH_ZERO_GENESIS_HASH } from '../constants';
 import useTranslation from '../hooks/useTranslation';
 import InputLock from './InputLock';
 import Label from './Label';
@@ -29,8 +30,6 @@ interface Props extends ThemeProps {
   options: DropdownOption[];
   value?: string;
 }
-
-const ALEPH_ZERO_GENESIS_HASH = '0x70255b4d28de0fc4e1a193d7e175ad1ccef431598211c55538f1018651a0344e';
 
 function Dropdown({
   className,
