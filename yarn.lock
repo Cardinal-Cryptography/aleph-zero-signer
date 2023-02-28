@@ -2881,7 +2881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/networks@npm:10.4.2, @polkadot/networks@npm:^10.4.2":
+"@polkadot/networks@npm:^10.4.2":
   version: 10.4.2
   resolution: "@polkadot/networks@npm:10.4.2"
   dependencies:
@@ -2894,12 +2894,12 @@ __metadata:
 
 "@polkadot/networks@patch:@polkadot/networks@npm:^10.4.2#.yarn/patches/@polkadot-networks-npm-10.4.2-69bf99e7c4.patch::locator=root-workspace-0b6124%40workspace%3A.":
   version: 10.4.2
-  resolution: "@polkadot/networks@patch:@polkadot/networks@npm%3A10.4.2#.yarn/patches/@polkadot-networks-npm-10.4.2-69bf99e7c4.patch::version=10.4.2&hash=5fbe5a&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@polkadot/networks@patch:@polkadot/networks@npm%3A10.4.2#.yarn/patches/@polkadot-networks-npm-10.4.2-69bf99e7c4.patch::version=10.4.2&hash=e243a0&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@babel/runtime": ^7.20.13
     "@polkadot/util": 10.4.2
     "@substrate/ss58-registry": ^1.38.0
-  checksum: 5e07c0ac9ef1141776d72a924bedfb1ca90cfe01bd02ba9938a10d1a08d627d012a03ddda71dc911dd05058899bda0b005333b4f28486fbe2e876c8895a02c86
+  checksum: 8bccf32864d346969becabc9c68713cda71fd14138d2c1c2d5bbbe047ee5af9d9a30921a0cbc5c8b79659146f09c74d863463f6137b46688a0ef52880e5aca38
   languageName: node
   linkType: hard
 
