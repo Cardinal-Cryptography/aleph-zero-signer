@@ -13,6 +13,7 @@ interface Option {
 }
 
 const RELAY_CHAIN = 'Relay Chain';
+const ALEPH_ZERO = 'Aleph Zero';
 
 export default function (): Option[] {
   const { t } = useTranslation();
@@ -30,6 +31,12 @@ export default function (): Option[] {
 
   const hashes = useMemo(
     () => [
+      ...chains
+        .filter(({ chain }) => chain.includes(ALEPH_ZERO))
+        .map(({ chain, genesisHash }) => ({
+          text: chain,
+          value: genesisHash
+        })),
       {
         text: t('Allow use on any chain'),
         value: ''
@@ -45,8 +52,9 @@ export default function (): Option[] {
           text: chain,
           value: genesisHash
         }))
-        // remove the relay chains, they are at the top already
-        .filter(({ text }) => !text.includes(RELAY_CHAIN))
+        // remove the relay and aleph zero chains, they are at the top already
+        .filter(({ text }) => !text.includes(RELAY_CHAIN) && !text.includes(ALEPH_ZERO))
+
         .concat(
           // get any chain present in the metadata and not already part of chains
           ...metadataChains.filter(({ value }) => {
