@@ -30,6 +30,8 @@ interface Props extends ThemeProps {
   value?: string;
 }
 
+const ALEPH_ZERO_GENESIS_HASH = '0x70255b4d28de0fc4e1a193d7e175ad1ccef431598211c55538f1018651a0344e';
+
 function Dropdown({
   className,
   defaultValue,
@@ -62,7 +64,7 @@ function Dropdown({
       >
         <select
           autoFocus={isFocussed}
-          defaultValue={defaultValue || undefined}
+          defaultValue={defaultValue || ALEPH_ZERO_GENESIS_HASH}
           disabled={isDisabled || isLocked}
           onBlur={onBlur}
           onChange={_onChange}
@@ -161,8 +163,6 @@ export default React.memo(
     line-height: 130%;
     letter-spacing: 0.06em;
   }
-
-
 `
   )
 );

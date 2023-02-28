@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useCallback, useState } from 'react';
+import styled from 'styled-components';
 
 import RadioCard from './RadioCard';
 
@@ -15,9 +16,16 @@ interface Props {
   options: Array<Option>;
   onSelectionChange: (value: string) => void;
   defaultSelectedValue?: string | null;
+  withTestNetwork?: boolean;
 }
 
-const RadioGroup: React.FC<Props> = ({ className, defaultSelectedValue, onSelectionChange, options }) => {
+const RadioGroup: React.FC<Props> = ({
+  className,
+  defaultSelectedValue,
+  onSelectionChange,
+  options,
+  withTestNetwork = false
+}) => {
   const [selectedValue, setSelectedValue] = useState(defaultSelectedValue || '');
 
   const handleChange = useCallback(
@@ -28,9 +36,26 @@ const RadioGroup: React.FC<Props> = ({ className, defaultSelectedValue, onSelect
     [onSelectionChange]
   );
 
+  const alephOptions = withTestNetwork
+    ? options.filter((option) => option.text.includes('Aleph Zero'))
+    : options.filter((option) => option.text === 'Aleph Zero');
+  const otherOptions = options.filter((option) => !option.text.includes('Aleph Zero'));
+
   return (
     <div className={className}>
-      {options.map((option, index) => (
+      <div className='aleph-options'>
+        {alephOptions.map((option, index) => (
+          <div key={option.value}>
+            <RadioCard
+              onChange={handleChange}
+              option={option}
+              position={index === 0 ? 'top' : index === options.length - 1 ? 'bottom' : 'middle'}
+              selectedValue={selectedValue}
+            />
+          </div>
+        ))}
+      </div>
+      {otherOptions.map((option, index) => (
         <div key={option.value}>
           <RadioCard
             onChange={handleChange}
@@ -44,4 +69,8 @@ const RadioGroup: React.FC<Props> = ({ className, defaultSelectedValue, onSelect
   );
 };
 
-export default RadioGroup;
+export default styled(RadioGroup)`
+  .aleph-options {
+    margin-bottom: 16px;
+  }
+`;
