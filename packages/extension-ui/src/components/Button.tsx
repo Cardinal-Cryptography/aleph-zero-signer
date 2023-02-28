@@ -37,6 +37,7 @@ function Button({
       return;
     }
 
+    // TODO: check why is it giving errors
     if (onClick) {
       onClick()?.catch(console.error);
     }
