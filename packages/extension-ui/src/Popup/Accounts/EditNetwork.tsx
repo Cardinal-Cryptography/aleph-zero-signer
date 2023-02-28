@@ -8,7 +8,6 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
 import useGenesisHashOptions from '@polkadot/extension-ui/hooks/useGenesisHashOptions';
-import { showNetworks } from '@polkadot/networks';
 
 import helpIcon from '../../assets/help.svg';
 import {
@@ -77,8 +76,6 @@ function EditNetwork({
     }
   }, [account, genesis]);
 
-  console.log('test', showNetworks());
-
   const footer = (
     <CustomFooter>
       <Svg
@@ -101,7 +98,6 @@ function EditNetwork({
       />
       <ScrollWrapper>
         <div className={className}>
-          {/* TODO: ask about the checkbox */}
           <div className='checkbox-container'>
             <Checkbox
               checked={checked}
@@ -113,6 +109,7 @@ function EditNetwork({
             defaultSelectedValue={genesis}
             onSelectionChange={setGenesis}
             options={options}
+            withTestNetwork={checked}
           />
         </div>
       </ScrollWrapper>
