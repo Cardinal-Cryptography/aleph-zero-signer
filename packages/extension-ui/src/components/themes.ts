@@ -86,6 +86,7 @@ const darkTheme = {
   skeletonBackground: '#14212A',
   stepsActiveColor: '#00EAC7',
   stepsInactiveColor: '#415566',
+  transactionTooltipTextColor: '#415566',
   subTextColor: '#BCCBD6',
   successBackground: '#66D16F',
   textColor: '#FFFFFF',
@@ -101,6 +102,7 @@ const darkTheme = {
   tooltipBorderColor: '#1B2B38',
   tooltipBoxShadow:
     '0px 24px 38px rgba(12, 19, 26, 0.14), 0px 9px 46px rgba(12, 19, 26, 0.12), 0px 11px 15px rgba(12, 19, 26, 0.2);',
+  tooltipBoxShadowTransaction: '8px 16px 24px rgba(69, 79, 89, 0.04)',
   tooltipTextColor: '#BCCBD6',
   warningBoxBackground: 'linear-gradient(0deg, rgba(255, 210, 63, 0.05), rgba(255, 210, 63, 0.05)), #14202A;',
   warningColor: '#FFD23F'
