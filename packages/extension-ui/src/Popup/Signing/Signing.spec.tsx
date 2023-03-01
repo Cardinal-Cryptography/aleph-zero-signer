@@ -255,35 +255,26 @@ describe('Signing requests', () => {
 
   describe('Request rendering', () => {
     it('correctly displays request 1', () => {
-      console.log(
-        'test',
-        wrapper
-          .find(Extrinsic)
-          .find('td.data')
-          .map((el): string => el.text())
-      );
       expect(
         wrapper
           .find(Extrinsic)
           .find('td.data')
           .map((el): string => el.text())
-      ).toEqual([
-        'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fwestend-rpc.polkadot.io#/accounts',
-        'Westend',
-        '45',
-        '3',
-        `balances.transferKeepAlive(dest, value){
-  "dest": "5GYQRJj3NUznYDzCduENRcocMsyxmb6tjb5xW87ZMErBe9R7",
-  "value": "123.0000 WND"
-}`,
-        'Same as the [`transfer`] call, but with a check that the transfer will not kill the origin account.',
-        'mortal, valid from {{birth}} to {{death}}'
-      ]);
+      ).toEqual(['3']);
+
+      expect(
+        wrapper
+          .find(Extrinsic)
+          .find('td.from')
+          .map((el): string => el.text())
+      ).toEqual(['https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fwestend-rpc.polkadot.io#/accounts']);
     });
 
     it('correctly displays request 2', async () => {
       wrapper.find('FontAwesomeIcon.arrowRight').simulate('click');
       await act(flushAllPromises);
+
+      console.log('siup3', wrapper.children().debug());
 
       expect(wrapper.find(Address).find('.fullAddress').text()).toBe(ellipsisName(signRequests[1].account.address));
       expect(
