@@ -14,7 +14,6 @@ interface Option {
 interface Props extends ThemeProps {
   className?: string;
   option: Option;
-  position?: 'top' | 'bottom' | 'middle' | 'both';
   selectedValue: string;
   onChange: (value: string) => void;
 }
@@ -45,25 +44,16 @@ function RadioCard({ className, onChange, option, selectedValue }: Props): React
 }
 
 export default styled(RadioCard)(
-  ({ position = 'middle', theme }: Props) => `
+  ({ theme }: Props) => `
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0px 16px;
   background: ${theme.menuBackground};
-  border-radius: 8px;
   height: 48px;
   margin-bottom: 2px;
   margin-top: 0px;
-  border-radius: ${
-    position === 'top'
-      ? '8px 8px 2px 2px'
-      : position === 'bottom'
-      ? '2px 2px 8px 8px'
-      : position === 'both'
-      ? '8px'
-      : '2px'
-  };
+  border-radius: 2px;
 
   label {
     display: flex;

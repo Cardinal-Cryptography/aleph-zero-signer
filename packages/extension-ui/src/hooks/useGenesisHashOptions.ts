@@ -12,7 +12,7 @@ interface Option {
   value: string;
 }
 
-interface ChainsAccumulator {
+interface ChainsReduce {
   alephChains: Option[];
   relayChains: Option[];
   otherChains: Option[];
@@ -36,17 +36,24 @@ export default function (): Option[] {
   }, []);
 
   const hashes = useMemo(() => {
-    const { alephChains, otherChains, relayChains } = chains.reduce(
-      (acc: ChainsAccumulator, { chain, genesisHash }) => {
+    const { alephChains, otherChains, relayChains } = chains.reduce<ChainsReduce>(
+      (acc, { chain, genesisHash }) => {
         if (chain.includes(ALEPH_ZERO)) {
-          acc.alephChains.push({ text: chain, value: genesisHash });
+          return {
+            ...acc,
+            alephChains: [...acc.alephChains, { text: chain, value: genesisHash }]
+          };
         } else if (chain.includes(RELAY_CHAIN)) {
-          acc.relayChains.push({ text: chain, value: genesisHash });
+          return {
+            ...acc,
+            relayChains: [...acc.relayChains, { text: chain, value: genesisHash }]
+          };
         } else {
-          acc.otherChains.push({ text: chain, value: genesisHash });
+          return {
+            ...acc,
+            otherChains: [...acc.otherChains, { text: chain, value: genesisHash }]
+          };
         }
-
-        return acc;
       },
       { alephChains: [], relayChains: [], otherChains: [] }
     );
@@ -55,7 +62,7 @@ export default function (): Option[] {
       ...alephChains,
       { text: t('Allow use on any chain'), value: '' },
       ...relayChains,
-      ...otherChains.filter(({ text }) => !text.includes(RELAY_CHAIN) && !text.includes(ALEPH_ZERO))
+      ...otherChains
     ];
 
     const extraChains = metadataChains.filter(({ value }) => {
