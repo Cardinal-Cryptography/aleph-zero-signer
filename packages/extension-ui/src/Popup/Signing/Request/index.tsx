@@ -45,6 +45,7 @@ function isRawPayload(payload: SignerPayloadJSON | SignerPayloadRaw): payload is
 }
 
 const StyledAddress = styled(Address)`
+  max-width: 324px;
   margin: 0px 8px 8px 8px;`;
 
 const Wrapper = styled.div`
@@ -100,9 +101,6 @@ export default function Request({
 
   if (payload !== null) {
     const json = request.payload as SignerPayloadJSON;
-
-    console.log('json', json);
-    console.log('payload', payload);
 
     return (
       <>

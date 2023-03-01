@@ -54,7 +54,6 @@ function Button({
       onClick={_onClick}
     >
       <div className='children'>{children}</div>
-      <div className='disabledOverlay' />
       <Spinner className='busyOverlay' />
     </button>
   );
@@ -194,9 +193,6 @@ export default styled(Button)(
     }
   }
 
-  &.isDisabled .disabledOverlay {
-    visibility: visible;
-  }
 
 `
 );

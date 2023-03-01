@@ -6,16 +6,7 @@ import styled from 'styled-components';
 
 import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 
-import {
-  ActionBar,
-  ActionContext,
-  BottomWrapper,
-  Button,
-  ButtonArea,
-  Checkbox,
-  Link,
-  VerticalSpace
-} from '../../../components';
+import { ActionContext, Button, ButtonArea, Checkbox } from '../../../components';
 import useTranslation from '../../../hooks/useTranslation';
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../../messaging';
 import Unlock from '../Unlock';
@@ -61,7 +52,7 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
     };
   }, [isExternal, signId]);
 
-  const _onSign = useCallback(async (): Promise<void> => {
+  const _onSign = useCallback(async () => {
     try {
       setIsBusy(true);
       await approveSignPassword(signId, savePass, password);
@@ -151,4 +142,5 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
 export default styled(SignArea)`
   flex-direction: column;
   padding: 6px 8px;
+  max-width: 344px;
 `;

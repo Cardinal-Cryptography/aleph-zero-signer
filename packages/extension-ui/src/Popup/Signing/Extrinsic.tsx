@@ -4,8 +4,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 import type { Chain } from '@polkadot/extension-chains/types';
-import type { Call, ExtrinsicPayload } from '@polkadot/types/interfaces';
-import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
+import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
+import type { SignerPayloadJSON } from '@polkadot/types/types';
 import type { SettingsStruct } from '@polkadot/ui-settings/types';
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
