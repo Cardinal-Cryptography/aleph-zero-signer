@@ -37,7 +37,10 @@ function Button({
       return;
     }
 
-    onClick && onClick()?.catch(console.error);
+    // TODO: check why is it giving errors
+    if (onClick) {
+      onClick()?.catch(console.error);
+    }
 
     if (to) {
       window.location.hash = to;
@@ -185,7 +188,7 @@ export default styled(Button)(
   }
 
   &.isBusy {
-
+    color: transparent;
     .busyOverlay {
       visibility: visible;
     }
