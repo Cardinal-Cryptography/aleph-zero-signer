@@ -43,16 +43,16 @@ function Signing({ className }: Props): React.ReactElement<Props> {
 
   return request ? (
     <div className={className}>
-      {requests.length > 1 && (
-        <TransactionIndex
-          index={requestIndex}
-          onNextClick={_onNextClick}
-          onPreviousClick={_onPreviousClick}
-          totalItems={requests.length}
-        />
-      )}
       <div className='content'>
         {isTransaction && <span className='heading'>{t<string>('New Transaction')}</span>}
+        {requests.length > 1 && (
+          <TransactionIndex
+            index={requestIndex}
+            onNextClick={_onNextClick}
+            onPreviousClick={_onPreviousClick}
+            totalItems={requests.length}
+          />
+        )}
         <Request
           account={request.account}
           buttonText={isTransaction ? t('Sign') : t('Sign the message')}

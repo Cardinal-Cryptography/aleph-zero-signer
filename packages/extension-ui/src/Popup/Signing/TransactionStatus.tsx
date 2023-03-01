@@ -29,7 +29,7 @@ function TransactionStatus({
 
   useEffect(() => {
     setTimeout(() => {
-      window.close();
+      onAction('..');
     }, 2000);
   }, [onAction]);
 
