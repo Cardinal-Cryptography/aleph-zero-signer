@@ -12,21 +12,10 @@ import React, { useState } from 'react';
 import { act } from 'react-dom/test-utils';
 import { ThemeProvider } from 'styled-components';
 
-import {
-  ActionContext,
-  Address,
-  Button,
-  Input,
-  InputWithLabel,
-  SigningReqContext,
-  themes,
-  ValidatedInput
-} from '../../components';
+import { ActionContext, Button, SigningReqContext, themes } from '../../components';
 import * as messaging from '../../messaging';
 import * as MetadataCache from '../../MetadataCache';
 import { flushAllPromises } from '../../testHelpers';
-import { ellipsisName } from '../../util/ellipsisName';
-import SignArea from './Request/SignArea';
 import Extrinsic from './Extrinsic';
 import { westendMetadata } from './metadataMock';
 import Qr from './Qr';
@@ -274,8 +263,6 @@ describe('Signing requests', () => {
       wrapper.find('FontAwesomeIcon.arrowRight').simulate('click');
       await act(flushAllPromises);
 
-      console.log('siup3', wrapper.children().debug());
-
       expect(
         wrapper
           .find(Extrinsic)
@@ -293,6 +280,10 @@ describe('Signing requests', () => {
   });
 
   describe('Submitting', () => {
+    const enterPassword = (password = 'any password'): void => {
+      wrapper.find('[data-signing-password] input').simulate('change', { target: { value: password } });
+    };
+
     it('passes request id to cancel call', async () => {
       wrapper.find(Button).first().simulate('click');
       await act(flushAllPromises);
@@ -301,26 +292,24 @@ describe('Signing requests', () => {
     });
 
     it('passes request id and password to approve call', async () => {
-      wrapper.find(ValidatedInput).simulate('change', { target: { value: 'hunter1' } });
-      await act(flushAllPromises);
+      enterPassword('hunter1');
 
-      wrapper.find(Button).find('[data-sign-transaction] button').simulate('click');
       await act(flushAllPromises);
       wrapper.update();
 
+      wrapper.find('[data-sign-transaction=true]').first().simulate('click');
       expect(messaging.approveSignPassword).toBeCalledWith(signRequests[0].id, false, 'hunter1');
     });
 
     it('asks the background to cache the password when the relevant checkbox is checked', async () => {
-      check(wrapper.find('input[type="checkbox"]'));
-      await act(flushAllPromises);
-
-      wrapper.find(Input).simulate('change', { target: { value: 'hunter1' } });
-      await act(flushAllPromises);
-
-      wrapper.find(Button).find('button').last().simulate('click');
+      enterPassword('hunter1');
       await act(flushAllPromises);
       wrapper.update();
+      check(wrapper.find('input[type="checkbox"]'));
+
+      await act(flushAllPromises);
+
+      wrapper.find('[data-sign-transaction=true]').first().simulate('click');
 
       expect(messaging.approveSignPassword).toBeCalledWith(signRequests[0].id, true, 'hunter1');
     });
@@ -332,14 +321,29 @@ describe('Signing requests', () => {
       jest.spyOn(messaging, 'approveSignPassword').mockImplementation(async () => {
         throw new Error('Unable to decode using the supplied passphrase');
       });
-      wrapper.find(Input).simulate('change', { target: { value: 'anything' } });
+      enterPassword('wrongPassword');
       await act(flushAllPromises);
-
-      wrapper.find(Button).find('button').last().simulate('click');
+      wrapper.update();
+      wrapper.find('[data-sign-transaction=true]').first().simulate('click');
       await act(flushAllPromises);
       wrapper.update();
 
-      expect(wrapper.find('.warning-message').first().text()).toBe('Unable to decode using the supplied passphrase');
+      setTimeout(() => {
+        wrapper.update();
+        expect(wrapper.find('.warning-message').text()).toBe('Unable to decode using the supplied passphrase');
+      }, 1500);
+    });
+
+    it('shows an error when the password is too short', async () => {
+      // silencing the following expected console.error
+      console.error = jest.fn();
+      // eslint-disable-next-line @typescript-eslint/require-await
+      enterPassword('short');
+
+      await act(flushAllPromises);
+      wrapper.update();
+
+      expect(wrapper.find('.warning-message').first().text()).toBe('Password is too short');
     });
 
     it('when last request has been removed/cancelled, shows the previous one', async () => {
