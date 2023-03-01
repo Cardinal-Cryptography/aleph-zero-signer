@@ -51,7 +51,7 @@ function Unlock({
     <div className={className}>
       <ValidatedInput
         component={InputWithLabel}
-        data-input-password
+        data-signing-password
         disabled={isBusy}
         isError={!password || !!error}
         isFocused

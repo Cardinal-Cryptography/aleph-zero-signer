@@ -4,12 +4,13 @@
 import type { SignerPayloadJSON } from '@polkadot/types/types';
 import type { ThemeProps } from '../../types';
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Loading, SigningReqContext } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import Request from './Request';
+import TransactionIndex from './TransactionIndex';
 
 interface Props extends ThemeProps {
   className?: string;
@@ -20,7 +21,12 @@ function Signing({ className }: Props): React.ReactElement<Props> {
   const requests = useContext(SigningReqContext);
   const [requestIndex, setRequestIndex] = useState(0);
 
+  const _onNextClick = useCallback(() => setRequestIndex((requestIndex) => requestIndex + 1), []);
+
+  const _onPreviousClick = useCallback(() => setRequestIndex((requestIndex) => requestIndex - 1), []);
+
   useEffect(() => {
+    setRequestIndex((requestIndex) => (requestIndex < requests.length ? requestIndex : requests.length - 1));
     setRequestIndex((requestIndex) => (requestIndex < requests.length ? requestIndex : requests.length - 1));
   }, [requests]);
 
@@ -37,6 +43,14 @@ function Signing({ className }: Props): React.ReactElement<Props> {
 
   return request ? (
     <div className={className}>
+      {requests.length > 1 && (
+        <TransactionIndex
+          index={requestIndex}
+          onNextClick={_onNextClick}
+          onPreviousClick={_onPreviousClick}
+          totalItems={requests.length}
+        />
+      )}
       <div className='content'>
         {isTransaction && <span className='heading'>{t<string>('New Transaction')}</span>}
         <Request

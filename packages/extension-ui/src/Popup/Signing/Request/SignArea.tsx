@@ -120,6 +120,7 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
       </div>
       <CustomButtonArea>
         <Button
+          data-decline-transaction
           isDanger
           onClick={_onCancel}
           secondary
@@ -127,6 +128,7 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
           {t<string>('Decline')}
         </Button>
         <Button
+          data-sign-transaction
           isBusy={isBusy}
           isDisabled={(!!isLocked && !password) || !!error}
           isSuccess

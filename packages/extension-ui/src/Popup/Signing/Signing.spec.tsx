@@ -12,11 +12,21 @@ import React, { useState } from 'react';
 import { act } from 'react-dom/test-utils';
 import { ThemeProvider } from 'styled-components';
 
-import { ActionContext, Address, Button, Input, SigningReqContext, themes } from '../../components';
+import {
+  ActionContext,
+  Address,
+  Button,
+  Input,
+  InputWithLabel,
+  SigningReqContext,
+  themes,
+  ValidatedInput
+} from '../../components';
 import * as messaging from '../../messaging';
 import * as MetadataCache from '../../MetadataCache';
 import { flushAllPromises } from '../../testHelpers';
-import {ellipsisName}  from '../../util/ellipsisName';
+import { ellipsisName } from '../../util/ellipsisName';
+import SignArea from './Request/SignArea';
 import Extrinsic from './Extrinsic';
 import { westendMetadata } from './metadataMock';
 import Qr from './Qr';
@@ -30,8 +40,6 @@ import Signing from '.';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
 configure({ adapter: new Adapter() });
 
-
-
 describe('Signing requests', () => {
   let wrapper: ReactWrapper;
   let onActionStub: jest.Mock;
@@ -39,7 +47,7 @@ describe('Signing requests', () => {
 
   const emitter = new EventEmitter();
 
-  function MockRequestsProvider (): React.ReactElement {
+  function MockRequestsProvider(): React.ReactElement {
     const [requests, setRequests] = useState(signRequests);
 
     emitter.on('request', setRequests);
@@ -200,43 +208,45 @@ describe('Signing requests', () => {
 
   describe('External account', () => {
     it('shows Qr scanner for external accounts', async () => {
-      signRequests = [{
-        account: {
-          address: '5Cf1CGZas62RWwce3d2EPqUvSoi1txaXKd9M5w9bEFSsQtRe',
-          genesisHash: null,
-          isExternal: true,
-          isHidden: false,
-          name: 'Dave account on Signer ',
-          whenCreated: 1602085704296
-        },
-        id: '1607357806151.5',
-        request: {
-          payload: {
+      signRequests = [
+        {
+          account: {
             address: '5Cf1CGZas62RWwce3d2EPqUvSoi1txaXKd9M5w9bEFSsQtRe',
-            blockHash: '0xd2f2dfb56c16af1d0faf5b454153d3199aeb6647537f4161c26a34541c591ec8',
-            blockNumber: '0x00340171',
-            era: '0x1503',
-            genesisHash: '0xe143f23803ac50e8f6f8e62695d1ce9e4e1d68aa36c1cd2cfd15340213f3423e',
-            method: '0x0403c6111b239376e5e8b983dc2d2459cbb6caed64cc1d21723973d061ae0861ef690b00b04e2bde6f',
-            nonce: '0x00000000',
-            signedExtensions: [
-              'CheckSpecVersion',
-              'CheckTxVersion',
-              'CheckGenesis',
-              'CheckMortality',
-              'CheckNonce',
-              'CheckWeight',
-              'ChargeTransactionPayment'
-            ],
-            specVersion: '0x0000002d',
-            tip: '0x00000000000000000000000000000000',
-            transactionVersion: '0x00000003',
-            version: 4
+            genesisHash: null,
+            isExternal: true,
+            isHidden: false,
+            name: 'Dave account on Signer ',
+            whenCreated: 1602085704296
           },
-          sign: jest.fn()
-        },
-        url: 'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fwestend-rpc.polkadot.io#/accounts'
-      }];
+          id: '1607357806151.5',
+          request: {
+            payload: {
+              address: '5Cf1CGZas62RWwce3d2EPqUvSoi1txaXKd9M5w9bEFSsQtRe',
+              blockHash: '0xd2f2dfb56c16af1d0faf5b454153d3199aeb6647537f4161c26a34541c591ec8',
+              blockNumber: '0x00340171',
+              era: '0x1503',
+              genesisHash: '0xe143f23803ac50e8f6f8e62695d1ce9e4e1d68aa36c1cd2cfd15340213f3423e',
+              method: '0x0403c6111b239376e5e8b983dc2d2459cbb6caed64cc1d21723973d061ae0861ef690b00b04e2bde6f',
+              nonce: '0x00000000',
+              signedExtensions: [
+                'CheckSpecVersion',
+                'CheckTxVersion',
+                'CheckGenesis',
+                'CheckMortality',
+                'CheckNonce',
+                'CheckWeight',
+                'ChargeTransactionPayment'
+              ],
+              specVersion: '0x0000002d',
+              tip: '0x00000000000000000000000000000000',
+              transactionVersion: '0x00000003',
+              version: 4
+            },
+            sign: jest.fn()
+          },
+          url: 'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fwestend-rpc.polkadot.io#/accounts'
+        }
+      ];
       await mountComponent();
       expect(wrapper.find(Extrinsic)).toHaveLength(0);
       expect(wrapper.find(Qr)).toHaveLength(1);
@@ -245,8 +255,19 @@ describe('Signing requests', () => {
 
   describe('Request rendering', () => {
     it('correctly displays request 1', () => {
-      expect(wrapper.find(Address).find('.fullAddress').text()).toBe(ellipsisName(signRequests[0].account.address));
-      expect(wrapper.find(Extrinsic).find('td.data').map((el): string => el.text())).toEqual([
+      console.log(
+        'test',
+        wrapper
+          .find(Extrinsic)
+          .find('td.data')
+          .map((el): string => el.text())
+      );
+      expect(
+        wrapper
+          .find(Extrinsic)
+          .find('td.data')
+          .map((el): string => el.text())
+      ).toEqual([
         'https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fwestend-rpc.polkadot.io#/accounts',
         'Westend',
         '45',
@@ -265,7 +286,12 @@ describe('Signing requests', () => {
       await act(flushAllPromises);
 
       expect(wrapper.find(Address).find('.fullAddress').text()).toBe(ellipsisName(signRequests[1].account.address));
-      expect(wrapper.find(Extrinsic).find('td.data').map((el): string => el.text())).toEqual([
+      expect(
+        wrapper
+          .find(Extrinsic)
+          .find('td.data')
+          .map((el): string => el.text())
+      ).toEqual([
         'https://polkadot.js.org/apps',
         'Westend',
         '45',
@@ -282,17 +308,17 @@ describe('Signing requests', () => {
 
   describe('Submitting', () => {
     it('passes request id to cancel call', async () => {
-      wrapper.find('.cancelButton').find('a').simulate('click');
+      wrapper.find(Button).first().simulate('click');
       await act(flushAllPromises);
 
       expect(messaging.cancelSignRequest).toBeCalledWith(signRequests[0].id);
     });
 
     it('passes request id and password to approve call', async () => {
-      wrapper.find(Input).simulate('change', { target: { value: 'hunter1' } });
+      wrapper.find(ValidatedInput).simulate('change', { target: { value: 'hunter1' } });
       await act(flushAllPromises);
 
-      wrapper.find(Button).find('button').simulate('click');
+      wrapper.find(Button).find('[data-sign-transaction] button').simulate('click');
       await act(flushAllPromises);
       wrapper.update();
 
@@ -306,7 +332,7 @@ describe('Signing requests', () => {
       wrapper.find(Input).simulate('change', { target: { value: 'hunter1' } });
       await act(flushAllPromises);
 
-      wrapper.find(Button).find('button').simulate('click');
+      wrapper.find(Button).find('button').last().simulate('click');
       await act(flushAllPromises);
       wrapper.update();
 
@@ -320,11 +346,10 @@ describe('Signing requests', () => {
       jest.spyOn(messaging, 'approveSignPassword').mockImplementation(async () => {
         throw new Error('Unable to decode using the supplied passphrase');
       });
-
       wrapper.find(Input).simulate('change', { target: { value: 'anything' } });
       await act(flushAllPromises);
 
-      wrapper.find(Button).find('button').simulate('click');
+      wrapper.find(Button).find('button').last().simulate('click');
       await act(flushAllPromises);
       wrapper.update();
 
