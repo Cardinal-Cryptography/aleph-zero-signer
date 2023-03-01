@@ -45,7 +45,7 @@ export default React.memo(
     justify-content: space-between;
   }
 
-  td.label {
+  td.label{
     text-align: left;
     vertical-align: top;
     font-style: normal;
@@ -63,7 +63,7 @@ export default React.memo(
   .separator {
     border-bottom: 1px solid ${theme.boxBorderColor};
     width: calc(100% - 16px);
-    min-width: 100px;
+
     margin: 0px 8px;
   }
 
@@ -107,6 +107,12 @@ export default React.memo(
     &[open] summary {
       white-space: normal;
     }
+  }
+
+  .help-icon {
+    background: ${theme.iconNeutralColor};
+    width: 12px;
+    height: 12px;
   }
 `
   )
