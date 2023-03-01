@@ -14,11 +14,13 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { bnToBn, formatNumber } from '@polkadot/util';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 
-import { Table } from '../../components';
+import helpIcon from '../../assets/help.svg';
+import { Svg, Table } from '../../components';
 import { SettingsContext } from '../../components/contexts';
 import useMetadata from '../../hooks/useMetadata';
 import useTranslation from '../../hooks/useTranslation';
 import { ellipsisName } from '../../util/ellipsisName';
+import Tooltip from './Tooltip';
 
 interface DecodedMethod {
   args: {
@@ -62,12 +64,10 @@ function Extrinsic({
   url
 }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const chain = useMetadata(genesisHash);
+  const chain = useMetadata(genesisHash, true);
   const settings = useContext(SettingsContext);
   const specVersion = useRef(bnToBn(hexSpec)).current;
   const [methodDetails, setMethodDetails] = useState<DecodedMethod>();
-
-  console.log('methodDetails', methodDetails);
 
   useEffect(() => {
     const getDetails = async () => {
@@ -76,6 +76,13 @@ function Extrinsic({
 
     getDetails().catch((e) => console.error(e));
   }, [chain, method, settings, specVersion]);
+
+  function prettyPrintValue(value: string) {
+    const numValue = parseFloat(value.replace(/,/g, ''));
+    const trillion = 1000000000000; // 10^12
+
+    return numValue / trillion;
+  }
 
   return (
     <Table className={className}>
@@ -99,7 +106,10 @@ function Extrinsic({
           <tr>
             <td className='label'>{t<string>('amount')}</td>
             <div className='separator'></div>
-            <td className='data'>{methodDetails?.args?.value}</td>
+            <td className='data'>
+              {prettyPrintValue(methodDetails?.args?.value || '')}&nbsp;
+              {chain?.definition.symbol}
+            </td>
           </tr>
           <tr>
             <td className='label'>{t<string>('target')}</td>
@@ -109,7 +119,15 @@ function Extrinsic({
         </>
       )}
       <tr>
-        <td className='label'>{t<string>('nonce')}</td>
+        <td className='label'>
+          {t<string>('nonce')}&nbsp;
+          <Tooltip content='The overall, lifetime transaction count of your account.'>
+            <Svg
+              className='help-icon'
+              src={helpIcon}
+            />
+          </Tooltip>
+        </td>
         <div className='separator'></div>
         <td className='data'>{formatNumber(nonce)}</td>
       </tr>
