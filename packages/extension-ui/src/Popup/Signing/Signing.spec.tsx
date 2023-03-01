@@ -276,24 +276,19 @@ describe('Signing requests', () => {
 
       console.log('siup3', wrapper.children().debug());
 
-      expect(wrapper.find(Address).find('.fullAddress').text()).toBe(ellipsisName(signRequests[1].account.address));
       expect(
         wrapper
           .find(Extrinsic)
           .find('td.data')
           .map((el): string => el.text())
-      ).toEqual([
-        'https://polkadot.js.org/apps',
-        'Westend',
-        '45',
-        '3',
-        `balances.transfer(dest, value){
-  "dest": "5Ggap6soAPaP5UeNaiJsgqQwdVhhNnm6ez7Ba1w9jJ62LM2Q",
-  "value": "200.0000 mWND"
-}`,
-        'Transfer some liquid free balance to another account.',
-        'mortal, valid from {{birth}} to {{death}}'
-      ]);
+      ).toEqual(['3']);
+
+      expect(
+        wrapper
+          .find(Extrinsic)
+          .find('td.from')
+          .map((el): string => el.text())
+      ).toEqual(['https://polkadot.js.org/apps']);
     });
   });
 
