@@ -278,5 +278,6 @@
   "amount": "",
   "target": "",
   "Transaction Signed": "",
-  "Transaction Declined": ""
+  "Transaction Declined": "",
+  "Authorization": ""
 }

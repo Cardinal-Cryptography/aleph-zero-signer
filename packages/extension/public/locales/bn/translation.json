@@ -245,5 +245,6 @@
   "Call": "",
   "amount": "",
   "target": "",
-  "Transaction Signed": ""
+  "Transaction Signed": "",
+  "Authorization": ""
 }
