@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
+import useTranslation from '../../hooks/useTranslation';
+
 interface Props {
   className?: string;
   index: number;
@@ -23,6 +25,7 @@ function TransactionIndex({
   onPreviousClick,
   totalItems
 }: Props): React.ReactElement<Props> {
+  const { t } = useTranslation();
   const previousClickActive = index !== 0;
   const nextClickActive = index < totalItems - 1;
 
@@ -38,7 +41,8 @@ function TransactionIndex({
     <div className={className}>
       <div>
         <span>
-          {totalItems - 1} more {totalItems - 1 === 1 ? 'Transaction' : 'Transactions'}
+          {totalItems - 1}&nbsp;{t<string>('more')}&nbsp;
+          {totalItems - 1 === 1 ? t<string>('Transaction') : t<string>('Transactions')}
         </span>
       </div>
       <div className='arrow-group'>
