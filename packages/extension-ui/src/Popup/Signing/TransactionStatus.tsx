@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import animDeclined from '../../assets/anim_declined.svg';
 import animSigned from '../../assets/anim_signed.svg';
-import { Svg } from '../../components';
+import { PopupBorderContainer, Svg } from '../../components';
 import { ActionContext } from '../../components/contexts';
 import useTranslation from '../../hooks/useTranslation';
 
@@ -25,7 +25,7 @@ function TransactionStatus({
 }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
-  const signed = status === 'signed';
+  const isSigned = status === 'signed';
 
   useEffect(() => {
     setTimeout(() => {
@@ -34,19 +34,21 @@ function TransactionStatus({
   }, [onAction]);
 
   return (
-    <div className={className}>
-      <div className='content'>
-        <div className='content-inner'>
-          <Svg
-            className='icon'
-            src={signed ? animSigned : animDeclined}
-          />
-          <span className='heading'>
-            {signed ? t<string>('Transaction Signed') : t<string>('Transaction Declined')}
-          </span>
+    <PopupBorderContainer>
+      <div className={className}>
+        <div className='content'>
+          <div className='content-inner'>
+            <Svg
+              className='icon'
+              src={isSigned ? animSigned : animDeclined}
+            />
+            <span className='heading'>
+              {isSigned ? t<string>('Transaction Signed') : t<string>('Transaction Declined')}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </PopupBorderContainer>
   );
 }
 
@@ -54,10 +56,6 @@ export default React.memo(
   withRouter(
     styled(TransactionStatus)(
       ({ match, theme }: Props) => `
-  border-radius: 32px;
-  // due to Main padding 16px;
-  margin: 0 -8px;
-
   .content {
     outline: ${match.params.status === 'signed' ? theme.successBackground : theme.dangerBackground} solid 37px;
     border-radius: 32px;
@@ -89,7 +87,7 @@ export default React.memo(
     color: ${theme.textColor};
     margin: 16px 0px 8px 0px;
   }
-  
+
   .icon {
     background: ${match.params.status === 'signed' ? theme.successBackground : theme.dangerBackground};
     width: 96px;

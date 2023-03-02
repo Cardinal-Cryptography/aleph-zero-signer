@@ -75,7 +75,7 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
   }, [onAction, signId]);
 
   const StyledCheckbox = styled(Checkbox)`
-  margin-left: 8px;
+    margin-left: 8px;
 `;
 
   const RememberPasswordCheckbox = () => (
@@ -95,8 +95,8 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
   );
 
   const CustomButtonArea = styled(ButtonArea)`
-  padding: 0px 24px;
-  margin-bottom: 0px;
+    padding: 0px 24px;
+    margin-bottom: 0px;
   `;
 
   return (

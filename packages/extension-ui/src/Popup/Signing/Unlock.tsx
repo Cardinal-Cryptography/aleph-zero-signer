@@ -83,4 +83,5 @@ function Unlock({
 }
 
 export default React.memo(styled(Unlock)`
-height: 89px`);
+  height: 89px
+`);

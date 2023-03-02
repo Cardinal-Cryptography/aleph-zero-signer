@@ -1,8 +1,6 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 import type { Chain } from '@polkadot/extension-chains/types';
 import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import type { SignerPayloadJSON } from '@polkadot/types/types';
@@ -45,14 +43,16 @@ const decodeMethodApi = async (data: string, chain: Chain | null, settings: Sett
   const provider = new WsProvider('wss://rpc.polkadot.io');
   const api = await ApiPromise.create({ provider });
   const methodCall = api.registry.createType('Call', data);
-  const prefix = chain ? chain.ss58Format : settings.prefix === -1 ? 42 : settings.prefix;
+  const prefix = chain?.ss58Format ?? settings.prefix === -1 ? 42 : settings.prefix;
   const target = decodeAddress(methodCall.args[0]?.toString());
   const targetEncoded = encodeAddress(target, prefix);
 
+  const humanRedableResponse = methodCall.toHuman();
+
   return {
-    args: (methodCall.toHuman() as { args: { dest: { Id: string }; value: string } })?.args,
-    method: methodCall.toHuman()?.method as string,
-    section: methodCall.toHuman()?.section as string,
+    args: (humanRedableResponse as { args: { dest: { Id: string }; value: string } })?.args,
+    method: humanRedableResponse?.method as string,
+    section: humanRedableResponse?.section as string,
     target: targetEncoded || null
   };
 };

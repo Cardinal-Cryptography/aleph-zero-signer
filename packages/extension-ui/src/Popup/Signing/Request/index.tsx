@@ -49,11 +49,11 @@ const StyledAddress = styled(Address)`
   margin: 0px 8px 8px 8px;`;
 
 const Wrapper = styled.div`
-position: absolute;
-left: 0px;
-right: 0px;
-bottom: 16px;
-margin: 0px 8px;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 16px;
+  margin: 0px 8px;
 `;
 
 export default function Request({
