@@ -28,6 +28,7 @@ function TransactionStatus({
   const isSigned = status === 'signed';
 
   useEffect(() => {
+    // we're using setTimeout here because TransactionStatus is only a temporary element signaling the status(signed/declined) of the transaction
     setTimeout(() => {
       onAction('..');
     }, 2000);
