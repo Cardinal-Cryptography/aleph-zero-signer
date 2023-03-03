@@ -4,6 +4,7 @@
 import { AccountJson, AccountWithChildren } from '@polkadot/extension-base/background/types';
 import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
 
+type IterationKeys = 'children' | 'parents';
 interface GroupedData {
   [key: string]: AccountWithChildren[];
 }
@@ -27,8 +28,16 @@ export const createGroupedAccountData = (filteredAccount: AccountWithChildren[])
     return acc;
   }, []);
 
-  const children = flattened.filter((item, idx, arr) => item.parentAddress && findOtherItemGenesis(item, idx, arr));
-  const parents = flattened.filter((item, idx, arr) => !item.parentAddress || !findOtherItemGenesis(item, idx, arr));
+  const { children, parents } = flattened.reduce<Record<IterationKeys, AccountJson[]>>(
+    (acc, next, idx, arr) => {
+      const type: IterationKeys = next.parentAddress && findOtherItemGenesis(next, idx, arr) ? 'children' : 'parents';
+
+      acc[type] = acc[type].concat(next);
+
+      return acc;
+    },
+    { children: [], parents: [] }
+  );
 
   const groupedParents: GroupedData = parents.reduce(
     (acc: GroupedData, next: AccountWithChildren) => {
