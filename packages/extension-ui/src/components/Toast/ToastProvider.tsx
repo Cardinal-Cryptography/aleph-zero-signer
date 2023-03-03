@@ -33,7 +33,7 @@ const ToastProvider = ({ children }: ToastProviderProps): React.ReactElement<Toa
       }
 
       if (callback) {
-        method.current = setTimeout(() => callback?.(), TOAST_TIMEOUT);
+        method.current = setTimeout(() => callback(), TOAST_TIMEOUT);
       }
 
       const timerId = setTimeout(() => {
