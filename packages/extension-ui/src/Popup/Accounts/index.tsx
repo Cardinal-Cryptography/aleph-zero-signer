@@ -82,8 +82,8 @@ function Accounts({ className }: Props): React.ReactElement {
         <>
           <CustomHeader
             onFilter={_onFilter}
-            withConnectedAccounts
             text={t<string>('Accounts')}
+            withConnectedAccounts
             withHelp
             withSettings
           />

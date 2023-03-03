@@ -8,8 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
+import connectionStatus from '../assets/anim_connection_status.svg';
 import logo from '../assets/azeroLogo.svg';
 import helpIcon from '../assets/help.svg';
+import notConnected from '../assets/not_connected.svg';
 import settingsIcon from '../assets/settings.svg';
 import { ActionContext, Link, Svg, Tooltip } from '../components';
 import useTranslation from '../hooks/useTranslation';
@@ -106,20 +108,32 @@ function Header({
               </Tooltip>
             )}
           </div>
-          {/* TODO: will be reused */}
-          {/* {isSettingsOpen && <MenuSettings reference={setMenuRef} />} */}
           {children}
-          {withConnectedAccounts && !!isConnected && (
-            <div className='connectedAccountsWrapper'>
+        </div>
+        {withConnectedAccounts && (
+          <div className='connectedAccountsWrapper'>
+            {isConnected ? (
               <Link
                 className='connectedAccounts'
                 to={connectedTabsUrl.length === 1 ? `/url/manage/${connectedTabsUrl[0]}` : '/auth-list'}
               >
-                <span className='greenDot'>•</span>Connected
+                <img
+                  className='greenDot'
+                  src={connectionStatus}
+                />
+                <span></span>Connected
               </Link>
-            </div>
-          )}
-        </div>
+            ) : (
+              <div className='connectedAccounts'>
+                <img
+                  className='greenDot'
+                  src={notConnected}
+                />
+                <div>Not Connected</div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );
@@ -145,6 +159,43 @@ export default React.memo(
 
   .flex {
     display: flex;
+  }
+
+  .connectedAccountsWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 45px;
+    height: 22px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    background: ${theme.connectedIndicator};
+    border: 1px solid ${theme.boxBorderColor};
+    margin: 0 auto;
+    width: fit-content;
+
+  }
+
+  .connectedAccounts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: ${theme.subTextColor};
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 130%;
+    letter-spacing: 0.06em;
+    gap: 4px;
+
+    .greenDot {
+      width: 20px;
+      height: 20px;
+      color: ${theme.connectedDotColor};
+    }
   }
 
   > .container {
@@ -173,7 +224,7 @@ export default React.memo(
       display:flex;
       align-items: center;
       justify-content: center;
-      margin-left: ${withSettings ? '16px' : '0px'};
+      margin-left: ${withSettings ? '32px' : '0px'};
       width: 100%;
 
       .logoText {
@@ -196,25 +247,7 @@ export default React.memo(
       }
     }
 
-    .connectedAccountsWrapper {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .connectedAccounts {
-      border: 1px solid ${theme.inputBorderColor};
-      border-radius: 4px;
-      padding: 0 0.5rem;
-
-      .greenDot {
-        margin-right: 0.3rem;
-        font-size: 1.5rem;
-        color: ${theme.connectedDotColor};
-        padding-bottom: 0.2rem;
-      }
-    }
+    
 
     .searchBarWrapper {
       flex: 1;
