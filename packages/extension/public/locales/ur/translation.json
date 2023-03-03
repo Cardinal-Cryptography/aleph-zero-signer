@@ -242,5 +242,9 @@
     "Call": "",
     "amount": "",
     "target": "",
-    "Transaction Signed": ""
+    "Transaction Signed": "",
+    "Undo": "",
+    "Account forgotten": "",
+    "Authorization": "",
+    "Transactions": ""
 }

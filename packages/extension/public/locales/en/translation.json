@@ -278,5 +278,9 @@
   "amount": "",
   "target": "",
   "Transaction Signed": "",
-  "Transaction Declined": ""
+  "Transaction Declined": "",
+  "Undo": "",
+  "Account forgotten": "",
+  "Authorization": "",
+  "Transactions": ""
 }
