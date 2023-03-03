@@ -61,65 +61,67 @@ function Header({
   const _goToRoot = useCallback(() => onAction('/'), [onAction]);
 
   return (
-    <div className={`${className} ${smallMargin ? 'smallMargin' : ''} header`}>
-      <div className='container'>
-        <div className='branding'>
-          {withBackArrow ? (
-            <FontAwesomeIcon
-              className='arrowLeftIcon'
-              icon={faArrowLeft}
-              onClick={withGoToRoot ? _goToRoot : _onBackArrowClick}
-            />
-          ) : (
-            <div className='flex'>
-              <img
-                className='logo'
-                src={logo}
+    <>
+      <div className={`${className} ${smallMargin ? 'smallMargin' : ''} header`}>
+        <div className='container'>
+          <div className='branding'>
+            {withBackArrow ? (
+              <FontAwesomeIcon
+                className='arrowLeftIcon'
+                icon={faArrowLeft}
+                onClick={withGoToRoot ? _goToRoot : _onBackArrowClick}
               />
+            ) : (
+              <div className='flex'>
+                <img
+                  className='logo'
+                  src={logo}
+                />
+              </div>
+            )}
+          </div>
+          <div className='logoText-container'>
+            <span className='logoText'>{text || t<string>('Aleph Zero Signer')}</span>
+          </div>
+          <div className='popupMenus'>
+            {withHelp && (
+              <Tooltip text={t<string>('Help')}>
+                <Link to={'/help'}>
+                  <Svg
+                    className='popupToggle'
+                    src={helpIcon}
+                  />
+                </Link>
+              </Tooltip>
+            )}
+            {withSettings && (
+              <Tooltip text={t<string>('Settings')}>
+                <Link to={'/account/settings'}>
+                  <Svg
+                    className='popupToggle'
+                    data-toggle-settings
+                    src={settingsIcon}
+                  />
+                </Link>
+              </Tooltip>
+            )}
+          </div>
+          {/* TODO: will be reused */}
+          {/* {isSettingsOpen && <MenuSettings reference={setMenuRef} />} */}
+          {children}
+          {withConnectedAccounts && !!isConnected && (
+            <div className='connectedAccountsWrapper'>
+              <Link
+                className='connectedAccounts'
+                to={connectedTabsUrl.length === 1 ? `/url/manage/${connectedTabsUrl[0]}` : '/auth-list'}
+              >
+                <span className='greenDot'>•</span>Connected
+              </Link>
             </div>
           )}
         </div>
-        {withConnectedAccounts && !!isConnected && (
-          <div className='connectedAccountsWrapper'>
-            <Link
-              className='connectedAccounts'
-              to={connectedTabsUrl.length === 1 ? `/url/manage/${connectedTabsUrl[0]}` : '/auth-list'}
-            >
-              <span className='greenDot'>•</span>Connected
-            </Link>
-          </div>
-        )}
-        <div className='logoText-container'>
-          <span className='logoText'>{text || t<string>('Aleph Zero Signer')}</span>
-        </div>
-        <div className='popupMenus'>
-          {withHelp && (
-            <Tooltip text={t<string>('Help')}>
-              <Link to={'/help'}>
-                <Svg
-                  className='popupToggle'
-                  src={helpIcon}
-                />
-              </Link>
-            </Tooltip>
-          )}
-          {withSettings && (
-            <Tooltip text={t<string>('Settings')}>
-              <Link to={'/account/settings'}>
-                <Svg
-                  className='popupToggle'
-                  data-toggle-settings
-                  src={settingsIcon}
-                />
-              </Link>
-            </Tooltip>
-          )}
-        </div>
-        {/* TODO: will be reused */}
-        {/* {isSettingsOpen && <MenuSettings reference={setMenuRef} />} */}
-        {children}
       </div>
-    </div>
+    </>
   );
 }
 
