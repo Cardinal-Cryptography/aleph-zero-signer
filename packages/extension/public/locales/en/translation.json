@@ -280,5 +280,7 @@
   "Transaction Signed": "",
   "Transaction Declined": "",
   "Undo": "",
-  "Account forgotten": ""
+  "Account forgotten": "",
+  "Authorization": "",
+  "Transactions": ""
 }
