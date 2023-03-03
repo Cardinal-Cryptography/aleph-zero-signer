@@ -37,12 +37,14 @@ function TransactionIndex({
     nextClickActive && onNextClick();
   }, [nextClickActive, onNextClick]);
 
+  const transactionsLeft = totalItems - 1;
+
   return (
     <div className={className}>
       <div>
         <span>
-          {totalItems - 1}&nbsp;{t<string>('more')}&nbsp;
-          {totalItems - 1 === 1 ? t<string>('Transaction') : t<string>('Transactions')}
+          {transactionsLeft}&nbsp;{t<string>('more')}&nbsp;
+          {transactionsLeft === 1 ? t<string>('Transaction') : t<string>('Transactions')}
         </span>
       </div>
       <div className='arrow-group'>
