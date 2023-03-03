@@ -5,7 +5,7 @@ import type { ThemeProps } from '../types';
 
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import logo from '../assets/azeroLogo.svg';
@@ -13,16 +13,15 @@ import helpIcon from '../assets/help.svg';
 import settingsIcon from '../assets/settings.svg';
 import { ActionContext, Link, Svg, Tooltip } from '../components';
 import useTranslation from '../hooks/useTranslation';
+import { getConnectedTabsUrl } from '../messaging';
 import { Z_INDEX } from '../zindex';
-// import { getConnectedTabsUrl } from '../messaging';
-// TODO: these will be reused in the future
 
 interface Props extends ThemeProps {
   children?: React.ReactNode;
   className?: string;
   onFilter?: (filter: string) => void;
   withBackArrow?: boolean;
-  showConnectedAccounts?: boolean;
+  withConnectedAccounts?: boolean;
   withHelp?: boolean;
   withSettings?: boolean;
   smallMargin?: boolean;
@@ -37,28 +36,26 @@ function Header({
   smallMargin = false,
   text,
   withBackArrow,
+  withConnectedAccounts,
   withGoToRoot = false,
   withHelp,
   withSettings
 }: Props): React.ReactElement<Props> {
-  // TODO: check if needed
-  // const [connectedTabsUrl, setConnectedTabsUrl] = useState<string[]>([]);
+  const [connectedTabsUrl, setConnectedTabsUrl] = useState<string[]>([]);
   const { t } = useTranslation();
 
-  // TODO: check if needed
-  // const isConnected = useMemo(() => connectedTabsUrl.length >= 1, [connectedTabsUrl]);
+  const isConnected = useMemo(() => connectedTabsUrl.length >= 1, [connectedTabsUrl]);
   const onAction = useContext(ActionContext);
 
-  // TODO: check if needed
-  // useEffect(() => {
-  //   if (!showConnectedAccounts) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!withConnectedAccounts) {
+      return;
+    }
 
-  // getConnectedTabsUrl()
-  //   .then((tabsUrl) => setConnectedTabsUrl(tabsUrl))
-  //   .catch(console.error);
-  // }, [showConnectedAccounts]);
+    getConnectedTabsUrl()
+      .then((tabsUrl) => setConnectedTabsUrl(tabsUrl))
+      .catch(console.error);
+  }, [withConnectedAccounts]);
 
   const _onBackArrowClick = useCallback(() => onAction('..'), [onAction]);
   const _goToRoot = useCallback(() => onAction('/'), [onAction]);
@@ -82,8 +79,18 @@ function Header({
             </div>
           )}
         </div>
+        {withConnectedAccounts && !!isConnected && (
+          <div className='connectedAccountsWrapper'>
+            <Link
+              className='connectedAccounts'
+              to={connectedTabsUrl.length === 1 ? `/url/manage/${connectedTabsUrl[0]}` : '/auth-list'}
+            >
+              <span className='greenDot'>•</span>Connected
+            </Link>
+          </div>
+        )}
         <div className='logoText-container'>
-          <span className='logoText'>{text || 'polkadot{.js}'}</span>
+          <span className='logoText'>{text || t<string>('Aleph Zero Signer')}</span>
         </div>
         <div className='popupMenus'>
           {withHelp && (
