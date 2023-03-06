@@ -27,9 +27,9 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
   return (
     <>
       <Header
+        text={t<string>('Add Account')}
         withBackArrow
         withHelp
-        text={t<string>('Add Account')}
       />
       <div className={className}>
         <div className='add-account-menu'>

@@ -6,18 +6,21 @@ import type { ThemeProps } from '../../types';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { AuthorizeReqContext, PopupBorderContainer } from '../../components';
-import useTranslation from '../../hooks/useTranslation';
-import { Header } from '../../partials';
+import { AccountContext, AuthorizeReqContext, PopupBorderContainer } from '../../components';
 import Request from './Request';
 
 interface Props extends ThemeProps {
   className?: string;
+  condition?: boolean;
 }
 
-function Authorize({ className = '' }: Props): React.ReactElement {
-  const { t } = useTranslation();
+function Authorize({ className = '', condition = false }: Props): React.ReactElement {
   const requests = useContext(AuthorizeReqContext);
+  const { accounts } = useContext(AccountContext);
+
+  // passing it as a prop to the styled component
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  condition = !accounts.length;
 
   return (
     <PopupBorderContainer>
@@ -40,9 +43,9 @@ function Authorize({ className = '' }: Props): React.ReactElement {
 }
 
 export default styled(Authorize)(
-  ({ theme }: Props) => `
-  overflow-y: auto;
-  outline:  37px solid ${theme.warningColor};
+  ({ condition, theme }: Props) => `
+  overflow-y: auto;  
+  outline:  37px solid ${condition ? theme.warningColor : theme.newTransactionBackground};
   border-radius: 32px;
   height: 584px;
   margin-top: 8px;
