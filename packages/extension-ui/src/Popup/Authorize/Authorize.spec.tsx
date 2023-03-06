@@ -80,7 +80,6 @@ describe('Authorize', () => {
 
     wrapper.update();
     expect(wrapper.find(Request).length).toBe(1);
-    console.log('siup2', wrapper.children().debug());
     expect(wrapper.find(Request).find('.warning-message').text()).toBe(
       'An application, self-identifying as ??? is requesting access from http://polkadot.org'
     );
