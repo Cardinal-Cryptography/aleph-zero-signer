@@ -12,7 +12,13 @@ interface GroupedData {
 const networkMap = getNetworkMap();
 
 const findOtherItemGenesis = (item: AccountJson, idx: number, arr: AccountJson[]) =>
-  arr.filter((_, index) => index !== idx).find((i) => i.genesisHash === item.genesisHash && !i.parentAddress);
+  arr
+    .filter((_, index) => index !== idx)
+    .find((i) =>
+      item.genesisHash
+        ? i.genesisHash === item.genesisHash && !i.parentAddress
+        : !i.genesisHash && i.address === item.parentAddress
+    );
 
 export const createGroupedAccountData = (filteredAccount: AccountWithChildren[]) => {
   const flattened: AccountJson[] = filteredAccount.reduce((acc: AccountJson[], next) => {
