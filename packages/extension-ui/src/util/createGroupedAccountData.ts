@@ -11,6 +11,16 @@ interface GroupedData {
 
 const networkMap = getNetworkMap();
 
+const parseChildren = (data: AccountWithChildren | AccountJson): AccountJson[] => {
+  if (!data.children) {
+    return [data];
+  } else {
+    const { children, ...rest } = data as AccountWithChildren;
+
+    return [rest, ...(children?.flatMap(parseChildren) ?? [])];
+  }
+};
+
 const findOtherItemGenesis = (item: AccountJson, idx: number, arr: AccountJson[]) =>
   arr
     .filter((_, index) => index !== idx)
@@ -21,18 +31,10 @@ const findOtherItemGenesis = (item: AccountJson, idx: number, arr: AccountJson[]
     );
 
 export const createGroupedAccountData = (filteredAccount: AccountWithChildren[]) => {
-  const flattened: AccountJson[] = filteredAccount.reduce((acc: AccountJson[], next) => {
-    if (next.children) {
-      next.children.forEach((c) => acc.push(c));
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { children, ...rest } = next;
-
-    acc.push(rest);
-
-    return acc;
-  }, []);
+  const flattened: AccountJson[] = filteredAccount.reduce(
+    (acc: AccountJson[], next) => acc.concat(parseChildren(next)),
+    []
+  );
 
   const { children, parents } = flattened.reduce<Record<IterationKeys, AccountJson[]>>(
     (acc, next, idx, arr) => {
