@@ -26,7 +26,6 @@ interface Props extends ThemeProps {
 
 const CustomButtonArea = styled(ButtonArea)`
   padding: 0px;
-
   margin-bottom: 0px;
 `;
 

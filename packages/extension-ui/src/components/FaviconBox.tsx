@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ThemeProps } from '../types';
@@ -13,8 +13,18 @@ interface Props extends ThemeProps {
 }
 
 const FaviconBox: React.FC<Props> = function ({ className, url }: Props) {
-  const favicon = getFaviconUrl(url);
+  const [favicon, setFavicon] = useState<string>('');
   const origin = new URL(url).origin;
+
+  useEffect(() => {
+    async function fetchFavicon() {
+      const url = await getFaviconUrl(origin);
+
+      setFavicon(url);
+    }
+
+    fetchFavicon().catch(console.error);
+  }, [origin]);
 
   return (
     <div className={className}>
@@ -35,7 +45,7 @@ export default styled(FaviconBox)(
   padding: 16px;
   gap: 8px;
   width: 270px;
-  margin-left: 16px;    
+  margin: 0px 16px;    
   background: ${theme.inputBorderColor};
   border-radius: 8px;
 

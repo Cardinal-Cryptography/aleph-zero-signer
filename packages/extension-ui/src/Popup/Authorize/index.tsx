@@ -11,20 +11,19 @@ import Request from './Request';
 
 interface Props extends ThemeProps {
   className?: string;
-  condition?: boolean;
 }
 
-function Authorize({ className = '', condition = false }: Props): React.ReactElement {
+function Authorize({ className = '' }: Props): React.ReactElement {
   const requests = useContext(AuthorizeReqContext);
   const { accounts } = useContext(AccountContext);
 
-  // passing it as a prop to the styled component
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  condition = !accounts.length;
-
   return (
     <PopupBorderContainer>
-      <div className={`${className} ${requests.length === 1 ? 'lastRequest' : ''}`}>
+      <div
+        className={`${className} ${requests.length === 1 ? 'lastRequest' : ''} ${
+          !accounts.length ? 'warning-outline' : ''
+        }`}
+      >
         {requests.map(
           ({ id, request, url }, index): React.ReactNode => (
             <Request
@@ -43,9 +42,9 @@ function Authorize({ className = '', condition = false }: Props): React.ReactEle
 }
 
 export default styled(Authorize)(
-  ({ condition, theme }: Props) => `
+  ({ theme }: Props) => `
   overflow-y: auto;  
-  outline:  37px solid ${condition ? theme.warningColor : theme.newTransactionBackground};
+  outline:  37px solid ${theme.newTransactionBackground};
   border-radius: 32px;
   height: 584px;
   margin-top: 8px;
@@ -62,6 +61,10 @@ export default styled(Authorize)(
 
   .request {
     padding: 0 24px;
+  }
+
+  &.warning-outline {
+    outline:  37px solid ${theme.warningColor};
   }
 `
 );
