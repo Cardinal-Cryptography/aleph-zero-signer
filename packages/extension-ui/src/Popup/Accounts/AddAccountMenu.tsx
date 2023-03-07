@@ -52,7 +52,7 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
           onClick={goTo('/')}
           secondary
         >
-          {t<string>('Cancel')}
+          {t<string>('Close')}
         </Button>
       </ButtonArea>
     </>
