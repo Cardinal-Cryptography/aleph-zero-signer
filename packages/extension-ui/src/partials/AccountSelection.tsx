@@ -131,7 +131,7 @@ export default styled(AccounSelection)(
     }
   
     ::-webkit-scrollbar {
-      width: 4-=px;
+      width: 4px;
     }
     ${Account} {
       padding: 0px 4px;

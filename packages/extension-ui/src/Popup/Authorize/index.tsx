@@ -16,14 +16,13 @@ interface Props extends ThemeProps {
 function Authorize({ className = '' }: Props): React.ReactElement {
   const requests = useContext(AuthorizeReqContext);
   const { accounts } = useContext(AccountContext);
+  const classes = [requests.length === 1 ? 'lastRequest' : null, !accounts.length ? 'warning-outline' : null]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <PopupBorderContainer>
-      <div
-        className={`${className} ${requests.length === 1 ? 'lastRequest' : ''} ${
-          !accounts.length ? 'warning-outline' : ''
-        }`}
-      >
+      <div className={`${className} ${classes}`}>
         {requests.map(
           ({ id, request, url }, index): React.ReactNode => (
             <Request

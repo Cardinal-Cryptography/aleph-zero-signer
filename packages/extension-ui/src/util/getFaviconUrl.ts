@@ -19,9 +19,6 @@ export async function getFaviconUrl(url: string): Promise<string> {
       const faviconUrl = new URL(faviconLink.href, url);
       const faviconPath = faviconUrl.pathname;
 
-      console.log('faviconPath', faviconPath);
-      console.log('xd', `${origin}${faviconPath}`);
-
       return `${origin}${faviconPath}`;
     }
   } catch (err) {
