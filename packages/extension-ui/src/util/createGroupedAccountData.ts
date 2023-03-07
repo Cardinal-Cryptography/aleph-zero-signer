@@ -5,20 +5,23 @@ import { AccountJson, AccountWithChildren } from '@polkadot/extension-base/backg
 import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
 
 type IterationKeys = 'children' | 'parents';
+
+interface ParsedAccountJson extends AccountJson {
+  nestedChild?: boolean;
+}
 interface GroupedData {
   [key: string]: AccountWithChildren[];
 }
 
 const networkMap = getNetworkMap();
 
-const parseChildren = (data: AccountWithChildren | AccountJson): AccountJson[] => {
-  if (!data.children) {
-    return [data];
-  } else {
-    const { children, ...rest } = data as AccountWithChildren;
+const parseEntries = (data: AccountWithChildren | AccountJson, nestedChild = false): ParsedAccountJson[] => {
+  const { children, ...rest } = data as AccountWithChildren;
 
-    return [rest, ...(children?.flatMap(parseChildren) ?? [])];
-  }
+  return [
+    { ...rest, nestedChild },
+    ...(children?.flatMap((entry) => parseEntries(entry, Boolean(data.parentAddress))) ?? [])
+  ];
 };
 
 const findOtherItemGenesis = (item: AccountJson, idx: number, arr: AccountJson[]) =>
@@ -32,7 +35,7 @@ const findOtherItemGenesis = (item: AccountJson, idx: number, arr: AccountJson[]
 
 export const createGroupedAccountData = (filteredAccount: AccountWithChildren[]) => {
   const flattened: AccountJson[] = filteredAccount.reduce(
-    (acc: AccountJson[], next) => acc.concat(parseChildren(next)),
+    (acc: AccountJson[], next) => acc.concat(parseEntries(next)),
     []
   );
 
@@ -73,8 +76,8 @@ export const createGroupedAccountData = (filteredAccount: AccountWithChildren[])
     });
   }
 
-  function getParentName(child: AccountJson) {
-    const parent = parents.find((i) => i.address === child.parentAddress);
+  function getParentName(child: ParsedAccountJson) {
+    const parent = (child.nestedChild ? children : parents).find((i) => i.address === child.parentAddress);
 
     return parent?.name;
   }
