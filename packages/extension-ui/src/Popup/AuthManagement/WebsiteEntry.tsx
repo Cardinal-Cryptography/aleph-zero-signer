@@ -29,7 +29,9 @@ function WebsiteEntry({
   const [favicon, setFavicon] = useState<string>('');
   const onAction = useContext(ActionContext);
   const _goTo = useCallback((path: string) => () => onAction(path), [onAction]);
-  const origin = new URL(url).origin;
+  const origin = new URL(decodeURIComponent(url)).origin;
+
+  console.log(origin);
 
   useEffect(() => {
     async function fetchFavicon() {

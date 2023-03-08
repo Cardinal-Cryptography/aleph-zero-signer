@@ -62,6 +62,8 @@ function Header({
   const _onBackArrowClick = useCallback(() => onAction('..'), [onAction]);
   const _goToRoot = useCallback(() => onAction('/'), [onAction]);
 
+  console.log(connectedTabsUrl);
+
   return (
     <>
       <div className={`${className} ${smallMargin ? 'smallMargin' : ''} header`}>
@@ -117,7 +119,7 @@ function Header({
                 className='connectedAccounts'
                 to={
                   connectedTabsUrl.length === 1
-                    ? `/url/manage?url=${encodeURIComponent(connectedTabsUrl[0])}`
+                    ? `/url/manage?url=${encodeURIComponent(decodeURIComponent(connectedTabsUrl[0]))}`
                     : '/auth-list'
                 }
               >
