@@ -62,7 +62,9 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
           return;
         }
 
-        url && setSelectedAccounts && setSelectedAccounts(list[url].authorizedAccounts);
+        if (url && setSelectedAccounts) {
+          setSelectedAccounts(list[url].authorizedAccounts);
+        }
       })
       .catch(console.error);
   }, [setSelectedAccounts, url]);

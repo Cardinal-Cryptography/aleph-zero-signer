@@ -446,8 +446,6 @@ describe('Extension', () => {
           expect((result as ResponseSigning)?.signature).toEqual(signatureExpected.signature);
         }).catch((err) => console.log(err));
 
-      console.log('State', state);
-
       await expect(extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
         id: state.allSignRequests[0].id,
         password,
