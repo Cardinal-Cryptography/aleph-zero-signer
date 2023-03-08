@@ -60,6 +60,7 @@ import PhishingDetected from './PhishingDetected';
 import Settings from './Settings';
 import Signing from './Signing';
 import Welcome from './Welcome';
+import DisconnectApp from './AuthManagement/DisconnectApp';
 
 const startSettings = uiSettings.get();
 
@@ -229,6 +230,9 @@ export default function Popup(): React.ReactElement {
                             </Route>
                             <Route path='/url/manage'>
                               {wrapWithErrorBoundary(<AccountManagement />, 'manage-url')}
+                            </Route>
+                            <Route path='/url/disconnect/:url'>
+                              {wrapWithErrorBoundary(<DisconnectApp />, 'disconnect-url')}
                             </Route>
                             <Route path={`${PHISHING_PAGE_REDIRECT}/:website`}>
                               {wrapWithErrorBoundary(<PhishingDetected />, 'phishing-page-redirect')}
