@@ -303,5 +303,8 @@
   "Disconnect app": "",
   "Disconnecting app": "",
   "You're about to disconnect an app from the Signer. This will result in disconnecting all connected accounts from this app.": "",
-  "App disconnected": ""
+  "App disconnected": "",
+  "No app request yet": "",
+  "This view will contain a list of apps and associated accounts that you have granted the Trusted status. The requests are initiated by apps.": "This view will contain a list of apps and associated accounts that you have granted the Trusted status. The requests are\ninitiated by apps."
+
 }
