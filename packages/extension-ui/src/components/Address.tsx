@@ -147,7 +147,12 @@ function Address({
               title={t('external account')}
             />
           ))}
-        <span title={displayName}>{displayName}</span>
+        <span
+          className='name'
+          title={displayName}
+        >
+          {displayName}
+        </span>
       </>
     );
   };
@@ -385,6 +390,8 @@ export default styled(Address)(
     width: 300px;
     white-space: nowrap;
     color: ${theme.textColor};
+    width: 190px;
+    margin-right: 4px;
   } 
 
     &.displaced {
