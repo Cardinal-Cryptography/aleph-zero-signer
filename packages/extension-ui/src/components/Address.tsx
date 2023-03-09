@@ -175,7 +175,7 @@ function Address({
         <div className='info'>
           {parentName ? (
             <>
-              <div className='banner'>
+              <div className='name-banner'>
                 <FontAwesomeIcon
                   className='deriveIcon'
                   icon={faCodeBranch}
@@ -275,17 +275,22 @@ export default styled(Address)(
   .banner {
     font-size: 12px;
     line-height: 16px;
+  }
+
+  .name-banner{
+    position: absolute;
+    top: 0;
+  }
+  
+  .chain {
     position: absolute;
     bottom: 0;
-
-    &.chain {
-      background: ${theme.boxBorderColor};
-      border-radius: 8px 0px;
-      color: ${theme.subTextColor};
-      padding: 0.1rem 0.5rem 0.1rem 0.75rem;
-      right: 0;
-      z-index: ${Z_INDEX.ADDRESS};
-    }
+    background: ${theme.boxBorderColor};
+    border-radius: 8px 0px;
+    color: ${theme.subTextColor};
+    padding: 2px 8px;
+    right: 0;
+    z-index: ${Z_INDEX.ADDRESS};
   }
 
   .addressDisplay {
