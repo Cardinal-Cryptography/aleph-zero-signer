@@ -276,11 +276,11 @@ export default styled(Address)(
     font-size: 12px;
     line-height: 16px;
     position: absolute;
-    top: 0;
+    bottom: 0;
 
     &.chain {
       background: ${theme.boxBorderColor};
-      border-radius: 0px 8px;
+      border-radius: 8px 0px;
       color: ${theme.subTextColor};
       padding: 0.1rem 0.5rem 0.1rem 0.75rem;
       right: 0;
@@ -449,6 +449,10 @@ export default styled(Address)(
 
     &.active {
       background: ${theme.accountDotsIconColor};
+    }
+
+    &:hover {
+      background: ${theme.headerIconBackgroundHover};
     }
   }
 
