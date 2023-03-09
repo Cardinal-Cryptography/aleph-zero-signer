@@ -189,7 +189,7 @@ function Address({
                     className='subaccount-icon'
                     src={subAccountIcon}
                   />
-                  {parentNameSuri}
+                  <span>{parentNameSuri}</span>
                 </div>
               </div>
               <div className='name displaced'>
@@ -275,6 +275,7 @@ export default styled(Address)(
   .banner {
     font-size: 12px;
     line-height: 16px;
+    max-width: 200px;
   }
 
   .name-banner{
@@ -417,9 +418,6 @@ export default styled(Address)(
     top: -6px;
     color: ${theme.labelColor};
     font-size: ${theme.inputLabelFontSize};
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     background: ${theme.menuBackground};
     border: 1px solid ${theme.boxBorderColor};
     border-radius: 2px;
@@ -433,6 +431,13 @@ export default styled(Address)(
       width: 14px;
       height: 14px;
       background: ${theme.iconNeutralColor};
+    }
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 150px;
     }
   }
 

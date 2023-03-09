@@ -1,8 +1,11 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { ThemeProps } from '../../types';
+
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
+import styled from 'styled-components';
 
 import { AccountContext, AccountNamePasswordCreation, ActionContext } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
@@ -10,7 +13,8 @@ import { deriveAccount } from '../../messaging';
 import { HeaderWithSteps } from '../../partials';
 import SelectParent from './SelectParent';
 
-interface Props {
+interface Props extends ThemeProps {
+  className?: string;
   isLocked?: boolean;
 }
 
@@ -27,7 +31,7 @@ interface ConfirmState {
   parentPassword: string;
 }
 
-function Derive({ isLocked }: Props): React.ReactElement<Props> {
+function Derive({ className, isLocked }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
   const { accounts } = useContext(AccountContext);
@@ -45,6 +49,11 @@ function Derive({ isLocked }: Props): React.ReactElement<Props> {
 
   const parentIsExternal = useMemo(
     () => accounts.find((a) => a.address === parentAddress)?.isExternal || 'false',
+    [accounts, parentAddress]
+  );
+
+  const parentName = useMemo(
+    () => accounts.find((a) => a.address === parentAddress)?.name || null,
     [accounts, parentAddress]
   );
 
@@ -102,6 +111,7 @@ function Derive({ isLocked }: Props): React.ReactElement<Props> {
           onBackClick={goTo(`/account/edit-menu/${parentAddress}?isExternal=${parentIsExternal?.toString()}`)}
           onCreate={_onCreate}
           onNameChange={setName}
+          parentName={parentName}
         />
       )}
     </>
