@@ -40,6 +40,7 @@ import EditAccountMenu from './Accounts/EditAccountMenu';
 import EditName from './Accounts/EditName';
 import EditNetwork from './Accounts/EditNetwork';
 import AccountManagement from './AuthManagement/AccountManagement';
+import DisconnectApp from './AuthManagement/DisconnectApp';
 import RestoreJson from './Restore/RestoreJson';
 import TransactionStatus from './Signing/TransactionStatus';
 import About from './About';
@@ -60,7 +61,6 @@ import PhishingDetected from './PhishingDetected';
 import Settings from './Settings';
 import Signing from './Signing';
 import Welcome from './Welcome';
-import DisconnectApp from './AuthManagement/DisconnectApp';
 
 const startSettings = uiSettings.get();
 

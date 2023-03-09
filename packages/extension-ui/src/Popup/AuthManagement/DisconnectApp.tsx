@@ -36,21 +36,15 @@ function DisconnectApp({ className }: Props): React.ReactElement<Props> {
   const onAction = useContext(ActionContext);
   const { show } = useToast();
 
-  const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
+  const goToAuthList = useCallback(() => onAction('/auth-list'), [onAction]);
 
-  const removeAuth = useCallback(
-    (url: string) => {
-      show(t<string>('App disconnected'), 'success', () => {
-        removeAuthorization(url)
-          .then(() => onAction('/auth-list'))
-          .catch(console.error);
-      });
-      goTo('/auth-list');
-    },
-    [goTo, onAction, show, t]
-  );
-
-  const _removeAuth = useCallback(() => removeAuth(decodeURIComponent(url)), [removeAuth, url]);
+  const handleDisconnect = useCallback(() => {
+    show(t<string>('App disconnected'), 'success', () => {
+      removeAuthorization(decodedUrl)
+        .then(() => goToAuthList())
+        .catch(console.error);
+    });
+  }, [decodedUrl, goToAuthList, show, t]);
 
   return (
     <>
@@ -77,14 +71,14 @@ function DisconnectApp({ className }: Props): React.ReactElement<Props> {
       <VerticalSpace />
       <ButtonArea>
         <Button
-          onClick={goTo('/auth-list')}
+          onClick={goToAuthList}
           secondary
         >
           {t<string>('Cancel')}
         </Button>
         <Button
           isDanger
-          onClick={_removeAuth}
+          onClick={handleDisconnect}
         >
           {t<string>('Disconnect')}
         </Button>
@@ -118,7 +112,6 @@ export default React.memo(
     line-height: 120%;
     text-align: center;
     letter-spacing: 0.035em;
-    
     color: ${theme.textColorDanger};
     
   }
@@ -140,7 +133,6 @@ export default React.memo(
     height: 96px;
     background: ${theme.dangerBackground};
     margin: 0 auto;
-    
   }
       
   &::-webkit-scrollbar {

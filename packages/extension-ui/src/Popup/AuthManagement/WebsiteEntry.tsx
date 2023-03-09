@@ -31,8 +31,6 @@ function WebsiteEntry({
   const _goTo = useCallback((path: string) => () => onAction(path), [onAction]);
   const origin = new URL(decodeURIComponent(url)).origin;
 
-  console.log(origin);
-
   useEffect(() => {
     async function fetchFavicon() {
       const url = await getFaviconUrl(origin);

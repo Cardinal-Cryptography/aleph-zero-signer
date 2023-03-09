@@ -62,8 +62,6 @@ function Header({
   const _onBackArrowClick = useCallback(() => onAction('..'), [onAction]);
   const _goToRoot = useCallback(() => onAction('/'), [onAction]);
 
-  console.log(connectedTabsUrl);
-
   return (
     <>
       <div className={`${className} ${smallMargin ? 'smallMargin' : ''} header`}>
