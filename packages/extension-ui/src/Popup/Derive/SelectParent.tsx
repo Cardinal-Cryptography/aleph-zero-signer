@@ -281,7 +281,7 @@ export default React.memo(
         line-height: 125%;
         text-align: center;
         letter-spacing: 0.06em;
-        }
+      }
 
       .subtitle {
         color: ${theme.subTextColor};
@@ -290,7 +290,6 @@ export default React.memo(
         text-align: center;
         letter-spacing: 0.07em;
         white-space: pre-line;
-        
       }
     }
 `

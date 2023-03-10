@@ -53,8 +53,8 @@ function Accounts({ className }: Props): React.ReactElement {
   }, []);
 
   const accounts = Object.entries(groupedParents)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .filter(([_, details]) => details.length > 0)
+
+    .filter(([, details]) => details.length > 0)
     .map(([networkName, details]) => {
       return (
         <div key={networkName}>
