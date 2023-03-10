@@ -46,6 +46,7 @@ function Header({
   const [connectedTabsUrl, setConnectedTabsUrl] = useState<string[]>([]);
   const { t } = useTranslation();
 
+  console.log('connectedTabsUrl', getConnectedTabsUrl());
   const isConnected = useMemo(() => connectedTabsUrl.length >= 1, [connectedTabsUrl]);
   const onAction = useContext(ActionContext);
 

@@ -37,6 +37,7 @@ export interface AuthUrlInfo {
   id: string;
   // this is from pre-0.44.1
   isAllowed?: boolean;
+  lastAuth: number;
   origin: string;
   url: string;
   authorizedAccounts: string[];
@@ -244,8 +245,9 @@ export default class State {
         authorizedAccounts,
         count: 0,
         id: idStr,
+        lastAuth: Date.now(),
         origin,
-        url
+        url: URLorigin
       };
 
       this.saveCurrentAuthList();
@@ -272,7 +274,7 @@ export default class State {
 
       // the assert in stripUrl may throw for new tabs with "chrome://newtab/"
       try {
-        strippedUrl = decodeURIComponent(url);
+        strippedUrl = new URL(url).origin;
       } catch (e) {
         console.error(e);
       }
@@ -387,6 +389,7 @@ export default class State {
   }
 
   public updateAuthorizedAccounts (authorizedAccountDiff: AuthorizedAccountsDiff): void {
+    console.log('updateAuthorizedAccounts', authorizedAccountDiff);
     authorizedAccountDiff.forEach(([url, authorizedAccountDiff]) => {
       this.#authUrls[url].authorizedAccounts = authorizedAccountDiff;
     });
@@ -395,7 +398,7 @@ export default class State {
   }
 
   public async authorizeUrl (url: string, request: RequestAuthorizeTab): Promise<AuthResponse> {
-    const idStr = decodeURIComponent(url);
+    const idStr = new URL(url).origin;
 
     // Do not enqueue duplicate authorization requests.
     const isDuplicate = Object

@@ -46,6 +46,8 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
 
   const hasAuthList = useMemo(() => !!authList && !!Object.keys(authList).length, [authList]);
 
+  console.log('authList', authList);
+
   const footer = (
     <CustomFooter>
       <Svg
