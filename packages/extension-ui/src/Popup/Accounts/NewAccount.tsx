@@ -3,15 +3,20 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
+
+import { AuthUrls } from '@polkadot/extension-base/background/handlers/State';
+import { AccountJson } from '@polkadot/extension-base/background/types';
+import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
 
 import { AccountContext, ActionContext, Button, ButtonArea, RemoveAuth, VerticalSpace } from '../../components';
 import Checkbox from '../../components/Checkbox';
 import useTranslation from '../../hooks/useTranslation';
 import { getAuthList, updateAuthorization } from '../../messaging';
 import { AccountSelection, Header } from '../../partials';
+import { createGroupedAccountData } from '../../util/createGroupedAccountData';
 
 interface Props extends RouteComponentProps, ThemeProps {
   className?: string;
@@ -22,12 +27,25 @@ const CustomButtonArea = styled(ButtonArea)`
   padding-bottom: 0px;
 `;
 
-function AccountManagement({ className, location: { search } }: Props): React.ReactElement<Props> {
-  const { selectedAccounts = [], setSelectedAccounts } = useContext(AccountContext);
+function NewAccount({ className, location: { search } }: Props): React.ReactElement<Props> {
+  const { hierarchy, selectedAccounts = [], setSelectedAccounts } = useContext(AccountContext);
+  const [authList, setAuthList] = useState<AuthUrls | null>(null);
+
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
   const searchParams = new URLSearchParams(search);
   const url = searchParams.get('url');
+  const networkMap = useMemo(() => getNetworkMap(), []);
+  const { flattened, getParentName } = useMemo(() => createGroupedAccountData(hierarchy), [hierarchy]);
+  let test: AccountJson[] = [];
+
+  console.log('url', url);
+
+  useEffect(() => {
+    getAuthList()
+      .then(({ list }) => setAuthList(list))
+      .catch((e) => console.error(e));
+  }, []);
 
   useEffect(() => {
     getAuthList()
@@ -42,6 +60,16 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
       })
       .catch(console.error);
   }, [setSelectedAccounts, url]);
+
+  if (authList && url) {
+    test = flattened.filter((account) => {
+      if (account.whenCreated) {
+        return account.whenCreated > authList[url].lastAuth;
+      }
+
+      return false;
+    });
+  }
 
   const _onApprove = useCallback((): void => {
     if (!url) {
@@ -68,6 +96,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
         {url && (
           <>
             <RemoveAuth url={url} />
+            {test.length > 0 && test.map((account) => <div key={account.address}>{account.name}</div>)}
             <AccountSelection
               className='accountSelection'
               showHidden={true}
@@ -96,7 +125,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
   );
 }
 
-export default withRouter(styled(AccountManagement)`
+export default withRouter(styled(NewAccount)`
   margin-top: -16px;
   overflow: hidden;
   .accountSelection {

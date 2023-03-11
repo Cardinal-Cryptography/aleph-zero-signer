@@ -16,7 +16,7 @@ import AccountsTree from '../Popup/Accounts/AccountsTree';
 interface Props extends ThemeProps {
   className?: string;
   url: string;
-  origin: string;
+
   showHidden?: boolean;
   withWarning?: boolean;
 }
@@ -29,7 +29,7 @@ const StyledCheckbox = styled(Checkbox)`
 
 function AccounSelection({
   className,
-  origin,
+
   showHidden = false,
   url,
   withWarning = true

@@ -389,9 +389,8 @@ export default class State {
   }
 
   public updateAuthorizedAccounts (authorizedAccountDiff: AuthorizedAccountsDiff): void {
-    console.log('updateAuthorizedAccounts', authorizedAccountDiff);
     authorizedAccountDiff.forEach(([url, authorizedAccountDiff]) => {
-      this.#authUrls[url].authorizedAccounts = authorizedAccountDiff;
+      this.#authUrls[new URL(url).origin].authorizedAccounts = authorizedAccountDiff;
     });
 
     this.saveCurrentAuthList();
@@ -409,6 +408,12 @@ export default class State {
 
     if (this.#authUrls[idStr]) {
       // this url was seen in the past
+      // if (this.#authUrls[idStr].lastAuth < Date.now()) {
+      //   console.log('tak');
+      //   this.#authUrls[idStr].lastAuth = Date.now();
+      //   this.popupOpen();
+      // }
+
       assert(this.#authUrls[idStr].authorizedAccounts || this.#authUrls[idStr].isAllowed, `The source ${url} is not allowed to interact with this extension`);
 
       return {
@@ -434,7 +439,7 @@ export default class State {
   }
 
   public ensureUrlAuthorized (url: string): boolean {
-    const entry = this.#authUrls[url];
+    const entry = this.#authUrls[new URL(url).origin];
 
     assert(entry, `The source ${url} has not been enabled yet`);
 

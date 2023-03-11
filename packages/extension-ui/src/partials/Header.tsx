@@ -46,7 +46,6 @@ function Header({
   const [connectedTabsUrl, setConnectedTabsUrl] = useState<string[]>([]);
   const { t } = useTranslation();
 
-  console.log('connectedTabsUrl', getConnectedTabsUrl());
   const isConnected = useMemo(() => connectedTabsUrl.length >= 1, [connectedTabsUrl]);
   const onAction = useContext(ActionContext);
 
@@ -63,9 +62,12 @@ function Header({
   const _onBackArrowClick = useCallback(() => onAction('..'), [onAction]);
   const _goToRoot = useCallback(() => onAction('/'), [onAction]);
 
+  console.log('connectedTabsUrl', connectedTabsUrl);
+
   return (
     <>
       <div className={`${className} ${smallMargin ? 'smallMargin' : ''} header`}>
+        {/* {JSON.stringify(connectedTabsUrl)} */}
         <div className='container'>
           <div className='branding'>
             {withBackArrow ? (

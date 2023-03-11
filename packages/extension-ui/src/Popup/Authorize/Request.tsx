@@ -107,10 +107,7 @@ function Request({ authId, className, isFirst, request: { origin }, url }: Props
 
   return (
     <div className={className}>
-      <AccountSelection
-        origin={origin}
-        url={url}
-      />
+      <AccountSelection url={url} />
       <CustomButtonArea footer={footer}>
         <Button
           data-accept-request-button
