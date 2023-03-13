@@ -39,6 +39,7 @@ import AddAccountMenu from './Accounts/AddAccountMenu';
 import EditAccountMenu from './Accounts/EditAccountMenu';
 import EditName from './Accounts/EditName';
 import EditNetwork from './Accounts/EditNetwork';
+import NewAccount from './Accounts/NewAccount';
 import AccountManagement from './AuthManagement/AccountManagement';
 import DisconnectApp from './AuthManagement/DisconnectApp';
 import RestoreJson from './Restore/RestoreJson';
@@ -61,7 +62,6 @@ import PhishingDetected from './PhishingDetected';
 import Settings from './Settings';
 import Signing from './Signing';
 import Welcome from './Welcome';
-import NewAccount from './Accounts/NewAccount';
 
 const startSettings = uiSettings.get();
 
@@ -232,7 +232,7 @@ export default function Popup(): React.ReactElement {
                             <Route path='/url/manage'>
                               {wrapWithErrorBoundary(<AccountManagement />, 'manage-url')}
                             </Route>
-                            <Route path='/test'>{wrapWithErrorBoundary(<NewAccount />, 'manage-url')}</Route>
+                            <Route path='/url/new'>{wrapWithErrorBoundary(<NewAccount />, 'manage-url')}</Route>
                             <Route path='/url/disconnect/:url'>
                               {wrapWithErrorBoundary(<DisconnectApp />, 'disconnect-url')}
                             </Route>

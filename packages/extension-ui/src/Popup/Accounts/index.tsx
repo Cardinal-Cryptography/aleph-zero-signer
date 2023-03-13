@@ -7,14 +7,14 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import styled from 'styled-components';
 
 import { AuthUrls } from '@polkadot/extension-base/background/handlers/State';
-import { AccountWithChildren } from '@polkadot/extension-base/background/types';
+import { AccountJson, AccountWithChildren } from '@polkadot/extension-base/background/types';
 import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
 
 import { AccountContext, AddButton, ButtonArea, ScrollWrapper, VerticalSpace } from '../../components';
 import { ActionContext } from '../../components/contexts';
 import useTranslation from '../../hooks/useTranslation';
 import { getAuthList, getConnectedTabsUrl } from '../../messaging';
-import { AccountSelection, Header } from '../../partials';
+import { Header } from '../../partials';
 import { createGroupedAccountData } from '../../util/createGroupedAccountData';
 import AccountsTree from './AccountsTree';
 import AddAccount from './AddAccount';
@@ -41,31 +41,30 @@ function Accounts({ className }: Props): React.ReactElement {
     () => createGroupedAccountData(filteredAccount),
     [filteredAccount]
   );
-  let accountsCreatedAfterLastAuth = [];
+  const [accountsCreatedAfterLastAuth, setAccountsCreatedAfterLastAuth] = useState<AccountJson[] | []>([]);
 
   useEffect(() => {
     getAuthList()
       .then(({ list }) => setAuthList(list))
       .catch((e) => console.error(e));
-
     getConnectedTabsUrl()
       .then((tabsUrl) => setConnectedTabsUrl(tabsUrl))
       .catch(console.error);
-  }, []);
+  }, [authList]);
 
-  if (authList && connectedTabsUrl.length > 0) {
-    accountsCreatedAfterLastAuth = flattened.filter((account) => {
-      if (account.whenCreated) {
-        return account.whenCreated > authList[connectedTabsUrl[0]].lastAuth;
-      }
-
-      return false;
-    });
+  useEffect(() => {
+    if (authList && connectedTabsUrl.length > 0) {
+      setAccountsCreatedAfterLastAuth(
+        flattened.filter((account) => {
+          return account?.whenCreated && account?.whenCreated > authList[connectedTabsUrl[0]].lastAuth;
+        })
+      );
+    }
 
     if (accountsCreatedAfterLastAuth.length > 0) {
-      onAction(`/test?url=${connectedTabsUrl[0]}`);
+      onAction(`/url/new?url=${connectedTabsUrl[0]}`);
     }
-  }
+  }, [accountsCreatedAfterLastAuth.length, authList, connectedTabsUrl, flattened, onAction]);
 
   useEffect(() => {
     setFilteredAccount(
@@ -84,7 +83,6 @@ function Accounts({ className }: Props): React.ReactElement {
   }, []);
 
   const accounts = Object.entries(groupedParents)
-
     .filter(([, details]) => details.length > 0)
     .map(([networkName, details]) => {
       return (

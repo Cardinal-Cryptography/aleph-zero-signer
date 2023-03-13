@@ -3,28 +3,35 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
 import { AuthUrls } from '@polkadot/extension-base/background/handlers/State';
 import { AccountJson } from '@polkadot/extension-base/background/types';
-import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
 
-import { AccountContext, ActionContext, Button, ButtonArea, RemoveAuth, VerticalSpace } from '../../components';
-import Checkbox from '../../components/Checkbox';
+import { AccountContext, ActionContext, Button, PopupBorderContainer } from '../../components';
+import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
-import { getAuthList, updateAuthorization } from '../../messaging';
-import { AccountSelection, Header } from '../../partials';
+import { getAuthList, updateAuthorization, updateAuthorizationDate } from '../../messaging';
+import { NewAccountSelection } from '../../partials';
 import { createGroupedAccountData } from '../../util/createGroupedAccountData';
 
 interface Props extends RouteComponentProps, ThemeProps {
   className?: string;
 }
 
-const CustomButtonArea = styled(ButtonArea)`
-  padding-top: 16px;
+const ButtonsGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   padding-bottom: 0px;
+  position: absolute;
+  bottom: 16px;
+  left: 0px;
+  right: 0px;
 `;
 
 function NewAccount({ className, location: { search } }: Props): React.ReactElement<Props> {
@@ -32,14 +39,12 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
   const [authList, setAuthList] = useState<AuthUrls | null>(null);
 
   const { t } = useTranslation();
+  const { show } = useToast();
   const onAction = useContext(ActionContext);
   const searchParams = new URLSearchParams(search);
   const url = searchParams.get('url');
-  const networkMap = useMemo(() => getNetworkMap(), []);
-  const { flattened, getParentName } = useMemo(() => createGroupedAccountData(hierarchy), [hierarchy]);
-  let test: AccountJson[] = [];
-
-  console.log('url', url);
+  const { flattened } = useMemo(() => createGroupedAccountData(hierarchy), [hierarchy]);
+  const testRef = useRef<AccountJson[] | []>([]);
 
   useEffect(() => {
     getAuthList()
@@ -61,84 +66,97 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
       .catch(console.error);
   }, [setSelectedAccounts, url]);
 
-  if (authList && url) {
-    test = flattened.filter((account) => {
-      if (account.whenCreated) {
-        return account.whenCreated > authList[url].lastAuth;
-      }
+  useEffect(() => {
+    let test: AccountJson[] | [] = [];
 
-      return false;
-    });
-  }
+    if (flattened && authList && url) {
+      test = flattened.filter((account: AccountJson) => {
+        if (account && account.whenCreated) {
+          return account.whenCreated > authList[url].lastAuth;
+        }
 
-  const _onApprove = useCallback((): void => {
+        return false;
+      });
+    }
+
+    testRef.current = test;
+  }, [flattened, authList, url]);
+
+  const _onApprove = useCallback(async (): Promise<void> => {
     if (!url) {
       return;
     }
 
-    updateAuthorization(selectedAccounts, url)
-      .then(() => onAction('/auth-list'))
-      .catch(console.error);
-  }, [onAction, selectedAccounts, url]);
+    try {
+      await updateAuthorization(selectedAccounts, url);
 
-  const _onCancel = useCallback((): void => {
-    onAction('/auth-list');
-  }, [onAction]);
+      onAction('/');
+      show(t('Connected app updated'), 'success');
+    } catch (error) {
+      console.error(error);
+    }
+  }, [onAction, selectedAccounts, show, t, url]);
+
+  const _onCancel = useCallback(async (): Promise<void> => {
+    if (!url) {
+      return;
+    }
+
+    await updateAuthorizationDate(url);
+    onAction('/');
+  }, [onAction, url]);
 
   return (
     <>
-      <Header
-        smallMargin={true}
-        text={t<string>('Connected accounts')}
-        withBackArrow
-      />
-      <div className={className}>
-        {url && (
-          <>
-            <RemoveAuth url={url} />
-            {test.length > 0 && test.map((account) => <div key={account.address}>{account.name}</div>)}
-            <AccountSelection
-              className='accountSelection'
-              showHidden={true}
-              url={url}
-              withWarning={false}
-            />
-          </>
-        )}
-      </div>
-      <VerticalSpace />
-      <CustomButtonArea>
+      <PopupBorderContainer>
+        <div className={className}>
+          <div className='content'>
+            <div className='content-inner'>
+              {url && (
+                <NewAccountSelection
+                  className='accountSelection'
+                  newAccounts={testRef.current}
+                  showHidden={true}
+                  url={url}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </PopupBorderContainer>
+      <ButtonsGroup>
         <Button
           onClick={_onCancel}
           secondary
         >
-          {t<string>('Cancel')}
+          {t<string>('Dismiss')}
         </Button>
         <Button
           className='acceptButton'
           onClick={_onApprove}
         >
-          {t<string>('Change')}
+          {t<string>('Update')}
         </Button>
-      </CustomButtonArea>
+      </ButtonsGroup>
     </>
   );
 }
 
 export default withRouter(styled(NewAccount)`
-  margin-top: -16px;
-  overflow: hidden;
-  .accountSelection {
-    ${Checkbox} {
-        margin-right: 16px;
-      }
-    .accountList {
-      height: 350px;
-      padding: 0px 8px;
-    }
+
+  .content {
+    outline:  ${({ theme }: ThemeProps): string => theme.newTransactionBackground} solid 37px;
+    border-radius: 32px;
+    margin-top: 8px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height: 584px;
   }
-  .acceptButton {
-    width: 90%;
-    margin: 0.5rem auto 0;
+
+  .content-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
   }
 `);
