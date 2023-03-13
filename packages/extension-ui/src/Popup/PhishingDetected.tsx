@@ -20,7 +20,7 @@ interface WebsiteState {
 }
 
 const StyledFaviconBox = styled(FaviconBox)`
-margin: 8px 0px;
+  margin: 8px 0px;
 `;
 
 function PhishingDetected({ className }: Props): React.ReactElement<Props> {
