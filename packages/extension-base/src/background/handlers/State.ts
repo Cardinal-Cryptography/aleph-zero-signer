@@ -391,7 +391,14 @@ export default class State {
   public updateAuthorizedAccounts (authorizedAccountDiff: AuthorizedAccountsDiff): void {
     authorizedAccountDiff.forEach(([url, authorizedAccountDiff]) => {
       this.#authUrls[new URL(url).origin].authorizedAccounts = authorizedAccountDiff;
+      this.#authUrls[new URL(url).origin].lastAuth = Date.now();
     });
+
+    this.saveCurrentAuthList();
+  }
+
+  public updateAuthorizedDate (url: string): void {
+    this.#authUrls[new URL(url).origin].lastAuth = Date.now();
 
     this.saveCurrentAuthList();
   }
@@ -407,13 +414,6 @@ export default class State {
     assert(!isDuplicate, `The source ${url} has a pending authorization request`);
 
     if (this.#authUrls[idStr]) {
-      // this url was seen in the past
-      // if (this.#authUrls[idStr].lastAuth < Date.now()) {
-      //   console.log('tak');
-      //   this.#authUrls[idStr].lastAuth = Date.now();
-      //   this.popupOpen();
-      // }
-
       assert(this.#authUrls[idStr].authorizedAccounts || this.#authUrls[idStr].isAllowed, `The source ${url} is not allowed to interact with this extension`);
 
       return {
