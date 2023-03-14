@@ -33,6 +33,7 @@ function Settings({ className }: Props): React.ReactElement<Props> {
   return (
     <>
       <Header
+        customGoTo={goTo('/')}
         text={t<string>('Settings')}
         withBackArrow
         withHelp
