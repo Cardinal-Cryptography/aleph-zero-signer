@@ -73,7 +73,6 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
             <AccountSelection
               className='accountSelection'
               onChange={setSelectedAccountsChanged}
-              origin={origin}
               showHidden={true}
               url={url}
               withWarning={false}
