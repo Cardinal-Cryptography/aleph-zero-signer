@@ -46,8 +46,6 @@ function Toast({
     }
   }, [onUndoClick]);
 
-  console.log('toastTimeout', toastTimeout);
-
   return (
     <div className={className}>
       <div>
