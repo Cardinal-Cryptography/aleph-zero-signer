@@ -7,8 +7,8 @@ import React, { useCallback, useContext, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
+import animatedForget from '../assets/anim_vanish.svg';
 import helpIcon from '../assets/help.svg';
-import forgetIconSVG from '../assets/vanish.svg';
 import { ActionContext, Address, Button, ButtonArea, Svg, VerticalSpace } from '../components';
 import HelperFooter from '../components/HelperFooter';
 import useToast from '../hooks/useToast';
@@ -76,9 +76,9 @@ function Forget({
       />
       <div className={className}>
         <div className='text-container'>
-          <img
+          <Svg
             className='forgetIcon'
-            src={forgetIconSVG}
+            src={animatedForget}
           />
           <span className='heading'>{t<string>('Forget account')}</span>
           <span className='subtitle'>
@@ -151,6 +151,7 @@ export default withRouter(
     margin: 0 auto;
     width: 96px;
     height: 96px;
+    background: ${theme.dangerBackground};
   }
 
 `

@@ -6,8 +6,8 @@ import type { ThemeProps } from '../../types';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
+import animatedLockIcon from '../../assets/anim_locked.svg';
 import helpIcon from '../../assets/help.svg';
-import lockIcon from '../../assets/locked.svg';
 import { ActionContext, Button, ButtonArea, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import useTranslation from '../../hooks/useTranslation';
@@ -18,10 +18,10 @@ interface Props extends ThemeProps {
 }
 
 const WrapperRow = styled.div`
- display: flex;
- flex-direction: row;
- gap: 8px;
- width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
 `;
 
 function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props> {
@@ -49,9 +49,9 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
     <>
       <div className={className}>
         <div className='top'>
-          <img
+          <Svg
             className='icon'
-            src={lockIcon}
+            src={animatedLockIcon}
           />
           <p className='heading'>{t<string>('Safety first!')}</p>
           <p className='description'>
@@ -90,6 +90,9 @@ export default React.memo(
         
       .icon {
         margin: 0 auto;
+        width: 96px;
+        height: 96px;
+        background: ${theme.warningColor};
       }
 
       .heading {
