@@ -69,9 +69,9 @@ function EditAccountMenu({
   return (
     <>
       <Header
+        customGoTo={goTo('/')}
         text={t<string>('Edit Account')}
         withBackArrow
-        withGoToRoot
         withHelp
       />
       <div className={className}>

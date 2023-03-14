@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handlers/State';
@@ -11,6 +11,7 @@ import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handl
 import animTrusted from '../../assets/anim_trusted.svg';
 import helpIcon from '../../assets/help.svg';
 import { ButtonArea, Svg, VerticalSpace } from '../../components';
+import { ActionContext } from '../../components/contexts';
 import HelperFooter from '../../components/HelperFooter';
 import useTranslation from '../../hooks/useTranslation';
 import { getAuthList } from '../../messaging';
@@ -37,6 +38,9 @@ const CustomFooter = styled(HelperFooter)`
 function AuthManagement({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [authList, setAuthList] = useState<AuthUrls | null>(null);
+  const onAction = useContext(ActionContext);
+
+  const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
   useEffect(() => {
     getAuthList()
@@ -62,6 +66,7 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
   return (
     <>
       <Header
+        customGoTo={goTo('/account/settings')}
         smallMargin
         text={t<string>('Trusted Apps')}
         withBackArrow
