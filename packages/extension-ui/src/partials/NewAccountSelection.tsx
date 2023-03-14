@@ -16,6 +16,7 @@ import useTranslation from '../hooks/useTranslation';
 import Account from '../Popup/Accounts/Account';
 import AccountsTree from '../Popup/Accounts/AccountsTree';
 import { createGroupedAccountData } from '../util/createGroupedAccountData';
+import { Z_INDEX } from '../zindex';
 
 interface Props extends ThemeProps {
   className?: string;
@@ -40,16 +41,11 @@ function NewAccountSelection({ className, newAccounts, showHidden = false, url }
   const [isIndeterminate, setIsIndeterminate] = useState(false);
 
   const { flattened, getParentName } = useMemo(() => createGroupedAccountData(hierarchy), [hierarchy]);
-  const allVisibleAccounts = useMemo(() => accounts.filter(({ isHidden }) => !isHidden), [accounts]);
-  const noAccountSelected = useMemo(() => selectedAccounts.length === 0, [selectedAccounts.length]);
-  const allDisplayedAddresses = useMemo(
-    () => (showHidden ? accounts.map(({ address }) => address) : allVisibleAccounts.map(({ address }) => address)),
-    [accounts, allVisibleAccounts, showHidden]
-  );
-  const areAllAccountsSelected = useMemo(
-    () => selectedAccounts.length === allDisplayedAddresses.length,
-    [allDisplayedAddresses.length, selectedAccounts.length]
-  );
+  const noAccountSelected = selectedAccounts.length === 0;
+  const allDisplayedAddresses = showHidden
+    ? accounts.map(({ address }) => address)
+    : accounts.filter(({ isHidden }) => !isHidden).map(({ address }) => address);
+  const areAllAccountsSelected = selectedAccounts.length === allDisplayedAddresses.length;
 
   useEffect(() => {
     const nextIndeterminateState = !noAccountSelected && !areAllAccountsSelected;
@@ -144,18 +140,18 @@ export default styled(NewAccountSelection)(
       }
 
       position: relative;
-        &:before {
-          content: url(${ribbon});
-          display: block;
-          width: 56px;
-          height: 56px;
-          position: absolute;
-          width: 56px;
-          height: 56px;
-          left: 0px;
-          top: 0px;
-          z-index: 100;
-        }
+      &:before {
+        content: url(${ribbon});
+        display: block;
+        width: 56px;
+        height: 56px;
+        position: absolute;
+        width: 56px;
+        height: 56px;
+        left: 0px;
+        top: 0px;
+        z-index: ${Z_INDEX.NEW_ACCOUNT_RIBBON};
+      }
     }
   }
 

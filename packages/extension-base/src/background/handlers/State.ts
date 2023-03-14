@@ -390,8 +390,9 @@ export default class State {
 
   public updateAuthorizedAccounts (authorizedAccountDiff: AuthorizedAccountsDiff): void {
     authorizedAccountDiff.forEach(([url, authorizedAccountDiff]) => {
-      this.#authUrls[new URL(url).origin].authorizedAccounts = authorizedAccountDiff;
-      this.#authUrls[new URL(url).origin].lastAuth = Date.now();
+      const origin = new URL(url).origin;
+
+      this.#authUrls[origin] = { ...this.#authUrls[origin], authorizedAccounts: authorizedAccountDiff, lastAuth: Date.now() }
     });
 
     this.saveCurrentAuthList();

@@ -44,13 +44,7 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
   const searchParams = new URLSearchParams(search);
   const url = searchParams.get('url');
   const { flattened } = useMemo(() => createGroupedAccountData(hierarchy), [hierarchy]);
-  const testRef = useRef<AccountJson[] | []>([]);
-
-  useEffect(() => {
-    getAuthList()
-      .then(({ list }) => setAuthList(list))
-      .catch((e) => console.error(e));
-  }, []);
+  const newAccountsRef = useRef<AccountJson[] | []>([]);
 
   useEffect(() => {
     getAuthList()
@@ -58,6 +52,8 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
         if (url && !list[url]) {
           return;
         }
+
+        setAuthList(list);
 
         if (url && setSelectedAccounts) {
           setSelectedAccounts(list[url].authorizedAccounts);
@@ -67,19 +63,15 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
   }, [setSelectedAccounts, url]);
 
   useEffect(() => {
-    let test: AccountJson[] | [] = [];
+    if (!flattened || !authList || !url) {
+      newAccountsRef.current = [];
 
-    if (flattened && authList && url) {
-      test = flattened.filter((account: AccountJson) => {
-        if (account && account.whenCreated) {
-          return account.whenCreated > authList[url].lastAuth;
-        }
-
-        return false;
-      });
+      return;
     }
 
-    testRef.current = test;
+    newAccountsRef.current = flattened.filter(
+      (account: AccountJson) => account && account.whenCreated && account.whenCreated > authList[url].lastAuth
+    );
   }, [flattened, authList, url]);
 
   const _onApprove = useCallback(async (): Promise<void> => {
@@ -102,8 +94,13 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
       return;
     }
 
-    await updateAuthorizationDate(url);
-    onAction('/');
+    try {
+      await updateAuthorizationDate(url);
+
+      onAction('/');
+    } catch (error) {
+      console.error(error);
+    }
   }, [onAction, url]);
 
   return (
@@ -115,7 +112,7 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
               {url && (
                 <NewAccountSelection
                   className='accountSelection'
-                  newAccounts={testRef.current}
+                  newAccounts={newAccountsRef.current}
                   showHidden={true}
                   url={url}
                 />

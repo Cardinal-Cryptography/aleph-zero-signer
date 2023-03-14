@@ -55,9 +55,9 @@ function Accounts({ className }: Props): React.ReactElement {
   useEffect(() => {
     if (authList && connectedTabsUrl.length > 0) {
       setAccountsCreatedAfterLastAuth(
-        flattened.filter((account) => {
-          return account?.whenCreated && account?.whenCreated > authList[connectedTabsUrl[0]].lastAuth;
-        })
+        flattened.filter(
+          (account) => account?.whenCreated && account?.whenCreated > authList[connectedTabsUrl[0]].lastAuth
+        )
       );
     }
 
