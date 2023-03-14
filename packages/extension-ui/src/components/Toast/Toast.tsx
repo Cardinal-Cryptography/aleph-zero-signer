@@ -36,7 +36,10 @@ function Toast({
   const _getIconByType = useCallback((type: SnackbarTypes): string => icons?.[type] ?? icons.info, []);
 
   const _closeToast = useCallback(() => {
-    setVisible && setVisible(false);
+    if (setVisible) {
+      setVisible(false);
+    }
+
     clearTimeout(toastTimeout);
   }, [setVisible, toastTimeout]);
 

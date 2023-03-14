@@ -55,7 +55,9 @@ function AccounSelection({
   }, [areAllAccountsSelected, noAccountSelected]);
 
   const _onSelectAllToggle = useCallback(() => {
-    onChange && onChange(true);
+    if (onChange) {
+      onChange(true);
+    }
 
     if (areAllAccountsSelected) {
       setSelectedAccounts && setSelectedAccounts([]);

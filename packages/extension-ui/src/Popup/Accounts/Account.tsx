@@ -56,7 +56,9 @@ function Account({
   }, [isSelected]);
 
   const _onCheckboxChange = useCallback(() => {
-    checkBoxOnChange && checkBoxOnChange(true);
+    if (checkBoxOnChange) {
+      checkBoxOnChange(true);
+    }
 
     const newList = selectedAccounts?.includes(address)
       ? selectedAccounts.filter((account) => account !== address)
@@ -78,7 +80,9 @@ function Account({
   );
 
   const _saveChanges = useCallback((): void => {
-    editedName && editAccount(address, editedName).catch(console.error);
+    if (editedName) {
+      editAccount(address, editedName).catch(console.error);
+    }
 
     _toggleEdit();
   }, [editedName, address, _toggleEdit]);

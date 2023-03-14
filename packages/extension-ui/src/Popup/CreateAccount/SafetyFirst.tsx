@@ -3,13 +3,14 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import animatedLockIcon from '../../assets/anim_locked.svg';
 import helpIcon from '../../assets/help.svg';
-import { ActionContext, Button, ButtonArea, Svg, VerticalSpace } from '../../components';
+import { Button, ButtonArea, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
+import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
 
 interface Props extends ThemeProps {
@@ -26,9 +27,7 @@ const WrapperRow = styled.div`
 
 function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const onAction = useContext(ActionContext);
-
-  const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
+  const { goTo } = useGoTo();
 
   const footer = (
     <HelperFooter>

@@ -29,13 +29,13 @@ interface Props extends ThemeProps {
   smallMargin?: boolean;
   text?: React.ReactNode;
   withStepper?: boolean;
-  customGoTo?: () => void;
+  goToFnOverride?: () => void;
 }
 
 function Header({
   children,
   className = '',
-  customGoTo,
+  goToFnOverride,
   smallMargin = false,
   text,
   withBackArrow,
@@ -70,7 +70,7 @@ function Header({
               <FontAwesomeIcon
                 className='arrowLeftIcon'
                 icon={faArrowLeft}
-                onClick={customGoTo || _onBackArrowClick}
+                onClick={goToFnOverride || _onBackArrowClick}
               />
             ) : (
               <div className='flex'>

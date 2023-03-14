@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import animatedRemove from '../../assets/anim_unlink.svg';
 import { Button, ButtonArea, FaviconBox, Svg, VerticalSpace } from '../../components';
 import { ActionContext } from '../../components/contexts';
+import { useGoTo } from '../../hooks/useGoTo';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
 import { removeAuthorization } from '../../messaging';
@@ -35,7 +36,7 @@ function DisconnectApp({ className }: Props): React.ReactElement<Props> {
   const onAction = useContext(ActionContext);
   const { show } = useToast();
 
-  const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
+  const { goTo } = useGoTo();
 
   const handleDisconnect = useCallback(() => {
     show(t<string>('App disconnected'), 'success', () => {
