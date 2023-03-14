@@ -20,6 +20,7 @@ interface Props extends AccountJson {
   parentName?: string;
   withCheckbox?: boolean;
   withMenu?: boolean;
+  checkBoxOnChange?: (value: boolean) => void;
 }
 
 interface EditState {
@@ -29,6 +30,7 @@ interface EditState {
 
 function Account({
   address,
+  checkBoxOnChange,
   className,
   genesisHash,
   isExternal,
@@ -54,12 +56,14 @@ function Account({
   }, [isSelected]);
 
   const _onCheckboxChange = useCallback(() => {
+    checkBoxOnChange && checkBoxOnChange(true);
+
     const newList = selectedAccounts?.includes(address)
       ? selectedAccounts.filter((account) => account !== address)
       : [...selectedAccounts, address];
 
     setSelectedAccounts && setSelectedAccounts(newList);
-  }, [address, selectedAccounts, setSelectedAccounts]);
+  }, [address, checkBoxOnChange, selectedAccounts, setSelectedAccounts]);
 
   const _onChangeGenesis = useCallback(
     (genesisHash?: string | null): void => {

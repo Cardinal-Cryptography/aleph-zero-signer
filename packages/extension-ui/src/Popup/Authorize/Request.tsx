@@ -113,9 +113,9 @@ function Request({ authId, className, isFirst, request: { origin }, url }: Props
       />
       <CustomButtonArea footer={footer}>
         <Button
+          data-accept-request-button
           onClick={_onClose}
           secondary
-          data-accept-request-button
         >
           {t<string>('Cancel')}
         </Button>

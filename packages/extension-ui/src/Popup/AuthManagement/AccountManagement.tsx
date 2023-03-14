@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
@@ -28,6 +28,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
   const onAction = useContext(ActionContext);
   const searchParams = new URLSearchParams(search);
   const url = searchParams.get('url');
+  const [selectedAccountsChanged, setSelectedAccountsChanged] = useState(false);
 
   useEffect(() => {
     getAuthList()
@@ -38,10 +39,15 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
 
         if (url && setSelectedAccounts) {
           setSelectedAccounts(list[url].authorizedAccounts);
+          setSelectedAccountsChanged(false);
         }
       })
       .catch(console.error);
   }, [setSelectedAccounts, url]);
+
+  useEffect(() => {
+    console.log(selectedAccounts.length);
+  }, [selectedAccounts]);
 
   const _onApprove = useCallback((): void => {
     if (!url) {
@@ -70,6 +76,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
             <RemoveAuth url={url} />
             <AccountSelection
               className='accountSelection'
+              onChange={setSelectedAccountsChanged}
               origin={origin}
               showHidden={true}
               url={url}
@@ -89,6 +96,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
         <Button
           className='acceptButton'
           onClick={_onApprove}
+          isDisabled={!selectedAccountsChanged}
         >
           {t<string>('Change')}
         </Button>

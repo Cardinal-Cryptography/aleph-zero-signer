@@ -19,6 +19,7 @@ interface Props extends ThemeProps {
   origin: string;
   showHidden?: boolean;
   withWarning?: boolean;
+  onChange?: (value: boolean) => void;
 }
 
 const StyledCheckbox = styled(Checkbox)`
@@ -29,6 +30,7 @@ const StyledCheckbox = styled(Checkbox)`
 
 function AccounSelection({
   className,
+  onChange,
   origin,
   showHidden = false,
   url,
@@ -55,6 +57,8 @@ function AccounSelection({
   }, [areAllAccountsSelected, noAccountSelected]);
 
   const _onSelectAllToggle = useCallback(() => {
+    onChange && onChange(true);
+
     if (areAllAccountsSelected) {
       setSelectedAccounts && setSelectedAccounts([]);
 
@@ -62,7 +66,7 @@ function AccounSelection({
     }
 
     setSelectedAccounts && setSelectedAccounts(allDisplayedAddresses);
-  }, [allDisplayedAddresses, areAllAccountsSelected, setSelectedAccounts]);
+  }, [allDisplayedAddresses, areAllAccountsSelected, onChange, setSelectedAccounts]);
 
   return (
     <div className={className}>
@@ -97,6 +101,7 @@ function AccounSelection({
           (json, index): React.ReactNode => (
             <AccountsTree
               {...json}
+              checkBoxOnChange={onChange}
               isAuthList
               key={`${index}:${json.address}`}
               showHidden={showHidden}
