@@ -35,15 +35,15 @@ function DisconnectApp({ className }: Props): React.ReactElement<Props> {
   const onAction = useContext(ActionContext);
   const { show } = useToast();
 
-  const goToAuthList = useCallback(() => onAction('/auth-list'), [onAction]);
+  const goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
   const handleDisconnect = useCallback(() => {
     show(t<string>('App disconnected'), 'success', () => {
       removeAuthorization(decodedUrl)
-        .then(() => goToAuthList())
+        .then(() => goTo('/auth-list'))
         .catch(console.error);
     });
-  }, [decodedUrl, goToAuthList, show, t]);
+  }, [decodedUrl, goTo, show, t]);
 
   return (
     <>
@@ -70,7 +70,7 @@ function DisconnectApp({ className }: Props): React.ReactElement<Props> {
       <VerticalSpace />
       <ButtonArea>
         <Button
-          onClick={goToAuthList}
+          onClick={goTo(`/url/manage?url=${url}`)}
           secondary
         >
           {t<string>('Cancel')}
