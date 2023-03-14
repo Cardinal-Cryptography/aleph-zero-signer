@@ -45,10 +45,6 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
       .catch(console.error);
   }, [setSelectedAccounts, url]);
 
-  useEffect(() => {
-    console.log(selectedAccounts.length);
-  }, [selectedAccounts]);
-
   const _onApprove = useCallback((): void => {
     if (!url) {
       return;
@@ -95,8 +91,8 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
         </Button>
         <Button
           className='acceptButton'
-          onClick={_onApprove}
           isDisabled={!selectedAccountsChanged}
+          onClick={_onApprove}
         >
           {t<string>('Change')}
         </Button>

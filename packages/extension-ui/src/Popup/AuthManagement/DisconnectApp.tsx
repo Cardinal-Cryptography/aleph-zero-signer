@@ -40,10 +40,10 @@ function DisconnectApp({ className }: Props): React.ReactElement<Props> {
   const handleDisconnect = useCallback(() => {
     show(t<string>('App disconnected'), 'success', () => {
       removeAuthorization(decodedUrl)
-        .then(() => goTo('/auth-list'))
+        .then(() => onAction('/auth-list'))
         .catch(console.error);
     });
-  }, [decodedUrl, goTo, show, t]);
+  }, [decodedUrl, onAction, show, t]);
 
   return (
     <>
