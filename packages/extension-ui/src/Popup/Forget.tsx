@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import animatedForget from '../assets/anim_vanish.svg';
 import helpIcon from '../assets/help.svg';
-import { ActionContext, Address, Button, ButtonArea, Svg, VerticalSpace } from '../components';
+import { AccountContext, ActionContext, Address, Button, ButtonArea, Svg, VerticalSpace } from '../components';
 import HelperFooter from '../components/HelperFooter';
 import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
@@ -34,8 +34,13 @@ function Forget({
 }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
+  const { accounts } = useContext(AccountContext);
   const [isBusy, setIsBusy] = useState(false);
   const { show } = useToast();
+
+  const account = accounts.find((account) => account.address === address);
+
+  const isExternal = account?.isExternal || 'false';
 
   const _goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
@@ -99,7 +104,7 @@ function Forget({
       <ButtonArea footer={footer}>
         <Button
           isDisabled={isBusy}
-          onClick={_goTo(`/`)}
+          onClick={_goTo(`/account/edit-menu/${address}?isExternal=${isExternal.toString()}`)}
           secondary
         >
           {t<string>('Cancel')}
