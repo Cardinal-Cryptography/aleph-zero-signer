@@ -8,7 +8,7 @@ import type { AccountInfo } from '.';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { validateSeed } from '@polkadot/extension-ui/messaging';
+import { validateSeed, windowOpen } from '@polkadot/extension-ui/messaging';
 import { objectSpread } from '@polkadot/util';
 
 import helpIcon from '../../assets/help.svg';
@@ -110,6 +110,10 @@ function SeedAndPath({
     setLocked((prevState) => !prevState);
   }, []);
 
+  const _onClick = useCallback(() => {
+    windowOpen('/account/restore-json').catch(console.error);
+  }, []);
+
   const footer = (
     <CustomFooter>
       <div className='flex'>
@@ -135,7 +139,7 @@ function SeedAndPath({
           {t<string>('Have')}&nbsp;
           <span
             className='link'
-            onClick={goTo('/account/restore-json')}
+            onClick={_onClick}
           >
             {t<string>('JSON')}
           </span>
