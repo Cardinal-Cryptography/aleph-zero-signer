@@ -6,7 +6,7 @@ import type { ThemeProps } from '../types';
 import React from 'react';
 import styled from 'styled-components';
 
-import alephMark from '../assets/alephMark.png';
+import alephMark from '../assets/alephMark.svg';
 import { EditMenuCard } from '../components';
 import { useGoTo } from '../hooks/useGoTo';
 import useTranslation from '../hooks/useTranslation';
