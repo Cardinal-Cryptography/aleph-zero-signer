@@ -213,7 +213,10 @@ function Address({
               {chain.name.replace(' Relay Chain', '')}
             </div>
           )}
-          <div className='addressDisplay'>
+          <div
+            className='addressDisplay'
+            onClick={_onCopy}
+          >
             <div
               className='fullAddress'
               data-field='address'
@@ -307,6 +310,7 @@ export default styled(Address)(
     display: flex;
     justify-content: space-between;
     position: relative;
+    cursor: copy;
 
     .svg-inline--fa {
       width: 14px;
