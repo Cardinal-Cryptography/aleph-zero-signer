@@ -10,6 +10,7 @@ import { faUsb } from '@fortawesome/free-brands-svg-icons';
 import { faCodeBranch, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -172,59 +173,61 @@ function Address({
           prefix={prefix}
           value={formatted || address}
         />
-        <div className='info'>
-          {parentName ? (
-            <>
-              <div className='name-banner'>
-                <FontAwesomeIcon
-                  className='deriveIcon'
-                  icon={faCodeBranch}
-                />
-                <div
-                  className='parentName'
-                  data-field='parent'
-                  title={parentNameSuri}
-                >
-                  <Svg
-                    className='subaccount-icon'
-                    src={subAccountIcon}
-                  />
-                  <span>{parentNameSuri}</span>
-                </div>
-              </div>
-              <div className='name displaced'>
-                <Name />
-              </div>
-            </>
-          ) : (
-            <div
-              className='name'
-              data-field='name'
-            >
-              <Name />
-            </div>
-          )}
-          {chain?.genesisHash && (
-            <div
-              className='banner chain'
-              data-field='chain'
-              style={chain.definition.color ? { backgroundColor: chain.definition.color } : undefined}
-            >
-              {chain.name.replace(' Relay Chain', '')}
-            </div>
-          )}
+        <CopyToClipboard text={(address && address) || ''}>
           <div
-            className='addressDisplay'
+            className='info'
             onClick={_onCopy}
           >
-            <div
-              className='fullAddress'
-              data-field='address'
-            >
-              {_ellipsisName(formatted || address) || t('<unknown>')}
+            {parentName ? (
+              <>
+                <div className='name-banner'>
+                  <FontAwesomeIcon
+                    className='deriveIcon'
+                    icon={faCodeBranch}
+                  />
+                  <div
+                    className='parentName'
+                    data-field='parent'
+                    title={parentNameSuri}
+                  >
+                    <Svg
+                      className='subaccount-icon'
+                      src={subAccountIcon}
+                    />
+                    <span>{parentNameSuri}</span>
+                  </div>
+                </div>
+                <div className='name displaced'>
+                  <Name />
+                </div>
+              </>
+            ) : (
+              <div
+                className='name'
+                data-field='name'
+              >
+                <Name />
+              </div>
+            )}
+            {chain?.genesisHash && (
+              <div
+                className='banner chain'
+                data-field='chain'
+                style={chain.definition.color ? { backgroundColor: chain.definition.color } : undefined}
+              >
+                {chain.name.replace(' Relay Chain', '')}
+              </div>
+            )}
+            <div className='addressDisplay'>
+              <div
+                className='fullAddress'
+                data-field='address'
+              >
+                {_ellipsisName(formatted || address) || t('<unknown>')}
+              </div>
             </div>
           </div>
-        </div>
+        </CopyToClipboard>
         {withExport && address && (
           <div
             className='export'
@@ -310,7 +313,6 @@ export default styled(Address)(
     display: flex;
     justify-content: space-between;
     position: relative;
-    cursor: copy;
 
     .svg-inline--fa {
       width: 14px;
@@ -355,6 +357,7 @@ export default styled(Address)(
   }
 
   .info {
+    cursor: copy;
     max-width: 200px;
     border-radius: 8px;
   }
