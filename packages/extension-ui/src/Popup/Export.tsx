@@ -89,7 +89,7 @@ function Export({
           <InputWithLabel
             data-export-password
             disabled={isBusy}
-            isError={pass.length < MIN_LENGTH || !!error}
+            isError={!!error}
             label={t<string>('Password')}
             onChange={onPassChange}
             type={isPasswordVisible ? 'text' : 'password'}
