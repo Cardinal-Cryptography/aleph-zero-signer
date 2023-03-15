@@ -3,12 +3,11 @@
 
 import type { ThemeProps } from '../types';
 
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import connectionStatus from '../assets/anim_connection_status.svg';
+import arrowLeft from '../assets/arrow-left.svg';
 import logo from '../assets/azeroLogo.svg';
 import helpIcon from '../assets/help.svg';
 import notConnected from '../assets/not_connected.svg';
@@ -67,10 +66,10 @@ function Header({
         <div className='container'>
           <div className='branding'>
             {withBackArrow ? (
-              <FontAwesomeIcon
+              <img
                 className='arrowLeftIcon'
-                icon={faArrowLeft}
                 onClick={goToFnOverride || _onBackArrowClick}
+                src={arrowLeft}
               />
             ) : (
               <div className='flex'>
@@ -291,6 +290,7 @@ export default React.memo(
   .arrowLeftIcon {
     color: ${theme.labelColor};
     cursor: pointer;
+    padding: 8px 0px;
 
     :hover {
       path {
