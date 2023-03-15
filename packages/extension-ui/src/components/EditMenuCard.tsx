@@ -1,11 +1,10 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import styled from 'styled-components';
 
+import chevronIcon from '../assets/chevron.svg';
 import copyIcon from '../assets/copyMenu.svg';
 import externalLinkIcon from '../assets/externalLink.svg';
 import { ThemeProps } from '../types';
@@ -33,9 +32,9 @@ const ExtraContent = ({ extra = 'chevron' }: ExtraProps): React.ReactElement<Ext
   switch (extra) {
     case 'chevron':
       return (
-        <FontAwesomeIcon
+        <Svg
           className='chevron'
-          icon={faChevronRight}
+          src={chevronIcon}
         />
       );
     case 'copy':
@@ -130,12 +129,22 @@ export default styled(EditMenuCard)(
     }
     
   
-    .chevron path{
-      fill: ${theme.headerIconBackgroundHover};
+    .chevron {
+      background: ${theme.headerIconBackgroundHover};
+    }
+
+    .link-icon {
+      transform: translateX(4px);
     }
   }
 
   cursor: ${onClick ? 'pointer' : 'default'};
+
+  .chevron {
+    width: 16px;
+    height: 16px;
+    background: ${theme.iconNeutralColor};
+  }
 
   .flex-container {
     display: flex;
@@ -223,6 +232,7 @@ export default styled(EditMenuCard)(
     width: 20px;
     height: 20px;
     background: ${theme.primaryColor};
+    transition: transform 0.2s ease;
   }
 
   .icon {
