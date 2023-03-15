@@ -106,7 +106,7 @@ export default React.memo(
         white-space: pre-line;
         
         & .bold {
-          color: ${theme.textColor};
+          color: ${theme.subTextColor};
           font-weight: 600;
         }
       }
