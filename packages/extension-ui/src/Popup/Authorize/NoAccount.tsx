@@ -30,9 +30,6 @@ const CustomFooter = styled(HelperFooter)`
   display: flex;
   gap: 8px;
 
-  .icon-container {
-    margin-top: 4px;
-  }
   .text-container {
     display: flex;
     gap: 4px;

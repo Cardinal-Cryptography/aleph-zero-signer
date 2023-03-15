@@ -69,6 +69,7 @@ const darkTheme = {
   inputCheckboxBorderColor: '#1B2B38',
   inputFileBorderColor: '#1B2B38',
   inputFocusBorderColor: '#00EAC7',
+  inputFocusHoverColor: '#A5B5C2',
   inputLabelFontSize: '13px',
   inputRadioBorderColor: '#1B2B38',
   headerStepCurrent: '#00EAC7',

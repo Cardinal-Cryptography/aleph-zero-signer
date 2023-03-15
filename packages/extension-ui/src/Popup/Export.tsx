@@ -145,7 +145,7 @@ export default withRouter(styled(Export)`
   .password-icon {
     position: absolute;
     top: 18px;
-    right: 36px;
+    right: 20px;
     cursor: pointer;
   }
 

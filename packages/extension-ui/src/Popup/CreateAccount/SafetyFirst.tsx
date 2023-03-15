@@ -25,12 +25,18 @@ const WrapperRow = styled.div`
   width: 100%;
 `;
 
+const StyledFooter = styled(HelperFooter)`
+  .icon {
+    margin-top: -12px;
+  }
+`;
+
 function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { goTo } = useGoTo();
 
   const footer = (
-    <HelperFooter>
+    <StyledFooter>
       <WrapperRow>
         <Svg
           className='icon'
@@ -41,7 +47,7 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
           <span className='link'>{t<string>('Learn more')}</span>
         </span>
       </WrapperRow>
-    </HelperFooter>
+    </StyledFooter>
   );
 
   return (

@@ -5,7 +5,8 @@ import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../assets/help.svg';
-import { Address, BackButton, Button, ButtonArea, Dropdown, ScrollWrapper, Svg, VerticalSpace } from '../components';
+import { BackButton, Button, ButtonArea, Dropdown, ScrollWrapper, Svg, VerticalSpace } from '../components';
+import Address from '../components/Address';
 import useGenesisHashOptions from '../hooks/useGenesisHashOptions';
 import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
@@ -35,13 +36,15 @@ flex-direction: row;
 display: flex;
 gap: 8px;
 
-.icon-container {
-  margin-top: 4px;
-}
+
 .text-container {
   display: flex;
   gap: 4px;
 }
+`;
+
+const StyledAddress = styled(Address)`
+  margin-bottom: 16px;
 `;
 
 function AccountNamePasswordCreation({
@@ -131,7 +134,7 @@ function AccountNamePasswordCreation({
               {t<string>('Choose how your new account is displayed and protected it in Aleph Zero Signer.')}
             </span>
           </div>
-          <Address
+          <StyledAddress
             address={address}
             genesisHash={genesisHash}
             name={name}
