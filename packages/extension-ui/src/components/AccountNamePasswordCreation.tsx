@@ -5,7 +5,7 @@ import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../assets/help.svg';
-import { BackButton, Button, ButtonArea, Dropdown, ScrollWrapper, Svg, VerticalSpace } from '../components';
+import { BackButton, Button, ButtonArea, Dropdown, LearnMore, ScrollWrapper, Svg, VerticalSpace } from '../components';
 import Address from '../components/Address';
 import useGenesisHashOptions from '../hooks/useGenesisHashOptions';
 import useToast from '../hooks/useToast';
@@ -119,14 +119,7 @@ function AccountNamePasswordCreation({
         <span>
           {t<string>("Don't know which network to choose?")}&nbsp;
           <br />
-          <a
-            className='link'
-            href={LINKS.NETWORK}
-            rel='noreferrer'
-            target='_blank'
-          >
-            {t<string>('Learn more')}
-          </a>
+          <LearnMore href={LINKS.NETWORK} />
         </span>
       </div>
     </CustomFooter>

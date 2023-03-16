@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import partnerLogo from '../assets/partnerLogo.svg';
 import secureIMG from '../assets/secure.png';
-import { ActionContext, Button, ButtonArea, List, Svg, VerticalSpace } from '../components';
+import { ActionContext, Button, ButtonArea, LearnMore, List, Svg, VerticalSpace } from '../components';
 import useTranslation from '../hooks/useTranslation';
 import { LINKS } from '../links';
 
@@ -49,14 +49,7 @@ const Welcome = function ({ className }: Props): React.ReactElement<Props> {
           />
           <span className='subtitle'>
             {t<string>('For extra protection, we highly recommend using the')}&nbsp;
-            <a
-              className='link'
-              target='_blank'
-              href={LINKS.PARTNER}
-              rel='noreferrer'
-            >
-              {t<string>('Threat Slayer extension')}
-            </a>
+            <LearnMore href={LINKS.PARTNER}>{t<string>('Threat Slayer extension')} </LearnMore>
             &nbsp;
             {t<string>('which scan every website you visit in real-time.')}
           </span>

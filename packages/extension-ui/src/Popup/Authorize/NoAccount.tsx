@@ -11,7 +11,7 @@ import { deleteAuthRequest } from '@polkadot/extension-ui/messaging';
 
 import animatedWarning from '../../assets/anim_warning.svg';
 import helpIcon from '../../assets/help.svg';
-import { Button, ButtonArea, Link, Svg, VerticalSpace } from '../../components';
+import { Button, ButtonArea, LearnMore, Link, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import { LINKS } from '../../links';
 
@@ -68,14 +68,7 @@ function NoAccount({ authId, className }: Props): React.ReactElement<Props> {
           <span>
             {t<string>('Only connect with sites you trust.')}&nbsp;
             <br />
-            <a
-              className='link'
-              href={LINKS.TRUSTED_APPS}
-              rel='noreferrer'
-              target='_blank'
-            >
-              {t<string>('Learn more')}
-            </a>
+            <LearnMore href={LINKS.TRUSTED_APPS} />
           </span>
         </div>
       </div>

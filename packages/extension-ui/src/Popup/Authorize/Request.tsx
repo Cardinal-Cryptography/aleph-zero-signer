@@ -8,7 +8,7 @@ import React, { useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../../assets/help.svg';
-import { AccountContext, ActionContext, Button, ButtonArea, Svg } from '../../components';
+import { AccountContext, ActionContext, Button, ButtonArea, LearnMore, Svg } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
@@ -96,14 +96,7 @@ function Request({ authId, className, isFirst, request: { origin }, url }: Props
           <span>
             {t<string>('Only connect with sites you trust.')}&nbsp;
             <br />
-            <a
-              className='link'
-              href={LINKS.TRUSTED_APPS}
-              rel='noreferrer'
-              target='_blank'
-            >
-              {t<string>('Learn more')}
-            </a>
+            <LearnMore href={LINKS.TRUSTED_APPS} />
           </span>
         </div>
       </div>

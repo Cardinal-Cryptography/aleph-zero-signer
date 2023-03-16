@@ -13,5 +13,6 @@ export const LINKS = {
   NETWORK: 'https://docs.alephzero.org/aleph-zero/aleph-zero-signer/what-are-networks',
   TRUSTED_APPS: 'https://docs.alephzero.org/aleph-zero/aleph-zero-signer/what-are-trusted-apps',
   PRIVACY_POLICY: 'https://alephzero.org/signer-privacy-policy',
-  TERMS_OF_SERVICE: 'https://alephzero.org/signer-terms-of-service'
+  TERMS_OF_SERVICE: 'https://alephzero.org/signer-terms-of-service',
+  PHISHING: 'https://github.com/polkadot-js/phishing/issues/new'
 } as const;

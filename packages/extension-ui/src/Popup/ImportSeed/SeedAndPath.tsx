@@ -18,6 +18,7 @@ import {
   ButtonArea,
   InputLock,
   InputWithLabel,
+  LearnMore,
   MnemonicInput,
   ScrollWrapper,
   Svg,
@@ -127,14 +128,9 @@ function SeedAndPath({
         <div className='text-container'>
           <span>
             {t<string>('What is')}&nbsp;
-            <a
-              className='link'
-              href={LINKS.DERIVE_SUB_ACCOUNT}
-              rel='noreferrer'
-              target='_blank'
-            >
+            <LearnMore href={LINKS.DERIVE_SUB_ACCOUNT}>
               {t<string>('Sub-account derivation path').toLowerCase()}
-            </a>
+            </LearnMore>
             ?
           </span>
         </div>

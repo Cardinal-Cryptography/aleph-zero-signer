@@ -10,7 +10,7 @@ import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handl
 
 import animTrusted from '../../assets/anim_trusted.svg';
 import helpIcon from '../../assets/help.svg';
-import { ButtonArea, Svg, VerticalSpace } from '../../components';
+import { ButtonArea, LearnMore, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
@@ -57,14 +57,7 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
       />
       <span>
         {t<string>('What are trusted apps?')}&nbsp;
-        <a
-          className='link'
-          href={LINKS.TRUSTED_APPS}
-          rel='noreferrer'
-          target='_blank'
-        >
-          {t<string>('Learn more')}
-        </a>
+        <LearnMore href={LINKS.TRUSTED_APPS} />
       </span>
     </CustomFooter>
   );

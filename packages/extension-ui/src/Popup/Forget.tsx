@@ -9,7 +9,16 @@ import styled from 'styled-components';
 
 import animatedForget from '../assets/anim_vanish.svg';
 import helpIcon from '../assets/help.svg';
-import { AccountContext, ActionContext, Address, Button, ButtonArea, Svg, VerticalSpace } from '../components';
+import {
+  AccountContext,
+  ActionContext,
+  Address,
+  Button,
+  ButtonArea,
+  LearnMore,
+  Svg,
+  VerticalSpace
+} from '../components';
 import HelperFooter from '../components/HelperFooter';
 import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
@@ -46,7 +55,6 @@ function Forget({
   const _goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
   const _onClick = useCallback((): void => {
-    onAction('/');
     show(t<string>('Account forgotten'), 'success', () => {
       setIsBusy(true);
       forgetAccount(address)
@@ -58,6 +66,7 @@ function Forget({
           console.error(error);
         });
     });
+    onAction('/');
   }, [address, onAction, show, t]);
 
   const footer = (
@@ -68,14 +77,7 @@ function Forget({
       />
       <span>
         {t<string>('How to restore your account?')}&nbsp;
-        <a
-          className='link'
-          href={LINKS.FORGET}
-          rel='noreferrer'
-          target='_blank'
-        >
-          {t<string>('Learn more')}
-        </a>
+        <LearnMore href={LINKS.FORGET} />
       </span>
     </HelperFooter>
   );

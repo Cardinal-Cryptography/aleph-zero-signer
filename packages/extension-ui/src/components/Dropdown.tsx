@@ -84,10 +84,6 @@ function Dropdown({
           className={`icon ${isLocked ? 'disabled-icon' : ''}`}
           src={chevronDown}
         />
-        {/* <FontAwesomeIcon
-          className={`icon ${isLocked ? 'disabled-icon' : ''}`}
-          icon={faChevronDown}
-        /> */}
         <InputLock
           isLocked={isLocked}
           onClick={_toggleLocked}

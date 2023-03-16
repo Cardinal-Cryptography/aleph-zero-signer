@@ -19,7 +19,6 @@ interface Props extends ThemeProps {
   position?: 'top' | 'bottom' | 'middle' | 'both';
   extra?: ExtraOptions;
   isDanger?: boolean;
-  toggle?: React.ReactNode;
   onClick?: () => void;
   link?: string;
 }
@@ -71,8 +70,7 @@ function EditMenuCard({
   link,
   onClick,
   preIcon,
-  title,
-  toggle
+  title
 }: Props): React.ReactElement<Props> {
   return (
     <StyledLink
@@ -92,15 +90,12 @@ function EditMenuCard({
             </div>
             <div className='description'>
               <span className='description-text'>{description}</span>
-              {toggle && <div className='extra'>{toggle}</div>}
-              {!toggle && (
-                <div className='extra'>
-                  <ExtraContent
-                    extra={extra}
-                    link={link}
-                  />
-                </div>
-              )}
+              <div className='extra'>
+                <ExtraContent
+                  extra={extra}
+                  link={link}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -208,7 +203,7 @@ export default styled(EditMenuCard)(
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      width: 75px;
+      width: 80px;
       text-align: right;
     }
   }

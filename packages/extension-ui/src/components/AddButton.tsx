@@ -15,7 +15,7 @@ interface Props extends ThemeProps {
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  `;
+`;
 
 const AddButton: React.FC<Props> = function ({ className }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);

@@ -16,6 +16,7 @@ import {
   Button,
   ButtonArea,
   Checkbox,
+  LearnMore,
   RadioGroup,
   ScrollWrapper,
   Svg,
@@ -85,14 +86,7 @@ function EditNetwork({
       />
       <span>
         {t<string>('Not sure which to choose?')}&nbsp;
-        <a
-          className='link'
-          href={LINKS.NETWORK}
-          rel='noreferrer'
-          target='_blank'
-        >
-          {t<string>('Learn more')}
-        </a>
+        <LearnMore href={LINKS.NETWORK} />
       </span>
     </CustomFooter>
   );

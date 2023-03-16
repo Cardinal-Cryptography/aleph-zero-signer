@@ -19,6 +19,7 @@ import {
   ButtonArea,
   InputWithLabel,
   Label,
+  LearnMore,
   Svg,
   ValidatedInput,
   VerticalSpace,
@@ -164,14 +165,7 @@ function SelectParent({
       />
       <span>
         {t<string>('What is the difference between an\naccount and a sub-account?')}&nbsp;
-        <a
-          className='link'
-          href={LINKS.DERIVE_SUB_ACCOUNT}
-          rel='noreferrer'
-          target='_blank'
-        >
-          {t<string>('Learn more')}
-        </a>
+        <LearnMore href={LINKS.DERIVE_SUB_ACCOUNT} />
       </span>
     </StyledFooter>
   );

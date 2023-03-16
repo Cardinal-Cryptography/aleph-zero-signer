@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import animatedLockIcon from '../../assets/anim_locked.svg';
 import helpIcon from '../../assets/help.svg';
-import { Button, ButtonArea, Svg, VerticalSpace } from '../../components';
+import { Button, ButtonArea, LearnMore, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
@@ -28,7 +28,7 @@ const WrapperRow = styled.div`
 
 const StyledFooter = styled(HelperFooter)`
   .icon {
-    margin-top: -12px;
+    margin-bottom: 12px;
   }
 `;
 
@@ -45,14 +45,7 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
         />
         <span>
           {t<string>('Why it is critical to store your secret\nphrase in a safe place?')}&nbsp;
-          <a
-            className='link'
-            href={LINKS.SAFETY}
-            rel='noreferrer'
-            target='_blank'
-          >
-            {t<string>('Learn more')}
-          </a>
+          <LearnMore href={LINKS.SAFETY} />
         </span>
       </WrapperRow>
     </StyledFooter>
