@@ -97,7 +97,7 @@ export default styled(AddButton)(
     display: inline-block;
     margin-left: 8px;
     opacity: 0;
-    transition: opacity 0.2s ease 1s;
+    transition: 0.2s ease 1s;
     color: ${theme.primaryColor};
     text-decoration: none;
   }
