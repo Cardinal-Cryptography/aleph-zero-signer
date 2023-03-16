@@ -13,6 +13,7 @@ import animatedWarning from '../../assets/anim_warning.svg';
 import helpIcon from '../../assets/help.svg';
 import { Button, ButtonArea, Link, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
+import { LINKS } from '../../links';
 
 interface Props extends ThemeProps {
   authId: string;
@@ -67,7 +68,14 @@ function NoAccount({ authId, className }: Props): React.ReactElement<Props> {
           <span>
             {t<string>('Only connect with sites you trust.')}&nbsp;
             <br />
-            <span className='link'>{t<string>('Learn more')}</span>
+            <a
+              className='link'
+              href={LINKS.TRUSTED_APPS}
+              rel='noreferrer'
+              target='_blank'
+            >
+              {t<string>('Learn more')}
+            </a>
           </span>
         </div>
       </div>

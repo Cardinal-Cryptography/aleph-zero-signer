@@ -10,6 +10,7 @@ import Address from '../components/Address';
 import useGenesisHashOptions from '../hooks/useGenesisHashOptions';
 import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
+import { LINKS } from '../links';
 import { Name, Password } from '../partials';
 import { ThemeProps } from '../types';
 import { AccountContext } from './contexts';
@@ -116,9 +117,16 @@ function AccountNamePasswordCreation({
       </div>
       <div className='text-container'>
         <span>
-          {t<string>('When should you choose the network?')}&nbsp;
+          {t<string>("Don't know which network to choose?")}&nbsp;
           <br />
-          <span className='link'>{t<string>('Learn more')}</span>
+          <a
+            className='link'
+            href={LINKS.NETWORK}
+            rel='noreferrer'
+            target='_blank'
+          >
+            {t<string>('Learn more')}
+          </a>
         </span>
       </div>
     </CustomFooter>

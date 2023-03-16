@@ -14,6 +14,7 @@ import { ButtonArea, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
+import { LINKS } from '../../links';
 import { getAuthList } from '../../messaging';
 import { Header } from '../../partials';
 import WebsiteEntry from './WebsiteEntry';
@@ -56,7 +57,14 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
       />
       <span>
         {t<string>('What are trusted apps?')}&nbsp;
-        <span className='link'>{` ${t<string>('Learn more')}`}</span>
+        <a
+          className='link'
+          href={LINKS.TRUSTED_APPS}
+          rel='noreferrer'
+          target='_blank'
+        >
+          {t<string>('Learn more')}
+        </a>
       </span>
     </CustomFooter>
   );

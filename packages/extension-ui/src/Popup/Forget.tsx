@@ -13,6 +13,7 @@ import { AccountContext, ActionContext, Address, Button, ButtonArea, Svg, Vertic
 import HelperFooter from '../components/HelperFooter';
 import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
+import { LINKS } from '../links';
 import { forgetAccount } from '../messaging';
 import { Header } from '../partials';
 
@@ -45,12 +46,12 @@ function Forget({
   const _goTo = useCallback((path: string) => () => onAction(path), [onAction]);
 
   const _onClick = useCallback((): void => {
+    onAction('/');
     show(t<string>('Account forgotten'), 'success', () => {
       setIsBusy(true);
       forgetAccount(address)
         .then(() => {
           setIsBusy(false);
-          onAction('/');
         })
         .catch((error: Error) => {
           setIsBusy(false);
@@ -67,7 +68,14 @@ function Forget({
       />
       <span>
         {t<string>('How to restore your account?')}&nbsp;
-        <span className='link'>{` ${t<string>('Learn more')}`}</span>
+        <a
+          className='link'
+          href={LINKS.FORGET}
+          rel='noreferrer'
+          target='_blank'
+        >
+          {t<string>('Learn more')}
+        </a>
       </span>
     </HelperFooter>
   );

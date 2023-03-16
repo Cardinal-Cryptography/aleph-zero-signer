@@ -24,6 +24,7 @@ import {
 import HelperFooter from '../../components/HelperFooter';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
+import { LINKS } from '../../links';
 import { tieAccount } from '../../messaging';
 import { Header } from '../../partials';
 
@@ -84,7 +85,14 @@ function EditNetwork({
       />
       <span>
         {t<string>('Not sure which to choose?')}&nbsp;
-        <span className='link'>{t<string>('Learn more')}</span>
+        <a
+          className='link'
+          href={LINKS.NETWORK}
+          rel='noreferrer'
+          target='_blank'
+        >
+          {t<string>('Learn more')}
+        </a>
       </span>
     </CustomFooter>
   );

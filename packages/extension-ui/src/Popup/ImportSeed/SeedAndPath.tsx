@@ -27,6 +27,7 @@ import {
 import HelperFooter from '../../components/HelperFooter';
 import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
+import { LINKS } from '../../links';
 
 interface Props {
   className?: string;
@@ -126,7 +127,15 @@ function SeedAndPath({
         <div className='text-container'>
           <span>
             {t<string>('What is')}&nbsp;
-            <span className='link'>{t<string>('Sub-account derivation path').toLowerCase()}</span>?
+            <a
+              className='link'
+              href={LINKS.DERIVE_SUB_ACCOUNT}
+              rel='noreferrer'
+              target='_blank'
+            >
+              {t<string>('Sub-account derivation path').toLowerCase()}
+            </a>
+            ?
           </span>
         </div>
       </div>

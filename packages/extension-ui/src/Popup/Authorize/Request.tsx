@@ -12,6 +12,7 @@ import { AccountContext, ActionContext, Button, ButtonArea, Svg } from '../../co
 import HelperFooter from '../../components/HelperFooter';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
+import { LINKS } from '../../links';
 import { approveAuthRequest, deleteAuthRequest } from '../../messaging';
 import { AccountSelection } from '../../partials';
 import NoAccount from './NoAccount';
@@ -95,7 +96,14 @@ function Request({ authId, className, isFirst, request: { origin }, url }: Props
           <span>
             {t<string>('Only connect with sites you trust.')}&nbsp;
             <br />
-            <span className='link'>{t<string>('Learn more')}</span>
+            <a
+              className='link'
+              href={LINKS.TRUSTED_APPS}
+              rel='noreferrer'
+              target='_blank'
+            >
+              {t<string>('Learn more')}
+            </a>
           </span>
         </div>
       </div>

@@ -10,12 +10,11 @@ import partnerLogo from '../assets/partnerLogo.svg';
 import secureIMG from '../assets/secure.png';
 import { ActionContext, Button, ButtonArea, List, Svg, VerticalSpace } from '../components';
 import useTranslation from '../hooks/useTranslation';
+import { LINKS } from '../links';
 
 interface Props extends ThemeProps {
   className?: string;
 }
-
-const PARTNER_LINK = 'https://chrome.google.com/webstore/detail/threatslayer/mgcmocglffknmbhhfjihifeldhghihpj';
 
 const Welcome = function ({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
@@ -51,8 +50,10 @@ const Welcome = function ({ className }: Props): React.ReactElement<Props> {
           <span className='subtitle'>
             {t<string>('For extra protection, we highly recommend using the')}&nbsp;
             <a
-              href={PARTNER_LINK}
               className='link'
+              target='_blank'
+              href={LINKS.PARTNER}
+              rel='noreferrer'
             >
               {t<string>('Threat Slayer extension')}
             </a>

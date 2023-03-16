@@ -21,11 +21,13 @@ interface Props extends ThemeProps {
   isDanger?: boolean;
   toggle?: React.ReactNode;
   onClick?: () => void;
+  link?: string;
 }
 
 interface ExtraProps {
   className?: string;
   extra?: ExtraOptions;
+  link?: string;
 }
 
 const ExtraContent = ({ extra = 'chevron' }: ExtraProps): React.ReactElement<ExtraProps> | null => {
@@ -56,44 +58,59 @@ const ExtraContent = ({ extra = 'chevron' }: ExtraProps): React.ReactElement<Ext
   }
 };
 
+const StyledLink = styled.a`
+  text-decoration: none;
+  color: inherit;
+`;
+
 function EditMenuCard({
   className,
   description,
   extra,
   isDanger = false,
+  link,
   onClick,
   preIcon,
   title,
   toggle
 }: Props): React.ReactElement<Props> {
   return (
-    <div
-      className={className}
-      onClick={onClick}
+    <StyledLink
+      href={link}
+      rel='noreferrer'
+      target='_blank'
     >
-      <div className='flex-container'>
-        <div className='flex-group'>
-          <div className={`title ${isDanger ? 'danger' : ''}`}>
-            {preIcon}
-            {title}
-          </div>
-          <div className='description'>
-            <span className='description-text'>{description}</span>
-            {toggle && <div className='extra'>{toggle}</div>}
-            {!toggle && (
-              <div className='extra'>
-                <ExtraContent extra={extra} />
-              </div>
-            )}
+      <div
+        className={className}
+        onClick={onClick}
+      >
+        <div className='flex-container'>
+          <div className='flex-group'>
+            <div className={`title ${isDanger ? 'danger' : ''}`}>
+              {preIcon}
+              {title}
+            </div>
+            <div className='description'>
+              <span className='description-text'>{description}</span>
+              {toggle && <div className='extra'>{toggle}</div>}
+              {!toggle && (
+                <div className='extra'>
+                  <ExtraContent
+                    extra={extra}
+                    link={link}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </StyledLink>
   );
 }
 
 export default styled(EditMenuCard)(
-  ({ onClick, position, theme }: Props) => `
+  ({ link, onClick, position, theme }: Props) => `
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -138,7 +155,7 @@ export default styled(EditMenuCard)(
     }
   }
 
-  cursor: ${onClick ? 'pointer' : 'default'};
+  cursor: ${onClick || link ? 'pointer' : 'default'};
 
   .chevron {
     width: 16px;

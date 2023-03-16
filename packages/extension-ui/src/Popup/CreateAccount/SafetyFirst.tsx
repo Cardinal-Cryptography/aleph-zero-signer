@@ -12,6 +12,7 @@ import { Button, ButtonArea, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
+import { LINKS } from '../../links';
 
 interface Props extends ThemeProps {
   className?: string;
@@ -44,7 +45,14 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
         />
         <span>
           {t<string>('Why it is critical to store your secret\nphrase in a safe place?')}&nbsp;
-          <span className='link'>{t<string>('Learn more')}</span>
+          <a
+            className='link'
+            href={LINKS.SAFETY}
+            rel='noreferrer'
+            target='_blank'
+          >
+            {t<string>('Learn more')}
+          </a>
         </span>
       </WrapperRow>
     </StyledFooter>

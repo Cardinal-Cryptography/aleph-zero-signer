@@ -14,6 +14,7 @@ import notConnected from '../assets/not_connected.svg';
 import settingsIcon from '../assets/settings.svg';
 import { ActionContext, Link, Svg, Tooltip } from '../components';
 import useTranslation from '../hooks/useTranslation';
+import { LINKS } from '../links';
 import { getConnectedTabsUrl } from '../messaging';
 import { Z_INDEX } from '../zindex';
 
@@ -86,12 +87,16 @@ function Header({
           <div className='popupMenus'>
             {withHelp && (
               <Tooltip text={t<string>('Help')}>
-                <Link to={'/help'}>
+                <a
+                  href={LINKS.GENERAL_INTRODUCTION}
+                  rel='noreferrer'
+                  target='_blank'
+                >
                   <Svg
                     className='popupToggle'
                     src={helpIcon}
                   />
-                </Link>
+                </a>
               </Tooltip>
             )}
             {withSettings && (
@@ -239,6 +244,7 @@ export default React.memo(
       display: flex;
       justify-content: flex-end;
       gap: 16px;
+      align-items: center;
 
       :last-child {
         padding-right: 18px;
