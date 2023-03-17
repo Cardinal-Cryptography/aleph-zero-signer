@@ -10,7 +10,7 @@ import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handl
 
 import animTrusted from '../../assets/anim_trusted.svg';
 import helpIcon from '../../assets/help.svg';
-import { ButtonArea, LearnMore, Svg, VerticalSpace } from '../../components';
+import { ButtonArea, LearnMore, ScrollWrapper, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
@@ -33,7 +33,19 @@ const CustomButtonArea = styled(ButtonArea)`
 const CustomFooter = styled(HelperFooter)`
   margin-bottom: 8px;
   gap: 8px;
-  justify-content: flex-start;
+  
+  span {
+    margin-left: -24px;
+  }
+
+`;
+
+const CustomScrollWrapper = styled(ScrollWrapper)`
+::-webkit-scrollbar-thumb {
+  border-right: none;
+  border-left: 4px solid rgb(17, 27, 36);
+}
+  padding-right: 0px;
 `;
 
 function AuthManagement({ className }: Props): React.ReactElement<Props> {
@@ -86,7 +98,7 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
             </span>
           </div>
         ) : (
-          <>
+          <CustomScrollWrapper>
             <div className='website-list'>
               {Object.entries<AuthUrlInfo>(authList).map(([url, info]) => (
                 <WebsiteEntry
@@ -96,7 +108,7 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
                 />
               ))}
             </div>
-          </>
+          </CustomScrollWrapper>
         )}
       </div>
       <VerticalSpace />

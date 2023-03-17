@@ -33,10 +33,11 @@ interface Props {
 }
 
 const CustomFooter = styled(HelperFooter)`
-flex-direction: row;
-display: flex;
-gap: 8px;
-
+  flex-direction: row;
+  display: flex;
+  gap: 8px;
+  width: auto;
+  margin-bottom: 8px;
 
 .text-container {
   display: flex;
@@ -158,11 +159,12 @@ function AccountNamePasswordCreation({
               value={genesisHash}
             />
           )}
+          {!isDeriving && footer}
         </div>
       </ScrollWrapper>
       <VerticalSpace />
       {onBackClick && buttonLabel && (
-        <ButtonArea footer={!isDeriving && footer}>
+        <ButtonArea>
           {master && isDeriving ? (
             <Button
               onClick={_onBackClick}

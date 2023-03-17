@@ -33,7 +33,8 @@ const CustomButtonArea = styled(ButtonArea)`
 const CustomFooter = styled(HelperFooter)`
   flex-direction: row;
   display: flex;
-  gap: 8px;
+  gap: 8px;  
+
 
   .text-container {
     display: flex;
@@ -122,4 +123,10 @@ function Request({ authId, className, isFirst, request: { origin }, url }: Props
 
 export default styled(Request)`
   padding: 0px 16px;
+  .accountList {
+    overflow-x: hidden;
+    height: 250px;
+    padding-right: 2px;
+    padding-bottom: 16px;
+  }
 `;

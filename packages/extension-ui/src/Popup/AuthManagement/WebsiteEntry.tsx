@@ -130,10 +130,8 @@ export default styled(WebsiteEntry)(
     background: ${theme.iconNeutralColor};
   }
 
-  &:hover { 
-    .chevron {
-      background: ${theme.headerIconBackgroundHover};
-    }
+  &:hover .chevron {
+    background: ${theme.headerIconBackgroundHover};
   }
 
   .number-of-accounts {

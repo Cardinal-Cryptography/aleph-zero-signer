@@ -23,7 +23,7 @@ const CustomButtonArea = styled(ButtonArea)`
 `;
 
 function AccountManagement({ className, location: { search } }: Props): React.ReactElement<Props> {
-  const { selectedAccounts = [], setSelectedAccounts } = useContext(AccountContext);
+  const { hierarchy, selectedAccounts = [], setSelectedAccounts } = useContext(AccountContext);
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
   const searchParams = new URLSearchParams(search);
@@ -59,6 +59,8 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
     onAction('/auth-list');
   }, [onAction]);
 
+  console.log(hierarchy.length);
+
   return (
     <>
       <Header
@@ -70,13 +72,15 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
         {url && (
           <>
             <RemoveAuth url={url} />
-            <AccountSelection
-              className='accountSelection'
-              onChange={setSelectedAccountsChanged}
-              showHidden={true}
-              url={url}
-              withWarning={false}
-            />
+            {hierarchy.length > 0 && (
+              <AccountSelection
+                className='accountSelection'
+                onChange={setSelectedAccountsChanged}
+                showHidden={true}
+                url={url}
+                withWarning={false}
+              />
+            )}
           </>
         )}
       </div>

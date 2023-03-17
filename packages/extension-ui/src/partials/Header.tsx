@@ -67,11 +67,15 @@ function Header({
         <div className='container'>
           <div className='branding'>
             {withBackArrow ? (
-              <img
-                className='arrowLeftIcon'
+              <div
+                className='arrow-container'
                 onClick={goToFnOverride || _onBackArrowClick}
-                src={arrowLeft}
-              />
+              >
+                <Svg
+                  className='arrowLeftIcon'
+                  src={arrowLeft}
+                />
+              </div>
             ) : (
               <div className='flex'>
                 <img
@@ -162,6 +166,13 @@ export default React.memo(
 
   .flex {
     display: flex;
+  }
+
+  .arrow-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0px;
   }
 
   .connectedAccountsWrapper {
@@ -296,13 +307,14 @@ export default React.memo(
   .arrowLeftIcon {
     color: ${theme.labelColor};
     cursor: pointer;
-    padding: 8px 0px;
+    width: 20px;
+    height: 20px;
+    background: ${theme.iconNeutralColor};
 
     :hover {
-      path {
-        fill: ${theme.headerIconBackgroundHover};
+        background: ${theme.headerIconBackgroundHover};
     }
-}
+  }
 
   &.smallMargin {
     margin-bottom: 15px;

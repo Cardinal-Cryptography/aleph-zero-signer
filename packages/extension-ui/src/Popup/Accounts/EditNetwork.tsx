@@ -34,7 +34,13 @@ interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
 }
 
 const CustomFooter = styled(HelperFooter)`
+  width: auto;
+  margin-bottom: 24px;
   gap: 12px;
+`;
+
+const CustomButtonArea = styled(ButtonArea)`
+  padding-top:8px;
 `;
 
 function EditNetwork({
@@ -113,10 +119,11 @@ function EditNetwork({
             options={options}
             withTestNetwork={checked}
           />
+          {footer}
         </div>
       </ScrollWrapper>
       <VerticalSpace />
-      <ButtonArea footer={footer}>
+      <CustomButtonArea>
         <Button
           onClick={_goTo(`/account/edit-menu/${address}?isExternal=${isExternal.toString()}`)}
           secondary
@@ -129,7 +136,7 @@ function EditNetwork({
         >
           {t<string>('Change')}
         </Button>
-      </ButtonArea>
+      </CustomButtonArea>
     </>
   );
 }

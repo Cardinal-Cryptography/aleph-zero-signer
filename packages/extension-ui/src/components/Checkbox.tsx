@@ -89,6 +89,8 @@ export default styled(Checkbox)(
       background-color: ${theme.inputBackground};
       border: 1px solid ${theme.inputBackground};
       outline: 1px solid ${theme.boxBorderColor};
+      transition: 0.2s ease;
+
       &:after {
         content: '';
         display: none;
@@ -129,5 +131,12 @@ export default styled(Checkbox)(
       }
     }
   }
+
+  &:hover{
+    label span {
+      outline-color:  ${theme.primaryColor};
+    }
+  }
+
 `
 );

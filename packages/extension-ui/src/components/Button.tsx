@@ -63,7 +63,7 @@ export default styled(Button)(
       ? theme.buttonTertiaryBackground
       : theme.buttonBackground
   };
-  
+
   cursor: pointer;
   display: block;
   width: ${tertiary ? 'max-content' : '100%'};
@@ -83,7 +83,7 @@ export default styled(Button)(
       : theme.buttonTextColor
   };
   font-family: ${theme.secondaryFontFamily};
-  font-weigth: 500;
+  font-weight: 500;
   font-size: 16px;
   line-height: 135%;
   padding: ${tertiary ? '2px 0px;' : '0 1rem'};
@@ -116,9 +116,7 @@ export default styled(Button)(
 
   &:focus {
     outline: none;
-    border: ${
-      secondary ? theme.buttonSecondaryBorderFocused : tertiary ? theme.buttonTertiaryBorder : theme.buttonBorderFocused
-    };
+    border: ${secondary ? theme.buttonSecondaryBorderFocused : tertiary ? 'none' : theme.buttonBorderFocused};
   }
 
   &:not(:disabled):hover, &:active {

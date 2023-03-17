@@ -23,6 +23,7 @@ interface Props extends ThemeProps {
   url: string;
   showHidden?: boolean;
   newAccounts: Array<AccountJson> | [];
+  onChange?: (value: boolean) => void;
 }
 
 interface GroupedData {
@@ -32,10 +33,16 @@ interface GroupedData {
 const StyledCheckbox = styled(Checkbox)`
   display: flex;
   justify-content: flex-end;
-  margin-right: 8px;
+  margin-right: 24px;
 `;
 
-function NewAccountSelection({ className, newAccounts, showHidden = false, url }: Props): React.ReactElement<Props> {
+function NewAccountSelection({
+  className,
+  newAccounts,
+  onChange,
+  showHidden = false,
+  url
+}: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { accounts, hierarchy, selectedAccounts = [], setSelectedAccounts } = useContext(AccountContext);
   const [isIndeterminate, setIsIndeterminate] = useState(false);
@@ -54,6 +61,10 @@ function NewAccountSelection({ className, newAccounts, showHidden = false, url }
   }, [areAllAccountsSelected, noAccountSelected]);
 
   const _onSelectAllToggle = useCallback(() => {
+    if (onChange) {
+      onChange(true);
+    }
+
     if (areAllAccountsSelected) {
       setSelectedAccounts && setSelectedAccounts([]);
 
@@ -61,7 +72,7 @@ function NewAccountSelection({ className, newAccounts, showHidden = false, url }
     }
 
     setSelectedAccounts && setSelectedAccounts(allDisplayedAddresses);
-  }, [allDisplayedAddresses, areAllAccountsSelected, setSelectedAccounts]);
+  }, [allDisplayedAddresses, areAllAccountsSelected, onChange, setSelectedAccounts]);
 
   const groupedAccounts = flattened.reduce<GroupedData>(
     (acc, curr) => {
@@ -110,6 +121,7 @@ function NewAccountSelection({ className, newAccounts, showHidden = false, url }
               {accounts.map((json, index) => (
                 <AccountsTree
                   {...json}
+                  checkBoxOnChange={onChange}
                   className={group === 'new' ? 'new' : ''}
                   isAuthList
                   key={`${group}:${index}:${json.address}`}

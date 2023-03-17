@@ -45,6 +45,7 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
   const url = searchParams.get('url');
   const { flattened } = useMemo(() => createGroupedAccountData(hierarchy), [hierarchy]);
   const newAccountsRef = useRef<AccountJson[] | []>([]);
+  const [selectedAccountsChanged, setSelectedAccountsChanged] = useState(false);
 
   useEffect(() => {
     getAuthList()
@@ -57,6 +58,7 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
 
         if (url && setSelectedAccounts) {
           setSelectedAccounts(list[url].authorizedAccounts);
+          setSelectedAccountsChanged(false);
         }
       })
       .catch(console.error);
@@ -113,6 +115,7 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
                 <NewAccountSelection
                   className='accountSelection'
                   newAccounts={newAccountsRef.current}
+                  onChange={setSelectedAccountsChanged}
                   showHidden={true}
                   url={url}
                 />
@@ -130,6 +133,7 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
         </Button>
         <Button
           className='acceptButton'
+          isDisabled={!selectedAccountsChanged}
           onClick={_onApprove}
         >
           {t<string>('Update')}

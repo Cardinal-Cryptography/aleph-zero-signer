@@ -54,6 +54,21 @@ export default styled(RadioCard)(
   margin-bottom: 2px;
   margin-top: 0px;
   border-radius: 2px;
+  transition: 0.2s ease;
+  font-family: ${theme.secondaryFontFamily};
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 120%;
+  letter-spacing: 0.07em;
+
+  &:hover {
+    background: ${theme.editCardBackgroundHover};
+
+    input {
+      outline: 2px solid ${theme.primaryColor};
+    }
+  }
 
   label {
     display: flex;
@@ -76,7 +91,7 @@ export default styled(RadioCard)(
     width: 20px;
     height: 20px;
     cursor: pointer;
-
+    transition: 0.2s ease;
     outline: 2px solid ${theme.inputRadioBorderColor};
 
     &:checked {

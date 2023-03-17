@@ -33,7 +33,8 @@ function MenuCard({ className, description, extra, onClick, preIcon, title }: Pr
   );
 }
 
-export default styled(MenuCard)(({ onClick,theme  }: Props) => `
+export default styled(MenuCard)(
+  ({ onClick, theme }: Props) => `
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,6 +43,11 @@ export default styled(MenuCard)(({ onClick,theme  }: Props) => `
   border-radius: 8px;
   padding: 16px 16px 16px 24px;
   cursor: ${onClick ? 'pointer' : 'default'};
+  transition: 0.2s ease;
+
+  :hover {
+    background: ${theme.editCardBackgroundHover};
+  }
 
   .border {
     border: 1px solid red;
