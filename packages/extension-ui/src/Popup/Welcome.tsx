@@ -92,7 +92,7 @@ export default styled(Welcome)(
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    padding: 12px;
+    padding: 12px 12px 12px 16px;
     gap: 16px;
     border: 1px solid ${theme.boxBorderColor};
     border-radius: 8px;
@@ -105,8 +105,6 @@ export default styled(Welcome)(
       height: 30px;
     }
   }
-
-
 
   .subtitle {
     font-weight: 300;
