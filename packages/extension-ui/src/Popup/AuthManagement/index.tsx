@@ -33,6 +33,12 @@ const CustomButtonArea = styled(ButtonArea)`
 const CustomFooter = styled(HelperFooter)`
   margin-bottom: 8px;
   gap: 8px;
+
+  .wrapper {
+    display: flex;
+    gap: 8px;
+    margin-right: 40px;
+  };
 `;
 
 const CustomScrollWrapper = styled(ScrollWrapper)`
@@ -58,14 +64,16 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
 
   const footer = (
     <CustomFooter>
-      <Svg
-        className='icon'
-        src={helpIcon}
-      />
-      <span>
-        {t<string>('What are trusted apps?')}&nbsp;
-        <LearnMore href={LINKS.TRUSTED_APPS} />
-      </span>
+      <div className='wrapper'>
+        <Svg
+          className='icon'
+          src={helpIcon}
+        />
+        <span>
+          {t<string>('What are trusted apps?')}&nbsp;
+          <LearnMore href={LINKS.TRUSTED_APPS} />
+        </span>
+      </div>
     </CustomFooter>
   );
 
@@ -81,8 +89,9 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
       <div className={className}>
         {!authList || !hasAuthList ? (
           <div className='empty-list'>
-            <Svg
+            <img
               className='animated-trusted'
+              key={crypto.randomUUID()}
               src={animTrusted}
             />
             <span className='heading'>{t<string>('No app request yet')}</span>
@@ -133,7 +142,6 @@ export default styled(AuthManagement)`
   .animated-trusted {
     width: 96px;
     height: 96px;
-    background: ${({ theme }: ThemeProps) => theme.trustedBackground};
   }
   
 

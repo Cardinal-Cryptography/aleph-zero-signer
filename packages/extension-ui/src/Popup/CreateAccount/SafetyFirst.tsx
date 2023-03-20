@@ -40,7 +40,6 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
     <StyledFooter>
       <WrapperRow>
         <Svg
-          key={Date.now()}
           className='icon'
           src={helpIcon}
         />
@@ -56,8 +55,13 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
     <>
       <div className={className}>
         <div className='top'>
-          <Svg
+          {/* <Svg
             className='icon'
+            src={animatedLockIcon}
+          /> */}
+          <img
+            className='icon'
+            key={crypto.randomUUID()}
             src={animatedLockIcon}
           />
           <span className='heading'>{t<string>('Safety first!')}</span>
@@ -100,7 +104,7 @@ export default React.memo(
         margin: 0 auto;
         width: 96px;
         height: 96px;
-        background: ${theme.warningColor};
+        // background: ${theme.warningColor};
       }
 
       .heading {

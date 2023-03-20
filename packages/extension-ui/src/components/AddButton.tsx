@@ -75,6 +75,13 @@ export default styled(AddButton)(
   border-radius: 50%;
   padding:0px;
   transition: 0.2s ease;
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
   
   &:disabled {
     cursor: default;

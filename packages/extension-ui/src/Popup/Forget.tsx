@@ -100,8 +100,9 @@ function Forget({
       />
       <div className={className}>
         <div className='text-container'>
-          <Svg
+          <img
             className='forgetIcon'
+            key={crypto.randomUUID()}
             src={animatedForget}
           />
           <span className='heading'>{t<string>('Forget account')}</span>
@@ -175,7 +176,6 @@ export default withRouter(
     margin: 0 auto;
     width: 96px;
     height: 96px;
-    background: ${theme.dangerBackground};
   }
 
 `

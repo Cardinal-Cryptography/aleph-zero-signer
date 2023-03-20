@@ -110,8 +110,6 @@ function Accounts({ className }: Props): React.ReactElement {
       );
     });
 
-  console.log('flattened', flattened);
-
   return (
     <>
       {hierarchy.length === 0 ? (

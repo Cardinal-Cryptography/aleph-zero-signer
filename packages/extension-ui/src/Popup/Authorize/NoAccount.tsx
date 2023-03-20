@@ -79,8 +79,9 @@ function NoAccount({ authId, className }: Props): React.ReactElement<Props> {
     <>
       <div className={className}>
         <div className='content-inner'>
-          <Svg
+          <img
             className='warning-icon'
+            key={crypto.randomUUID()}
             src={animatedWarning}
           />
           <span className='heading'>{t<string>('You do NOT have any account')}</span>
@@ -122,7 +123,6 @@ export default styled(NoAccount)(
   .warning-icon {
     width: 96px;
     height: 96px;
-    background: ${theme.warningColor};
   }
 
   .content-inner {

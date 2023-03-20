@@ -76,16 +76,6 @@ chrome.tabs.onRemoved.addListener(() => {
   getActiveTabs();
 });
 
-// TODO:
-document.addEventListener('fullscreenchange', () => {
-  if (document.fullscreenEnabled === true) {
-    document.exitFullscreen().catch(console.error);
-    console.log('Full screen mode is on');
-  } else {
-    console.log('Full screen mode is off');
-  }
-});
-
 // initial setup
 cryptoWaitReady()
   .then((): void => {

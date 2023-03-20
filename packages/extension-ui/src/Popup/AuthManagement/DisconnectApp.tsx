@@ -24,7 +24,6 @@ interface URLState {
 }
 
 const CustomFaviconBox = styled(FaviconBox)`
-
     margin: 0 auto;
     margin-top: 16px;
 `;
@@ -55,8 +54,9 @@ function DisconnectApp({ className }: Props): React.ReactElement<Props> {
       />
       <div className={className}>
         <div className='content'>
-          <Svg
+          <img
             className='animated-remove-icon'
+            key={crypto.randomUUID()}
             src={animatedRemove}
           />
           <span className='heading'>{t<string>('Disconnecting app')}</span>
@@ -131,7 +131,6 @@ export default React.memo(
     justify-content: center;
     width: 96px;
     height: 96px;
-    background: ${theme.dangerBackground};
     margin: 0 auto;
   }
       

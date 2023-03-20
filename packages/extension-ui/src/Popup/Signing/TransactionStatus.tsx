@@ -39,8 +39,9 @@ function TransactionStatus({
       <div className={className}>
         <div className='content'>
           <div className='content-inner'>
-            <Svg
+            <img
               className='icon'
+              key={crypto.randomUUID()}
               src={isSigned ? animSigned : animDeclined}
             />
             <span className='heading'>
@@ -90,7 +91,7 @@ export default React.memo(
   }
 
   .icon {
-    background: ${match.params.status === 'signed' ? theme.successBackground : theme.dangerBackground};
+    // background: ${match.params.status === 'signed' ? theme.successBackground : theme.dangerBackground};
     width: 96px;
     height: 96px;
   }
