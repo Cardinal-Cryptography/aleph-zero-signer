@@ -41,7 +41,7 @@ function TransactionStatus({
           <div className='content-inner'>
             <img
               className='icon'
-              key={crypto.randomUUID()}
+              key={Math.floor(Math.random() * Date.now())}
               src={isSigned ? animSigned : animDeclined}
             />
             <span className='heading'>

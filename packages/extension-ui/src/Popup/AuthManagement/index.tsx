@@ -91,7 +91,7 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
           <div className='empty-list'>
             <img
               className='animated-trusted'
-              key={crypto.randomUUID()}
+              key={Math.floor(Math.random() * Date.now())}
               src={animTrusted}
             />
             <span className='heading'>{t<string>('No app request yet')}</span>
