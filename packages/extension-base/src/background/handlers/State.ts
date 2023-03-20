@@ -76,6 +76,7 @@ const POPUP_WINDOW_OPTS: chrome.windows.CreateData = {
   focused: true,
   height: 630,
   left: 150,
+  state: 'normal',
   top: 150,
   type: 'popup',
   url: NOTIFICATION_URL,
@@ -85,6 +86,7 @@ const POPUP_WINDOW_OPTS: chrome.windows.CreateData = {
 const NORMAL_WINDOW_OPTS: chrome.windows.CreateData = {
   focused: true,
   height: 630,
+  state: 'normal',
   type: 'normal',
   url: NOTIFICATION_URL,
   width: 360
