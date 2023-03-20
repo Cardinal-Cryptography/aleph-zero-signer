@@ -5,13 +5,13 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { AccountContext, ActionContext } from '../../components';
 import AccountNamePasswordCreation from '../../components/AccountNamePasswordCreation';
+import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 import useMetadata from '../../hooks/useMetadata';
 import useTranslation from '../../hooks/useTranslation';
 import { createAccountSuri } from '../../messaging';
 import { HeaderWithSteps } from '../../partials';
 import { DEFAULT_TYPE } from '../../util/defaultType';
 import SeedAndPath from './SeedAndPath';
-import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 
 export interface AccountInfo {
   address: string;
