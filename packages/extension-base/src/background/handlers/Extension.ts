@@ -38,6 +38,7 @@ const POPUP_WINDOW_OPTS: chrome.windows.CreateData = {
   focused: true,
   height: 630,
   left: 150,
+  state: 'normal',
   top: 150,
   type: 'popup',
   width: 360
@@ -479,7 +480,12 @@ export default class Extension {
       return false;
     }
 
-    withErrorLog(() => chrome.windows.create({ ...POPUP_WINDOW_OPTS, url }));
+    withErrorLog(() => chrome.windows.create({ ...POPUP_WINDOW_OPTS, url },
+      (window): void => {
+        if (window) {
+          chrome.windows.update(window.id || 0, { state: 'normal' }).catch(console.error);
+        }
+      }));
 
     return true;
   }

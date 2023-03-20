@@ -25,7 +25,7 @@ export default React.memo(
     margin-top: 24px;
     gap: 4px;
     padding: 0 16px;
-  
+    
     &:before {
       position: absolute;
       content: '';

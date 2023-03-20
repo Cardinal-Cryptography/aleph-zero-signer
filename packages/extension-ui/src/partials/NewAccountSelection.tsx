@@ -91,7 +91,10 @@ function NewAccountSelection({
     <div className={className}>
       <div className='withWarning'>
         <div className='heading'>{t<string>('Update connected app')}</div>
-        <FaviconBox url={url} />
+        <FaviconBox
+          url={url}
+          withoutProtocol
+        />
         <div className='separator'>
           <div className='line'></div>
           <Svg

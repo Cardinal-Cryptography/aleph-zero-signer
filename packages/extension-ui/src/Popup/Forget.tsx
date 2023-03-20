@@ -69,17 +69,26 @@ function Forget({
     onAction('/');
   }, [address, onAction, show, t]);
 
+  const CustomFooter = styled(HelperFooter)`
+  .wrapper {
+    display: flex;
+    gap: 8px;
+    margin-left: -12px;
+  }`;
+
   const footer = (
-    <HelperFooter>
-      <Svg
-        className='icon'
-        src={helpIcon}
-      />
-      <span>
-        {t<string>('How to restore your account?')}&nbsp;
-        <LearnMore href={LINKS.FORGET} />
-      </span>
-    </HelperFooter>
+    <CustomFooter>
+      <div className='wrapper'>
+        <Svg
+          className='icon'
+          src={helpIcon}
+        />
+        <span>
+          {t<string>('How to restore your account?')}&nbsp;
+          <LearnMore href={LINKS.FORGET} />
+        </span>
+      </div>
+    </CustomFooter>
   );
 
   return (

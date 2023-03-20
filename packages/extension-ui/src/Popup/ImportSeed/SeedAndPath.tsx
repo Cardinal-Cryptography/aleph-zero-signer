@@ -43,12 +43,21 @@ interface Props {
 }
 
 const CustomFooter = styled(HelperFooter)`
-display: flex;
-flex-direction: column;
-.flex {
   display: flex;
-  gap: 8px;
-}
+  flex-direction: column;
+  .icon-container {
+    margin-top: 6px; 
+  }
+
+  .flex {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  ::before {
+    width: calc(100% - 32px);
+  }
 `;
 
 interface StyledInputWithLabelProps extends ThemeProps {
@@ -56,15 +65,15 @@ interface StyledInputWithLabelProps extends ThemeProps {
 }
 
 const StyledInputWithLabel = styled(InputWithLabel)`
-max-width: 284px;
-gap: 4px;
-position: relative;
-margin-bottom: 4px;
+  max-width: 284px;
+  gap: 4px;
+  position: relative;
+  margin-bottom: 4px;
 
-label {
-color: ${({ isLocked, theme }: StyledInputWithLabelProps) => (isLocked ? theme.disabledTextColor : theme.subTextColor)};
-opacity: 1;
-
+  label {
+  color: ${({ isLocked, theme }: StyledInputWithLabelProps) =>
+    isLocked ? theme.disabledTextColor : theme.subTextColor};
+  opacity: 1;
 }
 `;
 
@@ -136,21 +145,25 @@ function SeedAndPath({
         </div>
       </div>
       <div className='flex'>
-        <Svg
-          className='icon'
-          src={infoIcon}
-        />
-        <span>
-          {t<string>('Have')}&nbsp;
-          <span
-            className='link'
-            onClick={_onClick}
-          >
-            {t<string>('JSON')}
+        <div className='icon-container'>
+          <Svg
+            className='icon'
+            src={infoIcon}
+          />
+        </div>
+        <div className='text-container'>
+          <span>
+            {t<string>('Have')}&nbsp;
+            <span
+              className='link'
+              onClick={_onClick}
+            >
+              {t<string>('JSON')}
+            </span>
+            &nbsp;
+            {t<string>('file to import?')}
           </span>
-          &nbsp;
-          {t<string>('file to import?')}
-        </span>
+        </div>
       </div>
     </CustomFooter>
   );

@@ -30,6 +30,7 @@ function WebsiteEntry({
   const onAction = useContext(ActionContext);
   const _goTo = useCallback((path: string) => () => onAction(path), [onAction]);
   const origin = new URL(decodeURIComponent(url)).origin;
+  const strippedUrl = origin.replace(/^https?:\/\//, '');
 
   useEffect(() => {
     async function fetchFavicon() {
@@ -51,7 +52,7 @@ function WebsiteEntry({
           className='favicon'
           src={favicon}
         />
-        <div className='url'>{origin}</div>
+        <div className='url'>{strippedUrl}</div>
       </div>
       <span className='number-of-accounts'>
         {authorizedAccounts && authorizedAccounts.length

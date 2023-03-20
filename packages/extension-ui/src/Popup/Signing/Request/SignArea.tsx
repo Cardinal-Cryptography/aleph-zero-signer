@@ -130,7 +130,7 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
         <Button
           data-sign-transaction
           isBusy={isBusy}
-          isDisabled={(!!isLocked && !password) || !!error}
+          isDisabled={!isFirst || (!!isLocked && !password) || !!error}
           isSuccess
           onClick={_onSign}
         >

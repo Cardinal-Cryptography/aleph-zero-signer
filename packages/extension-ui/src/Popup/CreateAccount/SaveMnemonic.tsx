@@ -126,6 +126,10 @@ export default React.memo(
       justify-content: space-between;
       width: 100%;
       user-select: all;
+
+      .mnemonic-index {
+        user-select: none;
+      }
     }
 
     .mnemonic-pill {

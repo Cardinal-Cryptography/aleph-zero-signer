@@ -188,6 +188,7 @@ export default styled(MnemonicInput)(
     font-size: 13px;
     line-height: 130%;
     border-radius: 50%;
+    user-select: none;
   }
 `
 );

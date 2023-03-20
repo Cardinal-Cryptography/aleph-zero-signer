@@ -59,8 +59,6 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
     onAction('/auth-list');
   }, [onAction]);
 
-  console.log(hierarchy.length);
-
   return (
     <>
       <Header
@@ -72,7 +70,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
         {url && (
           <>
             <RemoveAuth url={url} />
-            {hierarchy.length > 0 && (
+            {hierarchy.length > 0 ? (
               <AccountSelection
                 className='accountSelection'
                 onChange={setSelectedAccountsChanged}
@@ -80,6 +78,10 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
                 url={url}
                 withWarning={false}
               />
+            ) : (
+              <div className='no-accounts'>
+                <span>{t<string>('You do NOT have any account.')}</span>
+              </div>
             )}
           </>
         )}
@@ -105,12 +107,26 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
 }
 
 export default withRouter(styled(AccountManagement)`
-  margin-top: -16px;
   overflow: hidden;
+
+  .no-accounts {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    gap: 8px;
+    height: 80px;
+    margin-top: 16px;
+    border: 1px dashed #1B2B38;
+    border-radius: 8px;
+  }
   .accountSelection {
     ${Checkbox} {
         margin-right: 16px;
       }
+
     .accountList {
       height: 350px;
       padding: 0px 8px;

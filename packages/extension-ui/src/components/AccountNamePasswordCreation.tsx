@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import helpIcon from '../assets/help.svg';
 import { BackButton, Button, ButtonArea, Dropdown, LearnMore, ScrollWrapper, Svg, VerticalSpace } from '../components';
 import Address from '../components/Address';
+import { ALEPH_ZERO_GENESIS_HASH } from '../constants';
 import useGenesisHashOptions from '../hooks/useGenesisHashOptions';
 import useToast from '../hooks/useToast';
 import useTranslation from '../hooks/useTranslation';
@@ -156,7 +157,7 @@ function AccountNamePasswordCreation({
               label={t<string>('Show on network')}
               onChange={_onChangeNetwork}
               options={options}
-              value={genesisHash}
+              value={genesisHash || ALEPH_ZERO_GENESIS_HASH}
             />
           )}
           {!isDeriving && footer}

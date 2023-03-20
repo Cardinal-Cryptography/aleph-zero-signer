@@ -10,6 +10,7 @@ import { canDerive } from '@polkadot/extension-base/utils';
 import { ThemeProps } from '@polkadot/extension-ui/types';
 
 import { AccountContext, Address, Checkbox, Dropdown, Link, MenuDivider } from '../../components';
+import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 import useGenesisHashOptions from '../../hooks/useGenesisHashOptions';
 import useTranslation from '../../hooks/useTranslation';
 import { editAccount, tieAccount } from '../../messaging';
@@ -130,7 +131,7 @@ function Account({
                 label=''
                 onChange={_onChangeGenesis}
                 options={genesisOptions}
-                value={genesisHash || ''}
+                value={genesisHash || ALEPH_ZERO_GENESIS_HASH}
               />
             </div>
           </>

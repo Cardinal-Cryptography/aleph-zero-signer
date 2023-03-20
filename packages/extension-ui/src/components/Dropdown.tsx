@@ -63,11 +63,11 @@ function Dropdown({
       >
         <select
           autoFocus={isFocussed}
-          defaultValue={defaultValue || ALEPH_ZERO_GENESIS_HASH}
+          defaultValue={ALEPH_ZERO_GENESIS_HASH}
           disabled={isDisabled || isLocked}
           onBlur={onBlur}
           onChange={_onChange}
-          value={value}
+          value={value || ALEPH_ZERO_GENESIS_HASH}
         >
           {options.map(
             ({ text, value }): React.ReactNode => (

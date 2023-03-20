@@ -40,6 +40,7 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
     <StyledFooter>
       <WrapperRow>
         <Svg
+          key={Date.now()}
           className='icon'
           src={helpIcon}
         />

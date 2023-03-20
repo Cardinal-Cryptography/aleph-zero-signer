@@ -11,6 +11,7 @@ import { createAccountSuri } from '../../messaging';
 import { HeaderWithSteps } from '../../partials';
 import { DEFAULT_TYPE } from '../../util/defaultType';
 import SeedAndPath from './SeedAndPath';
+import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 
 export interface AccountInfo {
   address: string;
@@ -28,7 +29,7 @@ function ImportSeed(): React.ReactElement {
   const [step, setStep] = useState<number>(1);
   const [type, setType] = useState(DEFAULT_TYPE);
   const [path, setPath] = useState<string | null>(null);
-  const [genesis, setGenesis] = useState('');
+  const [genesis, setGenesis] = useState(ALEPH_ZERO_GENESIS_HASH);
   const [seed, setSeed] = useState<string | null>(null);
   const chain = useMetadata(account && account.genesis, true);
 

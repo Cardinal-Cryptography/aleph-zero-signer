@@ -284,6 +284,8 @@ export default React.memo(
       vertical-align: middle;
       width: 20px;
       height: 20px;
+      background: ${theme.iconNeutralColor};
+      transition: 0.2s ease;
 
       &:hover {
         cursor: pointer;

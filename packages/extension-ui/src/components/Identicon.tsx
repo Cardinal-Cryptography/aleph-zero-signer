@@ -23,7 +23,6 @@ function Identicon({ className, iconTheme, onCopy, prefix, value }: Props): Reac
     <div className={className}>
       <Icon
         className='icon'
-        // onCopy={onCopy}
         prefix={prefix}
         size={64}
         theme={iconTheme}
@@ -35,11 +34,11 @@ function Identicon({ className, iconTheme, onCopy, prefix, value }: Props): Reac
 
 export default styled(Identicon)(
   ({ theme }: ThemeProps) => `
-  background: rgba(192, 192, 292, 0.25);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   border: 1px solid ${theme.avatarBorderColor};
+  overflow: hidden;
 
   .icon {
     cursor: initial;
@@ -56,5 +55,6 @@ export default styled(Identicon)(
       display: none;
     }
   }
+
 `
 );

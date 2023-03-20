@@ -13,8 +13,19 @@ interface Props extends ThemeProps {
   className?: string;
 }
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(Link)<{ isExpanded: boolean }>`
   text-decoration: none;
+  border-radius: ${({ isExpanded }) => (isExpanded ? '24px' : '50%')};
+
+  &:focus {
+    outline: 1px solid ${({ theme }: ThemeProps) => theme.addButtonFocusBorder};
+  }
+
+  &:active {
+    .container {
+      margin-top: 2px;
+    }
+  }
 `;
 
 const AddButton: React.FC<Props> = function ({ className }: Props) {
@@ -30,16 +41,20 @@ const AddButton: React.FC<Props> = function ({ className }: Props) {
 
   return (
     <StyledLink
+      className={className}
+      isExpanded={isExpanded}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       to={'/account/add-menu'}
     >
       <div className={className}>
-        <FontAwesomeIcon
-          className='icon'
-          icon={faPlus}
-        />
-        {isExpanded && <span className='expanded'>Add Account</span>}
+        <div className='container'>
+          <FontAwesomeIcon
+            className='icon'
+            icon={faPlus}
+          />
+          {isExpanded && <span className='expanded'>Add Account</span>}
+        </div>
       </div>
     </StyledLink>
   );
@@ -47,7 +62,7 @@ const AddButton: React.FC<Props> = function ({ className }: Props) {
 
 export default styled(AddButton)(
   ({ theme }: ThemeProps) => `
-
+  
   display: flex;
   margin-left:auto;
   margin-right:auto;
@@ -65,11 +80,6 @@ export default styled(AddButton)(
     cursor: default;
     background: ${theme.addButtonBackground};
     opacity: 0.3
-  }
-
-  &:focus{
-    outline: none;
-    border: ${theme.addButtonFocusBorder};
   }
 
   &:not(:disabled):hover, &:active {

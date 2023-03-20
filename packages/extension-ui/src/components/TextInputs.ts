@@ -38,7 +38,7 @@ const TextInput = css(
     caret-color: ${withError ? theme.iconDangerColor : theme.inputFocusBorderColor};
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: ${theme.inputFocusHoverColor};
   }
 

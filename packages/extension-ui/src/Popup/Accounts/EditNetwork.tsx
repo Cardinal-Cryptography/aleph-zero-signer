@@ -37,6 +37,12 @@ const CustomFooter = styled(HelperFooter)`
   width: auto;
   margin-bottom: 24px;
   gap: 12px;
+
+  .wrapper {
+    display: flex;
+    gap: 8px;
+    margin-left: -12px;
+  };
 `;
 
 const CustomButtonArea = styled(ButtonArea)`
@@ -86,14 +92,16 @@ function EditNetwork({
 
   const footer = (
     <CustomFooter>
-      <Svg
-        className='icon'
-        src={helpIcon}
-      />
-      <span>
-        {t<string>('Not sure which to choose?')}&nbsp;
-        <LearnMore href={LINKS.NETWORK} />
-      </span>
+      <div className='wrapper'>
+        <Svg
+          className='icon'
+          src={helpIcon}
+        />
+        <span>
+          {t<string>('Not sure which to choose?')}&nbsp;
+          <LearnMore href={LINKS.NETWORK} />
+        </span>
+      </div>
     </CustomFooter>
   );
 

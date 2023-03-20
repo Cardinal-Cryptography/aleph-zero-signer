@@ -120,6 +120,7 @@ export default styled(Button)(
   }
 
   &:not(:disabled):hover, &:active {
+    border: none;
     background: ${
       isDanger
         ? theme.buttonBackgroundDangerHover
@@ -149,6 +150,10 @@ export default styled(Button)(
         ? 'none'
         : theme.buttonHoverBoxShadow
     };
+  }
+
+  &:active .children{
+    margin-top: 2px;
   }
   
   .busyOverlay,

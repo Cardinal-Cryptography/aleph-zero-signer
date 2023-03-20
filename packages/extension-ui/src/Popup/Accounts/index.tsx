@@ -36,7 +36,7 @@ function Accounts({ className }: Props): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
   const onAction = useContext(ActionContext);
   const networkMap = useMemo(() => getNetworkMap(), []);
-  const defaultNetwork = 'any';
+  const defaultNetwork = 'Aleph Zero';
   const { filterChildren, flattened, getParentName, groupedParents } = useMemo(
     () => createGroupedAccountData(filteredAccount),
     [filteredAccount]
@@ -53,10 +53,14 @@ function Accounts({ className }: Props): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    if (authList && connectedTabsUrl.length > 0) {
+    if (!authList) {
+      return;
+    }
+
+    if (connectedTabsUrl.length > 0) {
       setAccountsCreatedAfterLastAuth(
         flattened.filter(
-          (account) => account?.whenCreated && account?.whenCreated > authList[connectedTabsUrl[0]].lastAuth
+          (account) => account?.whenCreated && account?.whenCreated > authList[connectedTabsUrl[0]]?.lastAuth
         )
       );
     }
@@ -105,6 +109,8 @@ function Accounts({ className }: Props): React.ReactElement {
         </div>
       );
     });
+
+  console.log('flattened', flattened);
 
   return (
     <>
