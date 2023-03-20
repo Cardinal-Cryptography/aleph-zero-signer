@@ -29,7 +29,8 @@ const darkTheme = {
   buttonBackgroundDisabled: 'linear-gradient(0deg, rgba(0, 234, 199, 0.3), rgba(0, 234, 199, 0.3)), #111B24;',
   buttonBackgroundHover: '#7FF4E3',
   buttonBackgroundSuccess: '#66D16F',
-  buttonBackgroundSuccessDisabled: '#66D16F4D',
+  buttonBackgroundSuccessDisabled:
+    'linear-gradient(0deg, rgba(102, 209, 111, 0.3), rgba(102, 209, 111, 0.3)), #111B24;',
   buttonBackgroundSuccessHover: '#8DDD94',
   buttonBorderFocused: '1px dashed #111B24',
   buttonBorderRadius: '24px',

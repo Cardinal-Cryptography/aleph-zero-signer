@@ -33,11 +33,6 @@ const CustomButtonArea = styled(ButtonArea)`
 const CustomFooter = styled(HelperFooter)`
   margin-bottom: 8px;
   gap: 8px;
-  
-  span {
-    margin-left: -24px;
-  }
-
 `;
 
 const CustomScrollWrapper = styled(ScrollWrapper)`

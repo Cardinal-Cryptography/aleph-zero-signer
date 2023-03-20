@@ -124,7 +124,6 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, setError,
           isDanger
           isDisabled={!isFirst}
           onClick={_onCancel}
-          secondary
         >
           {t<string>('Decline')}
         </Button>

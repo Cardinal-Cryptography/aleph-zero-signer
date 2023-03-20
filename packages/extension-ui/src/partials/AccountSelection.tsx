@@ -124,7 +124,7 @@ export default styled(AccounSelection)(
 
   .accountList {
     overflow-x: hidden;
-    height: 190px;
+    height: 180px;
     scrollbar-color: ${theme.boxBorderColor};
     scrollbar-width: 2px;
     padding-right: 2px;

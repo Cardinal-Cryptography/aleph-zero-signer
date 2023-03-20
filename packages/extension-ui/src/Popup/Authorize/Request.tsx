@@ -35,6 +35,9 @@ const CustomFooter = styled(HelperFooter)`
   display: flex;
   gap: 8px;  
 
+  .icon {
+    margin-bottom: 4px;
+  }
 
   .text-container {
     display: flex;
@@ -125,7 +128,6 @@ export default styled(Request)`
   padding: 0px 16px;
   .accountList {
     overflow-x: hidden;
-    height: 250px;
     padding-right: 2px;
     padding-bottom: 16px;
   }
