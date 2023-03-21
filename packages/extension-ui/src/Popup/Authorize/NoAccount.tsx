@@ -11,7 +11,7 @@ import { deleteAuthRequest } from '@polkadot/extension-ui/messaging';
 
 import animatedWarning from '../../assets/anim_warning.svg';
 import helpIcon from '../../assets/help.svg';
-import { Button, ButtonArea, LearnMore, Link, Svg, VerticalSpace } from '../../components';
+import { AnimatedSvg, Button, ButtonArea, LearnMore, Link, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import { LINKS } from '../../links';
 
@@ -79,9 +79,8 @@ function NoAccount({ authId, className }: Props): React.ReactElement<Props> {
     <>
       <div className={className}>
         <div className='content-inner'>
-          <img
+          <AnimatedSvg
             className='warning-icon'
-            key={Math.floor(Math.random())}
             src={animatedWarning}
           />
           <span className='heading'>{t<string>('You do NOT have any account')}</span>

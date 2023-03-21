@@ -54,9 +54,8 @@ function DisconnectApp({ className }: Props): React.ReactElement<Props> {
       />
       <div className={className}>
         <div className='content'>
-          <img
+          <AnimatedSvg
             className='animated-remove-icon'
-            key={Math.floor(Math.random())}
             src={animatedRemove}
           />
           <span className='heading'>{t<string>('Disconnecting app')}</span>

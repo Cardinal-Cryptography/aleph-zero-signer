@@ -13,6 +13,7 @@ import {
   AccountContext,
   ActionContext,
   Address,
+  AnimatedSvg,
   Button,
   ButtonArea,
   LearnMore,
@@ -100,9 +101,8 @@ function Forget({
       />
       <div className={className}>
         <div className='text-container'>
-          <img
+          <AnimatedSvg
             className='forgetIcon'
-            key={Math.floor(Math.random())}
             src={animatedForget}
           />
           <span className='heading'>{t<string>('Forget account')}</span>

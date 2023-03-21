@@ -10,7 +10,7 @@ import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handl
 
 import animTrusted from '../../assets/anim_trusted.svg';
 import helpIcon from '../../assets/help.svg';
-import { ButtonArea, LearnMore, ScrollWrapper, Svg, VerticalSpace } from '../../components';
+import { AnimatedSvg, ButtonArea, LearnMore, ScrollWrapper, Svg, VerticalSpace } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
@@ -90,9 +90,8 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
       <div className={className}>
         {!authList || !hasAuthList ? (
           <div className='empty-list'>
-            <img
+            <AnimatedSvg
               className='animated-trusted'
-              key={Math.floor(Math.random())}
               src={animTrusted}
             />
             <span className='heading'>{t<string>('No app request yet')}</span>
