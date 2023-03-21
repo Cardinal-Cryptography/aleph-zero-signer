@@ -12,6 +12,7 @@ import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
 
 import { AccountContext, AddButton, ButtonArea, ScrollWrapper, VerticalSpace } from '../../components';
 import { ActionContext } from '../../components/contexts';
+import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 import useTranslation from '../../hooks/useTranslation';
 import { getAuthList, getConnectedTabsUrl } from '../../messaging';
 import { Header } from '../../partials';
@@ -86,12 +87,14 @@ function Accounts({ className }: Props): React.ReactElement {
     setFilter(filter.toLowerCase());
   }, []);
 
+  const areAllAleph = flattened.every((account) => account.genesisHash === ALEPH_ZERO_GENESIS_HASH);
+
   const accounts = Object.entries(groupedParents)
     .filter(([, details]) => details.length > 0)
     .map(([networkName, details]) => {
       return (
         <div key={networkName}>
-          {networkName !== defaultNetwork && <span className='network-heading'>{networkName}</span>}
+          {!areAllAleph && <span className='network-heading'>{networkName}</span>}
           {details.map((json) => (
             <AccountsTree
               {...json}
@@ -124,7 +127,7 @@ function Accounts({ className }: Props): React.ReactElement {
             withSettings
           />
           <ScrollWrapper>
-            <div className={className}>{accounts}</div>
+            <div className={`${className || ''} ${areAllAleph ? 'all-aleph-main' : 'all-grouped'}`}>{accounts}</div>
           </ScrollWrapper>
           <VerticalSpace />
           <ButtonArea>
@@ -140,7 +143,16 @@ export default styled(Accounts)(
   ({ theme }: Props) => `
   height: calc(100vh - 2px);
   scrollbar-width: none;
-  margin-top: 32px;
+  
+
+  &.all-aleph-main {
+    margin-top: 32px;
+  }
+
+  &.all-grouped {
+    margin-top: 16px;
+  }
+
 
   &::-webkit-scrollbar {
     display: none;

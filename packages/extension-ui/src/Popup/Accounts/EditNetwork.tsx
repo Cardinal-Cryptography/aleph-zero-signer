@@ -23,6 +23,7 @@ import {
   VerticalSpace
 } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
+import { ALEPH_ZERO_TESTNET_GENESIS_HASH } from '../../constants';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
 import { LINKS } from '../../links';
@@ -68,7 +69,8 @@ function EditNetwork({
   const isExternal = Boolean(account?.isExternal);
 
   const [genesis, setGenesis] = useState<string | undefined | null>(account?.genesisHash);
-  const [checked, setChecked] = useState(false);
+  const isTestNet = account?.genesisHash === ALEPH_ZERO_TESTNET_GENESIS_HASH;
+  const [checked, setChecked] = useState(isTestNet);
 
   const toggleChecked = useCallback(() => setChecked((checked) => !checked), []);
 
