@@ -122,16 +122,18 @@ export default withRouter(styled(AccountManagement)`
     border: 1px dashed #1B2B38;
     border-radius: 8px;
   }
+
   .accountSelection {
     ${Checkbox} {
-        margin-right: 16px;
-      }
+      margin-right: 16px;
+    }
 
     .accountList {
       height: 350px;
       padding: 0px 8px;
     }
   }
+  
   .acceptButton {
     width: 90%;
     margin: 0.5rem auto 0;

@@ -152,7 +152,7 @@ export default styled(Button)(
     };
   }
 
-  &:active .children{
+  &:active .children {
     margin-top: 2px;
   }
   

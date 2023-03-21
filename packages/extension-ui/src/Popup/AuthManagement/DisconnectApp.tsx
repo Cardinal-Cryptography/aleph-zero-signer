@@ -8,7 +8,7 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 import animatedRemove from '../../assets/anim_unlink.svg';
-import { Button, ButtonArea, FaviconBox, Svg, VerticalSpace } from '../../components';
+import { Button, ButtonArea, FaviconBox, VerticalSpace } from '../../components';
 import { ActionContext } from '../../components/contexts';
 import { useGoTo } from '../../hooks/useGoTo';
 import useToast from '../../hooks/useToast';
@@ -56,7 +56,7 @@ function DisconnectApp({ className }: Props): React.ReactElement<Props> {
         <div className='content'>
           <img
             className='animated-remove-icon'
-            key={Math.floor(Math.random() * Date.now())}
+            key={Math.floor(Math.random())}
             src={animatedRemove}
           />
           <span className='heading'>{t<string>('Disconnecting app')}</span>

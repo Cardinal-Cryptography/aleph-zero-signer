@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import animDeclined from '../../assets/anim_declined.svg';
 import animSigned from '../../assets/anim_signed.svg';
-import { PopupBorderContainer, Svg } from '../../components';
+import { PopupBorderContainer } from '../../components';
 import { ActionContext } from '../../components/contexts';
 import useTranslation from '../../hooks/useTranslation';
 
@@ -41,7 +41,7 @@ function TransactionStatus({
           <div className='content-inner'>
             <img
               className='icon'
-              key={Math.floor(Math.random() * Date.now())}
+              key={Math.floor(Math.random())}
               src={isSigned ? animSigned : animDeclined}
             />
             <span className='heading'>
@@ -91,7 +91,6 @@ export default React.memo(
   }
 
   .icon {
-    // background: ${match.params.status === 'signed' ? theme.successBackground : theme.dangerBackground};
     width: 96px;
     height: 96px;
   }

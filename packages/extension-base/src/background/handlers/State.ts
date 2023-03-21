@@ -232,6 +232,8 @@ export default class State {
           if (window) {
             this.#windows.push(window.id || 0);
 
+            // We're adding chrome.windows.update to make sure that the extension popup is not fullscreened
+            // There is a bug in Chrome that causes the extension popup to be fullscreened when user has any fullscreened browser window opened on the main screen
             chrome.windows.update(window.id || 0, { state: 'normal' }).catch(console.error);
           }
         });

@@ -102,7 +102,7 @@ function Forget({
         <div className='text-container'>
           <img
             className='forgetIcon'
-            key={Math.floor(Math.random() * Date.now())}
+            key={Math.floor(Math.random())}
             src={animatedForget}
           />
           <span className='heading'>{t<string>('Forget account')}</span>

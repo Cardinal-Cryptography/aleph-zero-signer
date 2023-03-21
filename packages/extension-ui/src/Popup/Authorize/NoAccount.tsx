@@ -81,7 +81,7 @@ function NoAccount({ authId, className }: Props): React.ReactElement<Props> {
         <div className='content-inner'>
           <img
             className='warning-icon'
-            key={Math.floor(Math.random() * Date.now())}
+            key={Math.floor(Math.random())}
             src={animatedWarning}
           />
           <span className='heading'>{t<string>('You do NOT have any account')}</span>

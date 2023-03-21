@@ -42,10 +42,11 @@ const CustomFooter = styled(HelperFooter)`
 `;
 
 const CustomScrollWrapper = styled(ScrollWrapper)`
-::-webkit-scrollbar-thumb {
-  border-right: none;
-  border-left: 4px solid rgb(17, 27, 36);
-}
+  ::-webkit-scrollbar-thumb {
+    border-right: none;
+    border-left: 4px solid rgb(17, 27, 36);
+  }
+
   padding-right: 0px;
 `;
 
@@ -91,7 +92,7 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
           <div className='empty-list'>
             <img
               className='animated-trusted'
-              key={Math.floor(Math.random() * Date.now())}
+              key={Math.floor(Math.random())}
               src={animTrusted}
             />
             <span className='heading'>{t<string>('No app request yet')}</span>

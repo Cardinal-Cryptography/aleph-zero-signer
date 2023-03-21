@@ -26,7 +26,6 @@ export default React.memo(
     gap: 4px;
     padding: 0 16px;
 
-
     &:before {
       position: absolute;
       content: '';

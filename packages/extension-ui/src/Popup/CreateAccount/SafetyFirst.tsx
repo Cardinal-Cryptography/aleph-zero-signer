@@ -55,13 +55,9 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
     <>
       <div className={className}>
         <div className='top'>
-          {/* <Svg
-            className='icon'
-            src={animatedLockIcon}
-          /> */}
           <img
             className='icon'
-            key={Math.floor(Math.random() * Date.now())}
+            key={Math.floor(Math.random())}
             src={animatedLockIcon}
           />
           <span className='heading'>{t<string>('Safety first!')}</span>

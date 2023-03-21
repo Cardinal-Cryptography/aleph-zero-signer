@@ -314,7 +314,7 @@ export default React.memo(
     background: ${theme.iconNeutralColor};
 
     :hover {
-        background: ${theme.headerIconBackgroundHover};
+      background: ${theme.headerIconBackgroundHover};
     }
   }
 
