@@ -114,11 +114,15 @@ function EditNetwork({
           className='header'
           text={t<string>('Account network')}
           withBackArrow
-          withHelp
           withBackdrop
+          withHelp
         />
         <div className={className}>
-          <div className='checkbox-container'>
+          <div
+            className='checkbox-container'
+            tabIndex={0}
+            onKeyPress={toggleChecked}
+          >
             <Checkbox
               checked={checked}
               label={t<string>('Show test networks')}

@@ -25,16 +25,16 @@ export default function Password({ isFocussed, label, onChange }: Props): React.
   const [isSecondPasswordVisible, setIsSecondPasswordVisible] = useState(false);
   const isFirstPasswordValid = useMemo(() => isNotShorterThan(MIN_LENGTH, t<string>('Password is too short')), [t]);
   const isSecondPasswordValid = useCallback(
-    (firstPassword: string): Validator<string> =>
+    (firstPassword: string) =>
       allOf(
-        isNotShorterThan(MIN_LENGTH, t<string>('Password is too short')),
+        // isNotShorterThan(MIN_LENGTH, t<string>('Password is too short')),
         isSameAs(firstPassword, t<string>('Passwords do not match'))
       ),
     [t]
   );
 
   useEffect((): void => {
-    onChange(pass1 && pass2 ? pass1 : '');
+    onChange(pass1 && pass2 ? pass1 : null);
   }, [onChange, pass1, pass2]);
 
   const _handleFistInputTypeChange = useCallback(() => {

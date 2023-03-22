@@ -40,10 +40,17 @@ const CustomFooter = styled(HelperFooter)`
   width: auto;
   margin-bottom: 8px;
 
-.text-container {
-  display: flex;
-  gap: 4px;
-}
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin-left: -12px;
+  }
+
+  .text-container {
+    display: flex;
+    gap: 4px;
+  }
 `;
 
 const StyledAddress = styled(Address)`
@@ -111,18 +118,20 @@ function AccountNamePasswordCreation({
 
   const footer = (
     <CustomFooter>
-      <div className='icon-container'>
-        <Svg
-          className='icon'
-          src={helpIcon}
-        />
-      </div>
-      <div className='text-container'>
-        <span>
-          {t<string>("Don't know which network to choose?")}&nbsp;
-          <br />
-          <LearnMore href={LINKS.NETWORK} />
-        </span>
+      <div className='wrapper'>
+        <div className='icon-container'>
+          <Svg
+            className='icon'
+            src={helpIcon}
+          />
+        </div>
+        <div className='text-container'>
+          <span>
+            {t<string>("Don't know which network to choose?")}&nbsp;
+            <br />
+            <LearnMore href={LINKS.NETWORK} />
+          </span>
+        </div>
       </div>
     </CustomFooter>
   );

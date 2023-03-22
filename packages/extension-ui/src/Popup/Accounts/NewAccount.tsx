@@ -9,8 +9,8 @@ import styled from 'styled-components';
 
 import { AuthUrls } from '@polkadot/extension-base/background/handlers/State';
 import { AccountJson } from '@polkadot/extension-base/background/types';
+import { Z_INDEX } from '@polkadot/extension-ui/zindex';
 
-import border from '../../assets/border.svg';
 import {
   AccountContext,
   ActionContext,
@@ -24,7 +24,6 @@ import useTranslation from '../../hooks/useTranslation';
 import { getAuthList, updateAuthorization, updateAuthorizationDate } from '../../messaging';
 import { NewAccountSelection } from '../../partials';
 import { createGroupedAccountData } from '../../util/createGroupedAccountData';
-import { Z_INDEX } from '../../zindex';
 
 interface Props extends RouteComponentProps, ThemeProps {
   className?: string;
@@ -38,12 +37,12 @@ const ButtonsGroup = styled.div`
   gap: 8px;
   padding-bottom: 0px;
   position: absolute;
-  bottom: 16px;
+  bottom: 7px;
   left: 0px;
   right: 0px;
+  height: 56px;
+  backdrop-filter: blur(10px);
   z-index: ${Z_INDEX.BOTTOM_WRAPPER};
-  margin: 0 16px;
-  backdrop-filter: blur(20px);
 `;
 
 function NewAccount({ className, location: { search } }: Props): React.ReactElement<Props> {
@@ -57,7 +56,6 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
   const url = searchParams.get('url');
   const { flattened } = useMemo(() => createGroupedAccountData(hierarchy), [hierarchy]);
   const newAccountsRef = useRef<AccountJson[] | []>([]);
-  const [selectedAccountsChanged, setSelectedAccountsChanged] = useState(false);
 
   useEffect(() => {
     getAuthList()
@@ -70,7 +68,6 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
 
         if (url && setSelectedAccounts) {
           setSelectedAccounts(list[url].authorizedAccounts);
-          setSelectedAccountsChanged(false);
         }
       })
       .catch(console.error);
@@ -117,24 +114,9 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
     }
   }, [onAction, url]);
 
-  const StyledPopupBorderContainer = styled(PopupBorderContainer)`
-
-  ${BottomWrapper} {
-    bottom: 8px;
-  }
-`;
-
-  const CustomButtonArea = styled(ButtonArea)`
-    position: sticky;
-    margin-bottom: -8px;
-    padding-bottom: 9px;
-    backdrop-filter: blur(10px);
-
-`;
-
   return (
     <>
-      <StyledPopupBorderContainer>
+      <PopupBorderContainer>
         <div className={className}>
           <div className='content'>
             <div className='content-inner'>
@@ -142,55 +124,56 @@ function NewAccount({ className, location: { search } }: Props): React.ReactElem
                 <NewAccountSelection
                   className='accountSelection'
                   newAccounts={newAccountsRef.current}
-                  onChange={setSelectedAccountsChanged}
                   showHidden={true}
                   url={url}
                 />
               )}
             </div>
-            <CustomButtonArea>
-              <Button
-                onClick={_onCancel}
-                secondary
-              >
-                {t<string>('Dismiss')}
-              </Button>
-              <Button
-                className='acceptButton'
-                isDisabled={!selectedAccountsChanged}
-                onClick={_onApprove}
-              >
-                {t<string>('Update')}
-              </Button>
-            </CustomButtonArea>
           </div>
         </div>
-      </StyledPopupBorderContainer>
+      </PopupBorderContainer>
+      <ButtonsGroup>
+        <Button
+          onClick={_onCancel}
+          secondary
+        >
+          {t<string>('Dismiss')}
+        </Button>
+        <Button
+          className='acceptButton'
+          onClick={_onApprove}
+        >
+          {t<string>('Update')}
+        </Button>
+      </ButtonsGroup>
     </>
   );
 }
 
 export default withRouter(styled(NewAccount)`
+  & ${BottomWrapper} {
+    position: sticky;
+    bottom: -8px !important;
+  }
 
   .content {
-    outline:  ${({ theme }: ThemeProps): string => theme.newTransactionBackground} solid 37px;
-    border-radius: 32px;
+    /* outline:  ${({ theme }: ThemeProps): string => theme.newTransactionBackground} solid 37px;
+    border-radius: 32px; */
     margin-top: 8px;
-    overflow-y: hidden;
+    overflow-y: scroll;
     overflow-x: hidden;
     height: 584px;
-    overflow-y: scroll;
 
     ::-webkit-scrollbar-thumb {
-
-    border-radius: 50px;  
-    width: 2px;  
-    border-right: 2px solid #111B24;
-  }
-
-  ::-webkit-scrollbar {
+      background: ${({ theme }: ThemeProps): string => theme.boxBorderColor};
+      border-radius: 50px;  
+      width: 2px;  
+      border-right: 2px solid #111B24;
+    }
+  
+    ::-webkit-scrollbar {
     width: 4px;
-  }
+    }
   }
 
   .content-inner {

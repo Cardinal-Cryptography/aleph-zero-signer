@@ -56,6 +56,11 @@ function Upload(): React.ReactElement {
 
       try {
         json = JSON.parse(u8aToString(file)) as KeyringPair$Json | KeyringPairs$Json;
+
+        if ('meta' in json) {
+          json.meta.whenCreated = Date.now();
+        }
+
         setFile(json);
         _onNextStep();
       } catch (e) {

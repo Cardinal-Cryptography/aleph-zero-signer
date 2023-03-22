@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { AccountJson } from '@polkadot/extension-base/background/types';
 
 import plusIcon from '../assets/add.svg';
+import border from '../assets/border.svg';
 import ribbon from '../assets/ribbon.svg';
 import { AccountContext, Svg } from '../components';
 import Checkbox from '../components/Checkbox';
@@ -97,6 +98,10 @@ function NewAccountSelection({
   return (
     <div className={className}>
       <div className='withWarning'>
+        <Svg
+          className='border'
+          src={border}
+        />
         <div className='heading'>{t<string>('Update connected app')}</div>
         <StyledFaviconBox
           url={url}
@@ -116,13 +121,15 @@ function NewAccountSelection({
           )}
         </div>
       </div>
-      <StyledCheckbox
-        checked={areAllAccountsSelected}
-        className='accountTree-checkbox'
-        indeterminate={isIndeterminate}
-        label={t('Select all')}
-        onChange={_onSelectAllToggle}
-      />
+      {flattened.length > 1 && (
+        <StyledCheckbox
+          checked={areAllAccountsSelected}
+          className='accountTree-checkbox'
+          indeterminate={isIndeterminate}
+          label={t('Select all')}
+          onChange={_onSelectAllToggle}
+        />
+      )}
       <div className='accountList'>
         {Object.entries(groupedAccounts).map(([group, accounts]) => {
           return (
@@ -157,6 +164,24 @@ export default styled(NewAccountSelection)(
   // due to internal padding
   margin: 0px -16px;
 
+  ${AccountsTree}:last-of-type {
+    padding-bottom: 48px;
+  }
+
+  ${Checkbox} label span {
+    left: -10px;
+  }
+
+  .border{
+    z-index: ${Z_INDEX.BORDER};
+    position: absolute;
+    top: 0;
+    pointer-events: none;
+    background: ${theme.newTransactionBackground};
+    height: 600px;
+    width: 360px;
+  }
+
   .new {
     ${Account} {
       .name {
@@ -164,6 +189,7 @@ export default styled(NewAccountSelection)(
       }
 
       position: relative;
+      
       &:before {
         content: url(${ribbon});
         display: block;

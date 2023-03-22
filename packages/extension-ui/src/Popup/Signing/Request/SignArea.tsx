@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 
-import { ActionContext, Button, ButtonArea, Checkbox } from '../../../components';
+import { ActionContext, BottomWrapper, Button, ButtonArea, Checkbox } from '../../../components';
 import useTranslation from '../../../hooks/useTranslation';
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../../messaging';
 import Unlock from '../Unlock';
@@ -145,4 +145,6 @@ export default styled(SignArea)`
   flex-direction: column;
   padding: 6px 8px;
   max-width: 344px;
+
+
 `;

@@ -44,11 +44,20 @@ function ValidatedInput<T extends Record<string, unknown>>({
     }
   }, [defaultValue]);
 
-  const handleBlur = useCallback(async () => {
-    const result = await validator(value);
+  useEffect(() => {
+    // Do not show any error on first mount
+    if (!isMounted) {
+      return;
+    }
 
-    setValidationResult(result);
-    onValidatedChange(Result.isOk(result) ? value : null);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    (async (): Promise<void> => {
+      const result = await validator(value);
+
+      setValidationResult(result);
+      onValidatedChange(Result.isOk(result) ? value : null);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, validator, onValidatedChange]);
 
   return (
@@ -56,7 +65,6 @@ function ValidatedInput<T extends Record<string, unknown>>({
       <Input
         {...(props as unknown as T)}
         isError={Result.isError(validationResult)}
-        onBlur={handleBlur}
         onChange={setValue}
         value={value}
       />

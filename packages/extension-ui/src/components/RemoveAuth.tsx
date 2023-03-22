@@ -34,6 +34,8 @@ function RemoveAuth({ className, url }: Props): React.ReactElement {
     <div
       className='remove-container'
       onClick={goToDisconnect}
+      onKeyPress={goToDisconnect}
+      tabIndex={0}
     >
       <Svg
         className='remove-icon'

@@ -16,9 +16,10 @@ interface Props extends ThemeProps {
   option: Option;
   selectedValue: string;
   onChange: (value: string) => void;
+  tabIndex?: number;
 }
 
-function RadioCard({ className, onChange, option, selectedValue }: Props): React.ReactElement<Props> {
+function RadioCard({ className, onChange, option, selectedValue, tabIndex }: Props): React.ReactElement<Props> {
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
@@ -29,7 +30,10 @@ function RadioCard({ className, onChange, option, selectedValue }: Props): React
   );
 
   return (
-    <div className={className}>
+    <div
+      className={className}
+      tabIndex={tabIndex}
+    >
       <label>
         <span>{option.text}</span>
         <input
@@ -48,7 +52,6 @@ export default styled(RadioCard)(
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 16px;
   background: ${theme.menuBackground};
   height: 48px;
   margin-bottom: 2px;
@@ -61,6 +64,8 @@ export default styled(RadioCard)(
   font-size: 14px;
   line-height: 120%;
   letter-spacing: 0.07em;
+
+
 
   &:hover {
     background: ${theme.editCardBackgroundHover};
@@ -76,6 +81,7 @@ export default styled(RadioCard)(
     justify-content: space-between;
     cursor: pointer;
     width: 100%;
+    padding: 0 16px;
   }
 
   span {

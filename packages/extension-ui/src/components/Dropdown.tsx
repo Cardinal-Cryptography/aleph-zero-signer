@@ -104,6 +104,17 @@ export default React.memo(
   height: 74px;
   width: calc(100% + 8px);
 
+
+select option {
+  appearance: none;
+  font-weight: 300;
+  font-style: light;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.04em;
+}
+
   .label {
     position: relative;
     width: calc(100% - 8px);
@@ -129,7 +140,6 @@ export default React.memo(
     border-width: 1px;
     box-sizing: border-box;
     color:  ${isDisabled ? theme.disabledTextColor : theme.textColor};
-    border:  ${isDisabled ? '1px solid red' : ''};
     display: block;
     font-size: ${theme.fontSize};
     padding-top: 8px;
@@ -138,9 +148,18 @@ export default React.memo(
     height: 56px;
     cursor: pointer;
     transition: 0.2s ease;
+    font-style: light;
+    font-weight: 300;
+    ont-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0.04em;
+
+    option {
+      font-weight: 300;
+    }
 
     &:disabled {
-      color: ${theme.disabledTextColor}
+      color: ${theme.disabledTextColor};
     }
 
     &:focus {
@@ -164,6 +183,7 @@ export default React.memo(
     right: 54px;
     top: 18px;
     background: ${theme.subTextColor};
+    pointer-events: none;
   }
 
   .disabled-icon {

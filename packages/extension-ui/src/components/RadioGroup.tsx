@@ -67,23 +67,25 @@ const RadioGroup: React.FC<Props> = ({
   return (
     <div className={className}>
       <div className='aleph-options'>
-        {alephOptions.map((option) => (
+        {alephOptions.map((option, i) => (
           <div key={option.value}>
             <RadioCard
               onChange={handleChange}
               option={option}
               selectedValue={selectedValue}
+              tabIndex={i}
             />
           </div>
         ))}
       </div>
       <div className='other-options'>
-        {otherOptions.map((option) => (
+        {otherOptions.map((option, i) => (
           <div key={option.value}>
             <RadioCard
               onChange={handleChange}
               option={option}
               selectedValue={selectedValue}
+              tabIndex={alephOptions.length + i}
             />
           </div>
         ))}

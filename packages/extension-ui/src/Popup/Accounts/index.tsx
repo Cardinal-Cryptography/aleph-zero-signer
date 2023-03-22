@@ -10,7 +10,15 @@ import { AuthUrls } from '@polkadot/extension-base/background/handlers/State';
 import { AccountJson, AccountWithChildren } from '@polkadot/extension-base/background/types';
 import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
 
-import { AccountContext, AddButton, Address, ButtonArea, ScrollWrapper, VerticalSpace } from '../../components';
+import {
+  AccountContext,
+  AddButton,
+  Address,
+  BottomWrapper,
+  ButtonArea,
+  ScrollWrapper,
+  VerticalSpace
+} from '../../components';
 import { ActionContext } from '../../components/contexts';
 import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 import useTranslation from '../../hooks/useTranslation';
@@ -26,6 +34,20 @@ interface Props extends ThemeProps {
 
 const CustomHeader = styled(Header)`
   margin: 0px;
+`;
+
+const StyledScrollWrapper = styled(ScrollWrapper)`
+  ${BottomWrapper} {
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+    left: 0;
+  }
+
+  .network-group:last-of-type {
+    padding-bottom: 70px;
+  }
+
 `;
 
 function Accounts({ className }: Props): React.ReactElement {
@@ -93,7 +115,10 @@ function Accounts({ className }: Props): React.ReactElement {
     .filter(([, details]) => details.length > 0)
     .map(([networkName, details]) => {
       return (
-        <div key={networkName}>
+        <div
+          className='network-group'
+          key={networkName}
+        >
           {!areAllAleph && <span className='network-heading'>{networkName}</span>}
           {details.map((json) => (
             <AccountsTree
@@ -119,21 +144,21 @@ function Accounts({ className }: Props): React.ReactElement {
         <AddAccount />
       ) : (
         <>
-          <ScrollWrapper>
+          <StyledScrollWrapper>
             <CustomHeader
               className='header'
               onFilter={_onFilter}
               text={t<string>('Accounts')}
+              withBackdrop
               withConnectedAccounts
               withHelp
               withSettings
-              withBackdrop
             />
             <div className={`${className || ''} ${areAllAleph ? 'all-aleph-main' : 'all-grouped'}`}>{accounts}</div>
             <ButtonArea>
               <AddButton />
             </ButtonArea>
-          </ScrollWrapper>
+          </StyledScrollWrapper>
           <VerticalSpace />
         </>
       )}
@@ -143,7 +168,7 @@ function Accounts({ className }: Props): React.ReactElement {
 
 export default styled(Accounts)(
   ({ theme }: Props) => `
-  height: calc(100vh - 2px);
+  height: calc(100vh + 16px);
   scrollbar-width: none;
   
 

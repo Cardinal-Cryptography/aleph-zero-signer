@@ -7,6 +7,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import styled from 'styled-components';
 
 import plusIcon from '../assets/add.svg';
+import border from '../assets/border.svg';
 import { AccountContext, Svg } from '../components';
 import Checkbox from '../components/Checkbox';
 import FaviconBox from '../components/FaviconBox';
@@ -14,6 +15,7 @@ import useTranslation from '../hooks/useTranslation';
 import Account from '../Popup/Accounts/Account';
 import AccountsTree from '../Popup/Accounts/AccountsTree';
 import { createGroupedAccountData } from '../util/createGroupedAccountData';
+import { Z_INDEX } from '../zindex';
 
 interface Props extends ThemeProps {
   className?: string;
@@ -82,6 +84,10 @@ function AccounSelection({
     <div className={className}>
       {withWarning && (
         <div className='withWarning'>
+          <Svg
+            className='border'
+            src={border}
+          />
           <div className='heading'>{t<string>('Connect app')}</div>
           <StyledFaviconBox
             url={url}
@@ -140,6 +146,26 @@ export default styled(AccounSelection)(
     margin-top: 22px;
   }
   
+  .accountList {
+    ${AccountsTree}:only-child {
+      padding-bottom: 100px;
+    }
+  }
+
+    .border{
+      z-index: ${Z_INDEX.BORDER};
+      position: absolute;
+      top: 0;
+      pointer-events: none;
+      background: ${theme.newTransactionBackground};
+      height: 600px;
+      width: 360px;
+  }
+
+  ${Checkbox} label span {
+    left: -10px;
+  }
+
   .accountList {
     overflow-x: hidden;
     height: 180px;

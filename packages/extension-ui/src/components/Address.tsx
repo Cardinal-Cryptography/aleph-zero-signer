@@ -457,7 +457,7 @@ export default styled(Address)(
   .fullAddress {
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100px;
+    max-width: 162px;
     color: ${theme.subTextColor};
     font-size: 14px;
     line-height: 145%;

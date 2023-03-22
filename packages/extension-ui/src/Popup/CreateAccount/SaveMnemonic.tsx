@@ -137,7 +137,7 @@ export default React.memo(
       width: 108px;
       margin-bottom: 8px;
       input {
-        text-align: center;
+        text-align: left;
       }
     }
 

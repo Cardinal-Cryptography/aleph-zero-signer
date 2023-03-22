@@ -62,9 +62,9 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
   return (
     <>
       <Header
-        smallMargin={true}
         text={t<string>('Connected accounts')}
         withBackArrow
+        withHelp
       />
       <div className={className}>
         {url && (

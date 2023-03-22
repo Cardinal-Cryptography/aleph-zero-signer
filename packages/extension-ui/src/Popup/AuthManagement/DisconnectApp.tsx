@@ -26,6 +26,10 @@ interface URLState {
 const CustomFaviconBox = styled(FaviconBox)`
     margin: 0 auto;
     margin-top: 16px;
+
+    :hover {
+      background: ${({ theme }: ThemeProps) => theme.inputBorderColor};
+    }
 `;
 
 function DisconnectApp({ className }: Props): React.ReactElement<Props> {

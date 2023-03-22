@@ -44,7 +44,7 @@ function Authorize({ className = '' }: Props): React.ReactElement {
     .join(' ');
 
   return (
-    <StyledPopupBorderContainer>
+    <>
       <div className={`${className} ${classes}`}>
         {requests.map(
           ({ id, request, url }, index): React.ReactNode => (
@@ -59,20 +59,12 @@ function Authorize({ className = '' }: Props): React.ReactElement {
           )
         )}
       </div>
-    </StyledPopupBorderContainer>
+    </>
   );
 }
 
 export default styled(Authorize)(
   ({ theme }: Props) => `
-
-.border {
-  height: 1px;
-  width: 100vw;
-  margin-left: -16px;
-  border:  8px solid ${theme.newTransactionBackground};
-  background: ${theme.newTransactionBackground};
-}
 
 .top {
   position: absolute;
@@ -85,8 +77,6 @@ export default styled(Authorize)(
   bottom: 0;
 }
 
-  outline:  37px solid ${theme.newTransactionBackground};
-  border-radius: 32px;
   height: 584px;
   margin-top: 8px;
   overflow-y: scroll;
@@ -130,9 +120,7 @@ export default styled(Authorize)(
     padding: 0;
   }
 
-  .request {
-    padding: 0 24px;
-  }
+
 
   &.warning-outline {
     outline:  37px solid ${theme.warningColor};

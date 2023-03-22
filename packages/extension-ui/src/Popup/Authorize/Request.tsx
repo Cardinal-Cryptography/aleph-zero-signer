@@ -8,7 +8,7 @@ import React, { useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../../assets/help.svg';
-import { AccountContext, ActionContext, Button, ButtonArea, LearnMore, Svg } from '../../components';
+import { AccountContext, ActionContext, BottomWrapper, Button, ButtonArea, LearnMore, Svg } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
@@ -26,10 +26,8 @@ interface Props extends ThemeProps {
 }
 
 const CustomButtonArea = styled(ButtonArea)`
-  position: sticky;
-  margin-bottom: -8px;
-  padding-bottom: 9px;
   backdrop-filter: blur(10px);
+
 
 `;
 
@@ -132,6 +130,11 @@ function Request({ authId, className, isFirst, request: { origin }, url }: Props
 
 export default styled(Request)`
   padding: 0px 16px;
+
+  & ${BottomWrapper} {
+    position: sticky;
+    bottom: -8px !important;
+  }
 
   .accountList {
     overflow-x: hidden;

@@ -108,6 +108,7 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
                   info={info}
                   key={url}
                   url={url}
+                  tabIndex={0}
                 />
               ))}
             </div>

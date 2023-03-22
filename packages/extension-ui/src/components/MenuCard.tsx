@@ -13,11 +13,24 @@ interface Props extends ThemeProps {
   description: string;
   extra?: React.ReactNode;
   onClick?: () => void;
+  tabIndex?: number;
 }
 
-function MenuCard({ className, description, extra, onClick, preIcon, title }: Props): React.ReactElement<Props> {
+function MenuCard({
+  className,
+  description,
+  extra,
+  onClick,
+  preIcon,
+  tabIndex,
+  title
+}: Props): React.ReactElement<Props> {
   return (
-    <div className={className}>
+    <div
+      className={className}
+      onKeyPress={onClick}
+      tabIndex={tabIndex}
+    >
       <div
         className='flex-container'
         onClick={onClick}
@@ -49,9 +62,6 @@ export default styled(MenuCard)(
     background: ${theme.editCardBackgroundHover};
   }
 
-  .border {
-    border: 1px solid red;
-  }
 
   .flex-container {
     display: flex;

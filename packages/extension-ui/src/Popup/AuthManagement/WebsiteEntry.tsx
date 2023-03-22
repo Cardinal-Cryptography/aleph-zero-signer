@@ -18,11 +18,13 @@ interface Props extends ThemeProps {
   className?: string;
   info: AuthUrlInfo;
   url: string;
+  tabIndex?: number;
 }
 
 function WebsiteEntry({
   className = '',
   info: { authorizedAccounts, isAllowed },
+  tabIndex,
   url
 }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
@@ -46,6 +48,8 @@ function WebsiteEntry({
     <div
       className={className}
       onClick={_goTo(`/url/manage?url=${encodeURIComponent(url)}`)}
+      onKeyPress={_goTo(`/url/manage?url=${encodeURIComponent(url)}`)}
+      tabIndex={tabIndex}
     >
       <div className='url-group'>
         <img
@@ -54,17 +58,19 @@ function WebsiteEntry({
         />
         <div className='url'>{strippedUrl}</div>
       </div>
-      <span className='number-of-accounts'>
-        {authorizedAccounts && authorizedAccounts.length
-          ? t('{{total}} accounts', { replace: { total: authorizedAccounts.length } })
-          : isAllowed
-          ? t('all accounts')
-          : t('no accounts')}
-      </span>
-      <Svg
-        className='chevron'
-        src={chevronIcon}
-      />
+      <div className='accounts-group'>
+        <span className='number-of-accounts'>
+          {authorizedAccounts && authorizedAccounts.length
+            ? t('{{total}} accounts', { replace: { total: authorizedAccounts.length } })
+            : isAllowed
+            ? t('all accounts')
+            : t('no accounts')}
+        </span>
+        <Svg
+          className='chevron'
+          src={chevronIcon}
+        />
+      </div>
     </div>
   );
 }
@@ -79,7 +85,12 @@ export default styled(WebsiteEntry)(
   height: 48px;
   transition: 0.2s ease;
 
-  
+  .accounts-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
 
   &:hover {
     cursor: pointer;
