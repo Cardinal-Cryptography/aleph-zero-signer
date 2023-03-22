@@ -34,8 +34,7 @@ function Checkbox({ checked, className, indeterminate, label, onChange, onClick 
 
   const _onKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLSpanElement>) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        console.log(event);
+      if (event.key === 'Enter' || event.key === 'Space') {
         _onChange(event as unknown as React.ChangeEvent<HTMLInputElement>);
       }
     },

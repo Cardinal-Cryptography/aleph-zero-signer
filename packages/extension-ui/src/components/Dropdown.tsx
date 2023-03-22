@@ -105,15 +105,15 @@ export default React.memo(
   width: calc(100% + 8px);
 
 
-select option {
-  appearance: none;
-  font-weight: 300;
-  font-style: light;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 150%;
-  letter-spacing: 0.04em;
-}
+  select option {
+    appearance: none;
+    font-weight: 300;
+    font-style: light;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0.04em;
+  }
 
   .label {
     position: relative;

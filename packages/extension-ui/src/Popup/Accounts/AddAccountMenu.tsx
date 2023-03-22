@@ -36,14 +36,12 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
             description={t<string>('Generate a new public address')}
             onClick={goTo('/account/create')}
             preIcon={<img src={addIcon} />}
-            tabIndex={0}
             title={t<string>('Create a new account')}
           />
           <MenuCard
             description={t<string>('Accounts created in other \n wallets are also supported')}
             onClick={goTo('/account/import-seed')}
             preIcon={<img src={uploadIcon} />}
-            tabIndex={0}
             title={t<string>('Import an existing account')}
           />
         </div>

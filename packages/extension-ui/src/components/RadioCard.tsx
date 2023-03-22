@@ -29,6 +29,15 @@ function RadioCard({ className, onChange, option, selectedValue, tabIndex }: Pro
     [onChange]
   );
 
+  const _onKeyPress = useCallback(
+    (event: React.KeyboardEvent<HTMLSpanElement>) => {
+      if (event.key === 'Enter' || event.key === 'Space') {
+        handleChange(event as unknown as React.ChangeEvent<HTMLInputElement>);
+      }
+    },
+    [handleChange]
+  );
+
   return (
     <div
       className={className}
@@ -39,6 +48,7 @@ function RadioCard({ className, onChange, option, selectedValue, tabIndex }: Pro
         <input
           checked={selectedValue === option.value}
           onChange={handleChange}
+          onKeyPress={_onKeyPress}
           type='radio'
           value={option.value}
         />
@@ -64,8 +74,6 @@ export default styled(RadioCard)(
   font-size: 14px;
   line-height: 120%;
   letter-spacing: 0.07em;
-
-
 
   &:hover {
     background: ${theme.editCardBackgroundHover};

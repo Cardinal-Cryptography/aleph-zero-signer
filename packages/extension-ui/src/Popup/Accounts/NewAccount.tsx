@@ -37,7 +37,7 @@ const ButtonsGroup = styled.div`
   gap: 8px;
   padding-bottom: 0px;
   position: absolute;
-  bottom: 7px;
+  bottom: 8px;
   left: 0px;
   right: 0px;
   height: 56px;
@@ -157,8 +157,6 @@ export default withRouter(styled(NewAccount)`
   }
 
   .content {
-    /* outline:  ${({ theme }: ThemeProps): string => theme.newTransactionBackground} solid 37px;
-    border-radius: 32px; */
     margin-top: 8px;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -172,7 +170,7 @@ export default withRouter(styled(NewAccount)`
     }
   
     ::-webkit-scrollbar {
-    width: 4px;
+      width: 4px;
     }
   }
 

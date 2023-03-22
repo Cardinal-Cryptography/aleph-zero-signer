@@ -22,7 +22,7 @@ function MenuCard({
   extra,
   onClick,
   preIcon,
-  tabIndex,
+  tabIndex = 0,
   title
 }: Props): React.ReactElement<Props> {
   return (

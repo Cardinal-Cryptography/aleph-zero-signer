@@ -47,10 +47,10 @@ const CustomFooter = styled(HelperFooter)`
   gap: 0px;
   flex-direction: column;
 
-.text-container{
-  display: flex;
-  align-items: flex-start;
-}
+  .text-container {
+    display: flex;
+    align-items: flex-start;
+  }
 
   .flex {
     display: flex;

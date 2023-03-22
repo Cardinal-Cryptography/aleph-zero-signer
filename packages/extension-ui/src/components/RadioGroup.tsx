@@ -73,7 +73,7 @@ const RadioGroup: React.FC<Props> = ({
               onChange={handleChange}
               option={option}
               selectedValue={selectedValue}
-              tabIndex={i}
+              tabIndex={0}
             />
           </div>
         ))}
@@ -85,7 +85,7 @@ const RadioGroup: React.FC<Props> = ({
               onChange={handleChange}
               option={option}
               selectedValue={selectedValue}
-              tabIndex={alephOptions.length + i}
+              tabIndex={0}
             />
           </div>
         ))}

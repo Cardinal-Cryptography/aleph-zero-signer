@@ -185,13 +185,14 @@ export default styled(Account)(
   
     ${Checkbox} span {
     border: 1px solid ${theme.primaryColor};
+    }
   }
-}
-${Address}:active {
-  ${Checkbox} span {
-    background: ${theme.primaryColor};
+
+  ${Address}:active {
+    ${Checkbox} span {
+      background: ${theme.primaryColor};
+    }
   }
-}
 
   .address {
     display: flex;

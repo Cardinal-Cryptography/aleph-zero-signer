@@ -47,7 +47,6 @@ function Settings({ className }: Props): React.ReactElement<Props> {
               src={trustedIcon}
             />
           }
-          tabIndex={0}
           title={t<string>('Trusted Apps')}
         />
         <SettingsMenuCard
@@ -60,7 +59,6 @@ function Settings({ className }: Props): React.ReactElement<Props> {
               src={infoIcon}
             />
           }
-          tabIndex={0}
           title={t<string>('About Aleph Zero Signer')}
         />
       </div>

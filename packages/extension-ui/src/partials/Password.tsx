@@ -25,11 +25,7 @@ export default function Password({ isFocussed, label, onChange }: Props): React.
   const [isSecondPasswordVisible, setIsSecondPasswordVisible] = useState(false);
   const isFirstPasswordValid = useMemo(() => isNotShorterThan(MIN_LENGTH, t<string>('Password is too short')), [t]);
   const isSecondPasswordValid = useCallback(
-    (firstPassword: string) =>
-      allOf(
-        // isNotShorterThan(MIN_LENGTH, t<string>('Password is too short')),
-        isSameAs(firstPassword, t<string>('Passwords do not match'))
-      ),
+    (firstPassword: string) => allOf(isSameAs(firstPassword, t<string>('Passwords do not match'))),
     [t]
   );
 

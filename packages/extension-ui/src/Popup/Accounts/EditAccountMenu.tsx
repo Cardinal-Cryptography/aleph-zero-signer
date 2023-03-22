@@ -89,7 +89,6 @@ function EditAccountMenu({
           extra='chevron'
           onClick={goTo(`/account/edit-name/${address}`)}
           position='top'
-          tabIndex={3}
           title={t<string>('Name')}
         />
         <CopyToClipboard text={(address && address) || ''}>
@@ -98,7 +97,6 @@ function EditAccountMenu({
             extra='copy'
             onClick={_onCopy}
             position='middle'
-            tabIndex={4}
             title={t<string>('Address')}
           />
         </CopyToClipboard>
@@ -107,7 +105,6 @@ function EditAccountMenu({
           extra='chevron'
           onClick={goTo(`/account/edit-network/${address}`)}
           position='bottom'
-          tabIndex={5}
           title={t<string>('Network')}
         />
         {!!master && isExternal === 'false' && canDerive(type) && (
@@ -122,7 +119,6 @@ function EditAccountMenu({
                 src={subAccountIcon}
               />
             }
-            tabIndex={6}
             title={t<string>('Derive sub-account')}
           />
         )}
@@ -137,7 +133,6 @@ function EditAccountMenu({
               src={exportAccountIcon}
             />
           }
-          tabIndex={7}
           title={t<string>('Export account')}
         />
         <EditMenuCard
@@ -152,7 +147,6 @@ function EditAccountMenu({
               src={forgetIcon}
             />
           }
-          tabIndex={8}
           title={t<string>('Forget')}
         />
       </div>

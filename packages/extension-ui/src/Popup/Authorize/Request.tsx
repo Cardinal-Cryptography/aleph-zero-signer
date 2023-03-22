@@ -27,8 +27,6 @@ interface Props extends ThemeProps {
 
 const CustomButtonArea = styled(ButtonArea)`
   backdrop-filter: blur(10px);
-
-
 `;
 
 const CustomFooter = styled(HelperFooter)`

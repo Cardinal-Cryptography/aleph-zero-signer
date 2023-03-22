@@ -47,7 +47,6 @@ const StyledScrollWrapper = styled(ScrollWrapper)`
   .network-group:last-of-type {
     padding-bottom: 70px;
   }
-
 `;
 
 function Accounts({ className }: Props): React.ReactElement {

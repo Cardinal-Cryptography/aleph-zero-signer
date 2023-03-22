@@ -152,14 +152,14 @@ export default styled(AccounSelection)(
     }
   }
 
-    .border{
-      z-index: ${Z_INDEX.BORDER};
-      position: absolute;
-      top: 0;
-      pointer-events: none;
-      background: ${theme.newTransactionBackground};
-      height: 600px;
-      width: 360px;
+  .border {
+    z-index: ${Z_INDEX.BORDER};
+    position: absolute;
+    top: 0;
+    pointer-events: none;
+    background: ${theme.newTransactionBackground};
+    height: 600px;
+    width: 360px;
   }
 
   ${Checkbox} label span {
