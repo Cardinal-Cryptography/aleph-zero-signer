@@ -49,7 +49,6 @@ function About({ className }: Props): React.ReactElement<Props> {
           link={LINKS.GENERAL_INTRODUCTION}
           position='bottom'
           title={t<string>('Help & Support')}
-          tabIndex={0}
         />
         <AboutMenuCard
           description=''
@@ -57,7 +56,6 @@ function About({ className }: Props): React.ReactElement<Props> {
           link={LINKS.TERMS_OF_SERVICE}
           position='bottom'
           title={t<string>('Terms of Service')}
-          tabIndex={0}
         />
         <AboutMenuCard
           description=''
@@ -65,7 +63,6 @@ function About({ className }: Props): React.ReactElement<Props> {
           link={LINKS.PRIVACY_POLICY}
           position='bottom'
           title={t<string>('Privacy Policy')}
-          tabIndex={0}
         />
         <AboutMenuCard
           description=''
@@ -73,7 +70,6 @@ function About({ className }: Props): React.ReactElement<Props> {
           link={LINKS.MAIN_WEBSITE}
           position='bottom'
           title={t<string>('Visit Website')}
-          tabIndex={0}
         />
       </div>
     </>
