@@ -19,7 +19,7 @@ interface Props extends ThemeProps {
   tabIndex?: number;
 }
 
-function RadioCard({ className, onChange, option, selectedValue, tabIndex }: Props): React.ReactElement<Props> {
+function RadioCard({ className, onChange, option, selectedValue, tabIndex = 0 }: Props): React.ReactElement<Props> {
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
