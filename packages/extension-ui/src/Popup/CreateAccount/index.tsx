@@ -4,7 +4,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { ActionContext, Loading } from '../../components';
+import { ActionContext, Loading, ScrollWrapper } from '../../components';
 import AccountNamePasswordCreation from '../../components/AccountNamePasswordCreation';
 import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 import useMetadata from '../../hooks/useMetadata';

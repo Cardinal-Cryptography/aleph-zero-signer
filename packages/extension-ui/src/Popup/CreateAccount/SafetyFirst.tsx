@@ -28,7 +28,7 @@ const WrapperRow = styled.div`
 
 const StyledFooter = styled(HelperFooter)`
   .icon {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 `;
 

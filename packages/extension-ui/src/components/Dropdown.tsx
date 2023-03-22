@@ -58,11 +58,12 @@ function Dropdown({
     <div className={className}>
       <Label
         active
-        className='label'
+        className={`label ${isLocked ? 'select-disabled' : ''}`}
         label={label}
       >
         <select
           autoFocus={isFocussed}
+          className={`${isLocked ? 'select-disabled' : ''}`}
           defaultValue={ALEPH_ZERO_GENESIS_HASH}
           disabled={isDisabled || isLocked}
           onBlur={onBlur}
@@ -96,19 +97,25 @@ function Dropdown({
 
 export default React.memo(
   styled(Dropdown)(
-    ({ isError, theme }: Props) => `
+    ({ isDisabled, isError, theme }: Props) => `
 
   display: flex;
   flex-direction: column;
   height: 74px;
+  width: calc(100% + 8px);
 
   .label {
     position: relative;
-    max-width: 298px;
+    width: calc(100% - 8px);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
+  }
+
+  .select-disabled {
+    color: ${theme.disabledTextColor};
+    opacity: 1;
   }
 
   select {
@@ -117,23 +124,31 @@ export default React.memo(
     appearance: none;
     background: ${theme.inputBackground};
     border-color: ${isError ? theme.errorBorderColor : theme.inputBorderColor};
-    border-radius: ${theme.borderRadius};
+    border-radius: 2px;
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
-    color: ${isError ? theme.errorBorderColor : theme.textColor};
+    color:  ${isDisabled ? theme.disabledTextColor : theme.textColor};
+    border:  ${isDisabled ? '1px solid red' : ''};
     display: block;
-    font-family: ${theme.secondaryFontFamily};
     font-size: ${theme.fontSize};
     padding-top: 8px;
     padding-left: 16px;
     width: 100%;
     height: 56px;
     cursor: pointer;
+    transition: 0.2s ease;
 
     &:disabled {
-      opacity: 0.65;
       color: ${theme.disabledTextColor}
+    }
+
+    &:focus {
+      border-color: ${theme.primaryColor};
+    }
+
+    &:hover:not(:disabled):not(:active):not(:focus) {
+      border-color: ${theme.inputFocusHoverColor};
     }
 
     &:read-only {
@@ -146,19 +161,19 @@ export default React.memo(
     height: 20px;
     width: 20px;
     position: absolute;
-    right: 46px;
-    top: 20px;
+    right: 54px;
+    top: 18px;
     background: ${theme.subTextColor};
   }
 
   .disabled-icon {
     opacity: 0.65;
+    background: ${theme.disabledTextColor};
   }
   
   .unlock-text {
     padding-left: 16px;
     color: ${theme.disabledTextColor};
-    opacity: 0.65;
     font-weight: 300;
     font-size: 13px;
     line-height: 130%;

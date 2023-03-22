@@ -8,7 +8,7 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 import animatedRemove from '../../assets/anim_unlink.svg';
-import { Button, ButtonArea, FaviconBox, VerticalSpace } from '../../components';
+import { AnimatedSvg, Button, ButtonArea, FaviconBox, VerticalSpace } from '../../components';
 import { ActionContext } from '../../components/contexts';
 import { useGoTo } from '../../hooks/useGoTo';
 import useToast from '../../hooks/useToast';

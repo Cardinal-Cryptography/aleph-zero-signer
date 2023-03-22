@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import useIsMounted from '../hooks/useIsMounted';
@@ -34,6 +34,7 @@ function ValidatedInput<T extends Record<string, unknown>>({
   ...props
 }: Props<T>): React.ReactElement<Props<T>> {
   const [value, setValue] = useState(defaultValue || '');
+
   const [validationResult, setValidationResult] = useState<Result<string>>(Result.ok(''));
   const isMounted = useIsMounted();
 
@@ -43,20 +44,11 @@ function ValidatedInput<T extends Record<string, unknown>>({
     }
   }, [defaultValue]);
 
-  useEffect(() => {
-    // Do not show any error on first mount
-    if (!isMounted) {
-      return;
-    }
+  const handleBlur = useCallback(async () => {
+    const result = await validator(value);
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    (async (): Promise<void> => {
-      const result = await validator(value);
-
-      setValidationResult(result);
-      onValidatedChange(Result.isOk(result) ? value : null);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setValidationResult(result);
+    onValidatedChange(Result.isOk(result) ? value : null);
   }, [value, validator, onValidatedChange]);
 
   return (
@@ -64,6 +56,7 @@ function ValidatedInput<T extends Record<string, unknown>>({
       <Input
         {...(props as unknown as T)}
         isError={Result.isError(validationResult)}
+        onBlur={handleBlur}
         onChange={setValue}
         value={value}
       />

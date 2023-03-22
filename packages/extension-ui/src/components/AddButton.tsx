@@ -1,13 +1,13 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import add from '../assets/add.svg';
 import { ThemeProps } from '../types';
+import Svg from './Svg';
 
 interface Props extends ThemeProps {
   className?: string;
@@ -49,9 +49,9 @@ const AddButton: React.FC<Props> = function ({ className }: Props) {
     >
       <div className={className}>
         <div className='container'>
-          <FontAwesomeIcon
+          <img
             className='icon'
-            icon={faPlus}
+            src={add}
           />
           {isExpanded && <span className='expanded'>Add Account</span>}
         </div>
@@ -99,8 +99,8 @@ export default styled(AddButton)(
   }
 
   .icon {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
   }
 
   &:hover {

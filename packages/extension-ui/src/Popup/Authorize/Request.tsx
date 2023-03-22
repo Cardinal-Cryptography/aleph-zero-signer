@@ -26,8 +26,11 @@ interface Props extends ThemeProps {
 }
 
 const CustomButtonArea = styled(ButtonArea)`
-  padding: 0px;
-  margin-bottom: 8px;
+  position: sticky;
+  margin-bottom: -8px;
+  padding-bottom: 9px;
+  backdrop-filter: blur(10px);
+
 `;
 
 const CustomFooter = styled(HelperFooter)`
@@ -72,6 +75,7 @@ function Request({ authId, className, isFirst, request: { origin }, url }: Props
       await approveAuthRequest(authId, selectedAccounts);
       onAction();
       show(t('App connected'), 'success');
+      window.close();
     } catch (error) {
       console.error(error);
     }
@@ -108,27 +112,31 @@ function Request({ authId, className, isFirst, request: { origin }, url }: Props
   );
 
   return (
-    <div className={className}>
-      <AccountSelection url={url} />
-      <CustomButtonArea footer={footer}>
-        <Button
-          data-accept-request-button
-          onClick={_onClose}
-          secondary
-        >
-          {t<string>('Cancel')}
-        </Button>
-        {isFirst && <Button onClick={_onApprove}>{t<string>('Connect')}</Button>}
-      </CustomButtonArea>
-    </div>
+    <>
+      <div className={className}>
+        <AccountSelection url={url} />
+        <CustomButtonArea footer={footer}>
+          <Button
+            data-accept-request-button
+            onClick={_onClose}
+            secondary
+          >
+            {t<string>('Cancel')}
+          </Button>
+          {isFirst && <Button onClick={_onApprove}>{t<string>('Connect')}</Button>}
+        </CustomButtonArea>
+      </div>
+    </>
   );
 }
 
 export default styled(Request)`
   padding: 0px 16px;
+
   .accountList {
     overflow-x: hidden;
     padding-right: 2px;
     padding-bottom: 16px;
+    height: 100%;
   }
 `;

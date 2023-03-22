@@ -109,7 +109,7 @@ const MnemonicInput = ({
         { ...MNEMONIC_WORDS_INITIAL_STATE }
       )
     );
-  }, [seed, setMnemonicWords]);
+  }, [mnemonicWords, seed, setMnemonicWords]);
 
   useEffect(() => {
     // No need to validate an empty seed

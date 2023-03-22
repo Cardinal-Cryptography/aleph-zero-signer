@@ -6,12 +6,35 @@ import type { ThemeProps } from '../../types';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { AccountContext, AuthorizeReqContext, PopupBorderContainer } from '../../components';
+import { AccountContext, AuthorizeReqContext, BottomWrapper, Checkbox, PopupBorderContainer } from '../../components';
+import Account from '../Accounts/Account';
 import Request from './Request';
 
 interface Props extends ThemeProps {
   className?: string;
 }
+
+const StyledPopupBorderContainer = styled(PopupBorderContainer)`
+
+  padding: 0px -16px;
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 50px;  
+    width: 2px;  
+    border-right: 2px solid #111B24;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ${BottomWrapper} {
+    position: sticky;
+    bottom: 9px;
+    width: 100vw;
+    margin-left: -36px;
+  }
+`;
 
 function Authorize({ className = '' }: Props): React.ReactElement {
   const requests = useContext(AuthorizeReqContext);
@@ -21,7 +44,7 @@ function Authorize({ className = '' }: Props): React.ReactElement {
     .join(' ');
 
   return (
-    <PopupBorderContainer>
+    <StyledPopupBorderContainer>
       <div className={`${className} ${classes}`}>
         {requests.map(
           ({ id, request, url }, index): React.ReactNode => (
@@ -36,22 +59,71 @@ function Authorize({ className = '' }: Props): React.ReactElement {
           )
         )}
       </div>
-    </PopupBorderContainer>
+    </StyledPopupBorderContainer>
   );
 }
 
 export default styled(Authorize)(
   ({ theme }: Props) => `
-  overflow-y: auto;  
+
+.border {
+  height: 1px;
+  width: 100vw;
+  margin-left: -16px;
+  border:  8px solid ${theme.newTransactionBackground};
+  background: ${theme.newTransactionBackground};
+}
+
+.top {
+  position: absolute;
+  top: 0;
+  margin-top: -5px;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
+}
+
   outline:  37px solid ${theme.newTransactionBackground};
   border-radius: 32px;
   height: 584px;
   margin-top: 8px;
-  overflow-y: hidden;
+  overflow-y: scroll;
   overflow-x: hidden;
 
+  ::-webkit-scrollbar-thumb {
+    background:${theme.boxBorderColor};
+    border-radius: 50px;  
+    width: 2px;  
+    border-right: 2px solid #111B24;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ${Account} {
+    padding: 0px 4px;
+    
+    ${Checkbox} {
+      margin-left: 8px;
+    }
+  }
+
   &.lastRequest {
-    overflow: hidden;
+    overflow-y: scroll;
+
+    ::-webkit-scrollbar-thumb {
+      background:${theme.boxBorderColor};
+      border-radius: 50px;  
+      width: 2px;  
+      border-right: 2px solid #111B24;
+    }
+  
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
   }
 
   && {

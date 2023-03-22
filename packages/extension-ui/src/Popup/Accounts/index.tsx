@@ -10,7 +10,7 @@ import { AuthUrls } from '@polkadot/extension-base/background/handlers/State';
 import { AccountJson, AccountWithChildren } from '@polkadot/extension-base/background/types';
 import getNetworkMap from '@polkadot/extension-ui/util/getNetworkMap';
 
-import { AccountContext, AddButton, ButtonArea, ScrollWrapper, VerticalSpace } from '../../components';
+import { AccountContext, AddButton, Address, ButtonArea, ScrollWrapper, VerticalSpace } from '../../components';
 import { ActionContext } from '../../components/contexts';
 import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 import useTranslation from '../../hooks/useTranslation';
@@ -119,20 +119,22 @@ function Accounts({ className }: Props): React.ReactElement {
         <AddAccount />
       ) : (
         <>
-          <CustomHeader
-            onFilter={_onFilter}
-            text={t<string>('Accounts')}
-            withConnectedAccounts
-            withHelp
-            withSettings
-          />
           <ScrollWrapper>
+            <CustomHeader
+              className='header'
+              onFilter={_onFilter}
+              text={t<string>('Accounts')}
+              withConnectedAccounts
+              withHelp
+              withSettings
+              withBackdrop
+            />
             <div className={`${className || ''} ${areAllAleph ? 'all-aleph-main' : 'all-grouped'}`}>{accounts}</div>
+            <ButtonArea>
+              <AddButton />
+            </ButtonArea>
           </ScrollWrapper>
           <VerticalSpace />
-          <ButtonArea>
-            <AddButton />
-          </ButtonArea>
         </>
       )}
     </>
@@ -173,6 +175,10 @@ export default styled(Accounts)(
     padding: 8px 0 8px 8px;
     margin: 24px 0 16px 0;
     border-bottom: 1px solid ${theme.boxBorderColor};
+  }
+
+  ${Address} {
+    width: 100%;
   }
 `
 );

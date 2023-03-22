@@ -106,14 +106,14 @@ function Upload(): React.ReactElement {
     (isKeyringPairs$Json(file) ? batchRestore(file, password) : jsonRestore(file, password))
       .then(() => {
         show(t('Import successful'), 'success');
-        onAction('/');
+        window.close();
       })
       .catch((e) => {
         console.error(e);
         setIsBusy(false);
         setIsPasswordError(true);
       });
-  }, [file, onAction, password, requirePassword, show, t]);
+  }, [file, password, requirePassword, show, t]);
 
   return (
     <>

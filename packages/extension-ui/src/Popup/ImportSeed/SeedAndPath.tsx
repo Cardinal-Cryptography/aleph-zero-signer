@@ -44,15 +44,19 @@ interface Props {
 
 const CustomFooter = styled(HelperFooter)`
   display: flex;
+  gap: 0px;
   flex-direction: column;
-  .icon-container {
-    margin-top: 6px; 
-  }
+
+.text-container{
+  display: flex;
+  align-items: flex-start;
+}
 
   .flex {
     display: flex;
     gap: 8px;
     align-items: flex-start;
+    
   }
 
   ::before {
@@ -188,7 +192,14 @@ function SeedAndPath({
               setError={setError}
               type={type}
             />
-            {isValid && <Warning isDanger>{error}</Warning>}
+            {isValid && (
+              <Warning
+                className='centered'
+                isDanger
+              >
+                {error}
+              </Warning>
+            )}
           </div>
           <div className='input-with-lock'>
             <StyledInputWithLabel
@@ -232,6 +243,13 @@ export default styled(SeedAndPath)(
   ({ theme }: ThemeProps) => `
   display: flex;
   flex-direction: column;
+
+
+  .centered {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
 
   .text {
     display: flex;
@@ -323,7 +341,7 @@ export default styled(SeedAndPath)(
   }
 
   .input-with-warning {
-    height: 202px;
+    height: 210px;
   }
 `
 );

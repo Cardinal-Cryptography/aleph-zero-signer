@@ -66,7 +66,7 @@ export default styled(RadioCard)(
     background: ${theme.editCardBackgroundHover};
 
     input {
-      outline: 2px solid ${theme.primaryColor};
+      outline: 1px solid ${theme.primaryColor};
     }
   }
 
@@ -92,7 +92,7 @@ export default styled(RadioCard)(
     height: 20px;
     cursor: pointer;
     transition: 0.2s ease;
-    outline: 2px solid ${theme.inputRadioBorderColor};
+    outline: 1px solid ${theme.inputRadioBorderColor};
 
     &:checked {
       background-color: ${theme.primaryColor};

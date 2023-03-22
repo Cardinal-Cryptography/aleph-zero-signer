@@ -82,7 +82,6 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
     <>
       <Header
         goToFnOverride={goTo('/account/settings')}
-        smallMargin
         text={t<string>('Trusted Apps')}
         withBackArrow
         withHelp

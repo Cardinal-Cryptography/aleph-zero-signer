@@ -74,7 +74,7 @@ const StyledTooltip = styled.div`
     margin-top:14px;
     opacity: 0;
     transition: 0.2s ease;
-    transition-delay: 0.8s;
+
 
     & span  {
     font-family: ${({ theme }: ThemeProps) => theme.primaryFontFamily};
@@ -92,6 +92,8 @@ const StyledTooltipContainer = styled.div`
     :hover  {
       ${StyledTooltip} {
         opacity: 1;
+        transition: 0.2s ease;
+        transition-delay: 0.8s;
       } 
     }
 `;

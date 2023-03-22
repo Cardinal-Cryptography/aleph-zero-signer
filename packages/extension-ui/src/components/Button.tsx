@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../types';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import styled from 'styled-components';
 
 import Spinner from './Spinner';
@@ -23,6 +23,7 @@ interface Props extends ThemeProps {
 }
 
 function Button({ children, className = '', isBusy, isDisabled, onClick, to }: Props): React.ReactElement<Props> {
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const _onClick = useCallback((): void => {
     if (isBusy || isDisabled) {
       return;
@@ -38,11 +39,19 @@ function Button({ children, className = '', isBusy, isDisabled, onClick, to }: P
     }
   }, [isBusy, isDisabled, onClick, to]);
 
+  const onMouseLeave = useCallback(() => {
+    if (buttonRef.current) {
+      buttonRef.current.blur();
+    }
+  }, []);
+
   return (
     <button
       className={`${className}${isDisabled || isBusy ? ' isDisabled' : ''}${isBusy ? ' isBusy' : ''}`}
       disabled={isDisabled || isBusy}
       onClick={_onClick}
+      ref={buttonRef}
+      onMouseLeave={onMouseLeave}
     >
       <div className='children'>{children}</div>
       <Spinner className='busyOverlay' />

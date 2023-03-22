@@ -19,8 +19,8 @@ const MIN_LENGTH = 6;
 
 export default function Password({ isFocussed, label, onChange }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const [pass1, setPass1] = useState<string | null>(null);
-  const [pass2, setPass2] = useState<string | null>(null);
+  const [pass1, setPass1] = useState<string>('');
+  const [pass2, setPass2] = useState<string>('');
   const [isFirstPasswordVisible, setIsFirstPasswordVisible] = useState(false);
   const [isSecondPasswordVisible, setIsSecondPasswordVisible] = useState(false);
   const isFirstPasswordValid = useMemo(() => isNotShorterThan(MIN_LENGTH, t<string>('Password is too short')), [t]);
@@ -34,7 +34,7 @@ export default function Password({ isFocussed, label, onChange }: Props): React.
   );
 
   useEffect((): void => {
-    onChange(pass1 && pass2 ? pass1 : null);
+    onChange(pass1 && pass2 ? pass1 : '');
   }, [onChange, pass1, pass2]);
 
   const _handleFistInputTypeChange = useCallback(() => {
@@ -64,26 +64,22 @@ export default function Password({ isFocussed, label, onChange }: Props): React.
         type={isFirstPasswordVisible ? 'text' : 'password'}
         validator={isFirstPasswordValid}
       />
-      {pass1 && (
-        <>
-          <ValidatedInput
-            component={InputWithLabel}
-            data-input-repeat-password
-            label={t<string>('Confirm password')}
-            onValidatedChange={setPass2}
-            showPasswordElement={
-              <div className='password-icon'>
-                <img
-                  onClick={_handleSecondInputTypeChange}
-                  src={isSecondPasswordVisible ? viewOn : viewOff}
-                />
-              </div>
-            }
-            type={isSecondPasswordVisible ? 'text' : 'password'}
-            validator={isSecondPasswordValid(pass1)}
-          />
-        </>
-      )}
+      <ValidatedInput
+        component={InputWithLabel}
+        data-input-repeat-password
+        label={t<string>('Confirm password')}
+        onValidatedChange={setPass2}
+        showPasswordElement={
+          <div className='password-icon'>
+            <img
+              onClick={_handleSecondInputTypeChange}
+              src={isSecondPasswordVisible ? viewOn : viewOff}
+            />
+          </div>
+        }
+        type={isSecondPasswordVisible ? 'text' : 'password'}
+        validator={isSecondPasswordValid(pass1)}
+      />
     </>
   );
 }

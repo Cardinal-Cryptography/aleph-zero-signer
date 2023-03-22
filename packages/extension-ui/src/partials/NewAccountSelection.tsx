@@ -10,8 +10,9 @@ import { AccountJson } from '@polkadot/extension-base/background/types';
 
 import plusIcon from '../assets/add.svg';
 import ribbon from '../assets/ribbon.svg';
-import { AccountContext, FaviconBox, Svg } from '../components';
+import { AccountContext, Svg } from '../components';
 import Checkbox from '../components/Checkbox';
+import FaviconBox from '../components/FaviconBox';
 import useTranslation from '../hooks/useTranslation';
 import Account from '../Popup/Accounts/Account';
 import AccountsTree from '../Popup/Accounts/AccountsTree';
@@ -34,6 +35,12 @@ const StyledCheckbox = styled(Checkbox)`
   display: flex;
   justify-content: flex-end;
   margin-right: 24px;
+`;
+
+const StyledFaviconBox = styled(FaviconBox)`
+  :hover {
+    background: ${({ theme }: ThemeProps) => theme.inputBorderColor};
+  }
 `;
 
 function NewAccountSelection({
@@ -91,7 +98,7 @@ function NewAccountSelection({
     <div className={className}>
       <div className='withWarning'>
         <div className='heading'>{t<string>('Update connected app')}</div>
-        <FaviconBox
+        <StyledFaviconBox
           url={url}
           withoutProtocol
         />
@@ -120,7 +127,9 @@ function NewAccountSelection({
         {Object.entries(groupedAccounts).map(([group, accounts]) => {
           return (
             <>
-              {group !== 'new' && <span className='separator-heading'>{group}</span>}
+              {group !== 'new' && groupedAccounts.other.length > 0 && (
+                <span className='separator-heading'>{group}</span>
+              )}
               {accounts.map((json, index) => (
                 <AccountsTree
                   {...json}
@@ -189,7 +198,6 @@ export default styled(NewAccountSelection)(
 
   .accountList {
     overflow-x: hidden;
-    height: 240px;
     scrollbar-color: ${theme.boxBorderColor};
     scrollbar-width: 2px;
     padding-right: 2px;

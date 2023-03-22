@@ -109,12 +109,14 @@ function EditNetwork({
 
   return (
     <>
-      <Header
-        text={t<string>('Account network')}
-        withBackArrow
-        withHelp
-      />
       <ScrollWrapper>
+        <Header
+          className='header'
+          text={t<string>('Account network')}
+          withBackArrow
+          withHelp
+          withBackdrop
+        />
         <div className={className}>
           <div className='checkbox-container'>
             <Checkbox
@@ -131,22 +133,22 @@ function EditNetwork({
           />
           {footer}
         </div>
+        <CustomButtonArea>
+          <Button
+            onClick={_goTo(`/account/edit-menu/${address}?isExternal=${isExternal.toString()}`)}
+            secondary
+          >
+            {t<string>('Cancel')}
+          </Button>
+          <Button
+            isDisabled={!hasGenesisChanged}
+            onClick={_saveChanges}
+          >
+            {t<string>('Change')}
+          </Button>
+        </CustomButtonArea>
       </ScrollWrapper>
       <VerticalSpace />
-      <CustomButtonArea>
-        <Button
-          onClick={_goTo(`/account/edit-menu/${address}?isExternal=${isExternal.toString()}`)}
-          secondary
-        >
-          {t<string>('Cancel')}
-        </Button>
-        <Button
-          isDisabled={!hasGenesisChanged}
-          onClick={_saveChanges}
-        >
-          {t<string>('Change')}
-        </Button>
-      </CustomButtonArea>
     </>
   );
 }

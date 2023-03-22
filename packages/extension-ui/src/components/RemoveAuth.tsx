@@ -19,7 +19,7 @@ interface Props {
 
 const StyledFaviconBox = styled(FaviconBox)`
   box-sizing: border-box;
-  width: 328px;
+  margin: 0px auto;
 `;
 
 function RemoveAuth({ className, url }: Props): React.ReactElement {
