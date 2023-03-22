@@ -32,6 +32,16 @@ function Checkbox({ checked, className, indeterminate, label, onChange, onClick 
     [onChange]
   );
 
+  const _onKeyPress = useCallback(
+    (event: React.KeyboardEvent<HTMLSpanElement>) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        console.log(event);
+        _onChange(event as unknown as React.ChangeEvent<HTMLInputElement>);
+      }
+    },
+    [_onChange]
+  );
+
   const _onClick = useCallback(() => onClick && onClick(), [onClick]);
 
   return (
@@ -45,7 +55,11 @@ function Checkbox({ checked, className, indeterminate, label, onChange, onClick 
           ref={checkboxRef}
           type='checkbox'
         />
-        <span className={`${indeterminate ? 'indeterminate' : ''}`} />
+        <span
+          onKeyPress={_onKeyPress}
+          tabIndex={0}
+          className={`${indeterminate ? 'indeterminate' : ''}`}
+        />
       </label>
     </div>
   );
@@ -103,6 +117,10 @@ export default styled(Checkbox)(
         mask-size: cover;
         background: ${theme.boxBackground};
       }
+
+      &:focus {
+        outline: 5px auto -webkit-focus-ring-color;
+      }
     }
 
     input:checked ~ span:after {
@@ -137,6 +155,7 @@ export default styled(Checkbox)(
       outline-color:  ${theme.primaryColor};
     }
   }
+
 
 `
 );
