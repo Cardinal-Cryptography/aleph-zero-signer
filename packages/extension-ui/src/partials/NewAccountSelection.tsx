@@ -172,10 +172,11 @@ export default styled(NewAccountSelection)(
     left: -10px;
   }
 
-  .border{
+  .border {
     z-index: ${Z_INDEX.BORDER};
     position: absolute;
     top: 0;
+    right: 0;
     pointer-events: none;
     background: ${theme.newTransactionBackground};
     height: 600px;

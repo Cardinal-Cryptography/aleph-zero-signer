@@ -20,6 +20,7 @@ import Checkbox from '../../components/Checkbox';
 import useTranslation from '../../hooks/useTranslation';
 import { getAuthList, updateAuthorization } from '../../messaging';
 import { AccountSelection, Header } from '../../partials';
+import AccountsTree from '../Accounts/AccountsTree';
 
 interface Props extends RouteComponentProps, ThemeProps {
   className?: string;
@@ -27,6 +28,7 @@ interface Props extends RouteComponentProps, ThemeProps {
 
 const CustomButtonArea = styled(ButtonArea)`
   padding-top: 16px;
+  padding-left: 32px;
   padding-bottom: 0px;
 `;
 
@@ -159,11 +161,13 @@ export default withRouter(styled(AccountManagement)`
 
     .accountList {
       height: 100%;
+
+      ${AccountsTree} {
+        width: calc(100% - 16px);
+        margin: 0 auto;
+      }
     }
   }
   
-  .acceptButton {
-    width: 90%;
-    margin: 0.5rem auto 0;
-  }
+
 `);

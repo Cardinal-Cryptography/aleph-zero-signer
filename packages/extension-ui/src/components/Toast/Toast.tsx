@@ -17,21 +17,11 @@ interface Props extends ThemeProps {
   className?: string;
   type: SnackbarTypes;
   visible: boolean;
-  undoTimeout?: NodeJS.Timeout | undefined;
   toastTimeout?: NodeJS.Timeout | undefined;
-  onUndoClick?: (shouldRedirectBack: boolean) => void;
   setVisible?: (visible: boolean) => void;
 }
 
-function Toast({
-  className,
-  content,
-  onUndoClick,
-  setVisible,
-  toastTimeout,
-  type,
-  undoTimeout
-}: Props): React.ReactElement<Props> {
+function Toast({ className, content, setVisible, toastTimeout, type }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const _getIconByType = useCallback((type: SnackbarTypes): string => icons?.[type] ?? icons.info, []);
 
@@ -43,30 +33,16 @@ function Toast({
     clearTimeout(toastTimeout);
   }, [setVisible, toastTimeout]);
 
-  const _onUndoClick = useCallback(() => {
-    if (onUndoClick) {
-      onUndoClick(true);
-    }
-  }, [onUndoClick]);
-
   return (
     <div className={className}>
-      <div>
+      <div className='first-group'>
         <img
           className='snackbar-icon'
           src={_getIconByType(type)}
         />
+        <div className='snackbar-content'>{content}</div>
       </div>
-      <div className='snackbar-content'>{content}</div>
       <div className='snackbar-end-group'>
-        {undoTimeout && (
-          <div
-            className='snackbar-undo'
-            onClick={_onUndoClick}
-          >
-            {t<string>('Undo')}
-          </div>
-        )}
         <div
           className='snackbar-close'
           onClick={_closeToast}
@@ -88,6 +64,7 @@ export default styled(Toast)(
   right: 8px;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   border-radius: 4px;
   box-shadow: ${theme.toastBoxShadow};;
   gap: 14px;
@@ -98,6 +75,11 @@ export default styled(Toast)(
   box-sizing: border-box;
   animation: toast 0.2s, toast  0.2s linear ${TOAST_TIMEOUT / 1000}s reverse;
   z-index: ${Z_INDEX.TOAST}};
+
+  .first-group {
+    display: flex;
+    flex-direction: row;
+  }
 
   @keyframes toast {
   from {

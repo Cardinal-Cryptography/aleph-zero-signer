@@ -125,10 +125,15 @@ export default styled(NoAccount)(
     margin: 25px auto 0;
   }
 
+  body {    
+    height: 600px;
+  }
+
   .border {
     z-index: ${Z_INDEX.BORDER};
     position: absolute;
     top: 0;
+    right: 0;
     pointer-events: none;
     background: ${theme.warningColor};
     height: 600px;
