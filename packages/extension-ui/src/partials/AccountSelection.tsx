@@ -162,7 +162,7 @@ export default styled(AccounSelection)(
     width: 360px;
   }
 
-  ${Checkbox} label span {
+  ${Checkbox}:not(.accountTree-checkbox) label span {
     left: -10px;
   }
 

@@ -55,7 +55,7 @@ const StyledFooter = styled(HelperFooter)`
   gap: 8px;
 `;
 
-const MIN_PASSWORD_LENGTH = 6;
+const MIN_PASSWORD_LENGTH = 0;
 
 function SelectParent({
   className,

@@ -118,7 +118,7 @@ export default styled(Checkbox)(
       }
 
       &:focus {
-        outline: 5px auto -webkit-focus-ring-color;
+        outline-color:  ${theme.primaryColor};
       }
     }
 
@@ -149,12 +149,10 @@ export default styled(Checkbox)(
     }
   }
 
-  &:hover{
+  &:hover {
     label span {
       outline-color:  ${theme.primaryColor};
     }
   }
-
-
 `
 );

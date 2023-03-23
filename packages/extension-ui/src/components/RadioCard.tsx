@@ -24,6 +24,8 @@ function RadioCard({ className, onChange, option, selectedValue, tabIndex = 0 }:
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
 
+      console.log('value', value);
+
       onChange(value);
     },
     [onChange]
@@ -39,16 +41,14 @@ function RadioCard({ className, onChange, option, selectedValue, tabIndex = 0 }:
   );
 
   return (
-    <div
-      className={className}
-      tabIndex={tabIndex}
-    >
+    <div className={className}>
       <label>
         <span>{option.text}</span>
         <input
           checked={selectedValue === option.value}
           onChange={handleChange}
           onKeyPress={_onKeyPress}
+          tabIndex={tabIndex}
           type='radio'
           value={option.value}
         />
@@ -75,7 +75,7 @@ export default styled(RadioCard)(
   line-height: 120%;
   letter-spacing: 0.07em;
 
-  &:hover {
+  &:hover, &:focus {
     background: ${theme.editCardBackgroundHover};
 
     input {
@@ -89,7 +89,7 @@ export default styled(RadioCard)(
     justify-content: space-between;
     cursor: pointer;
     width: 100%;
-    padding: 0 16px;
+    padding: 16px;
   }
 
   span {

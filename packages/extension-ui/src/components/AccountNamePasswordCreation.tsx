@@ -171,30 +171,30 @@ function AccountNamePasswordCreation({
           )}
           {!isDeriving && footer}
         </div>
+        {onBackClick && buttonLabel && (
+          <ButtonArea>
+            {master && isDeriving ? (
+              <Button
+                onClick={_onBackClick}
+                secondary
+              >
+                {t<string>('Cancel')}
+              </Button>
+            ) : (
+              <BackButton onClick={_onBackClick} />
+            )}
+            <Button
+              data-button-action='add new root'
+              isBusy={isBusy}
+              isDisabled={!password || !name}
+              onClick={_onCreate}
+            >
+              {buttonLabel}
+            </Button>
+          </ButtonArea>
+        )}
       </ScrollWrapper>
       <VerticalSpace />
-      {onBackClick && buttonLabel && (
-        <ButtonArea>
-          {master && isDeriving ? (
-            <Button
-              onClick={_onBackClick}
-              secondary
-            >
-              {t<string>('Cancel')}
-            </Button>
-          ) : (
-            <BackButton onClick={_onBackClick} />
-          )}
-          <Button
-            data-button-action='add new root'
-            isBusy={isBusy}
-            isDisabled={!password || !name}
-            onClick={_onCreate}
-          >
-            {buttonLabel}
-          </Button>
-        </ButtonArea>
-      )}
     </>
   );
 }

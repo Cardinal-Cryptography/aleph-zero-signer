@@ -7,7 +7,15 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
-import { AccountContext, ActionContext, Button, ButtonArea, RemoveAuth, VerticalSpace } from '../../components';
+import {
+  AccountContext,
+  ActionContext,
+  Button,
+  ButtonArea,
+  RemoveAuth,
+  ScrollWrapper,
+  VerticalSpace
+} from '../../components';
 import Checkbox from '../../components/Checkbox';
 import useTranslation from '../../hooks/useTranslation';
 import { getAuthList, updateAuthorization } from '../../messaging';
@@ -59,14 +67,21 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
     onAction('/auth-list');
   }, [onAction]);
 
+  const StyledHeader = styled(Header)`
+    &.backdrop-margin-left {
+      margin-left: 0px;
+    }
+  `;
+
   return (
-    <>
-      <Header
-        text={t<string>('Connected accounts')}
-        withBackArrow
-        withHelp
-      />
+    <ScrollWrapper>
       <div className={className}>
+        <StyledHeader
+          text={t<string>('Connected accounts')}
+          withBackArrow
+          withBackdrop
+          withHelp
+        />
         {url && (
           <>
             <RemoveAuth url={url} />
@@ -85,29 +100,41 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
             )}
           </>
         )}
+        <CustomButtonArea>
+          <Button
+            onClick={_onCancel}
+            secondary
+          >
+            {t<string>('Cancel')}
+          </Button>
+          <Button
+            className='acceptButton'
+            isDisabled={!selectedAccountsChanged}
+            onClick={_onApprove}
+          >
+            {t<string>('Change')}
+          </Button>
+        </CustomButtonArea>
       </div>
-      <VerticalSpace />
-      <CustomButtonArea>
-        <Button
-          onClick={_onCancel}
-          secondary
-        >
-          {t<string>('Cancel')}
-        </Button>
-        <Button
-          className='acceptButton'
-          isDisabled={!selectedAccountsChanged}
-          onClick={_onApprove}
-        >
-          {t<string>('Change')}
-        </Button>
-      </CustomButtonArea>
-    </>
+    </ScrollWrapper>
   );
 }
 
 export default withRouter(styled(AccountManagement)`
-  overflow: hidden;
+  overflow: hidden scroll;
+  margin: 0 -16px;
+  ::-webkit-scrollbar-thumb {
+      background: ${({ theme }: ThemeProps) => theme.boxBorderColor};
+      border-radius: 50px;  
+      width: 2px;  
+      border-left: 2px solid #111B24;
+    }
+  
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+
 
   .no-accounts {
     box-sizing: border-box;
@@ -124,13 +151,14 @@ export default withRouter(styled(AccountManagement)`
   }
 
   .accountSelection {
+
+    margin: 0px;
     ${Checkbox} {
       margin-right: 16px;
     }
 
     .accountList {
-      height: 350px;
-      padding: 0px 8px;
+      height: 100%;
     }
   }
   
