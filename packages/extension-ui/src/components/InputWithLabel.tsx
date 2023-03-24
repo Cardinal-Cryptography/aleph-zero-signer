@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { ThemeProps } from '../types';
@@ -61,6 +61,27 @@ function InputWithLabel({
 
     setIsFocused(false);
   }, [onBlur]);
+
+  // this useEffects allows to navigate through the inputs with the enter key
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
+        event.preventDefault();
+        const formElements = Array.from(
+          document.querySelectorAll("input:not([type='hidden']):not([disabled])") as unknown as HTMLInputElement[]
+        );
+        const index = formElements.indexOf(event.target);
+
+        formElements[index + 1]?.focus();
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return (
     <Label

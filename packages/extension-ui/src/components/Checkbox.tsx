@@ -55,9 +55,9 @@ function Checkbox({ checked, className, indeterminate, label, onChange, onClick 
           type='checkbox'
         />
         <span
+          className={`${indeterminate ? 'indeterminate' : ''}`}
           onKeyPress={_onKeyPress}
           tabIndex={0}
-          className={`${indeterminate ? 'indeterminate' : ''}`}
         />
       </label>
     </div>

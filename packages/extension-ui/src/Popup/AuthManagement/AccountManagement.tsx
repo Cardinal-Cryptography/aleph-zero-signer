@@ -7,15 +7,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
-import {
-  AccountContext,
-  ActionContext,
-  Button,
-  ButtonArea,
-  RemoveAuth,
-  ScrollWrapper,
-  VerticalSpace
-} from '../../components';
+import { AccountContext, ActionContext, Button, ButtonArea, RemoveAuth, ScrollWrapper } from '../../components';
 import Checkbox from '../../components/Checkbox';
 import useTranslation from '../../hooks/useTranslation';
 import { getAuthList, updateAuthorization } from '../../messaging';
@@ -136,8 +128,6 @@ export default withRouter(styled(AccountManagement)`
       width: 4px;
     }
 
-
-
   .no-accounts {
     box-sizing: border-box;
     display: flex;
@@ -153,7 +143,7 @@ export default withRouter(styled(AccountManagement)`
   }
 
   .accountSelection {
-
+    height: 600px;
     margin: 0px;
     ${Checkbox} {
       margin-right: 16px;

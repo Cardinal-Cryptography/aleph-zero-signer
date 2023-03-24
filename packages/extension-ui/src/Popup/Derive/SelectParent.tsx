@@ -270,6 +270,7 @@ export default React.memo(
   styled(SelectParent)(
     ({ theme }: Props) => `
     margin-top: 24px;
+    margin-right: 8px;
 
     .text {
       display: flex;

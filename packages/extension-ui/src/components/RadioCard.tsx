@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import styled from 'styled-components';
 
 import { ThemeProps } from '../types';
@@ -20,35 +20,49 @@ interface Props extends ThemeProps {
 }
 
 function RadioCard({ className, onChange, option, selectedValue, tabIndex = 0 }: Props): React.ReactElement<Props> {
+  const inputRef = useRef<HTMLInputElement>(null);
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
-
-      console.log('value', value);
 
       onChange(value);
     },
     [onChange]
   );
 
+  const handleClick = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.click();
+      handleChange({
+        target: inputRef.current
+      } as React.ChangeEvent<HTMLInputElement>);
+    }
+  }, [inputRef, handleChange]);
+
   const _onKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLSpanElement>) => {
       if (event.key === 'Enter' || event.key === 'Space') {
-        handleChange(event as unknown as React.ChangeEvent<HTMLInputElement>);
+        handleClick();
       }
     },
-    [handleChange]
+    [handleClick]
   );
 
   return (
     <div className={className}>
-      <label>
+      <label
+        htmlFor={option.text}
+        onClick={handleClick}
+        onKeyPress={_onKeyPress}
+        tabIndex={tabIndex}
+      >
         <span>{option.text}</span>
         <input
           checked={selectedValue === option.value}
+          id={option.text}
           onChange={handleChange}
-          onKeyPress={_onKeyPress}
-          tabIndex={tabIndex}
+          ref={inputRef}
+          tabIndex={undefined}
           type='radio'
           value={option.value}
         />
@@ -90,6 +104,12 @@ export default styled(RadioCard)(
     cursor: pointer;
     width: 100%;
     padding: 16px;
+
+    &:focus {
+      input {
+        outline: 1px solid ${theme.primaryColor};
+      }
+    }
   }
 
   span {
@@ -111,6 +131,7 @@ export default styled(RadioCard)(
     &:checked {
       background-color: ${theme.primaryColor};
     }
+
   }
 `
 );

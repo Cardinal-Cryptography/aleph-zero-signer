@@ -5,8 +5,9 @@ import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../assets/help.svg';
-import { BackButton, Button, ButtonArea, Dropdown, LearnMore, ScrollWrapper, Svg, VerticalSpace } from '../components';
+import { BackButton, Button, Dropdown, LearnMore, Svg } from '../components';
 import Address from '../components/Address';
+import ButtonArea from '../components/ButtonArea';
 import { ALEPH_ZERO_GENESIS_HASH } from '../constants';
 import useGenesisHashOptions from '../hooks/useGenesisHashOptions';
 import useToast from '../hooks/useToast';
@@ -55,6 +56,10 @@ const CustomFooter = styled(HelperFooter)`
 
 const StyledAddress = styled(Address)`
   margin-bottom: 16px;
+`;
+
+const StyledButtonArea = styled(ButtonArea)`
+  margin-right: -8px;
 `;
 
 function AccountNamePasswordCreation({
@@ -138,68 +143,66 @@ function AccountNamePasswordCreation({
 
   return (
     <>
-      <ScrollWrapper>
-        <div className={className}>
-          <div className='text'>
-            <span className='heading'>{t<string>('Visibility & security')}</span>
-            <span className='subtitle'>
-              {t<string>('Choose how your new account is displayed and protected it in Aleph Zero Signer.')}
-            </span>
-          </div>
-          <StyledAddress
-            address={address}
-            genesisHash={genesisHash}
-            name={name}
-            parentName={parentName}
-          />
-          <Name
-            isFocused
-            onChange={_onNameChange}
-          />
-          <Password
-            label={isDeriving ? t<string>('Set sub-account password') : undefined}
-            onChange={_onPasswordChange}
-          />
-          {!isDeriving && (
-            <Dropdown
-              className={className}
-              label={t<string>('Show on network')}
-              onChange={_onChangeNetwork}
-              options={options}
-              value={genesisHash || ALEPH_ZERO_GENESIS_HASH}
-            />
-          )}
-          {!isDeriving && footer}
+      <div className={className}>
+        <div className='text'>
+          <span className='heading'>{t<string>('Visibility & security')}</span>
+          <span className='subtitle'>
+            {t<string>('Choose how your new account is displayed and protected it in Aleph Zero Signer.')}
+          </span>
         </div>
-        {onBackClick && buttonLabel && (
-          <ButtonArea>
-            {master && isDeriving ? (
-              <Button
-                onClick={_onBackClick}
-                secondary
-              >
-                {t<string>('Cancel')}
-              </Button>
-            ) : (
-              <BackButton onClick={_onBackClick} />
-            )}
-            <Button
-              data-button-action='add new root'
-              isBusy={isBusy}
-              isDisabled={!password || !name}
-              onClick={_onCreate}
-            >
-              {buttonLabel}
-            </Button>
-          </ButtonArea>
+        <StyledAddress
+          address={address}
+          genesisHash={genesisHash}
+          name={name}
+          parentName={parentName}
+        />
+        <Name
+          isFocused
+          onChange={_onNameChange}
+        />
+        <Password
+          label={isDeriving ? t<string>('Set sub-account password') : undefined}
+          onChange={_onPasswordChange}
+        />
+        {!isDeriving && (
+          <Dropdown
+            className={className}
+            label={t<string>('Show on network')}
+            onChange={_onChangeNetwork}
+            options={options}
+            value={genesisHash || ALEPH_ZERO_GENESIS_HASH}
+          />
         )}
-      </ScrollWrapper>
-      <VerticalSpace />
+        {!isDeriving && footer}
+      </div>
+      {onBackClick && buttonLabel && (
+        <StyledButtonArea>
+          {master && isDeriving ? (
+            <Button
+              onClick={_onBackClick}
+              secondary
+            >
+              {t<string>('Cancel')}
+            </Button>
+          ) : (
+            <BackButton onClick={_onBackClick} />
+          )}
+          <Button
+            data-button-action='add new root'
+            isBusy={isBusy}
+            isDisabled={!password || !name}
+            onClick={_onCreate}
+          >
+            {buttonLabel}
+          </Button>
+        </StyledButtonArea>
+      )}
     </>
   );
 }
 
 export default React.memo(styled(AccountNamePasswordCreation)`
+  margin-right: 8px;
 
   .spacer {
     height: 16px;

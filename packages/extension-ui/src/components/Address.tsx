@@ -9,7 +9,7 @@ import type { ThemeProps } from '../types';
 import { faUsb } from '@fortawesome/free-brands-svg-icons';
 import { faCodeBranch, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { MouseEventHandler, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -343,12 +343,12 @@ export default styled(Address)(
   
   .chain {
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     background: ${theme.boxBorderColor};
     border-radius: 8px 0px;
     color: ${theme.subTextColor};
     padding: 2px 8px;
-    right: 0;
+    right: -1px;
     z-index: ${Z_INDEX.ADDRESS};
   }
 

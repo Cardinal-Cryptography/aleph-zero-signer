@@ -184,13 +184,17 @@ export default styled(NewAccountSelection)(
   }
 
   .new {
+    position: relative;
+    
     ${Account} {
       .name {
         margin: 2px 8px 0px 0px;
       }
 
-      position: relative;
-      
+      ${Checkbox} label span {
+        left: -4px;
+      }
+
       &:before {
         content: url(${ribbon});
         display: block;

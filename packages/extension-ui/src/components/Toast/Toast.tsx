@@ -6,7 +6,6 @@ import type { SnackbarTypes, ThemeProps } from '../../types';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import useTranslation from '../../hooks/useTranslation';
 import { Z_INDEX } from '../../zindex';
 import * as icons from './iconsList';
 import ToastCloseIcon from './ToastCloseIcon';
@@ -22,7 +21,6 @@ interface Props extends ThemeProps {
 }
 
 function Toast({ className, content, setVisible, toastTimeout, type }: Props): React.ReactElement<Props> {
-  const { t } = useTranslation();
   const _getIconByType = useCallback((type: SnackbarTypes): string => icons?.[type] ?? icons.info, []);
 
   const _closeToast = useCallback(() => {
@@ -79,21 +77,24 @@ export default styled(Toast)(
   .first-group {
     display: flex;
     flex-direction: row;
+    gap: 8px;
   }
 
   @keyframes toast {
-  from {
-    opacity: 0;
-    transform: translateY(100%);
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+
   .snackbar-close {
     cursor: pointer;
   }
+
   .snackbar-undo {
     display: flex;
     width: fit-content;
