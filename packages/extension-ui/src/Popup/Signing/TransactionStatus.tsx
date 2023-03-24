@@ -31,8 +31,6 @@ function TransactionStatus({
   const searchParams = new URLSearchParams(search);
   const isLast = searchParams.get('isLast');
 
-  console.log('isLast', isLast);
-
   useEffect(() => {
     // we're using setTimeout here because TransactionStatus is only a temporary element signaling the status(signed/declined) of the transaction
     setTimeout(() => {

@@ -171,8 +171,6 @@ function Address({
 
   const handleOnClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      console.log('handleOnClick', e.target);
-
       if (!address) {
         return;
       }

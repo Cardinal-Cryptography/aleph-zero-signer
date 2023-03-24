@@ -57,8 +57,6 @@ function Account({
   }, [isSelected]);
 
   const _onCheckboxChange = useCallback(() => {
-    console.log('checkbox change');
-
     if (checkBoxOnChange) {
       checkBoxOnChange(true);
     }
