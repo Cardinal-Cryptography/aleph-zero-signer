@@ -5,6 +5,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { ThemeProps } from '../types';
+import { StyledProgressBar } from './PasswordField/PasswordField';
 import Address from './Address';
 import Label from './Label';
 
@@ -39,7 +40,7 @@ export default styled(ScrollWrapper)(
     width: 8px;
   }
 
-  ${Label}:not(.label), ${Address} {
+  ${Label}:not(.label), ${Address}, ${StyledProgressBar} {
     width: calc(100% + 8px);
   }
 
