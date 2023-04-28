@@ -9,7 +9,9 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { configure, mount } from 'enzyme';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
+import { ThemeProvider } from 'styled-components';
 
+import { themes } from '../components';
 import { flushAllPromises } from '../testHelpers';
 import { AccountNamePasswordCreation, BackButton, Button, Input, InputWithLabel } from '.';
 
@@ -21,7 +23,7 @@ configure({ adapter: new Adapter() });
 
 const account = {
   name: 'My Polkadot Account',
-  password: 'somepassword'
+  password: 'Alice has a cat'
 };
 
 const buttonLabel = 'Create';
@@ -52,13 +54,15 @@ const repeat = (password: string) => (): Promise<void> => type(wrapper.find('inp
 const mountComponent = (isBusy = false): ReactWrapper =>
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   mount(
-    <AccountNamePasswordCreation
-      buttonLabel={buttonLabel}
-      isBusy={isBusy}
-      onBackClick={onBackClick}
-      onCreate={onCreate}
-      onNameChange={onNameChange}
-    />
+    <ThemeProvider theme={themes.dark}>
+      <AccountNamePasswordCreation
+        buttonLabel={buttonLabel}
+        isBusy={isBusy}
+        onBackClick={onBackClick}
+        onCreate={onCreate}
+        onNameChange={onNameChange}
+      />
+    </ThemeProvider>
   );
 
 describe('AccountNamePasswordCreation', () => {
@@ -100,14 +104,14 @@ describe('AccountNamePasswordCreation', () => {
   });
 
   it('submit button is not enabled until both passwords are equal', async () => {
-    await enterName('abc').then(password('abcdef')).then(repeat('abcdeg'));
+    await enterName('abc').then(password('Alice has a cat')).then(repeat('Alice has a cat 2'));
     expect(wrapper.find('.warning-message').text()).toBe('Passwords do not match');
     expect(wrapper.find(InputWithLabel).find('[data-input-repeat-password]').find(Input).prop('withError')).toBe(true);
     expect(wrapper.find('[data-button-action="add new root"] button').prop('disabled')).toBe(true);
   });
 
   it('submit button is enabled when both passwords are equal', async () => {
-    await enterName('abc').then(password('abcdef')).then(repeat('abcdef'));
+    await enterName('abc').then(password('Alice has a cat')).then(repeat('Alice has a cat'));
     expect(wrapper.find('.warning-message')).toHaveLength(0);
     expect(wrapper.find(InputWithLabel).find('[data-input-repeat-password]').find(Input).prop('withError')).toBe(false);
     expect(wrapper.find('[data-button-action="add new root"] button').prop('disabled')).toBe(false);
@@ -127,20 +131,20 @@ describe('AccountNamePasswordCreation', () => {
     });
 
     it('first password changes - button is disabled', async () => {
-      await type(wrapper.find('input[type="password"]').first(), 'abcdef');
+      await type(wrapper.find('input[type="password"]').first(), 'Alice has a cat');
       expect(wrapper.find('.warning-message').text()).toBe('Passwords do not match');
       expect(wrapper.find('[data-button-action="add new root"] button').prop('disabled')).toBe(true);
     });
 
     it('first password changes, then second changes too - button is enabled', async () => {
-      await type(wrapper.find('input[type="password"]').first(), 'abcdef');
-      await type(wrapper.find('input[type="password"]').last(), 'abcdef');
+      await type(wrapper.find('input[type="password"]').first(), 'Alice has a cat');
+      await type(wrapper.find('input[type="password"]').last(), 'Alice has a cat');
       expect(wrapper.find('[data-button-action="add new root"] button').prop('disabled')).toBe(false);
     });
 
     it('second password changes, then first changes too - button is enabled', async () => {
-      await type(wrapper.find('input[type="password"]').last(), 'abcdef');
-      await type(wrapper.find('input[type="password"]').first(), 'abcdef');
+      await type(wrapper.find('input[type="password"]').last(), 'Alice has a cat');
+      await type(wrapper.find('input[type="password"]').first(), 'Alice has a cat');
       expect(wrapper.find('[data-button-action="add new root"] button').prop('disabled')).toBe(false);
     });
 
