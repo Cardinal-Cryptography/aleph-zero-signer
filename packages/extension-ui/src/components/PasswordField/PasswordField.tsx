@@ -15,8 +15,6 @@ type Props = {
   validationUserInput?: Array<string>;
 }
 
-
-
 function PasswordField({
   className,
   label,
