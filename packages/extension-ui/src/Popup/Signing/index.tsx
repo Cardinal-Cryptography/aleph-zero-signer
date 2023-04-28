@@ -83,7 +83,6 @@ export default React.memo(
   styled(Signing)(
     ({ theme }: Props) => `
     .content {
-      // outline: ${theme.newTransactionBackground} solid 37px;
       border-radius: 32px;
       height: 584px;
       overflow-y: hidden;
