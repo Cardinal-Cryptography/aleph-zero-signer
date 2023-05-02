@@ -4,10 +4,13 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
+import { clearClipboard } from "@polkadot/extension-ui/messaging";
 import {ThemeProps} from "@polkadot/extension-ui/types";
 
 import animSuccess from '../assets/anim_signed.svg';
 import { AnimatedSvg } from './index';
+
+const CLIPBOARD_CLEANUP_TIMEOUT = 5000;
 
 /**
  * This component is meant to be used in an external popup, as a last step of a wizard,
@@ -16,9 +19,12 @@ import { AnimatedSvg } from './index';
  */
 const AccountCreationSuccess = () => {
   useEffect(() => {
+    // Clearing the clipboard from the background thread to have it done even after the popup is closed
+    clearClipboard(CLIPBOARD_CLEANUP_TIMEOUT);
+
     const timeout = setTimeout(() => {
         window.close();
-    }, 2000);
+    }, CLIPBOARD_CLEANUP_TIMEOUT);
 
     return () => clearTimeout(timeout);
   }, []);
@@ -29,6 +35,10 @@ const AccountCreationSuccess = () => {
         <Header>
           Account created successfully!
         </Header>
+        <Info>
+          For safety reasons, your clipboard is going to be cleared
+          in {Math.ceil(CLIPBOARD_CLEANUP_TIMEOUT / 1000)} seconds.
+        </Info>
       </Container>
   );
 };
@@ -56,6 +66,15 @@ const Header = styled.span`
   letter-spacing: 0.03em;
   color: ${({ theme }: ThemeProps) => theme.textColor};
   text-align: center;
+`;
+
+const Info = styled.span`
+  font-family: ${({ theme }: ThemeProps) => theme.secondaryFontFamily};
+  font-style: normal;
+  font-size: 12px;
+  color: ${({ theme }: ThemeProps) => theme.textColor};
+  text-align: center;
+  margin: 0 20px;
 `;
 
 const Icon = styled(AnimatedSvg)`
