@@ -7,6 +7,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { MenuCard } from '@polkadot/extension-ui/components';
+import openInExternalPopup from "@polkadot/extension-ui/util/openInExternalPopup";
 
 import addIcon from '../../assets/add.svg';
 import uploadIcon from '../../assets/upload.svg';
@@ -34,13 +35,13 @@ function AddAccountMenu({ className }: Props): React.ReactElement<Props> {
         <div className='add-account-menu'>
           <MenuCard
             description={t<string>('Generate a new public address')}
-            onClick={goTo('/account/create')}
+            onClick={() => openInExternalPopup('account/create')}
             preIcon={<img src={addIcon} />}
             title={t<string>('Create a new account')}
           />
           <MenuCard
             description={t<string>('Accounts created in other \n wallets are also supported')}
-            onClick={goTo('/account/import-seed')}
+            onClick={() => openInExternalPopup('account/import-seed')}
             preIcon={<img src={uploadIcon} />}
             title={t<string>('Import an existing account')}
           />

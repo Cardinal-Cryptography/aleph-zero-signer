@@ -3,6 +3,7 @@
 
 import React, { useCallback, useContext, useState } from 'react';
 
+import useToast from "@polkadot/extension-ui/hooks/useToast";
 import { QrScanAddress } from '@polkadot/react-qr';
 
 import { ActionContext, Address, ButtonArea, NextStepButton, VerticalSpace } from '../components';
@@ -25,6 +26,7 @@ export default function ImportQr(): React.ReactElement {
   const [address, setAddress] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
+  const { show } = useToast();
 
   const _setAccount = useCallback((qrAccount: QrAccount) => {
     setAccount(qrAccount);
@@ -39,7 +41,7 @@ export default function ImportQr(): React.ReactElement {
     }
   }, []);
 
-  const _onCreate = useCallback((): void => {
+  const _onCreate = useCallback(() => {
     if (account && name) {
       if (account.isAddress) {
         createAccountExternal(name, account.content, account.genesisHash)
@@ -50,8 +52,12 @@ export default function ImportQr(): React.ReactElement {
           .then(() => onAction('/'))
           .catch((error: Error) => console.error(error));
       }
+
+      if (name && password) {
+        show(t('Account created successfully!'), 'success');
+      }
     }
-  }, [account, name, onAction, password]);
+  }, [account, name, onAction, password, show, t]);
 
   return (
     <>
