@@ -47,10 +47,5 @@ export default styled(ScrollWrapper)(
   .header .container{
     width: 360px;
   }
-
-  .password-icon {
-    right: 12px;
-  }
-
 `
 );

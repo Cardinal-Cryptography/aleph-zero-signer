@@ -28,7 +28,7 @@ function PasswordFeedback({
 
   const isTooWeak = isPasswordTooWeak(feedback);
   const defaultCriticalMessage = isTooWeak ? t('Password is too weak.') : '';
-  const critical = warning || defaultCriticalMessage;
+  const criticalMessage = warning || defaultCriticalMessage;
 
   return (
     <div className={className}>
@@ -38,7 +38,7 @@ function PasswordFeedback({
         inactiveColor={theme.progressBarInactive}
         stepCount={5}
       />
-      {isTooWeak && <StyledMessage messageType='critical'>{critical}</StyledMessage>}
+      {isTooWeak && <StyledMessage messageType='critical'>{criticalMessage}</StyledMessage>}
       {isTooWeak && suggestions.map((suggestion, index) => (
         <StyledMessage
           key={index}

@@ -63,7 +63,7 @@ function InputWithLabel({
     setIsFocused(false);
   }, [onBlur]);
 
-  const handleObscure = useCallback(() => {
+  const toggleObscure = useCallback(() => {
     setIsObscured((prevIsObscure) => !prevIsObscure);
   }, [setIsObscured]);
 
@@ -90,22 +90,31 @@ function InputWithLabel({
         withError={isError}
       />
       {type === "password" && (
-        <button
-          className='password-icon'
-          onClick={handleObscure}
-        >
+        <IconButton onClick={toggleObscure}>
           <img src={isObscured ? viewOff : viewOn} />
-        </button>
+        </IconButton>
       )}
     </Label>
   );
 }
 
+const IconButton = styled.button`
+    all: unset;
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    cursor: pointer;
+
+    &:focus {
+      outline-style: auto;
+    }
+`;
+
 export default styled(InputWithLabel)`
   margin-bottom: 16px;
  
   > ${Input} {
-    padding-top: ${({ label }: Props) => !label.trim() ? '0px' : '11px'};
+    padding-top: ${({ label }) => !label.trim() ? '0px' : '11px'};
  }
 
   &.withoutMargin {
@@ -114,17 +123,5 @@ export default styled(InputWithLabel)`
    + .danger {
       margin-top: 6px;
     }
-  }
-
-  && > .password-icon {
-    all: unset;
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    cursor: pointer;
-  }
-
-  && > .password-icon:focus {
-    outline-style: auto;
   }
 `;

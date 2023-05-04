@@ -9,10 +9,10 @@ export type ValidationResult = {
   suggestions: Array<string>;
 };
 
-const LOWERS_ACCEPTED_PASSWORD_SCORE = 3;
+const LOWEST_ACCEPTED_PASSWORD_SCORE = 3;
 
 export function isPasswordTooWeak(feedback: ValidationResult): boolean {
-  return feedback.score < LOWERS_ACCEPTED_PASSWORD_SCORE;
+  return feedback.score < LOWEST_ACCEPTED_PASSWORD_SCORE;
 }
 
 export default function zxcvbnResultAdapter(password: string, userInputs?: string[]): ValidationResult {

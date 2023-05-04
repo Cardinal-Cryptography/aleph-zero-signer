@@ -138,12 +138,6 @@ export default withRouter(styled(Export)`
   .password-container {
     position: relative;
   }
-  .password-icon {
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    cursor: pointer;
-  }
 
   .center {
     margin: auto;
