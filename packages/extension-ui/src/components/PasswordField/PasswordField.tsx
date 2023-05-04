@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import InputWithLabel from '../InputWithLabel';
@@ -15,42 +15,44 @@ type Props = {
   validationUserInput?: Array<string>;
 }
 
-function PasswordField({
+const PasswordField = ({
   className,
   label,
   onValidatedChange,
   validationUserInput,
-}: Props): React.ReactElement {
+}: Props) => {
   const [isTouched, setIsTouched] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
   const [passwordFeedback, setPasswordFeedback] = useState<ValidationResult>({score: 0, warning: '', suggestions: []});
 
-  const validateValue = useCallback((value: string): void => {
+  const onChange = useCallback((value: string): void => {
+    setValue(value);
+    setIsTouched(true);
+  }, []);
+
+  useEffect(() => {
     const feedback = getFeedback(value, validationUserInput);
 
-    setValue(value);
     setPasswordFeedback(feedback);
-    setIsTouched(true);
 
     if (!isPasswordTooWeak(feedback)) {
       onValidatedChange(value);
     }
-
-  }, [validationUserInput, onValidatedChange]);
+  }, [value, onValidatedChange, validationUserInput]);
 
   return (
     <div className={className}>
       <InputWithLabel
         isError={isTouched && isPasswordTooWeak(passwordFeedback)}
         label={label}
-        onChange={validateValue}
+        onChange={onChange}
         type='password'
         value={value}
       />
       {isTouched && <StyledPasswordFeedback feedback={passwordFeedback} />}
     </div>
   );
-}
+};
 
 export const StyledPasswordFeedback = styled(PasswordFeedback)`
   margin-top: -8px;

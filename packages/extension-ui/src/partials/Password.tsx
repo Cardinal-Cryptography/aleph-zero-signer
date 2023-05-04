@@ -8,13 +8,14 @@ import PasswordField from '../components/PasswordField';
 import useTranslation from '../hooks/useTranslation';
 import { allOf, isSameAs } from '../util/validators';
 
-interface Props {
+type Props = {
   isFocussed?: boolean;
   onChange: (password: string | null) => void;
+  validationUserInput?: string[];
   label?: string;
 }
 
-export default function Password({ label, onChange }: Props): React.ReactElement<Props> {
+const Password = ({ label, onChange, validationUserInput }: Props) => {
   const { t } = useTranslation();
   const [pass1, setPass1] = useState<string>('');
   const [pass2, setPass2] = useState<string>('');
@@ -30,9 +31,10 @@ export default function Password({ label, onChange }: Props): React.ReactElement
   return (
     <>
       <PasswordField
+        data-input-password
         label={label || t<string>('Set password')}
         onValidatedChange={setPass1}
-        validationUserInput={[]}
+        validationUserInput={validationUserInput}
       />
       <ValidatedInput
         component={InputWithLabel}
@@ -44,4 +46,6 @@ export default function Password({ label, onChange }: Props): React.ReactElement
       />
     </>
   );
-}
+};
+
+export default Password;
