@@ -20,6 +20,7 @@ interface Props extends ThemeProps {
   label: string;
   onBlur?: () => void;
   onChange?: (value: string) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   type?: 'text' | 'password';
   value?: string;
@@ -36,6 +37,7 @@ function InputWithLabel({
   label = '',
   onBlur,
   onChange,
+  onKeyDown,
   placeholder,
   type = 'text',
   value,
@@ -82,6 +84,7 @@ function InputWithLabel({
         onBlur={handleBlur}
         onChange={_onChange}
         onFocus={handleFocus}
+        onKeyDown={onKeyDown}
         placeholder={placeholder}
         readOnly={isReadOnly}
         spellCheck={false}

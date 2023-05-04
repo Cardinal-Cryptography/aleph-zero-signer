@@ -1,11 +1,14 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
+
+import { useIsCapsLockOn } from '@polkadot/extension-ui/hooks/useIsCapsLockOn';
 
 import InputWithLabel from '../InputWithLabel';
 import getFeedback, { isPasswordTooWeak, ValidationResult } from './getFeedback';
+import Message from './Message';
 import PasswordFeedback from './PasswordFeedback';
 
 type Props = {
@@ -24,13 +27,12 @@ const PasswordField = ({
   const [isTouched, setIsTouched] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
   const [passwordFeedback, setPasswordFeedback] = useState<ValidationResult>({score: 0, warning: '', suggestions: []});
+  const {handleKeyDown, isCapsLockOn} = useIsCapsLockOn();
 
   const onChange = useCallback((value: string): void => {
     setValue(value);
     setIsTouched(true);
-  }, []);
 
-  useEffect(() => {
     const feedback = getFeedback(value, validationUserInput);
 
     setPasswordFeedback(feedback);
@@ -38,7 +40,7 @@ const PasswordField = ({
     if (!isPasswordTooWeak(feedback)) {
       onValidatedChange(value);
     }
-  }, [value, onValidatedChange, validationUserInput]);
+  }, [onValidatedChange, validationUserInput]);
 
   return (
     <div className={className}>
@@ -46,16 +48,26 @@ const PasswordField = ({
         isError={isTouched && isPasswordTooWeak(passwordFeedback)}
         label={label}
         onChange={onChange}
+        onKeyDown={handleKeyDown}
         type='password'
         value={value}
       />
-      {isTouched && <StyledPasswordFeedback feedback={passwordFeedback} />}
+      {isTouched && (
+        <StyledPasswordFeedback
+          feedback={passwordFeedback}
+          isCapsLockOn={isCapsLockOn}
+        />
+      )}
     </div>
   );
 };
 
 export const StyledPasswordFeedback = styled(PasswordFeedback)`
   margin-top: -8px;
+`;
+
+export const StyledMessage = styled(Message)`
+  margin: 0 15px;
   margin-bottom: 16px;
 `;
 

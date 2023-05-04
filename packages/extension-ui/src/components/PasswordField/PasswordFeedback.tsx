@@ -12,12 +12,14 @@ import ProgressBar from './ProgressBar';
 type Props = {
   className?: string,
   feedback: ValidationResult,
+  isCapsLockOn?: boolean;
 }
 
 function PasswordFeedback({
   className,
   feedback: {score, suggestions, warning},
   feedback,
+  isCapsLockOn,
 }: Props): React.ReactElement {
   const { t } = useTranslation();
 
@@ -38,7 +40,10 @@ function PasswordFeedback({
         inactiveColor={theme.progressBarInactive}
         stepCount={5}
       />
+      {score === 4 && <StyledMessage messageType='success'>{t("Awesome! Your password is really strong")}</StyledMessage>}
       {isTooWeak && <StyledMessage messageType='critical'>{criticalMessage}</StyledMessage>}
+      {score === 3 && <StyledMessage messageType='warning'>{t("Your password could be stronger!")}</StyledMessage>}
+      {isCapsLockOn && <StyledMessage messageType='warning'>{t('CapsLock is ON')}</StyledMessage>}
       {isTooWeak && suggestions.map((suggestion, index) => (
         <StyledMessage
           key={index}
@@ -46,8 +51,6 @@ function PasswordFeedback({
           {suggestion}
         </StyledMessage>
       ))}
-      {score === 3 && <StyledMessage messageType='warning'>{t("Your password could be stronger!")}</StyledMessage>}
-      {score === 4 && <StyledMessage messageType='success'>{t("Awesome! Your password is really strong")}</StyledMessage>}
     </div>
   );
 }
