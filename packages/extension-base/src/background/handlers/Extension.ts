@@ -497,7 +497,7 @@ export default class Extension {
   private clearClipboard (rawTimeout: unknown) {
     const timeout = typeof rawTimeout === 'number' ? rawTimeout : parseInt(String(rawTimeout || 0));
 
-    setTimeout(() => clearClipboard(), timeout);
+    setTimeout(clearClipboard, timeout);
   }
 
   private derive (parentAddress: string, suri: string, password: string, metadata: KeyringPair$Meta): KeyringPair {

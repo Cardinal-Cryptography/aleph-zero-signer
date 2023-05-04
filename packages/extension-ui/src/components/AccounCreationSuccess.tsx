@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect } from 'react';
+import { useTranslation } from "react-i18next";
 import styled from 'styled-components';
 
 import { clearClipboard } from "@polkadot/extension-ui/messaging";
@@ -18,6 +19,8 @@ const CLIPBOARD_CLEANUP_TIMEOUT = 5000;
  * @constructor
  */
 const AccountCreationSuccess = () => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     // Clearing the clipboard from the background thread to have it done even after the popup is closed
     clearClipboard(CLIPBOARD_CLEANUP_TIMEOUT);
@@ -33,11 +36,14 @@ const AccountCreationSuccess = () => {
       <Container>
         <Icon src={animSuccess} />
         <Header>
-          Account created successfully!
+          {t('Account created successfully!')}
         </Header>
         <Info>
-          For safety reasons, your clipboard is going to be cleared
-          in {Math.ceil(CLIPBOARD_CLEANUP_TIMEOUT / 1000)} seconds.
+          {t(
+            'For safety reasons, your clipboard is going to be cleared ' +
+            'in {{seconds}} seconds.',
+            { seconds: Math.ceil(CLIPBOARD_CLEANUP_TIMEOUT / 1000) }
+          )}
         </Info>
       </Container>
   );
