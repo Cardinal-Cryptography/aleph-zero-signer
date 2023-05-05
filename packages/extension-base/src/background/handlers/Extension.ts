@@ -495,7 +495,7 @@ export default class Extension {
   }
 
   private clearClipboard (rawTimeout: unknown) {
-    const timeout = typeof rawTimeout === 'number' ? rawTimeout : parseInt(String(rawTimeout || 0));
+    const timeout = parseInt(String(rawTimeout || 0));
 
     setTimeout(clearClipboard, timeout);
   }
