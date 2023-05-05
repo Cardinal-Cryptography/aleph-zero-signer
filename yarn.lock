@@ -2667,12 +2667,12 @@ __metadata:
   resolution: "@polkadot/extension-base@workspace:packages/extension-base"
   dependencies:
     "@babel/runtime": ^7.20.7
-    "@polkadot/api": ^9.11.1
+    "@polkadot/api": ^10.5.1
     "@polkadot/extension-chains": ^0.44.8
     "@polkadot/extension-dapp": ^0.44.8
     "@polkadot/extension-inject": ^0.44.8
     "@polkadot/extension-mocks": ^0.44.8
-    "@polkadot/keyring": ^10.2.3
+    "@polkadot/keyring": ^12.1.2
     "@polkadot/networks": ^10.2.3
     "@polkadot/phishing": ^0.18.13
     "@polkadot/rpc-provider": ^9.11.1
@@ -2680,7 +2680,7 @@ __metadata:
     "@polkadot/ui-keyring": ^2.9.15
     "@polkadot/ui-settings": ^2.9.15
     "@polkadot/util": ^10.2.3
-    "@polkadot/util-crypto": ^10.2.3
+    "@polkadot/util-crypto": ^12.1.2
     eventemitter3: ^4.0.7
     rxjs: ^7.8.0
   languageName: unknown
@@ -2694,7 +2694,7 @@ __metadata:
     "@polkadot/extension-inject": ^0.44.8
     "@polkadot/networks": ^10.2.3
     "@polkadot/util": ^10.2.3
-    "@polkadot/util-crypto": ^10.2.3
+    "@polkadot/util-crypto": ^12.1.2
   peerDependencies:
     "@polkadot/api": "*"
     "@polkadot/types": "*"
@@ -2723,7 +2723,7 @@ __metadata:
     "@babel/runtime": ^7.20.7
     "@polkadot/extension-inject": ^0.44.8
     "@polkadot/util": ^10.2.3
-    "@polkadot/util-crypto": ^10.2.3
+    "@polkadot/util-crypto": ^12.1.2
   peerDependencies:
     "@polkadot/api": "*"
     "@polkadot/util": "*"
@@ -2739,7 +2739,7 @@ __metadata:
     "@polkadot/rpc-provider": ^9.11.1
     "@polkadot/types": ^9.11.1
     "@polkadot/util": ^10.2.3
-    "@polkadot/util-crypto": ^10.2.3
+    "@polkadot/util-crypto": ^12.1.2
     "@polkadot/x-global": ^10.2.3
     "@types/chrome": ^0.0.206
     "@types/firefox-webext-browser": ^94.0.1
@@ -2773,7 +2773,7 @@ __metadata:
     "@polkadot/extension-inject": ^0.44.8
     "@polkadot/extension-mocks": ^0.44.8
     "@polkadot/hw-ledger": ^10.2.3
-    "@polkadot/keyring": ^10.2.3
+    "@polkadot/keyring": ^12.1.2
     "@polkadot/networks": ^10.2.3
     "@polkadot/react-identicon": ^2.9.15
     "@polkadot/react-qr": ^2.9.15
@@ -2782,7 +2782,7 @@ __metadata:
     "@polkadot/ui-keyring": ^2.9.15
     "@polkadot/ui-settings": ^2.9.15
     "@polkadot/util": ^10.2.3
-    "@polkadot/util-crypto": ^10.2.3
+    "@polkadot/util-crypto": ^12.1.2
     "@types/enzyme": ^3.10.12
     "@types/enzyme-adapter-react-16": ^1.0.6
     "@types/file-saver": ^2.0.5
