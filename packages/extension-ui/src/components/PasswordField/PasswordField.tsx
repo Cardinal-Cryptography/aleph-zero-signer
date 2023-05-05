@@ -64,10 +64,6 @@ const PasswordField = ({
 
 export const StyledPasswordFeedback = styled(PasswordFeedback)`
   margin-top: -8px;
-`;
-
-export const StyledMessage = styled(Message)`
-  margin: 0 15px;
   margin-bottom: 16px;
 `;
 

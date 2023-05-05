@@ -13,10 +13,12 @@ const MESSAGE_TYPE_TO_ICON_URL = {
   critical, warning, info, success
 };
 
+export type MessageType = keyof typeof MESSAGE_TYPE_TO_ICON_URL;
+
 type Props = {
   children: React.ReactNode;
   className?: string;
-  messageType: keyof typeof MESSAGE_TYPE_TO_ICON_URL;
+  messageType: MessageType;
 }
 
 const Message = ({ children, className = '', messageType }: Props) => {
