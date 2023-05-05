@@ -14,5 +14,13 @@ module.exports = {
     ...base.rules,
     // this seems very broken atm, false positives
     '@typescript-eslint/unbound-method': 'off'
-  }
+  },
+  overrides: [
+    {
+      files: ['**/*.test.*', '**/*.stories.*'],
+      rules: {
+        '@typescript-eslint/ban-ts-comment': 'off',
+      },
+    },
+  ],
 };

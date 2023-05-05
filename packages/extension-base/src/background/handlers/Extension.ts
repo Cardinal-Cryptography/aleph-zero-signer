@@ -9,6 +9,7 @@ import type { KeypairType } from '@polkadot/util-crypto/types';
 import type { AccountJson, AllowedPath, AuthorizeRequest, MessageTypes, MetadataRequest, RequestAccountBatchExport, RequestAccountChangePassword, RequestAccountCreateExternal, RequestAccountCreateHardware, RequestAccountCreateSuri, RequestAccountEdit, RequestAccountExport, RequestAccountForget, RequestAccountShow, RequestAccountTie, RequestAccountValidate, RequestActiveTabsUrlUpdate, RequestAuthorizeApprove, RequestBatchRestore, RequestDeriveCreate, RequestDeriveValidate, RequestJsonRestore, RequestMetadataApprove, RequestMetadataReject, RequestSeedCreate, RequestSeedValidate, RequestSigningApprovePassword, RequestSigningApproveSignature, RequestSigningCancel, RequestSigningIsLocked, RequestTypes, RequestUpdateAuthorizedAccounts, ResponseAccountExport, ResponseAccountsExport, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSeedCreate, ResponseSeedValidate, ResponseSigningIsLocked, ResponseType, SigningRequest } from '../types';
 
 import { ALLOWED_PATH, PASSWORD_EXPIRY_MS } from '@polkadot/extension-base/defaults';
+import { isJsonAuthentic, signJson } from '@polkadot/extension-base/utils/accountJsonIntegrity';
 import { metadataExpand } from '@polkadot/extension-chains';
 import { TypeRegistry } from '@polkadot/types';
 import keyring from '@polkadot/ui-keyring';
@@ -113,13 +114,21 @@ export default class Extension {
     return true;
   }
 
-  private accountsExport ({ address, password }: RequestAccountExport): ResponseAccountExport {
-    return { exportedJson: keyring.backupAccount(keyring.getPair(address), password) };
+  private async accountsExport ({ address, password }: RequestAccountExport): Promise<ResponseAccountExport> {
+    return {
+      exportedJson: await signJson(
+        keyring.backupAccount(keyring.getPair(address), password),
+        password
+      )
+    };
   }
 
   private async accountsBatchExport ({ addresses, password }: RequestAccountBatchExport): Promise<ResponseAccountsExport> {
     return {
-      exportedJson: await keyring.backupAccounts(addresses, password)
+      exportedJson: await signJson(
+        await keyring.backupAccounts(addresses, password),
+        password
+      )
     };
   }
 
@@ -288,7 +297,11 @@ export default class Extension {
     return true;
   }
 
-  private jsonRestore ({ file, password }: RequestJsonRestore): void {
+  private async jsonRestore ({ file, password, skipAuthenticityCheck }: RequestJsonRestore): Promise<void> {
+    if (!skipAuthenticityCheck && !await isJsonAuthentic(file, password)) {
+      throw new Error('JSON authenticity check failed');
+    }
+
     try {
       keyring.restoreAccount(file, password);
     } catch (error) {
@@ -296,7 +309,11 @@ export default class Extension {
     }
   }
 
-  private batchRestore ({ file, password }: RequestBatchRestore): void {
+  private async batchRestore ({ file, password, skipAuthenticityCheck }: RequestBatchRestore): Promise<void> {
+    if (!skipAuthenticityCheck && !await isJsonAuthentic(file, password)) {
+      throw new Error('JSON authenticity check failed');
+    }
+
     try {
       keyring.restoreAccounts(file, password);
     } catch (error) {
