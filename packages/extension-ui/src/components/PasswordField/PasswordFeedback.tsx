@@ -1,7 +1,8 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, { cloneElement } from 'react';
+import { TransitionGroup } from 'react-transition-group';
 import styled, { useTheme } from 'styled-components';
 
 import useTranslation from '../../hooks/useTranslation';
@@ -42,37 +43,39 @@ function PasswordFeedback({
       />
       <StyledTransitionMessage
         duration={duration}
+        in={score === 4}
         messageType='success'
-        show={score === 4}
         text={t("Awesome! Your password is really strong")}
       />
       <StyledTransitionMessage
         duration={duration}
+        in={isTooWeak}
         messageType='critical'
-        show={isTooWeak}
         text={t(criticalMessage)}
       />
       <StyledTransitionMessage
         duration={duration}
+        in={score === 3}
         messageType='warning'
-        show={score === 3}
         text={t("Your password could be stronger!")}
       />
       <StyledTransitionMessage
         duration={duration}
+        in={!!isCapsLockOn}
         messageType='warning'
-        show={!!isCapsLockOn}
         text={t('CapsLock is ON')}
       />
-      {suggestions.map((suggestion, index) => (
-        <StyledTransitionMessage
-          duration={duration}
-          key={index}
-          messageType='info'
-          show={!!suggestion}
-          text={typeof suggestion === 'string' ? t(suggestion) : ''}
-        />
-      ))}
+      <TransitionGroup>
+        {suggestions.map((suggestion, index) => (
+          <StyledTransitionMessage
+            duration={duration}
+            in={!!suggestion}
+            key={index}
+            messageType='info'
+            text={typeof suggestion === 'string' ? t(suggestion) : ''}
+          />
+        ))}
+      </TransitionGroup>
     </div>
   );
 }

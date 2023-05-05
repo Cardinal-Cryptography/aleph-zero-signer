@@ -9,13 +9,13 @@ import Message, { MessageType } from './Message';
 
 type Props = {
   className?: string;
-  show: boolean;
+  in: boolean;
   messageType: MessageType;
   text: string;
   duration: number;
 };
 
-const TransitionMessage = ({className = '', duration, messageType, show, text}: Props) => {
+const TransitionMessage = ({className = '', duration, in: show, messageType, text}: Props) => {
   const nodeRef = useRef(null);
   const [currentText, setCurrentText] = useState<string>();
 
@@ -46,7 +46,6 @@ const TransitionMessage = ({className = '', duration, messageType, show, text}: 
     <Transition
       appear
       in={show && text === currentText}
-      mountOnEnter={true}
       nodeRef={nodeRef}
       timeout={duration}
     >
