@@ -40,7 +40,7 @@ const type = async (input: ReactWrapper, value: string): Promise<void> => {
 };
 
 const capsLockOn = async (input: ReactWrapper): Promise<void> => {
-  input.simulate('keyPress', { getModifierState: () => true });
+  input.simulate('keyDown', { getModifierState: () => true });
   await act(flushAllPromises);
   wrapper.update();
 };
@@ -49,6 +49,7 @@ const enterName = (name: string): Promise<void> => type(wrapper.find('input').fi
 const password = (password: string) => (): Promise<void> =>
   type(wrapper.find('input[type="password"]').first(), password);
 const repeat = (password: string) => (): Promise<void> => type(wrapper.find('input[type="password"]').last(), password);
+const findVisiblePasswordMessages = () => wrapper.find('PasswordFeedback').find({in: true}).find('Message');
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const mountComponent = (isBusy = false): ReactWrapper =>
@@ -97,14 +98,14 @@ describe('AccountNamePasswordCreation', () => {
   });
 
   it('password with caps lock should show a warning', async () => {
-    await enterName('abc').then(password('abcde'));
+    await enterName('Alice').then(password('Alice has a cat'));
     await capsLockOn(wrapper.find(InputWithLabel).find('[data-input-password]').find(Input));
 
-    expect(wrapper.find('.warning-message').first().text()).toBe('Password is too short');
+    expect(findVisiblePasswordMessages().find({messageType: 'warning'}).text()).toBe('CapsLock is ON');
   });
 
   it('submit button is not enabled until both passwords are equal', async () => {
-    await enterName('abc').then(password('Alice has a cat')).then(repeat('Alice has a cat 2'));
+    await enterName('abc').then(password('Alice has a cat')).then(repeat('Not Alice has a cat'));
     expect(wrapper.find('.warning-message').text()).toBe('Passwords do not match');
     expect(wrapper.find(InputWithLabel).find('[data-input-repeat-password]').find(Input).prop('withError')).toBe(true);
     expect(wrapper.find('[data-button-action="add new root"] button').prop('disabled')).toBe(true);
@@ -131,7 +132,7 @@ describe('AccountNamePasswordCreation', () => {
     });
 
     it('first password changes - button is disabled', async () => {
-      await type(wrapper.find('input[type="password"]').first(), 'Alice has a cat');
+      await type(wrapper.find('input[type="password"]').first(), 'Not Alice has a cat');
       expect(wrapper.find('.warning-message').text()).toBe('Passwords do not match');
       expect(wrapper.find('[data-button-action="add new root"] button').prop('disabled')).toBe(true);
     });

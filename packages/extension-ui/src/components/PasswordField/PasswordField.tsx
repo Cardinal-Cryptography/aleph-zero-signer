@@ -44,6 +44,7 @@ const PasswordField = ({
   return (
     <div className={className}>
       <InputWithLabel
+        data-input-password
         isError={isTouched && isPasswordTooWeak(passwordFeedback)}
         label={label}
         onChange={onChange}

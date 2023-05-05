@@ -31,7 +31,6 @@ const Password = ({ label, onChange, validationUserInput }: Props) => {
   return (
     <>
       <PasswordField
-        data-input-password
         label={label || t<string>('Set password')}
         onValidatedChange={setPass1}
         validationUserInput={validationUserInput}
