@@ -29,17 +29,15 @@ const TransitionMessage = ({className = '', duration, in: show, messageType, tex
     setTimeout(setCurrentText, timeout, text);
   }, [setCurrentText, currentText, text]);
 
-  const defaultStyle = {
-    transition: `grid-template-rows ${duration}ms, opacity ${duration}ms, padding ${duration}ms`,
-    opacity: 0,
-  };
+  const expandedStyles = { opacity: 1, gridTemplateRows: '1fr', paddingBottom: '8px' };
+  const collapsedStyles = { opacity: 0, gridTemplateRows: '0fr' };
 
   const transitionStyles = {
-    entering: { opacity: 1, gridTemplateRows: '1fr', paddingBottom: '8px' },
-    entered:  { opacity: 1, gridTemplateRows: '1fr', paddingBottom: '8px' },
-    exiting:  { opacity: 0, gridTemplateRows: '0fr' },
-    exited:  { opacity: 0, gridTemplateRows: '0fr' },
-    unmounted: { opacity: 0, gridTemplateRows: '0fr' },
+    entering: expandedStyles,
+    entered:  expandedStyles,
+    exiting:  collapsedStyles,
+    exited:  collapsedStyles,
+    unmounted: collapsedStyles,
   };
 
   return (
@@ -51,8 +49,9 @@ const TransitionMessage = ({className = '', duration, in: show, messageType, tex
     >
       {(state) => (
           <Wrapper
+            $duration={duration}
             ref={nodeRef}
-            style={{...defaultStyle, ...transitionStyles[state]}}
+            style={transitionStyles[state]}
           >
             <StyledMessage
               className={className}
@@ -66,9 +65,10 @@ const TransitionMessage = ({className = '', duration, in: show, messageType, tex
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{$duration: number}>`
   display: grid;
   overflow: hidden;
+  transition: ${({ $duration }) => `grid-template-rows ${$duration}ms, opacity ${$duration}ms, padding ${$duration}ms`}
 `;
 
 const StyledMessage = styled(Message)`
