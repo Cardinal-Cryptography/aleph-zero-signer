@@ -177,7 +177,7 @@ const Hint = styled.span`
   font-size: 12px;
   line-height: 1.2;
   letter-spacing: 0.06em;
-  color: ${({ theme }) => theme.subTextColor};
+  color: ${({ theme }: ThemeProps) => theme.subTextColor};
   opacity: 0.6;
   margin-top: 5px;
 `;

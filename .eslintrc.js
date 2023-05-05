@@ -16,6 +16,7 @@ module.exports = {
     '@typescript-eslint/unbound-method': 'off'
   },
   overrides: [
+    ...base.overrides,
     {
       files: ['**/*.test.*', '**/*.stories.*'],
       rules: {
