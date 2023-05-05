@@ -4,6 +4,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
+import useTranslation from "@polkadot/extension-ui/hooks/useTranslation";
 import {ThemeProps} from "@polkadot/extension-ui/types";
 
 import animSuccess from '../assets/anim_signed.svg';
@@ -15,6 +16,8 @@ import { AnimatedSvg } from './index';
  * @constructor
  */
 const AccountCreationSuccess = () => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     const timeout = setTimeout(() => {
         window.close();
@@ -27,7 +30,7 @@ const AccountCreationSuccess = () => {
       <Container>
         <Icon src={animSuccess} />
         <Header>
-          Account created successfully!
+          {t('Account created successfully!')}
         </Header>
       </Container>
   );
