@@ -143,7 +143,7 @@ function AccountNamePasswordCreation({
     </CustomFooter>
   );
 
-  const nameRelatedInputs = name ? [name, ...name.split(/\s+/)] : [];
+  const nameRelatedInputs = name ? [name, ...name.split(/[^a-zA-Z]+/)] : [];
   const validationUserInput = [
     ...APP_RELATED_INPUTS,
     ...nameRelatedInputs,
