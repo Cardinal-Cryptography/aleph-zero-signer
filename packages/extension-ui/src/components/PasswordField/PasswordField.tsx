@@ -8,7 +8,6 @@ import { useIsCapsLockOn } from '@polkadot/extension-ui/hooks/useIsCapsLockOn';
 
 import InputWithLabel from '../InputWithLabel';
 import getFeedback, { isPasswordTooWeak, ValidationResult } from './getFeedback';
-import Message from './Message';
 import PasswordFeedback from './PasswordFeedback';
 
 type Props = {

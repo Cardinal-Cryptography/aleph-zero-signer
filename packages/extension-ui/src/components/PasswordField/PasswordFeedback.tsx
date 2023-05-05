@@ -50,7 +50,7 @@ function PasswordFeedback({
         duration={duration}
         messageType='critical'
         show={isTooWeak}
-        text={criticalMessage}
+        text={t(criticalMessage)}
       />
       <StyledTransitionMessage
         duration={duration}
@@ -70,7 +70,7 @@ function PasswordFeedback({
           key={index}
           messageType='info'
           show={!!suggestion}
-          text={typeof suggestion === 'string' ? suggestion : ''}
+          text={typeof suggestion === 'string' ? t(suggestion) : ''}
         />
       ))}
     </div>
