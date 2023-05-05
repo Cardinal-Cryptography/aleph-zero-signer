@@ -38,9 +38,9 @@ const Password = ({ label, onChange, validationUserInput }: Props) => {
       <ValidatedInput
         component={InputWithLabel}
         data-input-repeat-password
-        isCapsLockChecked
         label={t<string>('Confirm password')}
         onValidatedChange={setPass2}
+        shouldCheckCapsLock
         type='password'
         validator={isSecondPasswordValid(pass1)}
       />

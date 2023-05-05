@@ -23,15 +23,15 @@ type Props<T extends BasicProps> = T & {
   defaultValue?: string;
   onValidatedChange: (value: string) => void;
   validator: Validator<string>;
-  isCapsLockChecked?: boolean;
+  shouldCheckCapsLock?: boolean;
 };
 
 function ValidatedInput<T extends Record<string, unknown>>({
   className,
   component: Input,
   defaultValue,
-  isCapsLockChecked = false,
   onValidatedChange,
+  shouldCheckCapsLock = false,
   validator,
   ...props
 }: Props<T>): React.ReactElement<Props<T>> {
@@ -82,7 +82,7 @@ function ValidatedInput<T extends Record<string, unknown>>({
           {validationResult.error.errorDescription}
         </Warning>
       )}
-      {isCapsLockChecked && isCapsLockOn && (
+      {shouldCheckCapsLock && isCapsLockOn && (
         <StyledMessage messageType='warning'>
           {t('CapsLock is ON')}
         </StyledMessage>
