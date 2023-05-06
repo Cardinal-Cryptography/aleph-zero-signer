@@ -24,7 +24,9 @@ module.exports = {
     'react/jsx-closing-bracket-location': 0,
     'react/jsx-newline': ['warn', { prevent: true, allowMultilines: false }],
     'sort-keys': 'off',
-    'react/jsx-no-bind': 'off'
+    'react/jsx-no-bind': 'off',
+    '@typescript-eslint/no-misused-promises': 'off',
+    '@typescript-eslint/no-floating-promises': 'off'
   },
   plugins: [...base.plugins, 'prettier'],
   extends: [...base.extends, 'prettier']

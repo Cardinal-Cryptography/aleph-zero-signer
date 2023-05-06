@@ -10,6 +10,7 @@ import type { AccountJson, AllowedPath, AuthorizeRequest, MessageTypes, Metadata
 
 import { ALLOWED_PATH, PASSWORD_EXPIRY_MS } from '@polkadot/extension-base/defaults';
 import { isJsonAuthentic, signJson } from '@polkadot/extension-base/utils/accountJsonIntegrity';
+import clearClipboard from '@polkadot/extension-base/utils/clearClipboard';
 import { metadataExpand } from '@polkadot/extension-chains';
 import { TypeRegistry } from '@polkadot/types';
 import keyring from '@polkadot/ui-keyring';
@@ -510,6 +511,12 @@ export default class Extension {
     return true;
   }
 
+  private clearClipboard (rawTimeout: unknown) {
+    const timeout = parseInt(String(rawTimeout || 0));
+
+    setTimeout(clearClipboard, timeout);
+  }
+
   private derive (parentAddress: string, suri: string, password: string, metadata: KeyringPair$Meta): KeyringPair {
     const parentPair = keyring.getPair(parentAddress);
 
@@ -690,6 +697,9 @@ export default class Extension {
 
       case 'pri(window.open)':
         return this.windowOpen(request as AllowedPath);
+
+      case 'pri(clipboard.clear)':
+        return this.clearClipboard(request);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);
