@@ -57,7 +57,7 @@ export default function ImportQr(): React.ReactElement {
         createAccountSuri(name, password, account.content, 'sr25519', account.genesisHash)
           .then(() => {
             show(t('Account created successfully!'), 'success');
-            onAction('/')
+            onAction('/');
           })
           .catch((error: Error) => {
             show(t('Account creation was not successful.'), 'critical');
