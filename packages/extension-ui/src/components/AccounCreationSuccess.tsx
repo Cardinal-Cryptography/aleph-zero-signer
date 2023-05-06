@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect } from 'react';
-import { useTranslation } from "react-i18next";
 import styled from 'styled-components';
 
+import useTranslation from "@polkadot/extension-ui/hooks/useTranslation";
 import { clearClipboard } from "@polkadot/extension-ui/messaging";
 import {ThemeProps} from "@polkadot/extension-ui/types";
 

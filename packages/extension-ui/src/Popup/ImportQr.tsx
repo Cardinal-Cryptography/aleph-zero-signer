@@ -42,6 +42,10 @@ export default function ImportQr(): React.ReactElement {
   }, []);
 
   const _onCreate = useCallback(() => {
+    if (name && password) {
+      show(t('Account created successfully!'), 'success');
+    }
+
     if (account && name) {
       if (account.isAddress) {
         createAccountExternal(name, account.content, account.genesisHash)
@@ -51,10 +55,6 @@ export default function ImportQr(): React.ReactElement {
         createAccountSuri(name, password, account.content, 'sr25519', account.genesisHash)
           .then(() => onAction('/'))
           .catch((error: Error) => console.error(error));
-      }
-
-      if (name && password) {
-        show(t('Account created successfully!'), 'success');
       }
     }
   }, [account, name, onAction, password, show, t]);
