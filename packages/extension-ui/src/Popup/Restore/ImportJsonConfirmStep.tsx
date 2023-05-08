@@ -129,18 +129,15 @@ function ImportJsonConfirmStep({
                         {t('The JSON has been exported from the Aleph Zero Signer.')}
                         <Hint>
                           {t(
-                            'Uncheck only if the JSON has NOT been exported from the Aleph Zero Signer.' +
-                            ' Unchecking turns off some additional safety measures that the Aleph Zero Signer' +
-                            ' introduces and is only available for compatibility with other extensions.'
+                            `Uncheck only if the JSON has NOT been exported from the Aleph Zero Signer.
+                             Unchecking turns off some additional safety measures that the Aleph Zero Signer
+                             introduces and is only available for compatibility with other extensions.`
                           )}
                         </Hint>
                       </>
                     }
                     onChange={setIsExportFromA0Signer}
                   />
-                  <Hint>
-                    {}
-                  </Hint>
               </div>
             </>
           )}

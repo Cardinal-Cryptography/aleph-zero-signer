@@ -23,9 +23,7 @@ export const signJson = async <J extends object>(json: J, password: string): Pro
 
   return {
     ...json,
-    // "btoa" is not deprecated in a browser
-    // eslint-disable-next-line deprecation/deprecation
-    signature: btoa(String.fromCharCode(...new Uint8Array(hmac)))
+    signature: window.btoa(String.fromCharCode(...new Uint8Array(hmac)))
   };
 };
 
@@ -43,9 +41,7 @@ export const isJsonAuthentic = async (
 
   const key = await generateKey(password);
 
-  // "atob" is not deprecated in a browser
-  // eslint-disable-next-line deprecation/deprecation
-  return crypto.subtle.verify(ALGO.name, key, Uint8Array.from(atob(signature), (c) => c.charCodeAt(0)), encoder.encode(canonicalJson));
+  return crypto.subtle.verify(ALGO.name, key, Uint8Array.from(window.atob(signature), (c) => c.charCodeAt(0)), encoder.encode(canonicalJson));
 };
 
 const generateKey = (password: string) =>

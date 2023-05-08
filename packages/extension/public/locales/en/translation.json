@@ -321,6 +321,6 @@
   "Threat Slayer extension": "Threat Slayer extension",
   "which protects you from dangerous websites in real-time.": "",
   "You do NOT have any account.": "",
-  "The JSON has been exported from the Aleph Zero Signer": "",
-  "The JSON has been exported from the Aleph Zero Signer.": ""
+  "The JSON has been exported from the Aleph Zero Signer.": "",
+  "Uncheck only if the JSON has NOT been exported from the Aleph Zero Signer.\n                             Unchecking turns off some additional safety measures that the Aleph Zero Signer\n                             introduces and is only available for compatibility with other extensions.": ""
 }
