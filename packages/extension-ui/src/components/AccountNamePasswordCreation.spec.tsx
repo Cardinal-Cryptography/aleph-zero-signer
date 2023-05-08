@@ -31,7 +31,6 @@ const buttonLabel = 'Create';
 let wrapper: ReactWrapper;
 const onBackClick = jest.fn();
 const onCreate = jest.fn();
-const onNameChange = jest.fn();
 
 const type = async (input: ReactWrapper, value: string): Promise<void> => {
   input.simulate('change', { target: { value } });
@@ -61,7 +60,6 @@ const mountComponent = (isBusy = false): ReactWrapper =>
         isBusy={isBusy}
         onBackClick={onBackClick}
         onCreate={onCreate}
-        onNameChange={onNameChange}
       />
     </ThemeProvider>
   );
@@ -90,11 +88,6 @@ describe('AccountNamePasswordCreation', () => {
     await enterName(account.name);
     await enterName('');
     expect(wrapper.find(InputWithLabel).find('[data-input-name]').find(Input).prop('withError')).toBe(true);
-  });
-
-  it('after typing 3 characters into name input, onNameChange is called', async () => {
-    await enterName(account.name);
-    expect(onNameChange).toHaveBeenLastCalledWith(account.name);
   });
 
   it('password with caps lock should show a warning', async () => {
