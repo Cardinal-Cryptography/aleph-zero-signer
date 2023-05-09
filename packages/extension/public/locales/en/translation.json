@@ -358,5 +358,6 @@
   "Confirm new password": "",
   "Change account password": "",
   "Current password": "",
-  "Change password": ""
+  "Change password": "",
+  "Account password changed successfully": ""
 }
