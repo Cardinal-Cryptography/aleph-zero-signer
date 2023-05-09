@@ -81,7 +81,7 @@ function PasswordFeedback({
 }
 
 const StyledTransitionMessage = styled(TransitionMessage)`
-  margin: 0 15px;
+  margin-inline: 15px;
 `;
 
 const StyleProgressBar = styled(ProgressBar)`

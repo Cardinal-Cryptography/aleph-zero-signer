@@ -29,7 +29,7 @@ const TransitionMessage = ({className = '', duration, in: show, messageType, tex
     setTimeout(setCurrentText, timeout, text);
   }, [setCurrentText, currentText, text]);
 
-  const expandedStyles = { opacity: 1, gridTemplateRows: '1fr', paddingBottom: '8px' };
+  const expandedStyles = { opacity: 1, gridTemplateRows: '1fr', marginBottom: '8px' };
   const collapsedStyles = { opacity: 0, gridTemplateRows: '0fr' };
 
   const transitionStyles = {
@@ -68,7 +68,7 @@ const TransitionMessage = ({className = '', duration, in: show, messageType, tex
 const Wrapper = styled.div<{$duration: number}>`
   display: grid;
   overflow: hidden;
-  transition: ${({ $duration }) => `grid-template-rows ${$duration}ms, opacity ${$duration}ms, padding ${$duration}ms`}
+  transition: ${({ $duration }) => `grid-template-rows ${$duration}ms, opacity ${$duration}ms, margin ${$duration}ms`}
 `;
 
 const StyledMessage = styled(Message)`

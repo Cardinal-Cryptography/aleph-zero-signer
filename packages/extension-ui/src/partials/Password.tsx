@@ -2,9 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useCallback, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-import { InputWithLabel, ValidatedInput } from '../components';
+import InputWithLabel from '../components/InputWithLabel';
 import PasswordField from '../components/PasswordField';
+import ValidatedInput from '../components/ValidatedInput';
 import useTranslation from '../hooks/useTranslation';
 import { allOf, isSameAs } from '../util/validators';
 
@@ -13,9 +15,10 @@ type Props = {
   onChange: (password: string | null) => void;
   validationUserInput?: string[];
   label?: string;
+  repeatLabel?: string;
 }
 
-const Password = ({ label, onChange, validationUserInput }: Props) => {
+const Password = ({ label, onChange, repeatLabel, validationUserInput }: Props) => {
   const { t } = useTranslation();
   const [pass1, setPass1] = useState<string>('');
   const [pass2, setPass2] = useState<string>('');
@@ -38,7 +41,7 @@ const Password = ({ label, onChange, validationUserInput }: Props) => {
       <ValidatedInput
         component={InputWithLabel}
         data-input-repeat-password
-        label={t<string>('Confirm password')}
+        label={repeatLabel || t<string>('Confirm password')}
         onValidatedChange={setPass2}
         shouldCheckCapsLock
         type='password'
