@@ -21,8 +21,8 @@ function Label({ children, className, label }: Props): React.ReactElement<Props>
   );
 }
 
-export default styled(Label)<{$active: boolean}>(
-  ({ $active, theme }) => `
+export default styled(Label)<{$active?: boolean}>(
+  ({ $active = false, theme }) => `
   color: ${theme.labelColor};
   display: inline-block;
   position: relative;

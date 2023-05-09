@@ -35,7 +35,7 @@ function PasswordFeedback({
   const duration = 500;
 
   return (
-    <Container className={className}>
+    <div className={className}>
       <ProgressBar
         activeColor={scoreToColor[score]}
         activeStepsCount={score + 1}
@@ -77,18 +77,16 @@ function PasswordFeedback({
           />
         ))}
       </TransitionGroup>
-    </Container>
+    </div>
   );
 }
-
-const Container = styled.div`
-  & > :not(:last-child) {
-    margin-bottom: 8px;
-  }
-`;
 
 const StyledTransitionMessage = styled(TransitionMessage)`
   margin-inline: 15px;
 `;
 
-export default PasswordFeedback;
+export default styled(PasswordFeedback)`
+  & > :not(:last-child) {
+    margin-bottom: 8px;
+  }
+`;
