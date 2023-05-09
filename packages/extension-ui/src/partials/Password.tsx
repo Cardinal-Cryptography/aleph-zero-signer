@@ -1,14 +1,13 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
 
 import InputWithLabel from '../components/InputWithLabel';
 import PasswordField from '../components/PasswordField';
 import ValidatedInput from '../components/ValidatedInput';
 import useTranslation from '../hooks/useTranslation';
-import { allOf, isSameAs } from '../util/validators';
+import { isSameAs } from '../util/validators';
 
 type Props = {
   isFocussed?: boolean;
@@ -20,21 +19,20 @@ type Props = {
 
 const Password = ({ label, onChange, repeatLabel, validationUserInput }: Props) => {
   const { t } = useTranslation();
+  const [nonValidatedPass1, setNonValidatedPass1] = useState<string>('');
   const [pass1, setPass1] = useState<string>('');
   const [pass2, setPass2] = useState<string>('');
-  const isSecondPasswordValid = useCallback(
-    (firstPassword: string) => allOf(isSameAs(firstPassword, t<string>('Passwords do not match'))),
-    [t]
-  );
+  const isSecondPasswordValid = isSameAs(nonValidatedPass1, t<string>('Passwords do not match'));
 
   useEffect((): void => {
-    onChange(pass1 && pass2 ? pass1 : null);
+    onChange(pass1 && pass1 === pass2 ? pass1 : null);
   }, [onChange, pass1, pass2]);
 
   return (
     <>
       <PasswordField
         label={label || t<string>('Set password')}
+        onNonValidatedChange={setNonValidatedPass1}
         onValidatedChange={setPass1}
         validationUserInput={validationUserInput}
       />
@@ -45,7 +43,7 @@ const Password = ({ label, onChange, repeatLabel, validationUserInput }: Props) 
         onValidatedChange={setPass2}
         shouldCheckCapsLock
         type='password'
-        validator={isSecondPasswordValid(pass1)}
+        validator={isSecondPasswordValid}
       />
     </>
   );

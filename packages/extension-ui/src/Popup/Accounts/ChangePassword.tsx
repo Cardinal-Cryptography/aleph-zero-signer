@@ -49,7 +49,7 @@ const EditPassword = () => {
     try {
       await changePassword(address, providedPass, nextPass);
       goBack();
-      show(t<string>('Account name changed successfully'), 'success');
+      show(t<string>('Account password changed successfully'), 'success');
     } catch (error) {
       show(t<string>('Unable to decode using the supplied passphrase'), 'critical');
       setIsProvidedPassWrong(true);
@@ -72,7 +72,7 @@ const EditPassword = () => {
       <ScrollWrapper>
         <ContentWrapper>
           <Address address={address} />
-          <div>
+          <InputWrapper>
             <ValidatedInput
               component={StyledInputWithLabel}
               label={t<string>('Current password')}
@@ -88,7 +88,7 @@ const EditPassword = () => {
                 </StyleMessage>
               )
             }
-          </div>
+          </InputWrapper>
           <Password
             label={t('New password')}
             onChange={setNextPass}
@@ -117,8 +117,14 @@ const EditPassword = () => {
 };
 
 const ContentWrapper = styled.div`
-  & > * {
+  & > :not(:last-child) {
     margin-bottom: 24px;
+  }
+`;
+
+const InputWrapper = styled.div`
+  & > :not(:last-child) {
+    margin-bottom: 8px;
   }
 `;
 

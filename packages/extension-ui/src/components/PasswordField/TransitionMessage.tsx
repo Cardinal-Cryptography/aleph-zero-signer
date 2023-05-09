@@ -29,8 +29,8 @@ const TransitionMessage = ({className = '', duration, in: show, messageType, tex
     setTimeout(setCurrentText, timeout, text);
   }, [setCurrentText, currentText, text]);
 
-  const expandedStyles = { opacity: 1, gridTemplateRows: '1fr', marginBottom: '8px' };
-  const collapsedStyles = { opacity: 0, gridTemplateRows: '0fr' };
+  const expandedStyles = { opacity: 1, gridTemplateRows: '1fr', };
+  const collapsedStyles = { opacity: 0, gridTemplateRows: '0fr', marginBlock: 0 };
 
   const transitionStyles = {
     entering: expandedStyles,
