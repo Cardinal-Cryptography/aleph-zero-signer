@@ -6,7 +6,7 @@
 import '@polkadot/extension-mocks/chrome';
 
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { configure, mount, ReactWrapper } from 'enzyme';
+import { ComponentType, configure, FunctionComponent, mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -47,6 +47,17 @@ describe('Create Account', () => {
     );
 
   describe('CreateAccount component', () => {
+    const clickNext = () => wrapper.findWhere(
+      (node) => node.type() === 'button' && node.text() === 'Next'
+    ).simulate('click');
+
+    const clickBack = () => wrapper.findWhere(
+      (node) => node.type() === 'button' && !!node.find('.arrowLeft').length
+    ).simulate('click');
+
+    const isRendered = <T,>(statelessComponent: FunctionComponent<T>) => expect(wrapper.find(statelessComponent).exists()).toBeTruthy();
+    const isUnmounted = <T,>(statelessComponent: FunctionComponent<T>) => expect(wrapper.find(statelessComponent).exists()).toBeFalsy();
+
     beforeEach(async () => {
       onActionStub = jest.fn();
       jest.spyOn(messaging, 'createSeed').mockResolvedValue(exampleAccount);
@@ -60,46 +71,58 @@ describe('Create Account', () => {
     });
     it('renders header with steps component when isBusy state is false', () => {
       wrapper.setState({ isBusy: false });
-      expect(wrapper.find(HeaderWithSteps).exists()).toBe(true);
+
+      isRendered(HeaderWithSteps);
     });
 
     it('renders SafetyFirst component when step is 1', () => {
       wrapper.setState({ step: 1 });
 
-      expect(wrapper.find(SafetyFirst).exists()).toBe(true);
+      isRendered(SafetyFirst);
     });
 
     it('renders SafetyFirst component after clicking back button on step 2', () => {
-      wrapper.find(Button).last().simulate('click');
-      wrapper.find(Button).at(1).simulate('click');
-      wrapper.find(Button).first().simulate('click');
-      wrapper.update();
+      isRendered(SafetyFirst);
 
-      expect(wrapper.find(SafetyFirst).exists()).toBe(true);
+      clickNext();
+
+      isUnmounted(SafetyFirst);
+
+
+      clickBack();
+
+      isRendered(SafetyFirst);
     });
 
     it('renders SaveMnemonic component after clicking next button on step 1', () => {
-      wrapper.find(Button).last().simulate('click');
-      wrapper.update();
+      clickNext();
 
-      expect(wrapper.find(SaveMnemonic).exists()).toBe(true);
+      isRendered(SaveMnemonic);
     });
 
     it('renders SaveMnemonic component after clicking Back button on step 3', () => {
-      wrapper.find(Button).last().simulate('click');
-      wrapper.find(Button).last().simulate('click');
-      wrapper.find(Button).first().simulate('click');
-      wrapper.update();
+      isUnmounted(SaveMnemonic);
 
-      expect(wrapper.find(SaveMnemonic).exists()).toBe(true);
+      clickNext();
+
+      isRendered(SaveMnemonic);
+
+      clickNext();
+
+      isUnmounted(SaveMnemonic);
+
+      clickBack();
+
+      isRendered(SaveMnemonic);
     });
 
-    it('renders AccountNamePasswordCreation component after clicking next button on step 2', () => {
-      wrapper.find(Button).last().simulate('click');
-      wrapper.find(Button).last().simulate('click');
-      wrapper.update();
+    it('renders AccountNamePasswordCreation component after clicking next button on step 2', async () => {
+      clickNext();
+      clickNext();
 
-      expect(wrapper.find(AccountNamePasswordCreation).exists()).toBe(true);
+      await act(flushAllPromises);
+
+      isRendered(AccountNamePasswordCreation);
     });
   });
 });
