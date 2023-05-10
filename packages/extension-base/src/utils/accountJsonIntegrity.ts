@@ -23,7 +23,7 @@ export const signJson = async <J extends object>(json: J, password: string): Pro
 
   return {
     ...json,
-    signature: window.btoa(String.fromCharCode(...new Uint8Array(hmac)))
+    signature: self.btoa(String.fromCharCode(...new Uint8Array(hmac)))
   };
 };
 
@@ -41,7 +41,12 @@ export const isJsonAuthentic = async (
 
   const key = await generateKey(password);
 
-  return crypto.subtle.verify(ALGO.name, key, Uint8Array.from(window.atob(signature), (c) => c.charCodeAt(0)), encoder.encode(canonicalJson));
+  return crypto.subtle.verify(
+    ALGO.name,
+    key,
+    Uint8Array.from(self.atob(signature), (c) => c.charCodeAt(0)),
+    encoder.encode(canonicalJson)
+  );
 };
 
 const generateKey = (password: string) =>
