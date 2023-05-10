@@ -6,13 +6,13 @@
 import '@polkadot/extension-mocks/chrome';
 
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { ComponentType, configure, FunctionComponent, mount, ReactWrapper } from 'enzyme';
+import { configure, FunctionComponent, mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
-import { AccountNamePasswordCreation, ActionContext, Button, themes } from '../../components';
+import { AccountNamePasswordCreation, ActionContext, themes } from '../../components';
 import * as messaging from '../../messaging';
 import HeaderWithSteps from '../../partials/HeaderWithSteps';
 import { flushAllPromises } from '../../testHelpers';
