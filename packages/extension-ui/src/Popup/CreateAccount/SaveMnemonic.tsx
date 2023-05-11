@@ -47,10 +47,12 @@ function SaveMnemonic({ className, onNextStep, onPreviousStep, seed }: Props): R
             />
           ))}
         </div>
-        <CopyToClipboard text={seed}>
+        <CopyToClipboard
+          onCopy={_onCopy}
+          text={seed}
+        >
           <Button
             className='copy-button'
-            onClick={_onCopy}
             tertiary
           >
             <div className='copy-to-clipboard'>
