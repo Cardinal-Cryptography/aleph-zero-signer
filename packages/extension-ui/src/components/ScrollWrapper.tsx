@@ -40,6 +40,7 @@ export default styled(ScrollWrapper)(
     width: 8px;
   }
 
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   ${Label}:not(.label), ${Address}, ${StyledPasswordFeedback} {
     width: calc(100% + 8px);
   }
