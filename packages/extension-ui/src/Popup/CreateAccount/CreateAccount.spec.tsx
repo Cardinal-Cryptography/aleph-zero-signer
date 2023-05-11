@@ -55,8 +55,8 @@ describe('Create Account', () => {
       (node) => node.type() === 'button' && !!node.find('.arrowLeft').length
     ).simulate('click');
 
-    const isRendered = <T,>(statelessComponent: FunctionComponent<T>) => expect(wrapper.find(statelessComponent).exists()).toBeTruthy();
-    const isUnmounted = <T,>(statelessComponent: FunctionComponent<T>) => expect(wrapper.find(statelessComponent).exists()).toBeFalsy();
+    const isPresent = <T,>(statelessComponent: FunctionComponent<T>) => expect(wrapper.find(statelessComponent).exists()).toBeTruthy();
+    const isAbsent = <T,>(statelessComponent: FunctionComponent<T>) => expect(wrapper.find(statelessComponent).exists()).toBeFalsy();
 
     beforeEach(async () => {
       onActionStub = jest.fn();
@@ -72,48 +72,47 @@ describe('Create Account', () => {
     it('renders header with steps component when isBusy state is false', () => {
       wrapper.setState({ isBusy: false });
 
-      isRendered(HeaderWithSteps);
+      isPresent(HeaderWithSteps);
     });
 
     it('renders SafetyFirst component when step is 1', () => {
       wrapper.setState({ step: 1 });
 
-      isRendered(SafetyFirst);
+      isPresent(SafetyFirst);
     });
 
     it('renders SafetyFirst component after clicking back button on step 2', () => {
-      isRendered(SafetyFirst);
+      isPresent(SafetyFirst);
 
       clickNext();
 
-      isUnmounted(SafetyFirst);
-
+      isAbsent(SafetyFirst);
 
       clickBack();
 
-      isRendered(SafetyFirst);
+      isPresent(SafetyFirst);
     });
 
     it('renders SaveMnemonic component after clicking next button on step 1', () => {
       clickNext();
 
-      isRendered(SaveMnemonic);
+      isPresent(SaveMnemonic);
     });
 
     it('renders SaveMnemonic component after clicking Back button on step 3', () => {
-      isUnmounted(SaveMnemonic);
+      isAbsent(SaveMnemonic);
 
       clickNext();
 
-      isRendered(SaveMnemonic);
+      isPresent(SaveMnemonic);
 
       clickNext();
 
-      isUnmounted(SaveMnemonic);
+      isAbsent(SaveMnemonic);
 
       clickBack();
 
-      isRendered(SaveMnemonic);
+      isPresent(SaveMnemonic);
     });
 
     it('renders AccountNamePasswordCreation component after clicking next button on step 2', async () => {
@@ -122,7 +121,7 @@ describe('Create Account', () => {
 
       await act(flushAllPromises);
 
-      isRendered(AccountNamePasswordCreation);
+      isPresent(AccountNamePasswordCreation);
     });
   });
 });
