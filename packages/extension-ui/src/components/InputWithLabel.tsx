@@ -27,7 +27,7 @@ interface Props extends ThemeProps {
 }
 
 function InputWithLabel({
-  className = '',
+  className,
   defaultValue,
   disabled,
   isError,

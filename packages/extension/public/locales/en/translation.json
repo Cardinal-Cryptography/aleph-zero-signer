@@ -359,5 +359,6 @@
   "Change account password": "",
   "Current password": "",
   "Change password": "",
-  "Account password changed successfully": ""
+  "Account password changed successfully": "",
+  "The current password is invalid": ""
 }

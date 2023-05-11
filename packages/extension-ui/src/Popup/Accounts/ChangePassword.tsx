@@ -51,7 +51,7 @@ const EditPassword = () => {
       goBack();
       show(t<string>('Account password changed successfully'), 'success');
     } catch (error) {
-      show(t<string>('Unable to decode using the supplied passphrase'), 'critical');
+      show(t<string>('The current password is invalid'), 'critical');
       setIsProvidedPassWrong(true);
     }
   };
