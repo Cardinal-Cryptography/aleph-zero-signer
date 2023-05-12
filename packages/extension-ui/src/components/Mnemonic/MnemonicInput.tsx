@@ -6,12 +6,12 @@ import styled from 'styled-components';
 
 import MnemonicPill from './MnemonicPill';
 
-interface Props {
+type Props = {
   className?: string;
   seedWords: string[];
   showError: boolean;
   onChange: (seedWords: string[]) => void;
-}
+};
 
 const MnemonicInput = ({
   className,

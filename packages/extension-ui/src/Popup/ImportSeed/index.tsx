@@ -36,8 +36,6 @@ function ImportSeed(): React.ReactElement {
 
   const chain = useMetadata(account && account.genesis, true);
 
-  console.log({chain});
-
   const type = chain && chain.definition.chainType === 'ethereum' ? 'ethereum' : DEFAULT_TYPE;
 
   useEffect((): void => {
