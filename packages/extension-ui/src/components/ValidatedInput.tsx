@@ -4,14 +4,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { useIsCapsLockOn } from '../hooks/useIsCapsLockOn';
 import useIsMounted from '../hooks/useIsMounted';
-import { ThemeProps } from '../types';
 import { Result, Validator } from '../util/validators';
+import Message from './PasswordField/Message';
+import { useTranslation } from './translate';
 import Warning from './Warning';
 
 interface BasicProps {
   isError?: boolean;
-  value?: string | null;
+  value?: string;
   onChange?: (value: string) => void;
 }
 
@@ -19,9 +21,9 @@ type Props<T extends BasicProps> = T & {
   className?: string;
   component: React.ComponentType<T>;
   defaultValue?: string;
-  onValidatedChange: (value: string | null) => void;
+  onValidatedChange: (value: string) => void;
   validator: Validator<string>;
-  showPasswordElement?: React.ReactNode;
+  shouldCheckCapsLock?: boolean;
 };
 
 function ValidatedInput<T extends Record<string, unknown>>({
@@ -29,11 +31,14 @@ function ValidatedInput<T extends Record<string, unknown>>({
   component: Input,
   defaultValue,
   onValidatedChange,
-  showPasswordElement,
+  shouldCheckCapsLock = false,
   validator,
   ...props
 }: Props<T>): React.ReactElement<Props<T>> {
+  const {t} = useTranslation();
+
   const [value, setValue] = useState(defaultValue || '');
+  const {handleKeyDown, isCapsLockOn} = useIsCapsLockOn();
 
   const [validationResult, setValidationResult] = useState<Result<string>>(Result.ok(''));
   const isMounted = useIsMounted();
@@ -55,20 +60,20 @@ function ValidatedInput<T extends Record<string, unknown>>({
       const result = await validator(value);
 
       setValidationResult(result);
-      onValidatedChange(Result.isOk(result) ? value : null);
+      onValidatedChange(Result.isOk(result) ? value : '');
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, validator, onValidatedChange]);
 
   return (
-    <div className={className}>
+    <Container className={className}>
       <Input
         {...(props as unknown as T)}
         isError={Result.isError(validationResult)}
         onChange={setValue}
+        onKeyDown={handleKeyDown}
         value={value}
       />
-      {showPasswordElement && showPasswordElement}
       {Result.isError(validationResult) && (
         <Warning
           isBelowInput
@@ -77,23 +82,23 @@ function ValidatedInput<T extends Record<string, unknown>>({
           {validationResult.error.errorDescription}
         </Warning>
       )}
-    </div>
+      {shouldCheckCapsLock && isCapsLockOn && (
+        <StyledMessage messageType='warning'>
+          {t('CapsLock is ON')}
+        </StyledMessage>
+      )}
+    </Container>
   );
 }
 
-export default styled(ValidatedInput)`
-position: relative;
-
-.password-icon {
-  all: unset;
-  position: absolute;
-  top: 18px;
-  right: 20px;
-  cursor: pointer;
-}
-
-.password-icon:focus {
-  outline: ${({ theme }: ThemeProps): string => theme.boxBorderColor} 1px auto;
-}
-
+const Container = styled.div`
+  & > :not(:last-child) {
+    margin-bottom: 8px;
+  }
 `;
+
+const StyledMessage = styled(Message)`
+  margin-left: 16px;
+`;
+
+export default styled(ValidatedInput)``;

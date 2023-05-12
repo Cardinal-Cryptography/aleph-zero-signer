@@ -97,6 +97,7 @@ const darkTheme = {
   successBackground: '#66D16F',
   textColor: '#FFFFFF',
   textColorDanger: '#FF5E5C',
+  textColorSuggestion: '#CFDAE3',
   toastBoxShadow:
     '0px 24px 38px rgba(12, 19, 26, 0.14), 0px 9px 46px rgba(12, 19, 26, 0.12), 0px 11px 15px rgba(12, 19, 26, 0.2);',
   toastCriticalBackground: '#FF5E5C',
@@ -112,7 +113,8 @@ const darkTheme = {
   tooltipBoxShadowTransaction: '8px 16px 24px rgba(69, 79, 89, 0.04)',
   tooltipTextColor: '#BCCBD6',
   warningBoxBackground: 'linear-gradient(0deg, rgba(255, 210, 63, 0.05), rgba(255, 210, 63, 0.05)), #14202A;',
-  warningColor: '#FFD23F'
+  warningColor: '#FFD23F',
+  progressBarInactive: '#273847',
 };
 
 export declare type Theme = typeof darkTheme;

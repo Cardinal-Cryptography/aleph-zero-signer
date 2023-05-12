@@ -2683,6 +2683,7 @@ __metadata:
     "@polkadot/ui-settings": ^2.9.15
     "@polkadot/util": ^12.1.2
     "@polkadot/util-crypto": ^12.1.2
+    canonicalize: ^2.0.0
     eventemitter3: ^4.0.7
     rxjs: ^7.8.0
   languageName: unknown
@@ -4348,6 +4349,13 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: 0773523fda71bafdc52f13f5970039e535a353665a60ba9261149a5c9c2b908242e6e77fbb7a8c06931ec78ce889d64d09673c68ba23eb5f5742d5385d0d1982
+  languageName: node
+  linkType: hard
+
+"@types/zxcvbn@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "@types/zxcvbn@npm:4.4.1"
+  checksum: 71c484f1aa049921997ee6471604725a7fb00b9899e7753c6e94275a2b135e1088ed3f2f2ba77d189715d1ec61bed65b06899ba03e061b07ffc32c2a9296501b
   languageName: node
   linkType: hard
 
@@ -6761,6 +6769,13 @@ __metadata:
   version: 1.0.30001458
   resolution: "caniuse-lite@npm:1.0.30001458"
   checksum: 258cc5a25babbbfe483bf788c6f321a19400ff80b2bf156b360bac09a6f9f4da44516350d187a30395667cb142c682d9ea96577ea0df236d35f76234b07ccb41
+  languageName: node
+  linkType: hard
+
+"canonicalize@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "canonicalize@npm:2.0.0"
+  checksum: 541dee6e53c06e81b11241eba76197b6837b3e2a5951a175f57d75eb4c59599ec68566ee88aa2fb3dac6e6ca57d674ca3c0d9c75a855176ce78f0555b26caf39
   languageName: node
   linkType: hard
 
@@ -15472,10 +15487,12 @@ __metadata:
     "@babel/core": ^7.20.12
     "@polkadot/dev": ^0.67.177
     "@types/jest": ^29.2.5
+    "@types/zxcvbn": ^4.4.1
     eslint-config-prettier: ^8.6.0
     eslint-plugin-prettier: ^4.2.1
     i18next-scanner: ^4.1.0
     sinon-chrome: ^3.0.1
+    zxcvbn: 4.4.2
   languageName: unknown
   linkType: soft
 
@@ -18332,5 +18349,12 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"zxcvbn@npm:4.4.2":
+  version: 4.4.2
+  resolution: "zxcvbn@npm:4.4.2"
+  checksum: 76ab32c066082ac73491b7cd7f93ad0595c59b6d45ae80a0745e9e1661237388beb2f0c2ba0ae3dc330ca3ecdb87edcb7a21e0c09137ab81d5b32e584cda1e5d
   languageName: node
   linkType: hard

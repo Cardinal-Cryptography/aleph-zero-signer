@@ -5,15 +5,16 @@ import type { KeypairType } from '@polkadot/util-crypto/types';
 import type { ThemeProps } from '../../types';
 import type { AccountInfo } from '.';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { validateSeed, windowOpen } from '@polkadot/extension-ui/messaging';
+import { validateSeed } from '@polkadot/extension-ui/messaging';
 import { objectSpread } from '@polkadot/util';
 
 import helpIcon from '../../assets/help.svg';
 import infoIcon from '../../assets/information.svg';
 import {
+  ActionContext,
   Button,
   ButtonArea,
   InputLock,
@@ -26,17 +27,12 @@ import {
   Warning
 } from '../../components';
 import HelperFooter from '../../components/HelperFooter';
-import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
 import { LINKS } from '../../links';
 
 interface Props {
   className?: string;
   genesis: string;
-  path: string | null;
-  seed: string | null;
-  setPath: (path: string) => void;
-  setSeed: (seed: string) => void;
   onNextStep: () => void;
   onAccountChange: (account: AccountInfo | null) => void;
   type: KeypairType;
@@ -81,53 +77,72 @@ const StyledInputWithLabel = styled(InputWithLabel)`
 }
 `;
 
+const SEED_WORDS_LENGTH = 12;
+const EMPTY_SEED_WORDS: string[] = new Array<string>(SEED_WORDS_LENGTH).fill('');
+
 function SeedAndPath({
   className,
   genesis,
   onAccountChange,
   onNextStep,
-  path,
-  seed,
-  setPath,
-  setSeed,
   type
 }: Props): React.ReactElement {
   const { t } = useTranslation();
+
+  const [seedWords, setSeedWords] = useState<string[]>(EMPTY_SEED_WORDS);
+  const [path, setPath] = useState<string>('');
+
   const [address, setAddress] = useState('');
   const [error, setError] = useState('');
-  const [isLocked, setLocked] = useState<boolean>(true);
-  const isValid = !!error && !!seed;
 
-  const { goTo } = useGoTo();
+  const [isLocked, setLocked] = useState<boolean>(true);
+
+  const onAction = useContext(ActionContext);
+
+  const onSeedWordsChange = (nextSeedWords: string[]) => {
+    setError('');
+    setSeedWords(
+      [...nextSeedWords, ...EMPTY_SEED_WORDS].slice(0, SEED_WORDS_LENGTH)
+    );
+  };
+
+  const hasSomeSeedWords = seedWords.some((word) => word);
 
   useEffect(() => {
     // No need to validate an empty seed
     // we have a dedicated error for this
-    if (!seed) {
+
+    if (!hasSomeSeedWords) {
       onAccountChange(null);
 
       return;
     }
 
-    const suri = `${seed || ''}${path || ''}`;
+    const seed = seedWords.join(' ');
+    const suri = seed + path;
 
     validateSeed(suri, type)
       .then((validatedAccount) => {
+        setError('');
+        setAddress(validatedAccount.address);
         onAccountChange(objectSpread<AccountInfo>({}, validatedAccount, { genesis, type }));
       })
       .catch(() => {
+        setAddress('');
         onAccountChange(null);
         setError(path ? t<string>('Invalid secret phrase or path') : t<string>('Invalid secret phrase'));
       });
-  }, [t, genesis, seed, path, onAccountChange, type, setError]);
+  }, [t, hasSomeSeedWords, genesis, seedWords, path, onAccountChange, type, setError, setAddress]);
 
   const _toggleLocked = useCallback(() => {
     setLocked((prevState) => !prevState);
   }, []);
 
   const _onClick = useCallback(() => {
-    windowOpen('/account/restore-json').catch(console.error);
-  }, []);
+    onAction('/account/restore-json');
+  }, [onAction]);
+
+  const showError = !!error && hasSomeSeedWords;
 
   const footer = (
     <CustomFooter>
@@ -164,8 +179,7 @@ function SeedAndPath({
             >
               {t<string>('JSON')}
             </span>
-            &nbsp;
-            {t<string>('file to import?')}
+            &nbsp;{t<string>('file to import?')}
           </span>
         </div>
       </div>
@@ -182,17 +196,11 @@ function SeedAndPath({
           </div>
           <div className='input-with-warning'>
             <MnemonicInput
-              error={error}
-              genesis={genesis}
-              onAccountChange={onAccountChange}
-              onChange={setSeed}
-              path={path}
-              seed={seed}
-              setAddress={setAddress}
-              setError={setError}
-              type={type}
+              onChange={onSeedWordsChange}
+              seedWords={seedWords}
+              showError={showError}
             />
-            {isValid && (
+            {showError && (
               <Warning
                 className='centered'
                 isDanger
@@ -210,7 +218,7 @@ function SeedAndPath({
               isLocked={isLocked}
               label={t<string>('Sub-account derivation path')}
               onChange={setPath}
-              value={path || ''}
+              value={path}
             />
             <InputLock
               isLocked={isLocked}
@@ -223,7 +231,7 @@ function SeedAndPath({
       <VerticalSpace />
       <ButtonArea footer={footer}>
         <Button
-          onClick={goTo('/')}
+          onClick={window.close}
           secondary
         >
           {t<string>('Cancel')}
@@ -343,6 +351,10 @@ export default styled(SeedAndPath)(
 
   .input-with-warning {
     height: 210px;
+  }
+
+  .input-with-warning > :not(:last-child) {
+    margin-bottom: 8px;
   }
 `
 );
