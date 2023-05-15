@@ -103,6 +103,10 @@ export async function editAccount(address: string, name: string): Promise<boolea
   return sendMessage('pri(accounts.edit)', { address, name });
 }
 
+export function changePassword(address: string, oldPass: string, newPass: string): Promise<boolean> {
+  return sendMessage('pri(accounts.changePassword)', {address, oldPass, newPass});
+}
+
 export async function showAccount(address: string, isShowing: boolean): Promise<boolean> {
   return sendMessage('pri(accounts.show)', { address, isShowing });
 }
@@ -309,12 +313,12 @@ export async function jsonGetAccountInfo(json: KeyringPair$Json): Promise<Respon
   return sendMessage('pri(json.account.info)', json);
 }
 
-export async function jsonRestore(file: KeyringPair$Json, password: string): Promise<void> {
-  return sendMessage('pri(json.restore)', { file, password });
+export async function jsonRestore(file: KeyringPair$Json, password: string, skipAuthenticityCheck?: boolean): Promise<void> {
+  return sendMessage('pri(json.restore)', { file, password, skipAuthenticityCheck });
 }
 
-export async function batchRestore(file: KeyringPairs$Json, password: string): Promise<void> {
-  return sendMessage('pri(json.batchRestore)', { file, password });
+export async function batchRestore(file: KeyringPairs$Json, password: string, skipAuthenticityCheck?: boolean): Promise<void> {
+  return sendMessage('pri(json.batchRestore)', { file, password, skipAuthenticityCheck });
 }
 
 export async function setNotification(notification: string): Promise<boolean> {

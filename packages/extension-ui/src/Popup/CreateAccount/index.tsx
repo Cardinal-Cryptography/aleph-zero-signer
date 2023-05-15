@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import useToast from "@polkadot/extension-ui/hooks/useToast";
 
 import { Loading, ScrollWrapper } from '../../components';
-import AccounCreationSuccess from "../../components/AccounCreationSuccess";
+import AccountCreationSuccess from "../../components/AccountCreationSuccess";
 import AccountNamePasswordCreation from '../../components/AccountNamePasswordCreation';
 import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 import useMetadata from '../../hooks/useMetadata';
@@ -80,7 +80,6 @@ function CreateAccount(): React.ReactElement {
           step={step}
           text={t<string>('Create an account')}
           total={3}
-          withBackArrow
           withBackdrop
         />
       )}
@@ -104,7 +103,7 @@ function CreateAccount(): React.ReactElement {
             setGenesis={setGenesis}
           />
         )}
-        {step === 4 && <AccounCreationSuccess />}
+        {step === 4 && <AccountCreationSuccess />}
       </Loading>
     </ScrollWrapper>
   );
