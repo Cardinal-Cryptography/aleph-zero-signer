@@ -353,5 +353,6 @@
   "Reversed words aren't much harder to guess": "",
   "Predictable substitutions like '@' instead of 'a' don't help very much": "",
   "Account creation was not successful.": "",
-  "Sub-account creation was not successful.": ""
+  "Sub-account creation was not successful.": "",
+  "Failed copying to clipboard": ""
 }
