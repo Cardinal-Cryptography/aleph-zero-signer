@@ -100,8 +100,8 @@ export default styled(Checkbox)(
       width: 16px;
       border-radius: 4px;
       background-color: ${theme.inputBackground};
-      border: 1px solid ${theme.inputBackground};
-      outline: 1px solid ${theme.boxBorderColor};
+      border: 2px solid ${theme.inputBackground};
+      outline: 1px solid ${theme.checkboxBorderColor};
       transition: 0.2s ease;
 
       &:after {
@@ -129,7 +129,6 @@ export default styled(Checkbox)(
 
     input:checked ~ .checkbox-ui {
       background: ${theme.primaryColor};
-      border: 1px solid black;
       border-radius: 4px;
     }
 
