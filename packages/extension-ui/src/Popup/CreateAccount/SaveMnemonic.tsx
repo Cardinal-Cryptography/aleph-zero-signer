@@ -49,10 +49,11 @@ function SaveMnemonic({ className, onNextStep, onPreviousStep, seed }: Props): R
 
   const footer = (
     <HelperFooter>
-      <StyledCheckbox
+      <Checkbox
         checked={isSecretCopied}
         label={t('I have copied the secret phrase to a safe place')}
         onChange={setIsSecretCopied}
+        variant='small'
       />
     </HelperFooter>
   );
@@ -109,27 +110,6 @@ function SaveMnemonic({ className, onNextStep, onPreviousStep, seed }: Props): R
     </>
   );
 }
-
-const StyledCheckbox = styled(Checkbox)`
-  margin: 0;
-  font-size: 14px;
-  letter-spacing: 0.07em;
-  line-height: 145%;
-
-  && .checkbox-ui {
-    left: 0px;
-    top: 4px;
-    height: 11px;
-    width: 11px;
-
-    :after {
-        width: 11px;
-        height: 11px;
-        left: 0px;
-        top: 0px;
-    }
-  }
-`;
 
 export default React.memo(
   styled(SaveMnemonic)(

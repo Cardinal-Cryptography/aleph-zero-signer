@@ -16,6 +16,7 @@ interface Props {
   label: ReactNode;
   onChange?: (checked: boolean) => void;
   onClick?: () => void;
+  variant?: 'default' | 'small';
 }
 
 function Checkbox({ checked, className, indeterminate, label, onChange, onClick }: Props): React.ReactElement<Props> {
@@ -64,8 +65,35 @@ function Checkbox({ checked, className, indeterminate, label, onChange, onClick 
   );
 }
 
+const variantToStyles = {
+  small: {
+    height: '11px',
+    width: '11px',
+    top: '4px',
+    left: '0px',
+    after: {
+      height: '11px',
+      width: '11px',
+      top: '0px',
+      left: '0px',
+    }
+  },
+  default: {
+    height: '16px',
+    width: '16px',
+    top: '2px',
+    left: '0px',
+    after: {
+      height: '10px',
+      width: '13px',
+      top: '2px',
+      left: '1px',
+    }
+  },
+};
+
 export default styled(Checkbox)(
-  ({ theme }: ThemeProps) => `
+  ({ theme, variant = 'default' }) => `
   margin: ${theme.boxMargin};
   box-sizing: border-box;
 
@@ -94,10 +122,10 @@ export default styled(Checkbox)(
 
     & .checkbox-ui {
       position: absolute;
-      top: 2px;
-      left: 0;
-      height: 16px;
-      width: 16px;
+      top: ${variantToStyles[variant].top};
+      left: ${variantToStyles[variant].left};
+      height: ${variantToStyles[variant].height};
+      width: ${variantToStyles[variant].width};
       border-radius: 4px;
       background-color: ${theme.inputBackground};
       border: 2px solid ${theme.inputBackground};
@@ -107,11 +135,11 @@ export default styled(Checkbox)(
       &:after {
         content: '';
         display: none;
-        width: 13px;
-        height: 10px;
+        width: ${variantToStyles[variant].after.width};
+        height: ${variantToStyles[variant].after.height};
         position: absolute;
-        left: 1px;
-        top: 2px;
+        left: ${variantToStyles[variant].after.left};
+        top: ${variantToStyles[variant].after.top};
         mask: url(${Checkmark});
         mask-size: cover;
         background: ${theme.boxBackground};
