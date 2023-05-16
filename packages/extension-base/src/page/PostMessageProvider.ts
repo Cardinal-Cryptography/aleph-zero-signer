@@ -80,6 +80,7 @@ export default class PostMessageProvider implements InjectedProvider {
    * @summary `true` when this provider supports subscriptions
    */
   public get hasSubscriptions (): boolean {
+    // Our state provider (packages/extension-base/src/background/handlers/State.ts) supports subscriptions
     return true;
   }
 
