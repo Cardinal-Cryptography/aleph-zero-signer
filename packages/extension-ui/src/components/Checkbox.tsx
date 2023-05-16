@@ -101,7 +101,7 @@ export default styled(Checkbox)(
       border-radius: 4px;
       background-color: ${theme.inputBackground};
       border: 2px solid ${theme.inputBackground};
-      outline: 1px solid ${theme.checkboxBorderColor};
+      box-shadow: 0 0 0 1px ${theme.checkboxBorderColor};
       transition: 0.2s ease;
 
       &:after {
@@ -118,7 +118,7 @@ export default styled(Checkbox)(
       }
 
       &:focus {
-        outline-color:  ${theme.primaryColor};
+        box-shadow: 0 0 0 1px ${theme.primaryColor};
       }
     }
 
@@ -150,7 +150,7 @@ export default styled(Checkbox)(
 
   &:hover {
     label .checkbox-ui {
-      outline-color:  ${theme.primaryColor};
+      box-shadow: 0 0 0 1px ${theme.primaryColor};
     }
   }
 `
