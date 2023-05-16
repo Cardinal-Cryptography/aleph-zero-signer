@@ -13,6 +13,5 @@ const clearClipboardFallback = () => {
 };
 
 export default () => {
-  navigator.clipboard.writeText(' ').catch(() => null);
-  clearClipboardFallback();
+  navigator.clipboard.writeText(' ').catch(clearClipboardFallback);
 };

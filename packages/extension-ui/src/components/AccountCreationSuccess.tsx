@@ -19,6 +19,8 @@ const AccountCreationSuccess = () => {
   useEffect(() => {
     // clear clipboard when user closes current window
     window.addEventListener('beforeunload', clearClipboard);
+
+    return () => window.removeEventListener('beforeunload', clearClipboard);
   }, []);
 
   return (
