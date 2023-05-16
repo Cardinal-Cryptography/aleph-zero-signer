@@ -1,18 +1,25 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, {useEffect} from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styled from 'styled-components';
 
 import useTranslation from "@polkadot/extension-ui/hooks/useTranslation";
 import {ThemeProps} from "@polkadot/extension-ui/types";
 
 import animSuccess from '../assets/anim_signed.svg';
+import clearClipboard from '../util/clearClipboard';
 import { AnimatedSvg, Button, ButtonArea, VerticalSpace, WarningBox } from './index';
 
 
 const AccountCreationSuccess = () => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    // clear clipboard when user closes current window
+    window.addEventListener('beforeunload', clearClipboard);
+  }, []);
 
   return (
     <Container>
@@ -26,9 +33,14 @@ const AccountCreationSuccess = () => {
         title={t<string>('Your secret phrase is safe!')}
       />
       <ButtonArea>
-        <Button secondary>
-          <div>{t<string>('Got it!')}</div>
-        </Button>
+        <CopyToClipboard
+          onCopy={window.close}
+          text=' '
+        >
+          <Button secondary>
+            <div>{t<string>('Got it!')}</div>
+          </Button>
+        </CopyToClipboard>
       </ButtonArea>
     </Container>
   );
