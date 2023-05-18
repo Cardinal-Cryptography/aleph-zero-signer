@@ -111,10 +111,11 @@ function Derive({ isLocked }: Props): React.ReactElement<Props> {
         total={2}
         withBackArrow
         withBackdrop
+        withMargin
       />
       {!account && step === 1 && (
         <SelectParent
-          externalString={parentIsExternal}
+          externalString={parentIsExternal.toString()}
           isLocked={isLocked}
           onDerivationConfirmed={_onDerivationConfirmed}
           onNextStep={_onNextStep}

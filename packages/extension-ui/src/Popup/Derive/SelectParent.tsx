@@ -1,8 +1,6 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeProps } from '../../types';
-
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -29,11 +27,11 @@ import useTranslation from '../../hooks/useTranslation';
 import { LINKS } from '../../links';
 import { validateAccount, validateDerivationPath } from '../../messaging';
 import { nextDerivationPath } from '../../util/nextDerivationPath';
-import { isNotShorterThan } from '../../util/validators';
+import { Result } from '../../util/validators';
 import AddressDropdown from './AddressDropdown';
 import DerivationPath from './DerivationPath';
 
-interface Props extends ThemeProps {
+interface Props {
   className?: string;
   isLocked?: boolean;
   parentAddress: string;
@@ -45,15 +43,6 @@ interface Props extends ThemeProps {
 
 // match any single slash
 const singleSlashRegex = /([^/]|^)\/([^/]|$)/;
-
-const StyledFooter = styled(HelperFooter)`
-  .icon {
-    margin-bottom: 12px;
-  }
-  gap: 8px;
-`;
-
-const MIN_PASSWORD_LENGTH = 0;
 
 function SelectParent({
   className,
@@ -150,8 +139,6 @@ function SelectParent({
 
   const { goTo } = useGoTo();
 
-  const isPasswordValid = useMemo(() => isNotShorterThan(MIN_PASSWORD_LENGTH, t<string>('Password is too short')), [t]);
-
   const footer = (
     <StyledFooter>
       <Svg
@@ -167,36 +154,38 @@ function SelectParent({
 
   return (
     <>
-      <div className={className}>
-        <div className='text'>
-          <span className='heading'>{t<string>('Add sub-account')}</span>
-          <span className='subtitle'>
+      <ContentContainer className={className}>
+        <Header>
+          <Title>{t<string>('Add sub-account')}</Title>
+          <Text>
             {t<string>('Choose a sub-account derivation path for additional account organization.')}
-          </span>
-        </div>
-        {isLocked ? (
-          <Address
-            address={parentAddress}
-            genesisHash={parentGenesis}
-          />
-        ) : (
-          <Label label={t<string>('Choose Parent Account:')}>
-            <AddressDropdown
-              allAddresses={allAddresses}
-              onSelect={_onParentChange}
-              selectedAddress={parentAddress}
-              selectedGenesis={parentGenesis}
+          </Text>
+        </Header>
+        <AddressWrapper>
+          {isLocked ? (
+            <Address
+              address={parentAddress}
+              genesisHash={parentGenesis}
             />
-          </Label>
-        )}
-        <div ref={passwordInputRef}>
+          ) : (
+            <Label label={t<string>('Choose Parent Account:')}>
+              <AddressDropdown
+                allAddresses={allAddresses}
+                onSelect={_onParentChange}
+                selectedAddress={parentAddress}
+                selectedGenesis={parentGenesis}
+              />
+            </Label>
+          )}
+        </AddressWrapper>
+        <InputWrapper ref={passwordInputRef}>
           <ValidatedInput
             component={InputWithLabel}
             data-input-password
             label={t<string>('Main account password')}
             onValidatedChange={_onParentPasswordEnter}
             type='password'
-            validator={isPasswordValid}
+            validator={Result.ok}
           />
           {!!parentPassword && !isProperParentPassword && (
             <Warning
@@ -206,9 +195,9 @@ function SelectParent({
               {t('Wrong password')}
             </Warning>
           )}
-        </div>
+        </InputWrapper>
         {isProperParentPassword && (
-          <>
+          <InputWrapper>
             <DerivationPath
               defaultPath={defaultPath}
               isError={!!pathError}
@@ -225,9 +214,9 @@ function SelectParent({
                 {pathError}
               </Warning>
             )}
-          </>
+          </InputWrapper>
         )}
-      </div>
+      </ContentContainer>
       <VerticalSpace />
       <ButtonArea footer={footer}>
         <Button
@@ -250,39 +239,58 @@ function SelectParent({
   );
 }
 
-export default React.memo(
-  styled(SelectParent)(
-    ({ theme }: Props) => `
-    margin-top: 24px;
-    margin-right: 8px;
+const StyledFooter = styled(HelperFooter)`
+  .icon {
+    margin-bottom: 12px;
+  }
+  gap: 8px;
+`;
 
-    .text {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      gap: 8px;
+const ContentContainer = styled.section`
+  margin-right: 8px;
+`;
 
-      .heading {
-        font-family: ${theme.secondaryFontFamily};
-        color: ${theme.textColor};
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 125%;
-        text-align: center;
-        letter-spacing: 0.06em;
-      }
+const Header = styled.header`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  gap: 8px;
+`;
 
-      .subtitle {
-        color: ${theme.subTextColor};
-        font-size: 14px;
-        line-height: 145%;
-        text-align: center;
-        letter-spacing: 0.07em;
-        white-space: pre-line;
-      }
-    }
-`
-  )
-);
+const Title = styled.h2`
+  font-family: ${({ theme }) => theme.secondaryFontFamily};
+  color: ${({ theme }) => theme.textColor};
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 125%;
+  text-align: center;
+  letter-spacing: 0.06em;
+  margin: 0;
+`;
+
+const Text = styled.div`
+  color: ${({ theme }) => theme.subTextColor};
+  font-size: 14px;
+  line-height: 145%;
+  text-align: center;
+  letter-spacing: 0.07em;
+  white-space: pre-line; 
+`;
+
+const AddressWrapper = styled.div`
+  margin-bottom: 24px;
+`;
+
+const InputWrapper = styled.div`
+  &:not(:last-child) {
+    margin-bottom: 16px;
+  }
+
+  & > :not(:last-child) {
+    margin-bottom: 8px;
+  }
+`;
+
+export default React.memo(SelectParent);
