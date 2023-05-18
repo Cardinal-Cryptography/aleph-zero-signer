@@ -157,9 +157,7 @@ function SelectParent({
       <ContentContainer className={className}>
         <Header>
           <Title>{t<string>('Add sub-account')}</Title>
-          <Text>
-            {t<string>('Choose a sub-account derivation path for additional account organization.')}
-          </Text>
+          <Text>{t<string>('Choose a sub-account derivation path for additional account organization.')}</Text>
         </Header>
         <AddressWrapper>
           {isLocked ? (
@@ -196,26 +194,32 @@ function SelectParent({
             </Warning>
           )}
         </InputWrapper>
-        {isProperParentPassword && (
-          <InputWrapper>
-            <DerivationPath
-              defaultPath={defaultPath}
-              isError={!!pathError}
-              onChange={_onSuriPathChange}
-              parentAddress={parentAddress}
-              parentPassword={parentPassword}
-              withSoftPath={allowSoftDerivation}
-            />
-            {!!pathError && (
-              <Warning
-                isBelowInput
-                isDanger
-              >
-                {pathError}
-              </Warning>
-            )}
-          </InputWrapper>
-        )}
+        <InputWrapper>
+          <DerivationPath
+            defaultPath={defaultPath}
+            isError={!!pathError}
+            onChange={_onSuriPathChange}
+            parentAddress={parentAddress}
+            parentPassword={parentPassword}
+            withSoftPath={allowSoftDerivation}
+          />
+          {!suriPath && (
+            <Warning
+              isBelowInput
+              isDanger
+            >
+              {t('Derivation path is required')}
+            </Warning>
+          )}
+          {!!pathError && (
+            <Warning
+              isBelowInput
+              isDanger
+            >
+              {pathError}
+            </Warning>
+          )}
+        </InputWrapper>
       </ContentContainer>
       <VerticalSpace />
       <ButtonArea footer={footer}>
@@ -229,7 +233,7 @@ function SelectParent({
         <Button
           data-button-action='create derived account'
           isBusy={isBusy}
-          isDisabled={!isProperParentPassword || !!pathError}
+          isDisabled={!isProperParentPassword || !!pathError || !suriPath}
           onClick={_onSubmit}
         >
           {t<string>('Next')}

@@ -69,7 +69,7 @@ function InputWithLabel({
 
   return (
     <Label
-      $active={focused || (!!value && value?.length > 0)}
+      $small={!!placeholder || focused || (!!value && value?.length > 0)}
       className={className}
       label={label}
     >
