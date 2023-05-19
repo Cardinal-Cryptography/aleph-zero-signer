@@ -36,7 +36,7 @@ const Steps = styled.div<{ withMargin: boolean }>`
   display: flex;
   justify-content: center;
   margin-inline: -16px;
-  margin-bottom: ${({ withMargin }) => withMargin ? '36px' : 0};
+  margin-bottom: ${({ withMargin }) => (withMargin ? '36px' : 0)};
   gap: 8px;
   position: sticky;
   top: 56px;
@@ -50,7 +50,14 @@ const Steps = styled.div<{ withMargin: boolean }>`
   }
 `;
 
-function HeaderWithSteps({ step, text, total, withBackArrow = false, withBackdrop, withMargin = false }: Props): React.ReactElement<Props> {
+function HeaderWithSteps({
+  step,
+  text,
+  total,
+  withBackArrow = false,
+  withBackdrop,
+  withMargin = true
+}: Props): React.ReactElement<Props> {
   return (
     <>
       <Header

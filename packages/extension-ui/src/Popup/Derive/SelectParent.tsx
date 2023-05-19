@@ -13,6 +13,7 @@ import {
   Address,
   Button,
   ButtonArea,
+  Header,
   HelperFooter,
   InputWithLabel,
   Label,
@@ -155,10 +156,10 @@ function SelectParent({
   return (
     <>
       <ContentContainer className={className}>
-        <Header>
-          <Title>{t<string>('Add sub-account')}</Title>
-          <Text>{t<string>('Choose a sub-account derivation path for additional account organization.')}</Text>
-        </Header>
+        <StyledHeader
+          text={t<string>('Choose a sub-account derivation path for additional account organization.')}
+          title={t<string>('Add sub-account')}
+        />
         <AddressWrapper>
           {isLocked ? (
             <Address
@@ -254,33 +255,8 @@ const ContentContainer = styled.section`
   margin-right: 8px;
 `;
 
-const Header = styled.header`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+const StyledHeader = styled(Header)`
   margin-bottom: 16px;
-  gap: 8px;
-`;
-
-const Title = styled.h2`
-  font-family: ${({ theme }) => theme.secondaryFontFamily};
-  color: ${({ theme }) => theme.textColor};
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 125%;
-  text-align: center;
-  letter-spacing: 0.06em;
-  margin: 0;
-`;
-
-const Text = styled.div`
-  color: ${({ theme }) => theme.subTextColor};
-  font-size: 14px;
-  line-height: 145%;
-  text-align: center;
-  letter-spacing: 0.07em;
-  white-space: pre-line; 
 `;
 
 const AddressWrapper = styled.div`
