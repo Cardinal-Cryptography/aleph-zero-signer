@@ -56,7 +56,7 @@ function HeaderWithSteps({
   total,
   withBackArrow = false,
   withBackdrop,
-  withMargin = true
+  withMargin = false
 }: Props): React.ReactElement<Props> {
   return (
     <>
