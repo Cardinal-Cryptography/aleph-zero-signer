@@ -55,7 +55,6 @@ import Export from './Export';
 // import ExportAll from './ExportAll';
 import Forget from './Forget';
 // import ImportLedger from './ImportLedger';
-// import ImportQr from './ImportQr';
 import ImportSeed from './ImportSeed';
 import Metadata from './Metadata';
 import PhishingDetected from './PhishingDetected';
@@ -220,8 +219,6 @@ export default function Popup(): React.ReactElement {
                             {/* <Route path='/account/import-ledger'>
                               {wrapWithErrorBoundary(<ImportLedger />, 'import-ledger')}
                             </Route> */}
-                            {/* NOT USED */}
-                            {/* <Route path='/account/import-qr'>{wrapWithErrorBoundary(<ImportQr />, 'import-qr')}</Route> */}
                             <Route path='/account/import-seed'>
                               {wrapWithErrorBoundary(<ImportSeed />, 'import-seed')}
                             </Route>
