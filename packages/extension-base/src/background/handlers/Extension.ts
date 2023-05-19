@@ -66,12 +66,6 @@ export default class Extension {
     );
   }
 
-  private accountsCreateExternal ({ address, genesisHash, name }: RequestAccountCreateExternal): boolean {
-    keyring.addExternal(address, { genesisHash, name });
-
-    return true;
-  }
-
   private accountsCreateHardware ({ accountIndex, address, addressOffset, genesisHash, hardwareType, name }: RequestAccountCreateHardware): boolean {
     keyring.addHardware(address, hardwareType, { accountIndex, addressOffset, genesisHash, name });
 
@@ -590,9 +584,6 @@ export default class Extension {
 
       case 'pri(authorizeDate.update)':
         return this.authorizeDateUpdate(request as string);
-
-      case 'pri(accounts.create.external)':
-        return this.accountsCreateExternal(request as RequestAccountCreateExternal);
 
       case 'pri(accounts.create.hardware)':
         return this.accountsCreateHardware(request as RequestAccountCreateHardware);

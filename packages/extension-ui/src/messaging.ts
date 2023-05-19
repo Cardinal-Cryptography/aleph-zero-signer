@@ -158,10 +158,6 @@ export async function approveSignSignature(id: string, signature: HexString): Pr
   return sendMessage('pri(signing.approve.signature)', { id, signature });
 }
 
-export async function createAccountExternal(name: string, address: string, genesisHash: string): Promise<boolean> {
-  return sendMessage('pri(accounts.create.external)', { address, genesisHash, name });
-}
-
 export async function createAccountHardware(
   address: string,
   hardwareType: string,
