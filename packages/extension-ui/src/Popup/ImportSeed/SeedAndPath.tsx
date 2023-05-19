@@ -17,6 +17,7 @@ import {
   ActionContext,
   Button,
   ButtonArea,
+  Header,
   HelperFooter,
   InputLock,
   InputWithLabel,
@@ -80,13 +81,7 @@ const StyledInputWithLabel = styled(InputWithLabel)`
 const SEED_WORDS_LENGTH = 12;
 const EMPTY_SEED_WORDS: string[] = new Array<string>(SEED_WORDS_LENGTH).fill('');
 
-function SeedAndPath({
-  className,
-  genesis,
-  onAccountChange,
-  onNextStep,
-  type
-}: Props): React.ReactElement {
+function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: Props): React.ReactElement {
   const { t } = useTranslation();
 
   const [seedWords, setSeedWords] = useState<string[]>(EMPTY_SEED_WORDS);
@@ -101,9 +96,7 @@ function SeedAndPath({
 
   const onSeedWordsChange = (nextSeedWords: string[]) => {
     setError('');
-    setSeedWords(
-      [...nextSeedWords, ...EMPTY_SEED_WORDS].slice(0, SEED_WORDS_LENGTH)
-    );
+    setSeedWords([...nextSeedWords, ...EMPTY_SEED_WORDS].slice(0, SEED_WORDS_LENGTH));
   };
 
   const hasSomeSeedWords = seedWords.some((word) => word);
@@ -190,11 +183,11 @@ function SeedAndPath({
     <>
       <ScrollWrapper>
         <div className={className}>
-          <div className='text'>
-            <span className='heading'>{t<string>('Enter your 12-word secret phrase')}</span>
-            <span className='subtitle'>{t<string>(' You can paste it into any field.')}</span>
-          </div>
-          <div className='input-with-warning'>
+          <StyledHeader
+            text={t<string>(' You can paste it into any field.')}
+            title={t<string>('Enter your 12-word secret phrase')}
+          />
+          <MnemonicWrapper>
             <MnemonicInput
               onChange={onSeedWordsChange}
               seedWords={seedWords}
@@ -208,7 +201,7 @@ function SeedAndPath({
                 {error}
               </Warning>
             )}
-          </div>
+          </MnemonicWrapper>
           <div className='input-with-lock'>
             <StyledInputWithLabel
               className='derivationPath'
@@ -247,6 +240,14 @@ function SeedAndPath({
   );
 }
 
+const StyledHeader = styled(Header)`
+  margin-bottom: 32px;
+`;
+
+const MnemonicWrapper = styled.div`
+  margin-bottom: 32px;
+`;
+
 export default styled(SeedAndPath)(
   ({ theme }: ThemeProps) => `
   display: flex;
@@ -258,39 +259,6 @@ export default styled(SeedAndPath)(
     display: flex;
     justify-content: center;
   }
-
-  .text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 24px;
-    gap: 8px;
-    margin-bottom: 16px;
-
-    .heading {
-      font-family: ${theme.secondaryFontFamily};
-      color: ${theme.textColor};
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 125%;
-      text-align: center;
-      letter-spacing: 0.06em;
-      }
-
-    .subtitle {
-      color: ${theme.subTextColor};
-      font-size: 14px;
-      line-height: 145%;
-      text-align: center;
-      letter-spacing: 0.07em;
-      white-space: pre-line;
-
-      & .bold {
-        font-weight: 600;
-      }
-    }
-}
 
   .advancedToggle {
     color: ${theme.textColor};
@@ -347,10 +315,6 @@ export default styled(SeedAndPath)(
   .input-with-lock {
     display: flex;
     gap: 4px;
-  }
-
-  .input-with-warning {
-    height: 210px;
   }
 
   .input-with-warning > :not(:last-child) {

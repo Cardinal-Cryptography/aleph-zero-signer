@@ -164,9 +164,14 @@ export default styled(Button)(
     };
   }
 
-  &:active .children {
-    margin-top: 2px;
+  &:not(:active) .children {
+    padding-bottom: 2px;
   }
+
+  &:active .children {
+    padding-top: 2px;
+  }
+
   
   .busyOverlay,
   .disabledOverlay {
