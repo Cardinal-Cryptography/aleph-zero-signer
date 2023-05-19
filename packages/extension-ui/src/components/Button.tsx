@@ -7,7 +7,7 @@ import React, { useCallback, useRef } from 'react';
 import styled from 'styled-components';
 
 import Spinner from './Spinner';
-import { Svg } from '.';
+import Svg from './Svg';
 
 interface Props extends ThemeProps {
   className?: string;

@@ -5,17 +5,22 @@ import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../assets/help.svg';
-import { BackButton, Button, Dropdown, LearnMore, Svg } from '../components';
-import Address from '../components/Address';
-import ButtonArea from '../components/ButtonArea';
 import { ALEPH_ZERO_GENESIS_HASH } from '../constants';
 import useGenesisHashOptions from '../hooks/useGenesisHashOptions';
 import useTranslation from '../hooks/useTranslation';
 import { LINKS } from '../links';
 import { Name, Password } from '../partials';
 import { getUserInputs } from './PasswordField/getFeedback';
+import Address from './Address';
+import BackButton from './BackButton';
+import Button from './Button';
+import ButtonArea from './ButtonArea';
 import { AccountContext } from './contexts';
+import Dropdown from './Dropdown';
+import Header from './Header';
 import HelperFooter from './HelperFooter';
+import LearnMore from './LearnMore';
+import Svg from './Svg';
 
 
 interface Props {
