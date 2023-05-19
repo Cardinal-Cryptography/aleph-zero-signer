@@ -95,7 +95,6 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
   const onAction = useContext(ActionContext);
 
   const onSeedWordsChange = (nextSeedWords: string[]) => {
-    setError('');
     setSeedWords([...nextSeedWords, ...EMPTY_SEED_WORDS].slice(0, SEED_WORDS_LENGTH));
   };
 
@@ -106,6 +105,7 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
     // we have a dedicated error for this
 
     if (!hasSomeSeedWords) {
+      setError('');
       onAccountChange(null);
 
       return;
@@ -241,11 +241,15 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
 }
 
 const StyledHeader = styled(Header)`
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 `;
 
 const MnemonicWrapper = styled.div`
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+
+  & > :not(:last-child) {
+    margin-bottom: 8px;
+  }
 `;
 
 export default styled(SeedAndPath)(
