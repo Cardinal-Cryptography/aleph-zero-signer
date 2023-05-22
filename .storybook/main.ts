@@ -1,5 +1,4 @@
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
-
 import webpackConfig from "../packages/extension/webpack.config.cjs";
 
 const config = {
@@ -8,9 +7,10 @@ const config = {
     "../packages/**/*.stories.@(js|jsx|ts|tsx)"
   ],
   "addons": [
-    "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-interactions"
+    "@storybook/addon-interactions",
+    "@storybook/addon-links",
+    '@storybook/addon-styling'
   ],
   "framework": {
     "name": "@storybook/react-webpack5",
@@ -26,4 +26,5 @@ const config = {
     };
   },
 };
+
 export default config;
