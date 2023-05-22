@@ -20,5 +20,5 @@ module.exports = {
       '@typescript-eslint/ban-ts-comment': 'off'
     }
   }],
-  extends: ['plugin:storybook/recommended']
+  extends: [...base.extends, 'plugin:storybook/recommended']
 };
