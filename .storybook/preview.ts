@@ -14,25 +14,36 @@ const preview = {
        date: /Date$/,
       },
     },
+    layout: 'centered',
     viewport: {
-      defaultViewport: "narrow",
+      defaultViewport: "popup",
       viewports: {
-        narrow: {
-          name: "narrow",
+        popup: {
+          name: "popup",
           type: "mobile",
           styles: {
             width: "360px",
             height: "625px",
           }
-        }
+        },
+        fullWidth: {
+          name: "full width",
+          type: "desktop",
+        },
       },
     },
     backgrounds: {
       default: "dark",
-      values: [{
-        name: "dark",
-        value: themes.dark.background,
-      }]
+      values: [
+        {
+          name: "dark",
+          value: themes.dark.background,
+        },
+        {
+          name: 'light',
+          value: themes.light.background,
+        }
+      ]
     }
   },
 };
