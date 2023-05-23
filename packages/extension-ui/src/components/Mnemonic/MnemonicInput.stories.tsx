@@ -10,12 +10,10 @@ import { EMPTY_SEED_WORDS, SEED_WORDS_LENGTH } from '@polkadot/extension-ui/Popu
 
 import { MnemonicInput } from '.';
 
-// More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 export default {
-  title: 'Components/Mnemonic/MnemonicInput',
   component: MnemonicInput,
   argTypes: {
-    showError: { control: 'boolean', name: 'Is error shown' }
+    showError: { name: 'Is error shown' }
   },
   args: {
     showError: false
