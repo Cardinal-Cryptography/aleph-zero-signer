@@ -88,7 +88,7 @@ export default styled(Button)(
   width: ${tertiary ? 'max-content' : '100%'};
   height: ${tertiary ? 'unset' : '48px'};
   box-sizing: border-box;
-  border: none;
+  border: 1px solid transparent;
   border-radius: ${tertiary ? '2px' : theme.buttonBorderRadius};
   color: ${
     isBusy
