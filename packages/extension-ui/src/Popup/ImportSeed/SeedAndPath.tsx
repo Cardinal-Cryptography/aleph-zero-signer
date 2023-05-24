@@ -30,6 +30,7 @@ import {
 } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import { LINKS } from '../../links';
+import { EMPTY_SEED_WORDS, SEED_WORDS_LENGTH } from './consts';
 
 interface Props {
   className?: string;
@@ -77,9 +78,6 @@ const StyledInputWithLabel = styled(InputWithLabel)`
   opacity: 1;
 }
 `;
-
-const SEED_WORDS_LENGTH = 12;
-const EMPTY_SEED_WORDS: string[] = new Array<string>(SEED_WORDS_LENGTH).fill('');
 
 function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: Props): React.ReactElement {
   const { t } = useTranslation();

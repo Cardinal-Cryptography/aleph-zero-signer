@@ -52,7 +52,6 @@ import Authorize from './Authorize';
 import CreateAccount from './CreateAccount';
 import Derive from './Derive';
 import Export from './Export';
-// import ExportAll from './ExportAll';
 import Forget from './Forget';
 // import ImportLedger from './ImportLedger';
 import ImportSeed from './ImportSeed';
@@ -211,10 +210,6 @@ export default function Popup(): React.ReactElement {
                             <Route path='/account/export/:address'>
                               {wrapWithErrorBoundary(<Export />, 'export-address')}
                             </Route>
-                            {/* NOT USED */}
-                            {/* <Route path='/account/export-all'>
-                              {wrapWithErrorBoundary(<ExportAll />, 'export-all-address')}
-                            </Route> */}
                             {/* NOT USED */}
                             {/* <Route path='/account/import-ledger'>
                               {wrapWithErrorBoundary(<ImportLedger />, 'import-ledger')}
