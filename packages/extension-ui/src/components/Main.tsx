@@ -21,7 +21,6 @@ export default styled(Main)(
   color: ${theme.textColor};
   font-size: ${theme.fontSize};
   line-height: ${theme.lineHeight};
-  border: 1px solid ${theme.inputBorderColor};
   height: 100%;
 `
 );
