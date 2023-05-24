@@ -1,9 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeProps } from '../types';
-
-import React, { ReactNode, useCallback, useEffect} from 'react';
+import React, { ReactNode, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
 import Checkmark from '../assets/checkmark.svg';
@@ -28,38 +26,41 @@ function Checkbox({ checked, className, indeterminate, label, onChange, onClick 
     }
   }, [indeterminate]);
 
-  const _onChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => onChange && onChange(event.target.checked),
-    [onChange]
-  );
+  const _onChange = useCallback((event: { target: HTMLInputElement }) => onChange?.(event.target.checked), [onChange]);
 
   const _onKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLSpanElement>) => {
-      if (event.key === 'Enter' || event.key === 'Space') {
-        _onChange(event as unknown as React.ChangeEvent<HTMLInputElement>);
+      if (event.code !== 'Enter' && event.code !== 'Space') {
+        return;
       }
+
+      if (!checkboxRef.current) {
+        return;
+      }
+
+      onChange?.(!checkboxRef.current.checked);
     },
-    [_onChange]
+    [onChange]
   );
 
   const _onClick = useCallback(() => onClick && onClick(), [onClick]);
 
   return (
     <div className={className}>
-      <label>
+      <label
+        onKeyDown={_onKeyPress}
+        tabIndex={0}
+      >
         {label}
         <input
           checked={checked && !indeterminate}
           onChange={_onChange}
           onClick={_onClick}
           ref={checkboxRef}
+          tabIndex={-1}
           type='checkbox'
         />
-        <span
-          className={`checkbox-ui ${indeterminate ? 'indeterminate' : ''}`}
-          onKeyDown={_onKeyPress}
-          tabIndex={0}
-        />
+        <span className={`checkbox-ui ${indeterminate ? 'indeterminate' : ''}`} />
       </label>
     </div>
   );
@@ -75,7 +76,7 @@ const variantToStyles = {
       height: '11px',
       width: '11px',
       top: '0px',
-      left: '0px',
+      left: '0px'
     }
   },
   default: {
@@ -87,9 +88,9 @@ const variantToStyles = {
       height: '10px',
       width: '13px',
       top: '2px',
-      left: '1px',
+      left: '1px'
     }
-  },
+  }
 };
 
 export default styled(Checkbox)(
