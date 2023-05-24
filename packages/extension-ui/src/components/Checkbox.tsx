@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { ReactNode, useCallback, useEffect } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import Checkmark from '../assets/checkmark.svg';
@@ -20,6 +20,8 @@ interface Props {
 function Checkbox({ checked, className, indeterminate, label, onChange, onClick }: Props): React.ReactElement<Props> {
   const checkboxRef = React.useRef<HTMLInputElement | null>(null);
 
+  const [isFocused, setIsFocused] = useState(false);
+
   useEffect(() => {
     if (checkboxRef.current) {
       checkboxRef.current.indeterminate = !!indeterminate;
@@ -28,43 +30,43 @@ function Checkbox({ checked, className, indeterminate, label, onChange, onClick 
 
   const _onChange = useCallback((event: { target: HTMLInputElement }) => onChange?.(event.target.checked), [onChange]);
 
-  const _onKeyPress = useCallback(
-    (event: React.KeyboardEvent<HTMLSpanElement>) => {
-      if (event.code !== 'Enter' && event.code !== 'Space') {
-        return;
-      }
-
-      if (!checkboxRef.current) {
-        return;
-      }
-
-      onChange?.(!checkboxRef.current.checked);
-    },
-    [onChange]
-  );
-
   const _onClick = useCallback(() => onClick && onClick(), [onClick]);
 
   return (
     <div className={className}>
-      <label
-        onKeyDown={_onKeyPress}
-        tabIndex={0}
-      >
+      <Label isOutlined={isFocused}>
         {label}
         <input
           checked={checked && !indeterminate}
+          onBlur={() => setIsFocused(false)}
           onChange={_onChange}
           onClick={_onClick}
+          onFocus={() => setIsFocused(true)}
           ref={checkboxRef}
-          tabIndex={-1}
           type='checkbox'
         />
         <span className={`checkbox-ui ${indeterminate ? 'indeterminate' : ''}`} />
-      </label>
+      </Label>
     </div>
   );
 }
+
+const Label = styled.label<{ isOutlined: boolean }>`
+    display: block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    padding-left: 26px;
+    padding-top: 1px;
+    color: ${({ theme }) => theme.subTextColor};
+    font-size: ${({ theme }) => theme.fontSize};
+    line-height: ${({ theme }) => theme.lineHeight};
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 145%;
+    letter-spacing: 0.07em;
+    ${({ isOutlined }) => (isOutlined ? 'outline-style: auto;' : '')}
+`;
 
 const variantToStyles = {
   small: {
@@ -99,20 +101,6 @@ export default styled(Checkbox)(
   box-sizing: border-box;
 
   label {
-    display: block;
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-    padding-left: 26px;
-    padding-top: 1px;
-    color: ${theme.subTextColor};
-    font-size: ${theme.fontSize};
-    line-height: ${theme.lineHeight};
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 145%;
-    letter-spacing: 0.07em;
-
     & input {
       position: absolute;
       opacity: 0;
