@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
@@ -16,6 +16,8 @@ import { Header, Name } from '../../partials';
 interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
   className?: string;
 }
+
+const EDIT_NAME_FORM_ID = 'EDIT_NAME_FORM_ID';
 
 function EditName({
   className,
@@ -48,6 +50,16 @@ function EditName({
     }
   }, [editedName, address, onAction, isExternal, show, t]);
 
+  const isFormValid = editedName && editedName !== account?.name;
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (isFormValid) {
+      _saveChanges();
+    }
+  };
+
   return (
     <>
       <Header
@@ -55,7 +67,11 @@ function EditName({
         withBackArrow
         withHelp
       />
-      <div className={className}>
+      <form
+        className={className}
+        id={EDIT_NAME_FORM_ID}
+        onSubmit={onSubmit}
+      >
         <Address
           address={address}
           name={editedName || t('<unknown>')}
@@ -67,18 +83,20 @@ function EditName({
             value={account?.name}
           />
         </div>
-      </div>
+      </form>
       <VerticalSpace />
       <ButtonArea>
         <Button
           onClick={_goTo(`/account/edit-menu/${address}?isExternal=${isExternal.toString()}`)}
           secondary
+          type='button'
         >
           {t<string>('Cancel')}
         </Button>
         <Button
-          isDisabled={!editedName || editedName === account?.name}
-          onClick={_saveChanges}
+          form={EDIT_NAME_FORM_ID}
+          isDisabled={!isFormValid}
+          type='submit'
         >
           {t<string>('Save')}
         </Button>
