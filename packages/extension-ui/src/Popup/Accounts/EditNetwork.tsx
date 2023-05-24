@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
@@ -33,6 +33,8 @@ import { Header } from '../../partials';
 interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
   className?: string;
 }
+
+const EDIT_NETWORK_FORM_ID = 'EDIT_NETWORK_FORM_ID';
 
 const CustomFooter = styled(HelperFooter)`
   width: auto;
@@ -107,6 +109,16 @@ function EditNetwork({
     </CustomFooter>
   );
 
+  const isFormValid = hasGenesisChanged;
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (isFormValid) {
+      _saveChanges();
+    }
+  };
+
   return (
     <>
       <ScrollWrapper>
@@ -117,18 +129,18 @@ function EditNetwork({
           withBackdrop
           withHelp
         />
-        <div className={className}>
-          <div
-            className='checkbox-container'
-            onKeyDown={toggleChecked}
-            tabIndex={0}
-          >
+        <form
+          className={className}
+          id={EDIT_NETWORK_FORM_ID}
+          onSubmit={onSubmit}
+        >
+          <CheckboxContainer>
             <Checkbox
               checked={checked}
               label={t<string>('Show test networks')}
               onChange={toggleChecked}
             />
-          </div>
+          </CheckboxContainer>
           <RadioGroup
             defaultSelectedValue={genesis}
             onSelectionChange={setGenesis}
@@ -136,17 +148,19 @@ function EditNetwork({
             withTestNetwork={checked}
           />
           {footer}
-        </div>
+        </form>
         <CustomButtonArea>
           <Button
             onClick={_goTo(`/account/edit-menu/${address}?isExternal=${isExternal.toString()}`)}
             secondary
+            type='button'
           >
             {t<string>('Cancel')}
           </Button>
           <Button
-            isDisabled={!hasGenesisChanged}
-            onClick={_saveChanges}
+            form={EDIT_NETWORK_FORM_ID}
+            isDisabled={!isFormValid}
+            type='submit'
           >
             {t<string>('Change')}
           </Button>
@@ -157,16 +171,16 @@ function EditNetwork({
   );
 }
 
+const CheckboxContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default withRouter(
   styled(EditNetwork)`
     display: flex;
     flex-direction: column;
     gap: 24px;
-
-    .checkbox-container{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
 `
 );
