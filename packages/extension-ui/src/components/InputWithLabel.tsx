@@ -39,7 +39,7 @@ function InputWithLabel({
   onKeyDown,
   placeholder,
   type = 'text',
-  value,
+  value
 }: Props): React.ReactElement<Props> {
   const _onChange = useCallback(
     ({ target: { value } }: React.ChangeEvent<HTMLInputElement>): void => {
@@ -90,8 +90,11 @@ function InputWithLabel({
         value={value}
         withError={isError}
       />
-      {type === "password" && (
-        <IconButton onClick={toggleObscure}>
+      {type === 'password' && (
+        <IconButton
+          onClick={toggleObscure}
+          type='button'
+        >
           <img src={isObscured ? viewOff : viewOn} />
         </IconButton>
       )}
@@ -113,6 +116,6 @@ const IconButton = styled.button`
 
 export default styled(InputWithLabel)`
   > ${Input} {
-    padding-top: ${({ label }) => !label.trim() ? '0px' : '11px'};
+    padding-top: ${({ label }) => (!label.trim() ? '0px' : '11px')};
  }
 `;
