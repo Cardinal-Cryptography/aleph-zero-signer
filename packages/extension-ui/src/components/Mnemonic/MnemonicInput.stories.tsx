@@ -27,22 +27,13 @@ const MnemonicInputWrapper = ({ showError }: { showError: boolean }) => {
     setSeedWords([...nextSeedWords, ...EMPTY_SEED_WORDS].slice(0, SEED_WORDS_LENGTH));
 
   return (
-    <Container>
-      <MnemonicInput
-        onChange={onInputChange}
-        seedWords={seedWords}
-        showError={showError}
-      />
-    </Container>
+    <MnemonicInput
+      onChange={onInputChange}
+      seedWords={seedWords}
+      showError={showError}
+    />
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 600px;
-`;
 
 type Story = StoryObj<typeof MnemonicInputWrapper>;
 
