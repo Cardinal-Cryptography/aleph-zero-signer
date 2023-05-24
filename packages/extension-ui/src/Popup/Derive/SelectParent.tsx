@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { canDerive } from '@polkadot/extension-base/utils';
@@ -44,6 +44,8 @@ interface Props {
 
 // match any single slash
 const singleSlashRegex = /([^/]|^)\/([^/]|$)/;
+
+const SELECT_PARENT_FORM_ID = 'SELECT_PARENT_FORM_ID';
 
 function SelectParent({
   className,
@@ -107,7 +109,7 @@ function SelectParent({
 
   const _onParentChange = useCallback((address: string) => onAction(`/account/derive/${address}`), [onAction]);
 
-  const _onSubmit = useCallback(async (): Promise<void> => {
+  const _confirmDerivation = useCallback(async (): Promise<void> => {
     if (suriPath && parentAddress && parentPassword) {
       setIsBusy(true);
 
@@ -153,9 +155,23 @@ function SelectParent({
     </StyledFooter>
   );
 
+  const isFormValid = isProperParentPassword && suriPath && !pathError;
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (isFormValid) {
+      _confirmDerivation();
+    }
+  };
+
   return (
     <>
-      <ContentContainer className={className}>
+      <Form
+        className={className}
+        id={SELECT_PARENT_FORM_ID}
+        onSubmit={onSubmit}
+      >
         <StyledHeader
           text={t<string>('Choose a sub-account derivation path for additional account organization.')}
           title={t<string>('Add sub-account')}
@@ -221,21 +237,23 @@ function SelectParent({
             </Warning>
           )}
         </InputWrapper>
-      </ContentContainer>
+      </Form>
       <VerticalSpace />
       <ButtonArea footer={footer}>
         <Button
           isDisabled={isBusy}
           onClick={goTo(`/account/edit-menu/${parentAddress}?isExternal=${externalString}`)}
           secondary
+          type='button'
         >
           {t<string>('Cancel')}
         </Button>
         <Button
           data-button-action='create derived account'
+          form={SELECT_PARENT_FORM_ID}
           isBusy={isBusy}
-          isDisabled={!isProperParentPassword || !!pathError || !suriPath}
-          onClick={_onSubmit}
+          isDisabled={!isFormValid}
+          type='submit'
         >
           {t<string>('Next')}
         </Button>
@@ -251,7 +269,7 @@ const StyledFooter = styled(HelperFooter)`
   gap: 8px;
 `;
 
-const ContentContainer = styled.section`
+const Form = styled.form`
   margin-right: 8px;
 `;
 
