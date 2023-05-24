@@ -5,7 +5,7 @@ import type { KeypairType } from '@polkadot/util-crypto/types';
 import type { ThemeProps } from '../../types';
 import type { AccountInfo } from '.';
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { validateSeed } from '@polkadot/extension-ui/messaging';
@@ -79,6 +79,8 @@ const StyledInputWithLabel = styled(InputWithLabel)`
 }
 `;
 
+const SEED_AND_PATH_FORM_ID = 'SEED_AND_PATH_FORM_ID';
+
 function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: Props): React.ReactElement {
   const { t } = useTranslation();
 
@@ -93,6 +95,10 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
   const onAction = useContext(ActionContext);
 
   const onSeedWordsChange = (nextSeedWords: string[]) => {
+    if (nextSeedWords.every((word) => !word)) {
+      setError(t('This field is required'));
+    }
+
     setSeedWords([...nextSeedWords, ...EMPTY_SEED_WORDS].slice(0, SEED_WORDS_LENGTH));
   };
 
@@ -133,7 +139,7 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
     onAction('/account/restore-json');
   }, [onAction]);
 
-  const showError = !!error && hasSomeSeedWords;
+  const isFormValid = Boolean(address && !error);
 
   const footer = (
     <CustomFooter>
@@ -177,10 +183,30 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
     </CustomFooter>
   );
 
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (isFormValid) {
+      onNextStep();
+
+      return;
+    }
+
+    if (error) {
+      return;
+    }
+
+    setError(t('This field is required'));
+  };
+
   return (
     <>
       <ScrollWrapper>
-        <div className={className}>
+        <form
+          className={className}
+          id={SEED_AND_PATH_FORM_ID}
+          onSubmit={onSubmit}
+        >
           <StyledHeader
             text={t<string>(' You can paste it into any field.')}
             title={t<string>('Enter your 12-word secret phrase')}
@@ -189,9 +215,9 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
             <MnemonicInput
               onChange={onSeedWordsChange}
               seedWords={seedWords}
-              showError={showError}
+              showError={!!error}
             />
-            {showError && (
+            {!!error && (
               <Warning
                 className='centered'
                 isDanger
@@ -217,19 +243,21 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
             />
           </div>
           {isLocked && <span className='unlock-text'>{t<string>('Unlock to edit')}</span>}
-        </div>
+        </form>
       </ScrollWrapper>
       <VerticalSpace />
       <ButtonArea footer={footer}>
         <Button
           onClick={window.close}
           secondary
+          type='button'
         >
           {t<string>('Cancel')}
         </Button>
         <Button
-          isDisabled={!address || !!error}
-          onClick={onNextStep}
+          form={SEED_AND_PATH_FORM_ID}
+          isDisabled={!isFormValid}
+          type='submit'
         >
           {t<string>('Next')}
         </Button>
