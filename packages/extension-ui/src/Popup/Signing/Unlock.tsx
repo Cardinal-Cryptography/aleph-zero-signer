@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useCallback, useMemo } from 'react';
+import styled from 'styled-components';
 
 import { isNotShorterThan } from '@polkadot/extension-ui/util/validators';
 
@@ -40,7 +41,7 @@ function Unlock({
   const isPasswordValid = useMemo(() => isNotShorterThan(MIN_PASSWORD_LENGTH, t<string>('Password is too short')), [t]);
 
   return (
-    <div className={className}>
+    <Container className={className}>
       <ValidatedInput
         component={InputWithLabel}
         data-signing-password
@@ -62,8 +63,14 @@ function Unlock({
           {error}
         </Warning>
       )}
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  & > :not(:last-child) {
+    margin-bottom: 8px;
+  }
+`;
 
 export default React.memo(Unlock);
