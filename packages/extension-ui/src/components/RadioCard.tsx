@@ -16,12 +16,12 @@ interface Props extends ThemeProps {
   option: Option;
   selectedValue: string;
   onChange: (value: string) => void;
-  tabIndex?: number;
 }
 
-function RadioCard({ className, onChange, option, selectedValue, tabIndex = 0 }: Props): React.ReactElement<Props> {
+function RadioCard({ className, onChange, option, selectedValue }: Props): React.ReactElement<Props> {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isFocused, setIsFocused] = useState(false);
+
+  const [isFocusVisible, setIsFocusVisible] = useState(false);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,16 +45,20 @@ function RadioCard({ className, onChange, option, selectedValue, tabIndex = 0 }:
     <div className={className}>
       <Label
         htmlFor={option.text}
-        isOutlined={isFocused}
+        isOutlined={isFocusVisible}
         onClick={handleClick}
       >
         <span>{option.text}</span>
         <input
           checked={selectedValue === option.value}
           id={option.text}
-          onBlur={() => setIsFocused(false)}
+          onBlur={() => setIsFocusVisible(false)}
           onChange={handleChange}
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => {
+            const isFocusVisible = !!inputRef.current?.matches(':focus-visible');
+
+            setIsFocusVisible(isFocusVisible);
+          }}
           ref={inputRef}
           type='radio'
           value={option.value}
@@ -71,6 +75,12 @@ const Label = styled.label<{ isOutlined: boolean }>`
     cursor: pointer;
     width: 100%;
     padding: 16px;
+
+    :has(input:focus-visible) {
+      outline-style: auto;
+    }
+
+    /* :has selector is the pure css solution to this problem, but doesn't have (so far) enough support ;( */
     ${({ isOutlined }) => (isOutlined ? 'outline-style: auto;' : '')}
 `;
 

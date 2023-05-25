@@ -17,10 +17,18 @@ interface Props {
   variant?: 'default' | 'small';
 }
 
-function Checkbox({ checked, className, indeterminate, label, onChange, onClick }: Props): React.ReactElement<Props> {
+function Checkbox({
+  checked,
+  className,
+  indeterminate,
+  label,
+  onChange,
+  onClick,
+  variant = 'default'
+}: Props): React.ReactElement<Props> {
   const checkboxRef = React.useRef<HTMLInputElement | null>(null);
 
-  const [isFocused, setIsFocused] = useState(false);
+  const [isFocusVisible, setIsFocusVisible] = useState(false);
 
   useEffect(() => {
     if (checkboxRef.current) {
@@ -34,14 +42,21 @@ function Checkbox({ checked, className, indeterminate, label, onChange, onClick 
 
   return (
     <div className={className}>
-      <Label isOutlined={isFocused}>
+      <Label
+        isOutlined={isFocusVisible}
+        variant={variant}
+      >
         {label}
         <input
           checked={checked && !indeterminate}
-          onBlur={() => setIsFocused(false)}
+          onBlur={() => setIsFocusVisible(false)}
           onChange={_onChange}
           onClick={_onClick}
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => {
+            const isFocusVisible = !!checkboxRef.current?.matches(':focus-visible');
+
+            setIsFocusVisible(isFocusVisible);
+          }}
           ref={checkboxRef}
           type='checkbox'
         />
@@ -50,23 +65,6 @@ function Checkbox({ checked, className, indeterminate, label, onChange, onClick 
     </div>
   );
 }
-
-const Label = styled.label<{ isOutlined: boolean }>`
-    display: block;
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-    padding-left: 26px;
-    padding-top: 1px;
-    color: ${({ theme }) => theme.subTextColor};
-    font-size: ${({ theme }) => theme.fontSize};
-    line-height: ${({ theme }) => theme.lineHeight};
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 145%;
-    letter-spacing: 0.07em;
-    ${({ isOutlined }) => (isOutlined ? 'outline-style: auto;' : '')}
-`;
 
 const variantToStyles = {
   small: {
@@ -95,12 +93,37 @@ const variantToStyles = {
   }
 };
 
+const Label = styled.label<{ isOutlined: boolean; variant: NonNullable<Props['variant']> }>`
+    display: block;
+    position: relative;
+    min-height: ${({ variant }) => `calc(${variantToStyles[variant].width} + 4px)`};
+    cursor: pointer;
+    user-select: none;
+    padding-left: 26px;
+    padding-top: 1px;
+    color: ${({ theme }) => theme.subTextColor};
+    font-size: ${({ theme }) => theme.fontSize};
+    line-height: ${({ theme }) => theme.lineHeight};
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 145%;
+    letter-spacing: 0.07em;
+
+    :has(input:focus-visible) {
+      outline-style: auto;
+    }
+
+    /* :has selector is the pure css solution to this problem, but doesn't have (so far) enough support ;( */
+    ${({ isOutlined }) => (isOutlined ? 'outline-style: auto;' : '')}
+`;
+
 export default styled(Checkbox)(
   ({ theme, variant = 'default' }) => `
   margin: ${theme.boxMargin};
   box-sizing: border-box;
 
   label {
+
     & input {
       position: absolute;
       opacity: 0;
