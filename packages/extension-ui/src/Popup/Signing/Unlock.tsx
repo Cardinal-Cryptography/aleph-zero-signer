@@ -1,10 +1,10 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import { isNotShorterThan } from '@polkadot/extension-ui/util/validators';
+import { Result } from '@polkadot/extension-ui/util/validators';
 
 import { InputWithLabel, ValidatedInput, Warning } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
@@ -18,7 +18,6 @@ interface Props {
   setError: (error: string | null) => void;
   setPassword: (password: string) => void;
 }
-const MIN_PASSWORD_LENGTH = 0;
 
 function Unlock({
   className,
@@ -38,8 +37,6 @@ function Unlock({
     [setError, setPassword]
   );
 
-  const isPasswordValid = useMemo(() => isNotShorterThan(MIN_PASSWORD_LENGTH, t<string>('Password is too short')), [t]);
-
   return (
     <Container className={className}>
       <ValidatedInput
@@ -52,7 +49,7 @@ function Unlock({
         onEnter={onSign}
         onValidatedChange={_onChangePassword}
         type='password'
-        validator={isPasswordValid}
+        validator={Result.ok}
         value={password}
       />
       {error && (

@@ -101,6 +101,14 @@ describe('AccountNamePasswordCreation', () => {
     expect(findVisiblePasswordMessages().find({ messageType: 'warning' }).text()).toBe('CapsLock is ON');
   });
 
+  it('has form with submit button', () => {
+    const submitButton = wrapper.find('button[type="submit"]');
+    const form = wrapper.find('form');
+
+    expect(form.props().id).toBeTruthy();
+    expect(submitButton.props().form).toBe(form.props().id);
+  });
+
   it('submit button is not enabled until both passwords are equal', async () => {
     await enterName('abc').then(password('Alice has a cat')).then(repeat('Not Alice has a cat'));
     expect(wrapper.find('.warning-message').text()).toBe('Passwords do not match');
@@ -117,7 +125,7 @@ describe('AccountNamePasswordCreation', () => {
 
   it('calls onCreate with provided name and password', async () => {
     await enterName(account.name).then(password(account.password)).then(repeat(account.password));
-    wrapper.find('[data-button-action="add new root"] button').simulate('click');
+    wrapper.find('form').simulate('submit');
     await act(flushAllPromises);
 
     expect(onCreate).toBeCalledWith(account.name, account.password);
