@@ -32,7 +32,7 @@ test('appends a signature', async () => {
     'signatureMaterial',
     {
       signature: expect.any(String),
-      salt: expect.any(String),
+      salt: expect.any(String)
     }
   );
 });
