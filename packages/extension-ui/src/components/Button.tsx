@@ -143,7 +143,7 @@ export default styled(Button)(
   }
 
   &:not(:disabled):hover, &:active {
-    border: none;
+    border: 1px solid transparent;;
     background: ${
       isDanger
         ? theme.buttonBackgroundDangerHover
