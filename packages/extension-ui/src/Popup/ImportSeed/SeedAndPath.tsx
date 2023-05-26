@@ -188,15 +188,7 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
 
     if (isFormValid) {
       onNextStep();
-
-      return;
     }
-
-    if (error) {
-      return;
-    }
-
-    setError(t('This field is required'));
   };
 
   return (
