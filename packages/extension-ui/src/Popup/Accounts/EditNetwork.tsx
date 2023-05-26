@@ -1,8 +1,6 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeProps } from '../../types';
-
 import React, { FormEvent, useCallback, useContext, useEffect, useId, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
@@ -30,13 +28,11 @@ import { LINKS } from '../../links';
 import { tieAccount } from '../../messaging';
 import { Header } from '../../partials';
 
-interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {}
-
 function EditNetwork({
   match: {
     params: { address }
   }
-}: Props): React.ReactElement<Props> {
+}: RouteComponentProps<{ address: string }>): React.ReactElement<RouteComponentProps<{ address: string }>> {
   const { t } = useTranslation();
   const { show } = useToast();
   const { accounts } = useContext(AccountContext);
