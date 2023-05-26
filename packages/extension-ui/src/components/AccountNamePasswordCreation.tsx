@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { FormEvent, useCallback, useContext, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useId, useState } from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../assets/help.svg';
@@ -44,8 +44,6 @@ type Props = {
     }
 );
 
-const ACCOUNT_NAME_PASSWORD_FORM_ID = 'ACCOUNT_NAME_PASSWORD_FORM_ID';
-
 function AccountNamePasswordCreation({
   address,
   buttonLabel,
@@ -64,6 +62,8 @@ function AccountNamePasswordCreation({
   const { t } = useTranslation();
   const options = useGenesisHashOptions();
   const { master } = useContext(AccountContext);
+
+  const formId = useId();
 
   const _onCreate = useCallback(() => {
     if (name && password) {
@@ -120,7 +120,7 @@ function AccountNamePasswordCreation({
     <>
       <Form
         className={className}
-        id={ACCOUNT_NAME_PASSWORD_FORM_ID}
+        id={formId}
         onSubmit={onSubmit}
       >
         <StyledHeader
@@ -171,7 +171,7 @@ function AccountNamePasswordCreation({
           )}
           <Button
             data-button-action='add new root'
-            form={ACCOUNT_NAME_PASSWORD_FORM_ID}
+            form={formId}
             isBusy={isBusy}
             isDisabled={!isFormValid}
             type='submit'

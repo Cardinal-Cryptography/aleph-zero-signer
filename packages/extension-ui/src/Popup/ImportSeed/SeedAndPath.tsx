@@ -5,7 +5,7 @@ import type { KeypairType } from '@polkadot/util-crypto/types';
 import type { ThemeProps } from '../../types';
 import type { AccountInfo } from '.';
 
-import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useEffect, useId, useState } from 'react';
 import styled from 'styled-components';
 
 import { validateSeed } from '@polkadot/extension-ui/messaging';
@@ -79,8 +79,6 @@ const StyledInputWithLabel = styled(InputWithLabel)`
 }
 `;
 
-const SEED_AND_PATH_FORM_ID = 'SEED_AND_PATH_FORM_ID';
-
 function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: Props): React.ReactElement {
   const { t } = useTranslation();
 
@@ -93,6 +91,8 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
   const [isLocked, setLocked] = useState<boolean>(true);
 
   const onAction = useContext(ActionContext);
+
+  const formId = useId();
 
   const onSeedWordsChange = (nextSeedWords: string[]) => {
     if (nextSeedWords.every((word) => !word)) {
@@ -204,7 +204,7 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
       <ScrollWrapper>
         <form
           className={className}
-          id={SEED_AND_PATH_FORM_ID}
+          id={formId}
           onSubmit={onSubmit}
         >
           <StyledHeader
@@ -255,7 +255,7 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
           {t<string>('Cancel')}
         </Button>
         <Button
-          form={SEED_AND_PATH_FORM_ID}
+          form={formId}
           isDisabled={!isFormValid}
           type='submit'
         >

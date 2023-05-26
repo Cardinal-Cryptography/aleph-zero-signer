@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { FormEvent, useCallback, useContext, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useId, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
@@ -16,8 +16,6 @@ import { Header, Name } from '../../partials';
 interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
   className?: string;
 }
-
-const EDIT_NAME_FORM_ID = 'EDIT_NAME_FORM_ID';
 
 function EditName({
   className,
@@ -37,6 +35,8 @@ function EditName({
   const isExternal = account?.isExternal || 'false';
 
   const [editedName, setName] = useState<string | undefined | null>(account?.name);
+
+  const formId = useId();
 
   const _saveChanges = useCallback(async (): Promise<void> => {
     if (editedName) {
@@ -69,7 +69,7 @@ function EditName({
       />
       <form
         className={className}
-        id={EDIT_NAME_FORM_ID}
+        id={formId}
         onSubmit={onSubmit}
       >
         <Address
@@ -94,7 +94,7 @@ function EditName({
           {t<string>('Cancel')}
         </Button>
         <Button
-          form={EDIT_NAME_FORM_ID}
+          form={formId}
           isDisabled={!isFormValid}
           type='submit'
         >

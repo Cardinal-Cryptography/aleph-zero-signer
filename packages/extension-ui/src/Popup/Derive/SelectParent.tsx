@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { FormEvent, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { canDerive } from '@polkadot/extension-base/utils';
@@ -45,8 +45,6 @@ interface Props {
 // match any single slash
 const singleSlashRegex = /([^/]|^)\/([^/]|$)/;
 
-const SELECT_PARENT_FORM_ID = 'SELECT_PARENT_FORM_ID';
-
 function SelectParent({
   className,
   externalString,
@@ -71,6 +69,8 @@ function SelectParent({
 
     return parent?.type === 'sr25519';
   }, [accounts, parentAddress]);
+
+  const formId = useId();
 
   // reset the password field if the parent address changes
   useEffect(() => {
@@ -169,7 +169,7 @@ function SelectParent({
     <>
       <Form
         className={className}
-        id={SELECT_PARENT_FORM_ID}
+        id={formId}
         onSubmit={onSubmit}
       >
         <StyledHeader
@@ -250,7 +250,7 @@ function SelectParent({
         </Button>
         <Button
           data-button-action='create derived account'
-          form={SELECT_PARENT_FORM_ID}
+          form={formId}
           isBusy={isBusy}
           isDisabled={!isFormValid}
           type='submit'

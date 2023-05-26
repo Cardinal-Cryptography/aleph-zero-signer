@@ -4,7 +4,7 @@
 import type { ThemeProps } from '../types';
 
 import { saveAs } from 'file-saver';
-import React, { FormEvent, useCallback, useContext, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useId, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
@@ -27,8 +27,6 @@ interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
   className?: string;
 }
 
-const EXPORT_FORM_ID = 'EXPORT_FORM_ID';
-
 function Export({
   className,
   match: {
@@ -41,6 +39,8 @@ function Export({
   const [isBusy, setIsBusy] = useState(false);
   const [pass, setPass] = useState('');
   const [error, setError] = useState('');
+
+  const formId = useId();
 
   const _goTo = (path: string) => () => onAction(path);
 
@@ -92,7 +92,7 @@ function Export({
         <Address address={address} />
         <form
           className='password-container'
-          id={EXPORT_FORM_ID}
+          id={formId}
           onSubmit={onSubmit}
         >
           <InputWithLabel
@@ -126,7 +126,7 @@ function Export({
         <Button
           className='export-button'
           data-export-button
-          form={EXPORT_FORM_ID}
+          form={formId}
           isBusy={isBusy}
           isDisabled={!isFormValid}
           type='submit'

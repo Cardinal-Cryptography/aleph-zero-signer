@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../../types';
 
-import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useEffect, useId, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
@@ -33,8 +33,6 @@ import { Header } from '../../partials';
 interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
   className?: string;
 }
-
-const EDIT_NETWORK_FORM_ID = 'EDIT_NETWORK_FORM_ID';
 
 const CustomFooter = styled(HelperFooter)`
   width: auto;
@@ -88,6 +86,8 @@ function EditNetwork({
 
   const [hasGenesisChanged, setHasGenesisChanged] = useState(false);
 
+  const formId = useId();
+
   useEffect(() => {
     if (account && genesis !== account.genesisHash) {
       setHasGenesisChanged(true);
@@ -131,7 +131,7 @@ function EditNetwork({
         />
         <form
           className={className}
-          id={EDIT_NETWORK_FORM_ID}
+          id={formId}
           onSubmit={onSubmit}
         >
           <CheckboxContainer>
@@ -158,7 +158,7 @@ function EditNetwork({
             {t<string>('Cancel')}
           </Button>
           <Button
-            form={EDIT_NETWORK_FORM_ID}
+            form={formId}
             isDisabled={!isFormValid}
             type='submit'
           >

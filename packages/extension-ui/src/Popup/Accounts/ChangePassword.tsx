@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { FormEvent, useCallback, useContext, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useId, useState } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 
@@ -25,8 +25,6 @@ import { changePassword } from '../../messaging';
 import { Header, Password } from '../../partials';
 import { Result } from '../../util/validators';
 
-const CHANGE_PASSWORD_FORM_ID = 'CHANGE_PASSWORD_FORM_ID';
-
 const EditPassword = () => {
   const { t } = useTranslation();
   const { show } = useToast();
@@ -42,6 +40,8 @@ const EditPassword = () => {
   const [providedPass, setProvidedPass] = useState('');
   const [isProvidedPassWrong, setIsProvidedPassWrong] = useState(false);
   const [nextPass, setNextPass] = useState<string | null>(null);
+
+  const formId = useId();
 
   const saveChanges = async (): Promise<void> => {
     if (nextPass === null) {
@@ -89,7 +89,7 @@ const EditPassword = () => {
       />
       <ScrollWrapper>
         <Form
-          id={CHANGE_PASSWORD_FORM_ID}
+          id={formId}
           onSubmit={onSubmit}
         >
           <Address address={address} />
@@ -123,7 +123,7 @@ const EditPassword = () => {
             {t<string>('Cancel')}
           </Button>
           <Button
-            form={CHANGE_PASSWORD_FORM_ID}
+            form={formId}
             isBusy={isBusy}
             isDisabled={!isFormValid}
             onClick={saveChanges}
