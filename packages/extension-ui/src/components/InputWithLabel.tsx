@@ -69,9 +69,9 @@ function InputWithLabel({
 
   return (
     <Label
-      $small={!!placeholder || focused || (!!value && value?.length > 0)}
       className={className}
       label={label}
+      small={!!placeholder || focused || (!!value && value?.length > 0)}
     >
       <Input
         autoCapitalize='off'
