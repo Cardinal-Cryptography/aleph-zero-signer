@@ -30,28 +30,9 @@ import { LINKS } from '../../links';
 import { tieAccount } from '../../messaging';
 import { Header } from '../../partials';
 
-interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {
-  className?: string;
-}
-
-const CustomFooter = styled(HelperFooter)`
-  width: auto;
-  margin-bottom: 24px;
-  gap: 12px;
-
-  .wrapper {
-    display: flex;
-    gap: 8px;
-    margin-left: -12px;
-  };
-`;
-
-const CustomButtonArea = styled(ButtonArea)`
-  padding-top:8px;
-`;
+interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {}
 
 function EditNetwork({
-  className,
   match: {
     params: { address }
   }
@@ -129,8 +110,7 @@ function EditNetwork({
           withBackdrop
           withHelp
         />
-        <form
-          className={className}
+        <Form
           id={formId}
           onSubmit={onSubmit}
         >
@@ -148,7 +128,7 @@ function EditNetwork({
             withTestNetwork={checked}
           />
           {footer}
-        </form>
+        </Form>
         <CustomButtonArea>
           <Button
             onClick={_goTo(`/account/edit-menu/${address}?isExternal=${isExternal.toString()}`)}
@@ -171,16 +151,32 @@ function EditNetwork({
   );
 }
 
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+`;
+
+const CustomFooter = styled(HelperFooter)`
+  width: auto;
+  margin-bottom: 24px;
+  gap: 12px;
+
+  .wrapper {
+    display: flex;
+    gap: 8px;
+    margin-left: -12px;
+  };
+`;
+
+const CustomButtonArea = styled(ButtonArea)`
+  padding-top:8px;
+`;
+
 const CheckboxContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-export default withRouter(
-  styled(EditNetwork)`
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-`
-);
+export default withRouter(EditNetwork);
