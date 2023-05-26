@@ -149,7 +149,7 @@ describe('Derive', () => {
       await act(flushAllPromises);
       wrapper.update();
 
-      expect(wrapper.find('.warning-message')).toHaveLength(1);
+      expect(wrapper.find({ children: 'Wrong password' }).length).toBeGreaterThan(0);
 
       await type(wrapper.find('input[type="password"]'), 'new_attempt');
 
@@ -235,7 +235,7 @@ describe('Derive', () => {
       await act(flushAllPromises);
       wrapper.update();
 
-      expect(wrapper.find('Warning').length).toBeGreaterThan(0);
+      expect(wrapper.find({ children: 'Invalid derivation path' }).length).toBeGreaterThan(0);
 
       await type(wrapper.find('[data-input-suri] input'), 'new');
 
