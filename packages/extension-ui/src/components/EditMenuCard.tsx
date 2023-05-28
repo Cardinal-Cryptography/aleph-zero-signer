@@ -252,8 +252,8 @@ export default styled(EditMenuCard)(
   }
 
   .link-icon {
-    width: 12px;
-    height: 12px;
+    width: 16px;
+    height: 16px;
     background: ${theme.headerIconBackground};
     transition: transform 0.2s ease;
   }
