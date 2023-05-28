@@ -57,8 +57,6 @@ export default styled(FaviconBox)(
   transition: 0.2s ease;
   justify-content: space-evenly;
   
-  min-width: 0; /* To enable ellipsis for flex grandchildren (https://css-tricks.com/flexbox-truncated-text/) */
-
   .favicon-box-content {
     display: flex;
     flex-direction: row;
