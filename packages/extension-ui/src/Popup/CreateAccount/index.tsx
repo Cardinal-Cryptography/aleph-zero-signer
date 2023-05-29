@@ -81,7 +81,6 @@ function CreateAccount(): React.ReactElement {
           text={t<string>('Create an account')}
           total={3}
           withBackdrop
-          withMargin
         />
       )}
       <Loading>
