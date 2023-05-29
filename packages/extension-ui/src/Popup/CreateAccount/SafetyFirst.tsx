@@ -5,11 +5,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../../assets/help.svg';
-import { Button, ButtonArea, HelperFooter, IconHeader, LearnMore, Svg, VerticalSpace } from '../../components';
+import { Button, ButtonArea, HelperFooter, IconHeader, LearnMore, Svg } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import { LINKS } from '../../links';
 
 type Props = {
+  className?: string;
   onNextStep: () => void;
 };
 
@@ -26,7 +27,7 @@ const StyledFooter = styled(HelperFooter)`
   }
 `;
 
-function SafetyFirst({ onNextStep }: Props): React.ReactElement<Props> {
+function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
   const footer = (
@@ -46,13 +47,15 @@ function SafetyFirst({ onNextStep }: Props): React.ReactElement<Props> {
 
   return (
     <>
-      <StyledIconHeader
-        description={t<string>(
-          "In the next step, you'll generate a secret phrase that allows you to access your account. Anyone who manages to access it will have a full control over your account,\nso read, save, and store it safely."
-        )}
+      <IconHeader
+        className={className}
         headerText={t<string>('Safety first!')}
         iconType='lock'
-      />
+      >
+        {t<string>(
+          "In the next step, you'll generate a secret phrase that allows you to access your account. Anyone who manages to access it will have a full control over your account,\nso read, save, and store it safely."
+        )}
+      </IconHeader>
       <ButtonArea footer={footer}>
         <Button
           onClick={window.close}
@@ -65,9 +68,5 @@ function SafetyFirst({ onNextStep }: Props): React.ReactElement<Props> {
     </>
   );
 }
-
-const StyledIconHeader = styled(IconHeader)`
-  margin-block: auto;
-`;
 
 export default React.memo(SafetyFirst);

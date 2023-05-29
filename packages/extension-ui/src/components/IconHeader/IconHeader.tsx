@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 import animDanger from '../../assets/anim_danger.svg';
@@ -13,7 +13,7 @@ import animTrusted from '../../assets/anim_trusted.svg';
 import animForget from '../../assets/anim_vanish.svg';
 import animWarning from '../../assets/anim_warning.svg';
 import azeroLogo from '../../assets/azeroLogo.svg';
-import secureImg from '../../assets/secure.png';
+import secureImg from '../../assets/secure.svg';
 
 const TYPE_TO_SRC = {
   aleph: azeroLogo,
@@ -32,16 +32,16 @@ type IconType = keyof typeof TYPE_TO_SRC;
 
 type Props = {
   className?: string;
-  description?: string;
+  children?: ReactNode;
   headerText: string;
   iconType: IconType;
 };
 
-const IconHeader = ({ className, description, headerText, iconType }: Props) => (
+const IconHeader = ({ children, className, headerText, iconType }: Props) => (
   <Container className={className}>
     <Icon src={TYPE_TO_SRC[iconType]} />
     <HeaderText>{headerText}</HeaderText>
-    {description && <Description>{description}</Description>}
+    <DescriptionContainer>{children}</DescriptionContainer>
   </Container>
 );
 
@@ -65,7 +65,7 @@ const Icon = styled.img`
 `;
 
 const HeaderText = styled.h2`
-  font-family: 'Gilroy';
+  font-family: ${({ theme }) => theme.secondaryFontFamily};
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -73,11 +73,11 @@ const HeaderText = styled.h2`
   letter-spacing: 0.035em;
   text-align: center;
 
-  color: ${({ theme }) => theme.textColor}
+  color: ${({ theme }) => theme.textColor};
 `;
 
-const Description = styled.p`
-  font-family: 'Karla';
+const DescriptionContainer = styled.div`
+  font-family: ${({ theme }) => theme.primaryFontFamily};
   font-style: normal;
   font-weight: 300;
   font-size: 14px;

@@ -28,6 +28,7 @@ const config = {
           ...webpackConfig.resolve.alias,
           '@polkadot/hw-ledger': require.resolve('./__mocks__/@polkadot/hw-ledger.js'),
           '../messaging': require.resolve('./__mocks__/messaging'),
+          '../../messaging': require.resolve('./__mocks__/messaging'),
         },
       },
     };

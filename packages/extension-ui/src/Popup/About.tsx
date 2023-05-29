@@ -7,7 +7,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import alephMark from '../assets/alephMark.svg';
-import { EditMenuCard } from '../components';
+import { EditMenuCard, IconHeader } from '../components';
 import useTranslation from '../hooks/useTranslation';
 import { LINKS } from '../links';
 import Header from '../partials/Header';
@@ -33,16 +33,12 @@ function About({ className }: Props): React.ReactElement<Props> {
         withHelp
       />
       <div className={className}>
-        <img
-          className='aleph-mark'
-          src={alephMark}
-        />
-        <div className='text'>
-          <span className='heading'>{t<string>('Aleph Zero Signer')}</span>
-          <span className='version-subtitle'>
-            {t<string>('Version')}&nbsp;{t<string>('version-number')}
-          </span>
-        </div>
+        <StyledIconHeader
+          headerText={t<string>('Aleph Zero Signer')}
+          iconType='aleph'
+        >
+          {t<string>('Version')}&nbsp;{t<string>('version-number')}
+        </StyledIconHeader>
         <AboutMenuCard
           description=''
           extra='link'
@@ -76,6 +72,10 @@ function About({ className }: Props): React.ReactElement<Props> {
   );
 }
 
+const StyledIconHeader = styled(IconHeader)`
+  margin-bottom: 32px;
+`;
+
 export default React.memo(
   styled(About)(
     ({ theme }: Props) => `
@@ -95,47 +95,6 @@ export default React.memo(
     height: 20px;
     background: ${theme.primaryColor};
   }
-
-  .aleph-mark {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-  }
-
-  .text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 34px;
-    margin-bottom: 36px;
-
-    .heading {
-      font-family: ${theme.secondaryFontFamily};
-      font-style: normal;
-      font-weight: bold;
-      font-size: 24px;
-      line-height: 118%;
-      display: flex;
-      align-items: center;
-      text-align: center;
-      letter-spacing: 0.03em;
-    }
-
-    .version-subtitle {
-      font-style: normal;
-      font-weight: 300;
-      font-size: 14px;
-      line-height: 145%;
-      display: flex;
-      align-items: center;
-      text-align: center;
-      letter-spacing: 0.07em;
-      color: ${theme.subTextColor}
-    }
-  }
-
   `
   )
 );

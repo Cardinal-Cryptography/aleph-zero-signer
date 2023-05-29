@@ -17,7 +17,7 @@ const meta = {
   args: {
     iconType: 'aleph',
     headerText: 'Add your title here',
-    description: 'Optional description here. I can be much longer than title'
+    children: 'Optional description here. I can be much longer than title'
   }
 } satisfies Meta<typeof IconHeader>;
 
