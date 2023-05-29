@@ -7,7 +7,7 @@ import React, { useCallback, useContext } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 
-import animatedRemove from '../../assets/anim_unlink.svg';
+import animatedRemove from '../../assets/anim_disconnect.svg';
 import { AnimatedSvg, Button, ButtonArea, FaviconBox, VerticalSpace } from '../../components';
 import { ActionContext } from '../../components/contexts';
 import { useGoTo } from '../../hooks/useGoTo';
