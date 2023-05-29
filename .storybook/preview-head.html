@@ -4,3 +4,17 @@
     height: 100vh;
   }
 </style>
+<script>
+  var data = { };
+  window.chrome = {
+    runtime: {
+      connect() {
+        return {
+          onMessage: {
+            addListener() {}
+          }
+        };
+      }
+    },
+  };
+</script>

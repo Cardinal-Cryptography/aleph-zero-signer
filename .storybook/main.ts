@@ -20,9 +20,20 @@ const config = {
   webpackFinal: async (config) => {
     return {
       ...config,
-      resolve: { ...config.resolve, alias: {...config.resolve.alias, ...webpackConfig.resolve.alias} },
+      resolve: {
+        ...config.resolve,
+        alias: {
+          ...config.resolve.alias,
+          ...webpackConfig.resolve.alias,
+          '@polkadot/hw-ledger': require.resolve('./__mocks__/@polkadot/hw-ledger.js')
+        },
+      },
     };
   },
+  env: (config) => ({
+    ...config,
+    EXTENSION_PREFIX: 'STORYBOOK-PREFIX',
+  }),
 };
 
 export default config;

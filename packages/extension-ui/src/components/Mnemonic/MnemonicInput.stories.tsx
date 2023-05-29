@@ -4,7 +4,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import React, { useState } from 'react';
-import styled from 'styled-components';
 
 import { EMPTY_SEED_WORDS, SEED_WORDS_LENGTH } from '@polkadot/extension-ui/Popup/ImportSeed/consts';
 
