@@ -37,9 +37,11 @@ function View({ children, className }: Props): React.ReactElement<Props> {
 
 export const BodyTheme = createGlobalStyle<ThemeProps>`
   body {
+    margin: 0;
     background: ${({ theme }: ThemeProps): string => theme.background};
     font-family: ${({ theme }: ThemeProps): string => theme.primaryFontFamily};
     -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
   }
 
   html {
@@ -48,6 +50,13 @@ export const BodyTheme = createGlobalStyle<ThemeProps>`
     &::-webkit-scrollbar {
       display: none;
     }
+  }
+
+  div#root {
+    height: calc(100vh - 2px);
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 0;
   }
 `;
 

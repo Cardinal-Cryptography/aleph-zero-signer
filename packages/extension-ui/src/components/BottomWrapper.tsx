@@ -22,7 +22,6 @@ export default styled(BottomWrapper)`
   position: sticky;
   bottom: 0;
   z-index: ${Z_INDEX.BOTTOM_WRAPPER};
-  max-width: 375px;
   backdrop-filter: blur(10px);
   mask-image: linear-gradient(to bottom, #0000 0, #000f 5px);
 `;
