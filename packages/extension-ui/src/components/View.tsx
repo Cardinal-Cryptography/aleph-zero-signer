@@ -36,18 +36,24 @@ function View({ children, className }: Props): React.ReactElement<Props> {
 }
 
 export const BodyTheme = createGlobalStyle<ThemeProps>`
-  body {
-    background: ${({ theme }: ThemeProps): string => theme.background};
-    font-family: ${({ theme }: ThemeProps): string => theme.primaryFontFamily};
-    -webkit-font-smoothing: antialiased;
-  }
-
   html {
+    height: 100%;
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
       display: none;
     }
+  }
+
+  body {
+    height: 100%;
+    background: ${({ theme }: ThemeProps): string => theme.background};
+    font-family: ${({ theme }: ThemeProps): string => theme.primaryFontFamily};
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    height: 100%;
   }
 `;
 

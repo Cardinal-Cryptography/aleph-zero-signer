@@ -23,7 +23,7 @@ const preview = {
           type: "mobile",
           styles: {
             width: "360px",
-            height: "625px",
+            height: "600px",
           }
         },
         fullWidth: {
