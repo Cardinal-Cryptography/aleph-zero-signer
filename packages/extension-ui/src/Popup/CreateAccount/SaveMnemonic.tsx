@@ -173,9 +173,6 @@ export default React.memo(
       box-sizing: border-box;
       width: 108px;
       margin-bottom: 8px;
-      input {
-        text-align: left;
-      }
     }
 
     .copy-to-clipboard {

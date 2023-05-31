@@ -65,7 +65,7 @@ export default styled(MnemonicPill)`
     letter-spacing: 0.07em;
     color: ${({ theme }) => theme.textColor};
     flex: 1;
-    text-align: left;
+    text-align: center;
     width: 60px;
     border-radius: ${({ theme }) => theme.buttonBorderRadius};
     outline: none;
