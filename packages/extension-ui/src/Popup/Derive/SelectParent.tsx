@@ -249,7 +249,6 @@ function SelectParent({
           {t<string>('Cancel')}
         </Button>
         <Button
-          data-button-action='create derived account'
           form={formId}
           isBusy={isBusy}
           isDisabled={!isFormValid}

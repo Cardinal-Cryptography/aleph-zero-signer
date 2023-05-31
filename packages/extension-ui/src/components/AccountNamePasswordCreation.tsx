@@ -170,7 +170,6 @@ function AccountNamePasswordCreation({
             <BackButton onClick={_onBackClick} />
           )}
           <Button
-            data-button-action='add new root'
             form={formId}
             isBusy={isBusy}
             isDisabled={!isFormValid}

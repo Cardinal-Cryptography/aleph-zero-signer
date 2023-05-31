@@ -153,7 +153,7 @@ describe('Derive', () => {
 
       await type(wrapper.find('input[type="password"]'), 'new_attempt');
 
-      const button = wrapper.find('[data-button-action="create derived account"] button');
+      const button = wrapper.find('button[type="submit"]');
 
       expect(button.prop('disabled')).toBe(false);
       expect(wrapper.find('.warning-message')).toHaveLength(0);
@@ -162,7 +162,7 @@ describe('Derive', () => {
     it('Button is enabled when password is set', async () => {
       await type(wrapper.find('input[type="password"]'), parentPassword);
 
-      const button = wrapper.find('[data-button-action="create derived account"] button');
+      const button = wrapper.find('button[type="submit"]');
 
       expect(button.prop('disabled')).toBe(false);
       expect(wrapper.find('.warning-message')).toHaveLength(0);
@@ -199,7 +199,7 @@ describe('Derive', () => {
       await act(flushAllPromises);
       wrapper.update();
 
-      const button = wrapper.find('[data-button-action="create derived account"] button');
+      const button = wrapper.find('button[type="submit"]');
 
       expect(button.prop('disabled')).toBe(true);
       expect(wrapper.find('.warning-message')).toHaveLength(1);
@@ -210,7 +210,7 @@ describe('Derive', () => {
       await type(wrapper.find('input[type="password"]'), parentPassword);
       await type(wrapper.find('[data-input-suri] input'), '///');
 
-      const button = wrapper.find('[data-button-action="create derived account"] button');
+      const button = wrapper.find('button[type="submit"]');
 
       expect(button.prop('disabled')).toBe(true);
       expect(wrapper.find('.warning-message')).toHaveLength(1);
@@ -222,7 +222,7 @@ describe('Derive', () => {
       await type(wrapper.find('input[type="password"]'), parentPassword);
       await type(wrapper.find('[data-input-suri] input'), '//somehard/soft');
 
-      const button = wrapper.find('[data-button-action="create derived account"] button');
+      const button = wrapper.find('button[type="submit"]');
 
       expect(button.prop('disabled')).toBe(false);
       expect(wrapper.find('.warning-message')).toHaveLength(0);
@@ -239,7 +239,7 @@ describe('Derive', () => {
 
       await type(wrapper.find('[data-input-suri] input'), 'new');
 
-      const button = wrapper.find('[data-button-action="create derived account"] button');
+      const button = wrapper.find('button[type="submit"]');
 
       expect(button.prop('disabled')).toBe(false);
       expect(wrapper.find('Warning')).toHaveLength(0);
@@ -328,7 +328,7 @@ describe('Derive', () => {
 
       await type(pathInput, '//somehard/soft');
 
-      const button = wrapper.find('[data-button-action="create derived account"] button');
+      const button = wrapper.find('button[type="submit"]');
 
       expect(button.prop('disabled')).toBe(true);
       expect(wrapper.find('[data-input-suri]').first().prop('isError')).toBe(true);
