@@ -213,16 +213,13 @@ function Address({
                   />
                   <span>{parentNameSuri}</span>
                 </div>
-              </div>
-              <div className='name displaced'>
-                <Name />
+                <div className='displaced'>
+                  <Name />
+                </div>
               </div>
             </>
           ) : (
-            <div
-              className='name'
-              data-field='name'
-            >
+            <div data-field='name'>
               <Name />
             </div>
           )}
@@ -382,6 +379,7 @@ export default styled(Address)(
   }
 
   .identityIcon {
+    flex-shrink: 0;
     margin-left: 16px;
     margin-right: 14px;
     width: 50px;
@@ -393,11 +391,13 @@ export default styled(Address)(
   }
 
   .info {
-    max-width: 200px;
+    min-width: 0;
     border-radius: 8px;
   }
 
   .infoRow {
+    min-width: 0;
+    flex-grow: 1;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -447,6 +447,7 @@ export default styled(Address)(
   }
 
   .name {
+    display: block;
     font-size: 16px;
     line-height: 125%;
     letter-spacing: 0.06em;
@@ -458,8 +459,8 @@ export default styled(Address)(
     width: 300px;
     white-space: nowrap;
     color: ${theme.textColor};
-    width: 190px;
     margin-right: 4px;
+    max-width: 100%;
   } 
 
     &.displaced {
