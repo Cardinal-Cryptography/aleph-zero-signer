@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../types';
 
-import React, { ReactNode, useCallback, useEffect} from 'react';
+import React, { ReactNode, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
 import Checkmark from '../assets/checkmark.svg';
@@ -71,11 +71,12 @@ const variantToStyles = {
     width: '11px',
     top: '4px',
     left: '0px',
+    paddingLeft: '24px',
     after: {
       height: '11px',
       width: '11px',
       top: '0px',
-      left: '0px',
+      left: '0px'
     }
   },
   default: {
@@ -83,13 +84,14 @@ const variantToStyles = {
     width: '16px',
     top: '2px',
     left: '0px',
+    paddingLeft: '26px',
     after: {
       height: '10px',
       width: '13px',
       top: '2px',
-      left: '1px',
+      left: '1px'
     }
-  },
+  }
 };
 
 export default styled(Checkbox)(
@@ -102,7 +104,7 @@ export default styled(Checkbox)(
     position: relative;
     cursor: pointer;
     user-select: none;
-    padding-left: 26px;
+    padding-left: ${variantToStyles[variant].paddingLeft};
     padding-top: 1px;
     color: ${theme.subTextColor};
     font-size: ${theme.fontSize};
