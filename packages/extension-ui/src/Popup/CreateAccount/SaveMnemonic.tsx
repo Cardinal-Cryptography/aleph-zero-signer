@@ -52,7 +52,7 @@ function SaveMnemonic({ className, onNextStep, onPreviousStep, seed }: Props): R
     <HelperFooter>
       <Checkbox
         checked={isSecretCopied}
-        label={t('I have copied the secret phrase to a safe place')}
+        label={t('I have safely stored the secret phrase. The clipboard will be cleared upon clicking "Next".')}
         onChange={setIsSecretCopied}
         variant='small'
       />
