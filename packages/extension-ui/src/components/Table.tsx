@@ -23,7 +23,6 @@ function Table({ children, className = '', isFull }: Props): React.ReactElement<
 export default React.memo(
   styled(Table)(
     ({ theme }: ThemeProps) => `
-  display: table;
   table-layout: fixed;
   border: 0;
   font-size: ${theme.labelFontSize};
