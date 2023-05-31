@@ -47,14 +47,21 @@ function About({ className }: Props): React.ReactElement<Props> {
           description=''
           extra='link'
           link={LINKS.GENERAL_INTRODUCTION}
-          position='bottom'
+          position='top'
           title={t<string>('Help & Support')}
         />
         <AboutMenuCard
           description=''
           extra='link'
-          link={LINKS.TERMS_OF_SERVICE}
+          link={LINKS.FEEDBACK}
           position='bottom'
+          title={t<string>('Feedback')}
+        />
+        <AboutMenuCard
+          description=''
+          extra='link'
+          link={LINKS.TERMS_OF_SERVICE}
+          position='top'
           title={t<string>('Terms of Service')}
         />
         <AboutMenuCard
