@@ -125,14 +125,6 @@ function Address({
 
   const _onClick = useCallback(() => setShowActionsMenu(!showActionsMenu), [showActionsMenu]);
 
-  const _onCopy = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      e.stopPropagation();
-      show(t<string>('Public address copied to your clipboard'), 'success');
-    },
-    [show, t]
-  );
-
   const Name = () => {
     const accountName = name || account?.name;
     const displayName = accountName || t('<unknown>');
@@ -166,8 +158,6 @@ function Address({
   };
 
   const parentNameSuri = getParentNameSuri(parentName, suri);
-
-  const _ellipsisName = useCallback(ellipsisName, [ellipsisName]);
 
   const handleOnClick = useCallback(() => {
     if (!address) {
@@ -255,7 +245,7 @@ function Address({
                 data-field='address'
                 onClick={onCopyClickStopPropagation}
               >
-                {_ellipsisName(formatted || address) || t('<unknown>')}
+                {ellipsisName(formatted || address) || t('<unknown>')}
               </div>
             </CopyToClipboard>
           </div>

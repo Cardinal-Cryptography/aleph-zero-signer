@@ -248,12 +248,17 @@ const genesisHashTestSuite = (account: AccountTestGenesisJson, withAccountsInCon
       expect(wrapper.find('Identicon').first().prop('iconTheme')).toEqual(expectedIconTheme);
     });
 
-    // TODO: fix when copy to clipboard is implemented on the designs
-    // it('Copy buttons contain the encoded address', () => {
-    //   // the first CopyToClipboard is from the identicon, the second from the copy button
-    //   expect(wrapper.find('CopyToClipboard').at(0).prop('text')).toEqual(expectedEncodedAddress);
-    //   expect(wrapper.find('CopyToClipboard').at(1).prop('text')).toEqual(expectedEncodedAddress);
-    // });
+    it('Copy address to clipboard on click and do not go to account menu', () => {
+      // eslint-disable-next-line deprecation/deprecation
+      (document.execCommand as jest.Mock).mockClear();
+      const stopPropagation = jest.fn();
+
+      wrapper.find('.fullAddress').simulate('click', { stopPropagation });
+      // the first CopyToClipboard is from the identicon, the second from the copy button
+      // eslint-disable-next-line deprecation/deprecation
+      expect(document.execCommand).toHaveBeenCalledWith('copy');
+      expect(stopPropagation).toHaveBeenCalled();
+    });
 
     it('Network label shows the correct network', () => {
       expect(wrapper.find('[data-field="chain"]').text()).toEqual(expectedNetworkLabel);
