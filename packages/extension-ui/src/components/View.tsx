@@ -37,6 +37,7 @@ function View({ children, className }: Props): React.ReactElement<Props> {
 
 export const BodyTheme = createGlobalStyle<ThemeProps>`
   body {
+    height: 100%;
     margin: 0;
     background: ${({ theme }: ThemeProps): string => theme.background};
     font-family: ${({ theme }: ThemeProps): string => theme.primaryFontFamily};
@@ -45,6 +46,7 @@ export const BodyTheme = createGlobalStyle<ThemeProps>`
   }
 
   html {
+    height: 100%;
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
@@ -53,7 +55,7 @@ export const BodyTheme = createGlobalStyle<ThemeProps>`
   }
 
   div#root {
-    height: calc(100vh - 2px);
+    height: 100%;
     margin: 0 auto;
     max-width: 100%;
     padding: 0;
