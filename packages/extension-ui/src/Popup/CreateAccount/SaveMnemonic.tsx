@@ -103,12 +103,14 @@ function SaveMnemonic({ className, onNextStep, onPreviousStep, seed }: Props): R
       </ContentContainer>
       <ButtonArea footer={footer}>
         <BackButton onClick={onPreviousStep} />
-        <Button
-          isDisabled={!isSecretCopied}
-          onClick={onNextStep}
-        >
-          {t<string>('Next')}
-        </Button>
+        <CopyToClipboard text=' '>
+          <Button
+            isDisabled={!isSecretCopied}
+            onClick={onNextStep}
+          >
+            {t<string>('Next')}
+          </Button>
+        </CopyToClipboard>
       </ButtonArea>
     </>
   );
