@@ -134,7 +134,7 @@ const MnemonicContainer = styled.div`
   width: 100%;
   user-select: all;
   margin-bottom: 32px;
-  row-gap: 16px;
+  row-gap: 12px;
 
   .mnemonic-index {
     user-select: none;

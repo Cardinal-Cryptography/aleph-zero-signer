@@ -45,10 +45,14 @@ export default styled(MnemonicPill)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px solid ${({ showError, theme }) => (showError ? theme.textColorDanger : theme.boxBorderColor)};
-  background: ${({ theme }) => theme.mnemonicBackground};
-  border-radius: ${({ theme }) => theme.buttonBorderRadius};
+
+  box-sizing: border-box;
   width: 106px;
+  height: 26px;
+  border: 1px solid ${({ showError, theme }) => (showError ? theme.textColorDanger : theme.boxBorderColor)};
+  border-radius: ${({ theme }) => theme.buttonBorderRadius};
+
+  background: ${({ theme }) => theme.mnemonicBackground};
 
   &:focus-within {
     border: 1px solid ${({ showError, theme }) => (showError ? theme.textColorDanger : theme.primaryColor)};
@@ -80,10 +84,13 @@ export default styled(MnemonicPill)`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    min-width: 22px;
+    min-height: 22px;
+    margin-left: 1px;
+
     color: ${({ theme }) => theme.subTextColor};
     background: ${({ theme }) => theme.menuBackground};
-    min-width: 24px;
-    min-height: 24px;
     font-weight: 300;
     font-size: 13px;
     line-height: 130%;
