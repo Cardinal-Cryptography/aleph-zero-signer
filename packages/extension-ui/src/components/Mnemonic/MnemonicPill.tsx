@@ -45,12 +45,10 @@ export default styled(MnemonicPill)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 1px;
   border: 1px solid ${({ showError, theme }) => (showError ? theme.textColorDanger : theme.boxBorderColor)};
   background: ${({ theme }) => theme.mnemonicBackground};
   border-radius: ${({ theme }) => theme.buttonBorderRadius};
-  padding: 4px;
-  max-width: 106px;
+  width: 106px;
 
   &:focus-within {
     border: 1px solid ${({ showError, theme }) => (showError ? theme.textColorDanger : theme.primaryColor)};
@@ -67,6 +65,8 @@ export default styled(MnemonicPill)`
     flex: 1;
     text-align: center;
     width: 60px;
+    margin-left: -3px;
+    padding-inline: 0;
     border-radius: ${({ theme }) => theme.buttonBorderRadius};
     outline: none;
 

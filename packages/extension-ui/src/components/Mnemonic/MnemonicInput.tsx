@@ -83,7 +83,7 @@ export default styled(MnemonicInput)`
   .mnemonic-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px 5px;
+    gap: 16px 5px;
     width: 100%;
   }
 
