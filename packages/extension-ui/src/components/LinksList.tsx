@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import chevronIcon from '../assets/chevron.svg';
 import copyIcon from '../assets/copyMenu.svg';
 import externalLinkIcon from '../assets/externalLink.svg';
+import { triggerOnEnterSpace } from '../util/keyDownWrappers';
 import Svg from './Svg';
 
 type RightIcon = 'chevron' | 'copy' | 'link';
@@ -34,7 +35,7 @@ export const Item = ({
     className={className}
     href={link}
     onClick={onClick}
-    onKeyDown={onClick}
+    onKeyDown={triggerOnEnterSpace(onClick)}
     rel='noreferrer'
     target='_blank'
   >
