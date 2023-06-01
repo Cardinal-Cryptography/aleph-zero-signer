@@ -30,7 +30,7 @@ const About = () => {
             </Version>
           </HeroTextContainer>
         </Hero>
-        <Links>
+        <Nav>
           <LinksList.Group>
             <LinksList.Item
               link={LINKS.GENERAL_INTRODUCTION}
@@ -62,7 +62,7 @@ const About = () => {
               title={t<string>('Visit Website')}
             />
           </LinksList.Group>
-        </Links>
+        </Nav>
       </Container>
     </>
   );
@@ -126,4 +126,4 @@ const Version = styled.span`
   color: ${({ theme }) => theme.subTextColor}
 `;
 
-const Links = styled.div``;
+const Nav = styled.nav``;
