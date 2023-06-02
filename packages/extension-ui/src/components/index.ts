@@ -60,6 +60,7 @@ export { default as PopupBorderContainer } from './PopupBorderContainer';
 export { default as FaviconBox } from './FaviconBox';
 export { default as LearnMore } from './LearnMore';
 export { default as AnimatedSvg } from './AnimatedSvg';
+export { default as Success } from './Success';
 
 export { Input, TextArea } from './TextInputs';
 

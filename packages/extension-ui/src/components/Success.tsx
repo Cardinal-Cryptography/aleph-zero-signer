@@ -4,39 +4,30 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
-import useTranslation from '@polkadot/extension-ui/hooks/useTranslation';
-
 import Hero from './Hero/Hero';
 
 type Props = {
-  successType: 'created' | 'imported';
+  text: string;
 };
 
-const AccountCreationSuccess = ({ successType }: Props) => {
-  const { t } = useTranslation();
-
+const Success = ({ text }: Props) => {
   useEffect(() => {
     const timeoutId = setTimeout(window.close, 2000);
 
     return () => clearTimeout(timeoutId);
   }, []);
 
-  const headerText = {
-    created: t('Account created successfully!'),
-    imported: t('New account has been imported successfully!')
-  }[successType];
-
   return (
     <Container>
       <Hero
-        headerText={headerText}
+        headerText={text}
         iconType='success'
       />
     </Container>
   );
 };
 
-export default AccountCreationSuccess;
+export default Success;
 
 const Container = styled.div`
   display: flex;

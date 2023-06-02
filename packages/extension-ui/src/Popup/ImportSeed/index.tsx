@@ -5,8 +5,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import useToast from '@polkadot/extension-ui/hooks/useToast';
 
-import { AccountContext, ActionContext, ScrollWrapper } from '../../components';
-import AccountCreationSuccess from '../../components/AccountCreationSuccess';
+import { AccountContext, ActionContext, ScrollWrapper, Success } from '../../components';
 import AccountNamePasswordCreation from '../../components/AccountNamePasswordCreation';
 import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
 import useMetadata from '../../hooks/useMetadata';
@@ -99,7 +98,7 @@ function ImportSeed(): React.ReactElement {
           setGenesis={_onChangeNetwork}
         />
       )}
-      {step === 3 && <AccountCreationSuccess successType='imported' />}
+      {step === 3 && <Success text={t('New account has been imported successfully!')} />}
     </ScrollWrapper>
   );
 }
