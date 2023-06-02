@@ -49,8 +49,6 @@ export const Metadata: Story = {
         ])
       );
 
-      window.localStorage.setItem('welcome_read', 'ok');
-
       return (
         <View>
           <MemoryRouter initialEntries={['/']}>
