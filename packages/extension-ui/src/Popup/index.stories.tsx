@@ -7,18 +7,11 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 
 import { View } from '../components';
+import { subscribeMetadataRequests } from '../messaging';
 import Popup from '.';
 
-const PopupWrapper = ({ initialPath }: { initialPath: string }) => (
-  <View>
-    <MemoryRouter initialEntries={[initialPath]}>
-      <Popup />
-    </MemoryRouter>
-  </View>
-);
-
 export default {
-  component: PopupWrapper,
+  component: Popup,
   parameters: {
     layout: 'fullscreen'
   }
@@ -26,14 +19,57 @@ export default {
 
 type Story = StoryObj<typeof Popup>;
 
+type Mock = {
+  (...args: unknown[]): unknown;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  setMockImpl(nextMockImpl: Function): void;
+};
+
 export const Metadata: Story = {
-  args: {
-    initialPath: '/'
-  }
+  decorators: [
+    (Story) => {
+      (subscribeMetadataRequests as Mock).setMockImpl((sub: (tab: unknown[]) => void) =>
+        sub([
+          {
+            id: 'Aleph Zero Signer',
+            request: {
+              chain: 'Aleph Zero Testnet',
+              chainType: 'substrate',
+              color: '#00CCAB',
+              genesisHash: '0x05d5279c52c484cc80396535a316add7d47b1c5b9e0398dd1f584149341460c5',
+              icon: 'substrate',
+              specVersion: 64,
+              ss58Format: 42,
+              tokenDecimals: 12,
+              tokenSymbol: 'TZERO',
+              metaCalls: ''
+            },
+            url: 'https://test.azero.dev/#/accounts'
+          }
+        ])
+      );
+
+      window.localStorage.setItem('welcome_read', 'ok');
+
+      return (
+        <View>
+          <MemoryRouter initialEntries={['/']}>
+            <Story />
+          </MemoryRouter>
+        </View>
+      );
+    }
+  ]
 };
 
 export const CreateAccount: Story = {
-  args: {
-    initialPath: '/account/create'
-  }
+  decorators: [
+    (Story) => (
+      <View>
+        <MemoryRouter initialEntries={['/account/create']}>
+          <Story />
+        </MemoryRouter>
+      </View>
+    )
+  ]
 };
