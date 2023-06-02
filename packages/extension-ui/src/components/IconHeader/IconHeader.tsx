@@ -50,10 +50,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
 
-  & > * {
-    margin-block: 0;
-  }
-
   & > :not(:last-child) {
     margin-bottom: 16px;
   }
