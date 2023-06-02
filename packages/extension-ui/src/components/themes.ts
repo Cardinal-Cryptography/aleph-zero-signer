@@ -93,7 +93,6 @@ const darkTheme = {
   readonlyInputBackground: '#1A1B20',
   secondaryFontFamily: 'Gilroy, sans-serif',
   signingBorderColor: '#7A8B99',
-  neuterColor: '#7A8B99',
   skeletonBackground: '#14212A',
   transactionTooltipTextColor: '#415566',
   subTextColor: '#BCCBD6',
