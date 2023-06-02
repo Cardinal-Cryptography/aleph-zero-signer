@@ -60,3 +60,16 @@ export const decorators = [
     defaultTheme: 'dark'
   }),
 ];
+
+window.chrome = {
+  runtime: {
+    connect() {
+      return {
+        onMessage: {
+          addListener() {}
+        },
+        postMessage() {}
+      };
+    }
+  },
+} as unknown as typeof window.chrome;
