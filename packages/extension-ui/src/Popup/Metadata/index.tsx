@@ -4,7 +4,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { IconHeader, Loading, MetadataReqContext, OutlineWrapper } from '../../components';
+import { IconHeader, Loading, MetadataReqContext } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import Request from './Request';
 
@@ -14,7 +14,6 @@ export default function Metadata(): React.ReactElement {
 
   return (
     <>
-      <OutlineWrapper variant='neuter' />
       <StyledIconHeader
         headerText={t('Metadata update')}
         iconType='warning'

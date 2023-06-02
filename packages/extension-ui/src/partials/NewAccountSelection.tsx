@@ -9,7 +9,6 @@ import styled from 'styled-components';
 import { AccountJson } from '@polkadot/extension-base/background/types';
 
 import plusIcon from '../assets/add.svg';
-import border from '../assets/border.svg';
 import ribbon from '../assets/ribbon.svg';
 import { AccountContext, Svg } from '../components';
 import Checkbox from '../components/Checkbox';
@@ -98,10 +97,6 @@ function NewAccountSelection({
   return (
     <div className={className}>
       <div className='withWarning'>
-        <Svg
-          className='border'
-          src={border}
-        />
         <div className='heading'>{t<string>('Update connected app')}</div>
         <StyledFaviconBox
           url={url}
@@ -172,17 +167,6 @@ export default styled(NewAccountSelection)(
     left: -10px;
   }
 
-  .border {
-    z-index: ${Z_INDEX.BORDER};
-    position: absolute;
-    top: 0;
-    right: 0;
-    pointer-events: none;
-    background: ${theme.newTransactionBackground};
-    height: 600px;
-    width: 360px;
-  }
-
   .new {
     position: relative;
     
@@ -246,6 +230,11 @@ export default styled(NewAccountSelection)(
     }
     ${Account} {
       padding: 2px 4px;
+
+      ${Checkbox} {
+        margin-left: 8px;
+        margin-right: 16px;
+      }
     }
   }
 

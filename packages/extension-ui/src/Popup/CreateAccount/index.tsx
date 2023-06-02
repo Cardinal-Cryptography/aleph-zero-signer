@@ -103,7 +103,7 @@ function CreateAccount(): React.ReactElement {
             setGenesis={setGenesis}
           />
         )}
-        {step === 4 && <AccountCreationSuccess />}
+        {step === 4 && <AccountCreationSuccess successType='created' />}
       </Loading>
     </ScrollWrapper>
   );

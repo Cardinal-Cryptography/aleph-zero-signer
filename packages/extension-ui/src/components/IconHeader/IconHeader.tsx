@@ -65,6 +65,8 @@ const Icon = styled.img`
 `;
 
 const HeaderText = styled.h2`
+  margin: 0 24px;
+
   font-family: ${({ theme }) => theme.secondaryFontFamily};
   font-style: normal;
   font-weight: 700;
