@@ -4,7 +4,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { IconHeader, Loading, MetadataReqContext } from '../../components';
+import { Hero, Loading, MetadataReqContext } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import Request from './Request';
 
@@ -14,12 +14,12 @@ export default function Metadata(): React.ReactElement {
 
   return (
     <>
-      <StyledIconHeader
+      <StyledHero
         headerText={t('Metadata update')}
         iconType='warning'
       >
         {t('This approval enables future requests to be decoded using this metadata.')}
-      </StyledIconHeader>
+      </StyledHero>
       {requests[0] ? (
         <Request
           key={requests[0].id}
@@ -34,6 +34,6 @@ export default function Metadata(): React.ReactElement {
   );
 }
 
-const StyledIconHeader = styled(IconHeader)`
+const StyledHero = styled(Hero)`
   margin: 40px;
 `;

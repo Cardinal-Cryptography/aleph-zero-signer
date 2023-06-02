@@ -4,7 +4,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { IconHeader } from '../components';
+import { Hero } from '../components';
 import * as LinksList from '../components/LinksList';
 import useTranslation from '../hooks/useTranslation';
 import { LINKS } from '../links';
@@ -21,12 +21,12 @@ const About = () => {
         withHelp
       />
       <Container>
-        <StyledIconHeader
+        <StyledHero
           headerText={t<string>('Aleph Zero Signer')}
           iconType='aleph'
         >
           {t<string>('Version')}&nbsp;{t<string>('version-number')}
-        </StyledIconHeader>
+        </StyledHero>
         <nav>
           <LinksList.Group>
             <LinksList.Item
@@ -76,7 +76,7 @@ const Container = styled.div`
   }
 `;
 
-const StyledIconHeader = styled(IconHeader)`
+const StyledHero = styled(Hero)`
   margin-bottom: 32px;
 `;
 

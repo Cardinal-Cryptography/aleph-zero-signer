@@ -17,7 +17,7 @@ import {
   Button,
   ButtonArea,
   HelperFooter,
-  IconHeader,
+  Hero,
   LearnMore,
   Svg,
   VerticalSpace
@@ -100,7 +100,7 @@ function Forget({
         withHelp
       />
       <div className={className}>
-        <StyleIconHeader
+        <StyleHero
           headerText={t<string>('Forget account')}
           iconType='forget'
         >
@@ -110,7 +110,7 @@ function Forget({
             )}
           </Text>
           <Text>{t<string>('Not sure if you have it? You can export JSON file and use it as well.')}</Text>
-        </StyleIconHeader>
+        </StyleHero>
         <StyledAddress
           address={address}
           withExport
@@ -136,7 +136,7 @@ function Forget({
   );
 }
 
-const StyleIconHeader = styled(IconHeader)`
+const StyleHero = styled(Hero)`
   margin-block: 16px;
 `;
 

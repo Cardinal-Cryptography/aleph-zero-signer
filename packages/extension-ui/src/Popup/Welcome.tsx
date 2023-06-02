@@ -7,7 +7,7 @@ import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import partnerLogo from '../assets/partnerLogo.svg';
-import { ActionContext, Button, ButtonArea, IconHeader, LearnMore, List, VerticalSpace } from '../components';
+import { ActionContext, Button, ButtonArea, Hero, LearnMore, List, VerticalSpace } from '../components';
 import useTranslation from '../hooks/useTranslation';
 import { LINKS } from '../links';
 
@@ -27,7 +27,7 @@ const Welcome = function ({ className }: Props): React.ReactElement<Props> {
   return (
     <>
       <div className={className}>
-        <IconHeader
+        <Hero
           headerText={t<string>('Your privacy is protected')}
           iconType='secure'
         />

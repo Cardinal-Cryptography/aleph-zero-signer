@@ -7,7 +7,7 @@ import React, { useCallback, useContext } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 
-import { Button, ButtonArea, FaviconBox, IconHeader } from '../../components';
+import { Button, ButtonArea, FaviconBox, Hero } from '../../components';
 import { ActionContext } from '../../components/contexts';
 import { useGoTo } from '../../hooks/useGoTo';
 import useToast from '../../hooks/useToast';
@@ -51,14 +51,14 @@ function DisconnectApp(): React.ReactElement {
         withBackArrow
         withHelp
       />
-      <StyledIconHeader
+      <StyledHero
         headerText={t<string>('Disconnecting app')}
         iconType='disconnect'
       >
         {t<string>(
           "You're about to disconnect an app from the Signer. This will result in disconnecting all connected accounts from this app."
         )}
-      </StyledIconHeader>
+      </StyledHero>
       <CustomFaviconBox url={decodedUrl} />
       <ButtonArea>
         <Button
@@ -78,7 +78,7 @@ function DisconnectApp(): React.ReactElement {
   );
 }
 
-const StyledIconHeader = styled(IconHeader)`
+const StyledHero = styled(Hero)`
   margin-top: 50px;
   margin-bottom: 32px;
 `;

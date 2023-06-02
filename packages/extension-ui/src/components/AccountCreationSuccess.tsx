@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import useTranslation from '@polkadot/extension-ui/hooks/useTranslation';
 
-import IconHeader from './IconHeader/IconHeader';
+import Hero from './Hero/Hero';
 
 type Props = {
   successType: 'created' | 'imported';
@@ -28,7 +28,7 @@ const AccountCreationSuccess = ({ successType }: Props) => {
 
   return (
     <Container>
-      <IconHeader
+      <Hero
         headerText={headerText}
         iconType='success'
       />

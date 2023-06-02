@@ -5,7 +5,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import helpIcon from '../../assets/help.svg';
-import { Button, ButtonArea, HelperFooter, IconHeader, LearnMore, Svg } from '../../components';
+import { Button, ButtonArea, HelperFooter, Hero, LearnMore, Svg } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import { LINKS } from '../../links';
 
@@ -47,7 +47,7 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
 
   return (
     <>
-      <IconHeader
+      <Hero
         className={className}
         headerText={t<string>('Safety first!')}
         iconType='lock'
@@ -55,7 +55,7 @@ function SafetyFirst({ className, onNextStep }: Props): React.ReactElement<Props
         {t<string>(
           "In the next step, you'll generate a secret phrase that allows you to access your account. Anyone who manages to access it will have a full control over your account,\nso read, save, and store it safely."
         )}
-      </IconHeader>
+      </Hero>
       <ButtonArea footer={footer}>
         <Button
           onClick={window.close}

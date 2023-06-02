@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handlers/State';
 
 import helpIcon from '../../assets/help.svg';
-import { ButtonArea, HelperFooter, IconHeader, LearnMore, ScrollWrapper, Svg } from '../../components';
+import { ButtonArea, HelperFooter, Hero, LearnMore, ScrollWrapper, Svg } from '../../components';
 import { useGoTo } from '../../hooks/useGoTo';
 import useTranslation from '../../hooks/useTranslation';
 import { LINKS } from '../../links';
@@ -86,14 +86,14 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
       />
       <div className={className}>
         {!authList || !hasAuthList ? (
-          <StyledIconHeader
+          <StyledHero
             headerText={t<string>('No app request yet')}
             iconType='trust'
           >
             {t<string>(
               'This view will contain a list of apps and associated accounts that you have granted the Trusted status. The requests are initiated by apps.'
             )}
-          </StyledIconHeader>
+          </StyledHero>
         ) : (
           <CustomScrollWrapper>
             <WebsiteListContainer>
@@ -114,7 +114,7 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
   );
 }
 
-const StyledIconHeader = styled(IconHeader)`
+const StyledHero = styled(Hero)`
   margin-top: 64px;
 `;
 

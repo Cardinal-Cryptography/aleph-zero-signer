@@ -37,7 +37,7 @@ type Props = {
   iconType: IconType;
 };
 
-const IconHeader = ({ children, className, headerText, iconType }: Props) => (
+const Hero = ({ children, className, headerText, iconType }: Props) => (
   <Container className={className}>
     <Icon src={TYPE_TO_SRC[iconType]} />
     <HeaderText>{headerText}</HeaderText>
@@ -86,4 +86,4 @@ const DescriptionContainer = styled.div`
   color: ${({ theme }) => theme.textColorSuggestion};
 `;
 
-export default IconHeader;
+export default Hero;
