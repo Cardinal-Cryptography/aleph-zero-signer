@@ -183,7 +183,7 @@ function Account({
 
 export default styled(Account)(
   ({ theme, withCheckbox }: Props) => `
-  display: flex;
+  margin-bottom: 16px;
   
   ${Address}:hover {
     background: ${withCheckbox ? theme.menuBackground : theme.menuBackground};
@@ -197,7 +197,6 @@ export default styled(Account)(
     min-width: 0;
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
   }
 
   .editName {
