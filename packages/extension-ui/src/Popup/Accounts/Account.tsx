@@ -193,12 +193,6 @@ export default styled(Account)(
     }
   }
 
-  ${Address}:active {
-    ${Checkbox} span {
-      background: ${theme.primaryColor};
-    }
-  }
-
   .address {
     min-width: 0;
     display: flex;
