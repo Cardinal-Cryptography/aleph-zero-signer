@@ -25,7 +25,7 @@ import { LINKS } from '../links';
 import { forgetAccount } from '../messaging';
 import { Header } from '../partials';
 
-interface Props extends RouteComponentProps<{ address: string }>, ThemeProps {}
+type Props = RouteComponentProps<{ address: string }>;
 
 const StyledAddress = styled(Address)`
   .name {
