@@ -1,4 +1,4 @@
-# Signer
+# polkadot{.js} extension
 
 A very simple scaffolding browser extension that injects a [@polkadot/api](https://github.com/polkadot-js/api) Signer into a page, along with any associated accounts, allowing for use by any dapp. This is an extensible POC implementation of a Polkadot/Substrate browser signer.
 
@@ -30,7 +30,7 @@ Steps to build the extension and view your changes in a browser:
     - check "Enable add-on debugging"
     - click on "Load Temporary Add-on" and point to `packages/extension/build/manifest.json`
     - if developing, after making changes - reload the extension
-3. When visiting `https://azero.dev` it will inject the extension
+3. When visiting `https://polkadot.js.org/apps/` it will inject the extension
 
 Once added, you can create an account (via a generated seed) or import via an existing seed. The [apps UI](https://github.com/polkadot-js/apps/), when loaded, will show these accounts as `<account name> (extension)`
 
