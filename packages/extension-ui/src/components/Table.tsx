@@ -61,12 +61,13 @@ export default React.memo(
 
   .separator {
     border-bottom: 1px solid ${theme.boxBorderColor};
-    width: calc(100% - 16px);
+    min-width: 40px;
+    flex-grow: 1;
 
     margin: 0px 8px;
   }
 
-  td.data {
+  .data {
     text-overflow: ellipsis;
     font-weight: 300;
     font-size: 14px;
