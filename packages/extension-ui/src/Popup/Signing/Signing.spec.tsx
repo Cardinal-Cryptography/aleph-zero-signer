@@ -202,6 +202,7 @@ describe('Signing requests', () => {
           .find('td.data')
           .map((el): string => el.text())
       ).toEqual([
+        // @ts-ignore
         Number(signRequests[0].request.payload.nonce).toString(),
         'balances',
         'transferKeepAlive',
@@ -227,6 +228,7 @@ describe('Signing requests', () => {
           .find('td.data')
           .map((el): string => el.text())
       ).toEqual([
+        // @ts-ignore
         Number(signRequests[0].request.payload.nonce).toString(),
         'balances',
         'transfer',
