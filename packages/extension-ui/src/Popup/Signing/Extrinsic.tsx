@@ -202,7 +202,7 @@ const formatters: { [typeName: string]: (value: Codec) => Renderable } = {
 
 const toBaseUnit = (value: Codec, precision = 2) => new BigNumber(value.toString()).div(10**12).toFixed(precision);
 
-const defaultFormatter = (value: Codec) => value.toString();
+const defaultFormatter = (value: Codec) => value.toHuman();
 
 /**
  * "Humanized" docs from `meta` is represented in an array of lines of a documentation.
