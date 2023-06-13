@@ -35,15 +35,9 @@ function Extrinsic({
       return undefined;
     }
 
-    const payloadType = chainRegistry.createType('ExtrinsicPayload', requestPayload, {
-      version: requestPayload.version,
-    });
+    const methodCall = chainRegistry.createType('Call', requestPayload.method.toString());
 
-    const method = payloadType.method.toString();
-
-    const call = chainRegistry.createType('Call', method);
-
-    return formatCall(call);
+    return formatCall(methodCall);
   }, [requestPayload, chainRegistry]);
 
   return (
