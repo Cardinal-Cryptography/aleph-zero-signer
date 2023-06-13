@@ -1,12 +1,13 @@
-# Signer
+# Aleph Zero Signer
 
-A browser extension managing accounts and signing transactions in a secure way. It's a fork of [polkadot-js/extension](https://github.com/polkadot-js/extension). Extension enables simple integration with dapps using [polkadot-js/extension-dapp](https://polkadot.js.org/docs/extension/) API.
+A browser extension managing accounts and signing transactions in a secure way. It's a fork of [polkadot-js/extension](https://github.com/polkadot-js/extension). Extension enables simple integration with dapps using the [polkadot-js/extension-dapp](https://polkadot.js.org/docs/extension/) API.
 
-Working with (among others):
+Works with:
 * https://azero.dev
 * https://dashboard.azero.dev
 * https://polkadot.js.org/apps
 
+and with every webapp using the [extension-dapp](https://polkadot.js.org/docs/extension/) API.
 
 ## Installation
 
