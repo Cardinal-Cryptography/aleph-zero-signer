@@ -36,7 +36,7 @@ Steps to build the extension and view your changes in a browser:
     - if developing, after making changes - reload the extension
 3. When visiting `https://azero.dev` it will inject the extension
 
-Once added, you can create an account (via a generated seed) or import via an existing seed. The [apps UI](https://github.com/polkadot-js/apps/), when loaded, will show these accounts as `<account name> (ALEPH-ZERO-SIGNER)`
+Once added, you can create an account (via a generated seed) or import via an existing seed. The [azero.dev](https://azero.dev) and [test.azero.dev](https://test.azero.dev), when loaded, will show these accounts as `<account name> (ALEPH-ZERO-SIGNER)`
 
 ## Development
 
@@ -47,13 +47,6 @@ The repo is split into a number of packages -
 - [extension-dapp](packages/extension-dapp/) - A convenience wrapper to work with the injected objects, simplifying data extraction for any dapp that wishes to integrate the extension (or any extension that supports the interface)
 - [extension-inject](packages/extension-inject/) - A convenience wrapper that allows extension developers to inject their extension for use by any dapp
 
-## Dapp developers
-
-The actual in-depth technical breakdown is given in the next section for any dapp developer wishing to work with the raw objects injected into the window. However, convenience wrappers are provided that allows for any dapp to use this extension (or any other extension that conforms to the interface) without having to manage any additional info.
-
-The documentation for Dapp development is available [in the polkadot-js doc](https://polkadot.js.org/docs/extension).
-
-This approach is used to support multiple external signers in for instance [apps](https://github.com/polkadot-js/apps/). You can read more about the convenience wrapper [@polkadot/extension-dapp](packages/extension-dapp/) along with usage samples.
 
 ## API interface
 
@@ -109,7 +102,7 @@ The extension injects `injectedWeb3` into the global `window` object, exposing t
 ```js
 window.injectedWeb3 = {
   // this is the name for this extension, there could be multiples injected,
-  // each with their own keys, here `polkadot-js` is for this extension
+  // each with their own keys, here `aleph-zero-signer` is for this extension
   'aleph-zero-signer': {
     // semver for the package
     version: '1.0.0',
