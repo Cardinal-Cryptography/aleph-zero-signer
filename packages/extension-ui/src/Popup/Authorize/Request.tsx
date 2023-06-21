@@ -24,10 +24,6 @@ interface Props extends ThemeProps {
   url: string;
 }
 
-const CustomButtonArea = styled(ButtonArea)`
-  backdrop-filter: blur(10px);
-`;
-
 const CustomFooter = styled(HelperFooter)`
   flex-direction: row;
   display: flex;
@@ -127,7 +123,7 @@ function Request({ authId, className, isFirst, url }: Props): React.ReactElement
       onSubmit={onSubmit}
     >
       <AccountSelection url={url} />
-      <CustomButtonArea footer={footer}>
+      <ButtonArea footer={footer}>
         <Button
           data-accept-request-button
           onClick={_onClose}
@@ -137,7 +133,7 @@ function Request({ authId, className, isFirst, url }: Props): React.ReactElement
           {t<string>('Cancel')}
         </Button>
         {isFirst && <Button type='submit'>{t<string>('Connect')}</Button>}
-      </CustomButtonArea>
+      </ButtonArea>
     </form>
   );
 }
@@ -146,7 +142,6 @@ export default styled(Request)`
   padding: 0px 16px;
 
   & ${BottomWrapper} {
-    position: sticky;
     margin-inline: -16px;
   }
 
