@@ -158,7 +158,7 @@ function AccountNamePasswordCreation({
         )}
       </Form>
       {onBackClick && buttonLabel && (
-        <StyledButtonArea>
+        <ButtonArea>
           {master && isDeriving ? (
             <Button
               onClick={_onBackClick}
@@ -177,7 +177,7 @@ function AccountNamePasswordCreation({
           >
             {buttonLabel}
           </Button>
-        </StyledButtonArea>
+        </ButtonArea>
       )}
     </>
   );
@@ -224,10 +224,6 @@ const CustomFooter = styled(HelperFooter)`
     display: flex;
     gap: 4px;
   }
-`;
-
-const StyledButtonArea = styled(ButtonArea)`
-  margin-right: -8px;
 `;
 
 export default React.memo(AccountNamePasswordCreation);
