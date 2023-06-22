@@ -101,22 +101,24 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
             )}
           </>
         )}
-        <CustomButtonArea>
-          <Button
-            onClick={_onCancel}
-            secondary
-            type='button'
-          >
-            {t<string>('Cancel')}
-          </Button>
-          <Button
-            className='acceptButton'
-            isDisabled={!isFormValid}
-            type='submit'
-          >
-            {t<string>('Change')}
-          </Button>
-        </CustomButtonArea>
+        {hierarchy.length > 0 && (
+          <CustomButtonArea>
+            <Button
+              onClick={_onCancel}
+              secondary
+              type='button'
+            >
+              {t<string>('Cancel')}
+            </Button>
+            <Button
+              className='acceptButton'
+              isDisabled={!isFormValid}
+              type='submit'
+            >
+              {t<string>('Change')}
+            </Button>
+          </CustomButtonArea>
+        )}
       </form>
     </StyledScrollWrapper>
   );
@@ -157,8 +159,8 @@ export default withRouter(styled(AccountManagement)`
     padding: 16px;
     gap: 8px;
     height: 80px;
-    margin-top: 16px;
-    border: 1px dashed #1B2B38;
+    margin-inline: 16px;
+    border: 1px dashed ${({ theme }) => theme.dottedBorderDark};
     border-radius: 8px;
   }
 
