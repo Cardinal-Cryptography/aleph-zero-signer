@@ -65,7 +65,7 @@ const Container = styled.div`
 
   isolation: isolate;
 
-  background: ${({ theme }) => theme.fullscreenbackground};
+  background: ${({ theme }) => theme.fullscreenBackground};
 `;
 
 const StyleSvg = styled(Svg)`

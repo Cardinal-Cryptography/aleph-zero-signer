@@ -60,7 +60,7 @@ const darkTheme = {
   errorColor: '#FF5E5C',
   fileNameBackground: '#16232E',
   fontSize: '16px',
-  fullscreenbackground:
+  fullscreenBackground:
     'radial-gradient(76.48% 123.65% at 100% 100%, #16232E 61.26%, rgba(20, 32, 42, 0) 100%), #111B24;',
   fullscreenBackgroundLines: '#1B2B38',
   fullscreenBorderColor: '#273847',
