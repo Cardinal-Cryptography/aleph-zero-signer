@@ -35,6 +35,7 @@ const StyledCheckbox = styled(Checkbox)`
   display: flex;
   justify-content: flex-end;
   margin-right: 24px;
+  margin-bottom: 16px;
 `;
 
 const StyledFaviconBox = styled(FaviconBox)`

@@ -19,8 +19,8 @@ interface Props extends RouteComponentProps, ThemeProps {
 }
 
 const CustomButtonArea = styled(ButtonArea)`
+  padding-inline: 16px;
   padding-top: 16px;
-  padding-left: 32px;
   padding-bottom: 0px;
 `;
 
@@ -72,7 +72,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
   };
 
   return (
-    <ScrollWrapper>
+    <StyledScrollWrapper>
       <form
         className={className}
         onSubmit={onSubmit}
@@ -85,7 +85,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
         />
         {url && (
           <>
-            <RemoveAuth url={url} />
+            <StyledRemoveAuth url={url} />
             {hierarchy.length > 0 ? (
               <AccountSelection
                 className='accountSelection'
@@ -118,16 +118,24 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
           </Button>
         </CustomButtonArea>
       </form>
-    </ScrollWrapper>
+    </StyledScrollWrapper>
   );
 }
+
+const StyledScrollWrapper = styled(ScrollWrapper)`
+  & > * {
+    margin-inline: -16px;
+  }
+`;
+
+const StyledRemoveAuth = styled(RemoveAuth)`
+  margin-bottom: 24px;
+`;
 
 export default withRouter(styled(AccountManagement)`
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden scroll;
-  margin: 0 -16px;
 
   ::-webkit-scrollbar-thumb {
       background: ${({ theme }: ThemeProps) => theme.boxBorderColor};
@@ -159,14 +167,16 @@ export default withRouter(styled(AccountManagement)`
     margin: 0px;
     
     ${Checkbox} {
-      margin-right: 16px;
+      margin-right: 32px;
     }
 
     .accountList {
       height: 100%;
 
+      padding-right: 8px;
+
       ${AccountsTree} {
-        width: calc(100% - 16px);
+        width: calc(100% - 32px);
         margin: 0 auto;
       }
     }
