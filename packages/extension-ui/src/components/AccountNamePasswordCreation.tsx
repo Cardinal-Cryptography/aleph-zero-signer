@@ -147,7 +147,6 @@ function AccountNamePasswordCreation({
         {!isDeriving && (
           <>
             <StyledDropdown
-              className={className}
               label={t<string>('Show on network')}
               onChange={_onChangeNetwork}
               options={options}
