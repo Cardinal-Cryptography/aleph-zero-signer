@@ -75,8 +75,6 @@ export interface SigningRequest {
 
 export type ConnectedTabsUrlResponse = string[]
 
-type Timeout = number
-
 // [MessageType]: [RequestType, ResponseType, SubscriptionMessageType?]
 export interface RequestSignatures {
   // private/internal requests, i.e. from a popup
@@ -138,7 +136,6 @@ export interface RequestSignatures {
   'pub(rpc.subscribe)': [RequestRpcSubscribe, number, JsonRpcResponse];
   'pub(rpc.subscribeConnected)': [null, boolean, boolean];
   'pub(rpc.unsubscribe)': [RequestRpcUnsubscribe, boolean];
-  'pri(clipboard.clear)': [Timeout, boolean];
 }
 
 export type MessageTypes = keyof RequestSignatures;

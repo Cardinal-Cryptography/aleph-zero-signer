@@ -28,8 +28,9 @@ import type { KeyringPairs$Json } from '@polkadot/ui-keyring/types';
 import type { HexString } from '@polkadot/util/types';
 import type { KeypairType } from '@polkadot/util-crypto/types';
 
+import { v4 as uuid } from 'uuid';
+
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
-import { getId } from '@polkadot/extension-base/utils/getId';
 import { metadataExpand } from '@polkadot/extension-chains';
 import { MetadataDef } from '@polkadot/extension-inject/types';
 
@@ -91,7 +92,7 @@ function sendMessage<TMessageType extends MessageTypes>(
   subscriber?: (data: unknown) => void
 ): Promise<ResponseTypes[TMessageType]> {
   return new Promise((resolve, reject): void => {
-    const id = getId();
+    const id = uuid();
 
     handlers[id] = { reject, resolve, subscriber };
 

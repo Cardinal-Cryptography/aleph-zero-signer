@@ -41,7 +41,7 @@ describe('Extension', () => {
       origin: 'example.com',
       url: 'http://localhost:3000'
     };
-    localStorage.setItem('authUrls', JSON.stringify(authUrls));
+    await chrome.storage.local.set({ authUrls: JSON.stringify(authUrls) });
     state = new State();
     tabs = new Tabs(state);
 
@@ -294,7 +294,7 @@ describe('Extension', () => {
         userExtensions
       };
 
-      state.saveMetadata(meta);
+      await state.saveMetadata(meta);
 
       const payload: SignerPayloadJSON = {
         address,
@@ -365,7 +365,7 @@ describe('Extension', () => {
         userExtensions
       };
 
-      state.saveMetadata(meta);
+      await state.saveMetadata(meta);
 
       const registry = new TypeRegistry();
 
@@ -417,7 +417,7 @@ describe('Extension', () => {
         userExtensions
       };
 
-      state.saveMetadata(meta);
+      await state.saveMetadata(meta);
 
       const payload = {
         address,

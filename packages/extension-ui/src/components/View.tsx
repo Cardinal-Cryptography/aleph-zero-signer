@@ -6,6 +6,8 @@ import type { ThemeProps } from '../types';
 import React, { useCallback, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
+import localStorageStores from '@polkadot/extension-base/utils/localStorageStores';
+
 import { ThemeSwitchContext } from './contexts';
 import Main from './Main';
 import { AvailableThemes, chooseTheme, themes } from './themes';
@@ -18,9 +20,10 @@ interface Props {
 function View({ children, className }: Props): React.ReactElement<Props> {
   const [theme, setTheme] = useState(chooseTheme());
 
-  const switchTheme = useCallback((theme: AvailableThemes): void => {
-    localStorage.setItem('theme', theme);
+  const switchTheme = useCallback(async (theme: AvailableThemes): Promise<void> => {
     setTheme(theme);
+
+    await localStorageStores.theme.set(theme);
   }, []);
 
   const _theme = themes[theme];

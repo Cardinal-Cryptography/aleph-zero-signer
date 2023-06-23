@@ -10,13 +10,6 @@ import { base64Decode } from '@polkadot/util-crypto';
 
 export { packageInfo } from './packageInfo';
 
-// imports chain details, generally metadata. For the generation of these,
-// inside the api, run `yarn chain:info --ws <url>`
-
-const definitions = new Map<string, MetadataDef>(
-  // [kusama].map((def) => [def.genesisHash, def])
-);
-
 const expanded = new Map<string, Chain>();
 
 export function metadataExpand (definition: MetadataDef, isPartial = false): Chain {
@@ -76,12 +69,4 @@ export function findChain (definitions: MetadataDef[], genesisHash?: string | nu
   return def
     ? metadataExpand(def)
     : null;
-}
-
-export function addMetadata (def: MetadataDef): void {
-  definitions.set(def.genesisHash, def);
-}
-
-export function knownMetadata (): MetadataDef[] {
-  return [...definitions.values()];
 }

@@ -5,9 +5,10 @@ import type { Signer as SignerInterface, SignerResult } from '@polkadot/api/type
 import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { SendRequest } from './types';
 
+import { v4 as uuid } from 'uuid';
+
 // External to class, this.# is not private enough (yet)
 let sendRequest: SendRequest;
-let nextId = 0;
 
 export default class Signer implements SignerInterface {
   constructor (_sendRequest: SendRequest) {
@@ -15,7 +16,6 @@ export default class Signer implements SignerInterface {
   }
 
   public async signPayload (payload: SignerPayloadJSON): Promise<SignerResult> {
-    const id = ++nextId;
     const result = await sendRequest('pub(extrinsic.sign)', payload);
 
     // we add an internal id (number) - should have a mapping from the
@@ -23,17 +23,16 @@ export default class Signer implements SignerInterface {
     // updated via the update functionality (noop at this point)
     return {
       ...result,
-      id
+      id: uuid()
     };
   }
 
   public async signRaw (payload: SignerPayloadRaw): Promise<SignerResult> {
-    const id = ++nextId;
     const result = await sendRequest('pub(bytes.sign)', payload);
 
     return {
       ...result,
-      id
+      id: uuid()
     };
   }
 
