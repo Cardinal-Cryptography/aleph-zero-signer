@@ -509,10 +509,16 @@ export default class State {
     return provider.unsubscribe(request.type, request.method, request.subscriptionId);
   }
 
-  public async saveMetadata (meta: MetadataDef): Promise<void> {
+  public async saveMetadata ({ types, ...restMeta }: MetadataDef): Promise<void> {
+    type TypesType = ReturnType<Parameters<typeof localStorageStores.chainMetadata.update>[0]>[string]['types']
+
     await localStorageStores.chainMetadata.update((currentContent) => ({
       ...currentContent,
-      [meta.genesisHash]: meta
+      [restMeta.genesisHash]: {
+        ...restMeta,
+        // Type assertion, because "MetadataDef.types" can contain the CodecClass which should not appear here (and is not serializable anyway, so no use of it in local storage)
+        types: types as TypesType
+      }
     }));
   }
 

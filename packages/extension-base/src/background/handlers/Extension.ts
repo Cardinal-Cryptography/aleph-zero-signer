@@ -402,7 +402,9 @@ export default class Extension {
 
     if (isJsonPayload(payload)) {
       // Get the metadata for the genesisHash
-      const metadata = (await this.#state.getKnownMetadata()).find(({ genesisHash }) => genesisHash === payload.genesisHash);
+      const metadata = (await this.#state.getKnownMetadata()).find(
+        ({ genesisHash }) => genesisHash === payload.genesisHash
+      );
 
       if (metadata) {
         // we have metadata, expand it and extract the info/registry

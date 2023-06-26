@@ -28,7 +28,6 @@ const STORES_DEFINITIONS = {
       types: // @polkadot/types-codec/types/registry.d.ts -> RegistryType
         z.record(z.union([
           z.string(),
-          z.object({}),
           z.record(z.string()),
           z.object({
             _enum: z.union([

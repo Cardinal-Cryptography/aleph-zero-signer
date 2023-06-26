@@ -10,15 +10,7 @@ import { base64Decode } from '@polkadot/util-crypto';
 
 export { packageInfo } from './packageInfo';
 
-const expanded = new Map<string, Chain>();
-
 export function metadataExpand (definition: MetadataDef, isPartial = false): Chain {
-  const cached = expanded.get(definition.genesisHash);
-
-  if (cached && cached.specVersion === definition.specVersion) {
-    return cached;
-  }
-
   const { chain, genesisHash, icon, metaCalls, specVersion, ss58Format, tokenDecimals, tokenSymbol, types, userExtensions } = definition;
   const registry = new TypeRegistry();
 
@@ -40,7 +32,7 @@ export function metadataExpand (definition: MetadataDef, isPartial = false): Cha
 
   const isUnknown = genesisHash === '0x';
 
-  const result = {
+  return {
     definition,
     genesisHash: isUnknown
       ? undefined
@@ -55,12 +47,6 @@ export function metadataExpand (definition: MetadataDef, isPartial = false): Cha
     tokenDecimals,
     tokenSymbol
   };
-
-  if (result.genesisHash && !isPartial) {
-    expanded.set(result.genesisHash, result);
-  }
-
-  return result;
 }
 
 export function findChain (definitions: MetadataDef[], genesisHash?: string | null): Chain | null {
