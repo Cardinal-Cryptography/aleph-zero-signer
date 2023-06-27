@@ -6,7 +6,7 @@ import React from 'react';
 
 import { metadataExpand } from '@polkadot/extension-chains/bundle';
 
-import { getMetadata } from '../../messaging';
+import { getMetadata } from '../../../messaging';
 import Extrinsic from './Extrinsic';
 
 type Mock = {

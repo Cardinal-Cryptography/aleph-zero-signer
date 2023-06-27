@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Call, WeightV2} from '@polkadot/types/interfaces';
+import type { Call, WeightV2 } from '@polkadot/types/interfaces';
 import type { Codec, SignerPayloadJSON } from '@polkadot/types/types';
 
 import BigNumber from "bignumber.js";
@@ -10,11 +10,12 @@ import styled from "styled-components";
 
 import { formatNumber } from "@polkadot/util";
 
-import helpIcon from '../../assets/help.svg';
-import { Svg, Table } from '../../components';
-import useMetadata from '../../hooks/useMetadata';
-import useTranslation from '../../hooks/useTranslation';
-import ExtrinsicTooltip from './Tooltip';
+import helpIcon from '../../../assets/help.svg';
+import { Svg, Table } from '../../../components';
+import useMetadata from '../../../hooks/useMetadata';
+import useTranslation from '../../../hooks/useTranslation';
+import ExtrinsicTooltip from '../Tooltip';
+import ArgumentValue from './ArgumentValue';
 
 type Props = {
   className?: string;
@@ -139,7 +140,9 @@ const CallDefinitionRows = (props: { section: string, method: string, args: { na
         <tr key={arg.name}>
           <td className='label'>{arg.name}</td>
           <div className='separator'></div>
-          <EllipsisCell className='data'>{arg.value ?? '-'}</EllipsisCell>
+          <EllipsisCell className='data'>
+            <ArgumentValue>{arg.value}</ArgumentValue>
+          </EllipsisCell>
         </tr>
       ))}
     </>
