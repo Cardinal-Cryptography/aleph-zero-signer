@@ -68,6 +68,7 @@ export default React.memo(
   }
 
   .data {
+    color: ${theme.subTextColor};
     text-overflow: ellipsis;
     font-weight: 300;
     font-size: 14px;

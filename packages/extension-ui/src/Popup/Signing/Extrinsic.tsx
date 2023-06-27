@@ -64,9 +64,7 @@ function Extrinsic({
         transactionDetails.map((batchTransactionDetails, i) => (
           <>
             <BatchRow key={i}>
-              <div className='separator'></div>
               <HeaderCell className='label'>{t<string>('Batched transaction')} {i + 1}/{transactionDetails.length}</HeaderCell>
-              <div className='separator'></div>
             </BatchRow>
             <CallDefinitionRows {...batchTransactionDetails} />
           </>
@@ -79,12 +77,8 @@ function Extrinsic({
 
 export default Extrinsic;
 
-const EllipsisCell = styled.td``;
-
-const FullWidthTable = styled(Table)`
-  width: 100%;
-  
-  ${EllipsisCell} { /* Styles declared as a descendant of the <Table> in order to override the intrusive <Table> styles */
+const EllipsisCell = styled.td`
+  &&& { /* Override the intrusive <Table> styles */
     display: block;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -92,8 +86,29 @@ const FullWidthTable = styled(Table)`
   }
 `;
 
-const HeaderCell = styled.td`
-  white-space: nowrap;
+const FullWidthTable = styled(Table)`
+  width: 100%;
+`;
+
+const HeaderCell = styled.td.attrs({ rowSpan: 3 })`
+  &&& { /* Override the intrusive <Table> styles */
+    color: #fff;
+    font-size: 16px;
+    white-space: nowrap;
+    font-weight: 500;
+    font-family: ${({theme}) => theme.secondaryFontFamily};
+    line-height: 125%;
+    letter-spacing: 0.96px;
+  }
+`;
+
+const SubHeaderCell = styled(HeaderCell)`
+  &&& { /* Override the intrusive <Table> styles */
+    font-size: 14px;
+    line-height: 120%;
+    letter-spacing: 0.98px;
+    margin-top: 10px;
+  }
 `;
 
 const BatchRow = styled.tr`
@@ -117,9 +132,7 @@ const CallDefinitionRows = (props: { section: string, method: string, args: { na
       </tr>
       {props.args?.length && (
         <tr>
-          <div className='separator'></div>
-          <HeaderCell className='label'>{t<string>('Arguments')}</HeaderCell>
-          <div className='separator'></div>
+          <SubHeaderCell className='label'>{t<string>('Arguments')}</SubHeaderCell>
         </tr>
       )}
       {props.args.map((arg) => (

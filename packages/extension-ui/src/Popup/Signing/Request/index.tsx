@@ -9,7 +9,7 @@ import type { HexString } from '@polkadot/util/types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import address from "@polkadot/extension-ui/components/Address";
+import { Address } from "@polkadot/extension-ui/components/index";
 import { TypeRegistry } from '@polkadot/types';
 
 import { ActionContext, VerticalSpace, Warning } from '../../../components';
@@ -94,7 +94,7 @@ export default function Request({
 
     return (
       <>
-        <Extrinsic
+        <FullHeightExtrinsic
           requestPayload={requestPayload}
           url={url}
         />
@@ -171,8 +171,12 @@ export default function Request({
   return null;
 }
 
-const StyledAddress = styled(address)`
+const StyledAddress = styled(Address)`
   &&& { /* overriding the intrusive <ScrollWrapper> styles */
     width: initial;
   }
+`;
+
+const FullHeightExtrinsic = styled(Extrinsic)`
+  flex-grow: 1;
 `;
