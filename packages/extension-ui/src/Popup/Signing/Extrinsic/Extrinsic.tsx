@@ -51,7 +51,7 @@ function Extrinsic({
       <tr>
         <td className='label'>
           {t<string>('nonce')}&nbsp;
-          <ExtrinsicTooltip content='The overall, lifetime transaction count of your account.'>
+          <ExtrinsicTooltip content='The overall lifetime transaction count of your account.'>
             <Svg
               className='help-icon'
               src={helpIcon}

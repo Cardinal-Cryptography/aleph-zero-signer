@@ -9,7 +9,7 @@ import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 
 const ArgumentValue = ({ children }: { children: string | number | undefined }) => {
   if (children === undefined) {
-    return <>&apos;</>;
+    return <>-</>;
   }
 
   if (isAddress(children)) {

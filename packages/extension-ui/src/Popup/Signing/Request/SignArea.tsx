@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 
-import { ActionContext, Button, ButtonArea, Checkbox } from '../../../components';
+import {ActionContext, BottomWrapper, Button, ButtonArea, Checkbox} from '../../../components';
 import useTranslation from '../../../hooks/useTranslation';
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../../messaging';
 import Unlock from '../Unlock';
@@ -107,7 +107,7 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
   };
 
   return (
-    <>
+    <Container>
       <form
         id={formId}
         onSubmit={onSubmit}
@@ -130,10 +130,9 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
           )}
         </div>
       </form>
-      <ButtonArea>
+      <CustomButtonArea>
         <Button
           data-decline-transaction
-          form={formId}
           isDanger
           isDisabled={!isFirst}
           onClick={_onCancel}
@@ -151,8 +150,8 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
         >
           {buttonText}
         </Button>
-      </ButtonArea>
-    </>
+      </CustomButtonArea>
+    </Container>
   );
 }
 
@@ -160,4 +159,14 @@ export default styled(SignArea)`
   flex-direction: column;
   padding-top: 6px;
   padding-bottom: 6px;
+`;
+
+const Container = styled.div`
+  & ${BottomWrapper} {
+    margin-inline: -16px;
+  }  
+`;
+
+const CustomButtonArea = styled(ButtonArea)`
+  margin-inline: 16px;
 `;
