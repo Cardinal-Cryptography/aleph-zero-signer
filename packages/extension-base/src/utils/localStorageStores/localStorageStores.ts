@@ -63,9 +63,13 @@ const STORES_DEFINITIONS = {
 
   welcomeRead: createStoreDefinition(z.literal('ok').or(z.undefined())),
 
-  theme: createStoreDefinition(z.enum(['dark', 'light']))
+  theme: createStoreDefinition(z.enum(['dark', 'light'])),
 
-} satisfies { [namespace: string]: ReturnType<typeof createStoreDefinition>};
+  signerRequestIds: createStoreDefinition(z.number(), 0)
+
+  // This is one of the rare cases where "any" is fine, as it describes a generic, not a particular value's type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} satisfies { [namespace: string]: ReturnType<typeof createStoreDefinition<any>>};
 
 export default Object.fromEntries(
   Object.entries(STORES_DEFINITIONS).map(([namespace, createStore]) => {

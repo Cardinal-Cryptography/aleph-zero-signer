@@ -159,7 +159,7 @@ export default class State {
       .map(({ account, id, request, url }): SigningRequest => ({ account, id, request, url }));
   }
 
-  public async getAuthUrls (): Promise<AuthUrls> {
+  public getAuthUrls (): Promise<AuthUrls> {
     return localStorageStores.authUrls.get();
   }
 
@@ -311,7 +311,7 @@ export default class State {
     withErrorLog(() => chrome.action.setBadgeText({ text }));
   }
 
-  public async removeAuthorization (url: string): Promise<AuthUrls> {
+  public removeAuthorization (url: string): Promise<AuthUrls> {
     return localStorageStores.authUrls.update(({ [url]: entryToRemove, ...otherAuthUrls }) => {
       assert(entryToRemove, `The source ${url} is not known`);
 

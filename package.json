@@ -64,7 +64,7 @@
     "@polkadot/api": "^10.5.1",
     "@polkadot/keyring": "^12.1.2",
     "@polkadot/networks": "patch:@polkadot/networks@npm:12.1.2#.yarn/patches/@polkadot-networks-npm-12.1.2-012217f8ff.patch",
-    "@polkadot/types": "patch:@polkadot/types@npm:10.5.1#.yarn/patches/@polkadot-types-npm-10.5.1-87f9037bb0.patch",
+    "@polkadot/types": "^10.5.1",
     "@polkadot/util": "^12.1.2",
     "@polkadot/util-crypto": "^12.1.2",
     "@polkadot/x-fetch": "^12.1.2",

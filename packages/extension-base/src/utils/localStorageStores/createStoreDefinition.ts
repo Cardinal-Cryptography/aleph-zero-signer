@@ -3,21 +3,17 @@
 
 import { z } from 'zod';
 
-export default <Z extends z.ZodType, D extends z.infer<Z>>(schema: Z, defaultValue?: D) => (namespace: string) => {
-  type Content = z.infer<Z>
-  type CurrentContent = Content
-  type NewContent = Content
-
+export default <Content>(schema: z.ZodType<Content>, defaultValue?: Content) => (namespace: string) => {
   const get = async (): Promise<Content> => {
     try {
       const { [namespace]: storageContent = defaultValue } = await chrome.storage.local.get([namespace]);
 
-      return schema.parse(storageContent as unknown); // eslint-disable-line @typescript-eslint/no-unsafe-return
+      return schema.parse(storageContent as unknown);
     } catch (e) {
       console.error(`The content of the "${namespace}" namespace in local storage does not match the schema:`, e);
 
       if (defaultValue) {
-        return defaultValue; // eslint-disable-line @typescript-eslint/no-unsafe-return
+        return defaultValue;
       } else {
         throw e;
       }
@@ -28,14 +24,12 @@ export default <Z extends z.ZodType, D extends z.infer<Z>>(schema: Z, defaultVal
     await chrome.storage.local.set({ [namespace]: value });
   };
 
-  const update = async (updater: (currentContent: CurrentContent) => NewContent): Promise<NewContent> => {
+  const update = async (updater: (currentContent: Content) => Content): Promise<Content> => {
     const currentContent = await get();
-
     const newContent = updater(currentContent);
 
     await chrome.storage.local.set({ [namespace]: newContent });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return newContent;
   };
 

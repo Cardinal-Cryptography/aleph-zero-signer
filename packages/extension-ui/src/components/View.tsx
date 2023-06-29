@@ -21,9 +21,9 @@ function View({ children, className }: Props): React.ReactElement<Props> {
   const [theme, setTheme] = useState(chooseTheme());
 
   const switchTheme = useCallback(async (theme: AvailableThemes): Promise<void> => {
-    setTheme(theme);
-
     await localStorageStores.theme.set(theme);
+
+    setTheme(theme);
   }, []);
 
   const _theme = themes[theme];

@@ -22,9 +22,9 @@ const Welcome = function ({ className }: Props): React.ReactElement<Props> {
   const onAction = useContext(ActionContext);
 
   const _onClick = useCallback(async (): Promise<void> => {
-    onAction();
-
     await localStorageStores.welcomeRead.set('ok');
+
+    await onAction();
   }, [onAction]);
 
   return (

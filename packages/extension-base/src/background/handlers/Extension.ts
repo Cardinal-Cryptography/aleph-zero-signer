@@ -192,9 +192,11 @@ export default class Extension {
   private accountsSubscribe (id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'pri(accounts.subscribe)'>(id, port);
     const subscription = accountsObservable.subject.subscribe((accounts: SubjectInfo): void => {
-      // It is the callbacks job to handle errors, so not doing it here
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.transformAccounts(accounts).then(cb);
+      this.transformAccounts(accounts).then(cb).catch((e) => {
+        console.error('Error subscribing for accounts:', e);
+
+        cb([]); // eslint-disable-line n/no-callback-literal
+      });
     });
 
     port.onDisconnect.addListener((): void => {
