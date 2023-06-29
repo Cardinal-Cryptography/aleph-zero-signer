@@ -72,62 +72,70 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
   };
 
   return (
-    <StyledScrollWrapper>
-      <form
-        className={className}
-        onSubmit={onSubmit}
-      >
-        <StyledHeader
-          text={t<string>('Connected accounts')}
-          withBackArrow
-          withBackdrop
-          withHelp
-        />
-        {url && (
-          <>
-            <StyledRemoveAuth url={url} />
-            {hierarchy.length > 0 ? (
-              <AccountSelection
-                className='accountSelection'
-                onChange={setSelectedAccountsChanged}
-                showHidden={true}
-                url={url}
-                withWarning={false}
-              />
-            ) : (
-              <div className='no-accounts'>
-                <span>{t<string>('You do NOT have any account.')}</span>
-              </div>
-            )}
-          </>
-        )}
-        {hierarchy.length > 0 && (
-          <CustomButtonArea>
-            <Button
-              onClick={_onCancel}
-              secondary
-              type='button'
-            >
-              {t<string>('Cancel')}
-            </Button>
-            <Button
-              className='acceptButton'
-              isDisabled={!isFormValid}
-              type='submit'
-            >
-              {t<string>('Change')}
-            </Button>
-          </CustomButtonArea>
-        )}
-      </form>
-    </StyledScrollWrapper>
+    <>
+      <MarginLessHeader
+        text={t<string>('Connected accounts')}
+        withBackArrow
+        withBackdrop
+        withHelp
+      />
+      <StyledScrollWrapper>
+        <form
+          className={className}
+          onSubmit={onSubmit}
+        >
+          {url && (
+            <>
+              <StyledRemoveAuth url={url} />
+              {hierarchy.length > 0 ? (
+                <AccountSelection
+                  className='accountSelection'
+                  onChange={setSelectedAccountsChanged}
+                  showHidden={true}
+                  url={url}
+                  withWarning={false}
+                />
+              ) : (
+                <div className='no-accounts'>
+                  <span>{t<string>('You do NOT have any account.')}</span>
+                </div>
+              )}
+            </>
+          )}
+          {hierarchy.length > 0 && (
+            <CustomButtonArea>
+              <Button
+                onClick={_onCancel}
+                secondary
+                type='button'
+              >
+                {t<string>('Cancel')}
+              </Button>
+              <Button
+                className='acceptButton'
+                isDisabled={!isFormValid}
+                type='submit'
+              >
+                {t<string>('Change')}
+              </Button>
+            </CustomButtonArea>
+          )}
+        </form>
+      </StyledScrollWrapper>
+    </>
   );
 }
 
 const StyledScrollWrapper = styled(ScrollWrapper)`
+  padding-top: 32px;
+  
   & > * {
     margin-inline: -16px;
   }
+`;
+
+const MarginLessHeader = styled(Header)`
+  margin-bottom: 0
 `;
 
 const StyledRemoveAuth = styled(RemoveAuth)`
@@ -186,9 +194,3 @@ export default withRouter(styled(AccountManagement)`
   
 
 `);
-
-const StyledHeader = styled(Header)`
-  &.backdrop-margin-left {
-    margin-left: 0px;
-  }
-`;

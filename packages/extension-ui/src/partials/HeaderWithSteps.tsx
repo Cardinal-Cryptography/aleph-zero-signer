@@ -33,10 +33,9 @@ const Step = styled.div<StepProps>`
   display: inline-block;
 `;
 
-const Steps = styled.div<{ withMargin: boolean }>`
+export const Steps = styled.div<{ withMargin: boolean }>`
   display: flex;
   justify-content: center;
-  margin-inline: -16px;
   margin-bottom: ${({ withMargin }) => (withMargin ? '36px' : 0)};
   gap: 8px;
   position: sticky;
@@ -57,18 +56,16 @@ function HeaderWithSteps({
   text,
   total,
   withBackArrow = false,
-  withBackdrop,
   withMargin = false
 }: Props): React.ReactElement<Props> {
   return (
     <>
-      <Header
+      <MarginLessHeader
         text={text}
         withBackArrow={withBackArrow}
-        withBackdrop={withBackdrop}
         withHelp
         withStepper
-      ></Header>
+      ></MarginLessHeader>
       <Steps withMargin={withMargin}>
         {Array.from({ length: total }, (_, i) => (
           <Step
@@ -85,3 +82,7 @@ function HeaderWithSteps({
 }
 
 export default React.memo(HeaderWithSteps);
+
+const MarginLessHeader = styled(Header)`
+  margin-bottom: 0;
+`;

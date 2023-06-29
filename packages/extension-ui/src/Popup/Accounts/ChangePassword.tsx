@@ -82,12 +82,12 @@ const EditPassword = () => {
 
   return (
     <>
-      <Header
+      <MarginLessHeader
         text={t<string>('Change account password')}
         withBackArrow
         withHelp
       />
-      <ScrollWrapper>
+      <ScrollWrapperWithMargin>
         <Form
           id={formId}
           onSubmit={onSubmit}
@@ -132,7 +132,7 @@ const EditPassword = () => {
             {t<string>('Save')}
           </Button>
         </ButtonArea>
-      </ScrollWrapper>
+      </ScrollWrapperWithMargin>
     </>
   );
 };
@@ -155,6 +155,14 @@ const StyledInputWithLabel = styled(InputWithLabel)`
 
 const StyleMessage = styled(Message)`
   margin-inline: 15px;
+`;
+
+const ScrollWrapperWithMargin = styled(ScrollWrapper)`
+  padding-top: 32px;
+`;
+
+const MarginLessHeader = styled(Header)`
+  margin-bottom: 0
 `;
 
 export default EditPassword;

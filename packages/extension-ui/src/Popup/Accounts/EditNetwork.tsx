@@ -20,7 +20,6 @@ import {
   RadioGroup,
   ScrollWrapper,
   Svg,
-  VerticalSpace
 } from '../../components';
 import { ALEPH_ZERO_TESTNET_GENESIS_HASH } from '../../constants';
 import useToast from '../../hooks/useToast';
@@ -99,14 +98,13 @@ function EditNetwork({
 
   return (
     <>
+      <MarginLessHeader
+        className='header'
+        text={t<string>('Account network')}
+        withBackArrow
+        withHelp
+      />
       <StyledScrollWrapper>
-        <Header
-          className='header'
-          text={t<string>('Account network')}
-          withBackArrow
-          withBackdrop
-          withHelp
-        />
         <Form
           id={formId}
           onSubmit={onSubmit}
@@ -148,6 +146,8 @@ function EditNetwork({
 }
 
 const StyledScrollWrapper = styled(ScrollWrapper)`
+  padding-top: 32px;
+  
   ${BottomWrapper} {
     margin-inline: -16px;
     padding-inline: 16px;
@@ -180,6 +180,10 @@ const CheckboxContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const MarginLessHeader = styled(Header)`
+  margin-bottom: 0
 `;
 
 export default withRouter(EditNetwork);

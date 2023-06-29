@@ -73,38 +73,39 @@ function CreateAccount(): React.ReactElement {
   const isLastStep = step === 4;
 
   return (
-    <StyledScrollWrapper>
+    <>
       {isLastStep || (
         <HeaderWithSteps
           step={step}
           text={t<string>('Create an account')}
           total={3}
-          withBackdrop
         />
       )}
-      <Loading>
-        {step === 1 && <StyledSafetyFirst onNextStep={_onNextStep} />}
-        {seed && step === 2 && (
-          <StyledSaveMnemonic
-            onNextStep={_onNextStep}
-            onPreviousStep={_onPreviousStep}
-            seed={seed}
-          />
-        )}
-        {seed && step === 3 && (
-          <StyledAccountNamePasswordCreation
-            address={address}
-            buttonLabel={t<string>('Create')}
-            genesisHash={genesisHash}
-            isBusy={isBusy}
-            onBackClick={_onPreviousStep}
-            onCreate={_onCreate}
-            setGenesis={setGenesis}
-          />
-        )}
-        {step === 4 && <Success text={t('Account created successfully!')} />}
-      </Loading>
-    </StyledScrollWrapper>
+      <StyledScrollWrapper>
+        <Loading>
+          {step === 1 && <StyledSafetyFirst onNextStep={_onNextStep} />}
+          {seed && step === 2 && (
+            <StyledSaveMnemonic
+              onNextStep={_onNextStep}
+              onPreviousStep={_onPreviousStep}
+              seed={seed}
+            />
+          )}
+          {seed && step === 3 && (
+            <StyledAccountNamePasswordCreation
+              address={address}
+              buttonLabel={t<string>('Create')}
+              genesisHash={genesisHash}
+              isBusy={isBusy}
+              onBackClick={_onPreviousStep}
+              onCreate={_onCreate}
+              setGenesis={setGenesis}
+            />
+          )}
+          {step === 4 && <Success text={t('Account created successfully!')} />}
+        </Loading>
+      </StyledScrollWrapper>
+    </>
   );
 }
 

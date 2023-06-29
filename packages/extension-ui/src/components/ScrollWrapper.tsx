@@ -5,9 +5,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { ThemeProps } from '../types';
-import PasswordFeedback from './PasswordField/PasswordFeedback';
-import Address from './Address';
-import Label from './Label';
 
 interface Props extends ThemeProps {
   className?: string;
@@ -38,11 +35,6 @@ export default styled(ScrollWrapper)(
 
   ::-webkit-scrollbar {
     width: 8px;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  ${Label}:not(.label), ${Address}, ${PasswordFeedback} {
-    width: calc(100% + 8px);
   }
 `
 );
