@@ -155,6 +155,34 @@ export const TheButtonSwapBatchTransaction: Story = {
   },
 };
 
+export const StakingDashboardNomination: Story = {
+  args: {
+    requestPayload: {
+      'specVersion': '0x00000040',
+      'transactionVersion': '0x0000000e',
+      'address': '5EkCk5SMQxUQGrULfDjsMeMCbcKoMgTd9ZBSrvMxiSDZUS86',
+      'blockHash': '0xce199fc12952396bff8e3c918521ea4e9ef22cadb038891893b8913477891428',
+      'blockNumber': '0x0215502c',
+      'era': '0xc802',
+      'genesisHash': '0x05d5279c52c484cc80396535a316add7d47b1c5b9e0398dd1f584149341460c5',
+      'method': '0x0f000c0800007698471eccdaf1b0374546c6666a2014d641e6c8d6f60b4c24738aa09a65882d0b00407a10f35a0108050400ec8df85d7896bcbb81d907c9f411f641fe983f5b217ab8116227eda760a6f2580808007498c40a78ff0c474c14c704ecdc88e91e68edd3fee9f65b45ec54151b237763',
+      'nonce': '0x0000001b',
+      'signedExtensions': [
+        'CheckNonZeroSender',
+        'CheckSpecVersion',
+        'CheckTxVersion',
+        'CheckGenesis',
+        'CheckMortality',
+        'CheckNonce',
+        'CheckWeight',
+        'ChargeTransactionPayment'
+      ],
+      'tip': '0x00000000000000000000000000000000',
+      'version': 4
+    }
+  },
+};
+
 export const MissingChainMetadata: Story = {
   args: {
     requestPayload: regularTransferRequestPayload

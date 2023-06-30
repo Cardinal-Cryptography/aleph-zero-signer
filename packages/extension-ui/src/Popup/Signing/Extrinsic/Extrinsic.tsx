@@ -16,6 +16,7 @@ import useMetadata from '../../../hooks/useMetadata';
 import useTranslation from '../../../hooks/useTranslation';
 import ExtrinsicTooltip from '../Tooltip';
 import ArgumentValue from './ArgumentValue';
+import { Renderable } from './types';
 
 type Props = {
   className?: string;
@@ -116,7 +117,12 @@ const BatchRow = styled.tr`
   margin-top: 40px;
 `;
 
-const CallDefinitionRows = (props: { section: string, method: string, args: { name: string, value?: Renderable }[], docs?: string[]}) => {
+const CallDefinitionRows = (props: {
+  section: string,
+  method: string,
+  args: { name: string, value?: Renderable | Renderable[] }[],
+  docs?: string[],
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -131,11 +137,11 @@ const CallDefinitionRows = (props: { section: string, method: string, args: { na
         <div className='separator'></div>
         <EllipsisCell className='data'>{props.method}</EllipsisCell>
       </tr>
-      {props.args?.length && (
+      {props.args?.length ? (
         <tr>
           <SubHeaderCell className='label'>{t<string>('Arguments')}</SubHeaderCell>
         </tr>
-      )}
+      ) : null}
       {props.args.map((arg) => (
         <tr key={arg.name}>
           <td className='label'>{arg.name}</td>
@@ -172,7 +178,7 @@ const formatCall = (call: Call) => {
   };
 };
 
-const formatCallArgs = (call: Call) =>
+const formatCallArgs = (call: Call): { name: string, value?: Renderable | Renderable[] }[] =>
   call.meta.args.flatMap((argMeta, i) => {
     const argName = argMeta.name.toHuman();
 
@@ -185,9 +191,17 @@ const formatCallArgs = (call: Call) =>
       }
 
       const argType = argMeta.typeName.toString();
-      const formatter = formatters[argType] || defaultFormatter;
+      const [, arrayItemType] = argType.match(/Vec<(.*)>/) || [];
+      const isVector = !!arrayItemType;
+      const formatter = (isVector ? formatters[arrayItemType] : formatters[argType]) || defaultFormatter;
 
-      return [{ name: argName, value: formatter(value) }];
+      return [{
+        name: argName,
+        value: isVector ?
+          // Type casting to limit redundant validation since any formatting errors are handled by the try-catch in this function
+          (value.toHuman() as unknown as { [key: string]: Codec }[]).flatMap((item) => Object.values(item)).map(formatter) :
+          formatter(value)
+      }];
     } catch (e) {
       console.error(`Failed argument "${argName}" decoding:`, e);
 
@@ -195,8 +209,6 @@ const formatCallArgs = (call: Call) =>
       return [{ name: argName }];
     }
   });
-
-type Renderable = string | number;
 
 /**
  * Formatters turn call arguments into renderable values.

@@ -7,25 +7,33 @@ import styled from 'styled-components';
 import { hexToU8a, isHex } from '@polkadot/util';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 
-const ArgumentValue = ({ children }: { children: string | number | undefined }) => {
+import { Renderable } from './types';
+
+const ArgumentValue = ({ children }: { children: Renderable | Renderable[] | undefined }) => {
   if (children === undefined) {
     return <>-</>;
   }
 
-  if (isAddress(children)) {
+  if (Array.isArray(children)) {
     return (
-      <AddressEllipsisContainer>
-        <AddressEllipsisLeftPart>{children.slice(0, -4)}</AddressEllipsisLeftPart>
-        {children.slice(-4)}
-      </AddressEllipsisContainer>
+      <>
+        {children.map((child) => <RenderableValue key={child}>{child}</RenderableValue>)}
+      </>
     );
   }
 
-  return <>{children}</>;
-
+  return <RenderableValue>{children}</RenderableValue>;
 };
 
 export default ArgumentValue;
+
+const RenderableValue = ({ children }: { children: Renderable }) => {
+  if (isAddress(children)) {
+    return <Address>{children}</Address>;
+  }
+
+  return <>{children}</>;
+};
 
 const AddressEllipsisContainer = styled.div`
   display: flex;
@@ -37,6 +45,13 @@ const AddressEllipsisLeftPart = styled.div`
   overflow: hidden;
   white-space: nowrap;
 `;
+
+const Address = ({ children }: { children: string }) => (
+  <AddressEllipsisContainer>
+    <AddressEllipsisLeftPart>{children.slice(0, -4)}</AddressEllipsisLeftPart>
+    {children.slice(-4)}
+  </AddressEllipsisContainer>
+);
 
 
 const isAddress = (value: unknown): value is string => {
