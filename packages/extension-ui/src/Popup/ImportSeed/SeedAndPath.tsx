@@ -126,7 +126,7 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
       .catch(() => {
         setAddress('');
         onAccountChange(null);
-        setError(path ? t<string>('Invalid secret phrase or path') : t<string>('Invalid secret phrase'));
+        setError(path ? t<string>('Invalid secret phrase or path.') : t<string>('Invalid secret phrase.'));
       });
   }, [t, hasSomeSeedWords, genesis, seedWords, path, onAccountChange, type, setError, setAddress]);
 

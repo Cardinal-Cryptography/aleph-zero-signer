@@ -20,7 +20,7 @@ interface Props {
 export default function Name ({ address, className, isFocused, label, onBlur, onChange, value }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { accounts } = useContext(AccountContext);
-  const isNameValid = useMemo(() => isNotShorterThan(3, t<string>('Account name is too short')), [t]);
+  const isNameValid = useMemo(() => isNotShorterThan(3, t<string>('Account name is too short.')), [t]);
 
   const account = accounts.find((account) => account.address === address);
   const startValue = value || account?.name;
