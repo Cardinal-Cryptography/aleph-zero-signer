@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 
-import {ActionContext, BottomWrapper, Button, ButtonArea, Checkbox} from '../../../components';
+import { ActionContext, BottomWrapper, Button, ButtonArea, Checkbox } from '../../../components';
 import useTranslation from '../../../hooks/useTranslation';
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../../messaging';
 import Unlock from '../Unlock';
@@ -62,10 +62,10 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
       onAction(`transaction-status/signed?isLast=${isLast.toString()}`);
     } catch (error) {
       setIsBusy(false);
-      setError((error as Error).message);
+      setError(t('Unable to decode using the supplied passphrase.'));
       console.error(error);
     }
-  }, [isLast, onAction, password, savePass, setError, signId]);
+  }, [isLast, onAction, password, savePass, setError, signId, t]);
 
   const _onCancel = useCallback(async (): Promise<void> => {
     try {
