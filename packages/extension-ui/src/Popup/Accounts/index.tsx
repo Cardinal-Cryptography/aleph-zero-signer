@@ -33,8 +33,6 @@ interface Props extends ThemeProps {
 }
 
 const StyledScrollWrapper = styled(ScrollWrapper)`
-  padding-top: 32px;
-  
   ${BottomWrapper} {
     position: absolute;
     bottom: 0px;
@@ -168,16 +166,8 @@ function Accounts({ className }: Props): React.ReactElement {
 
 export default styled(Accounts)(
   ({ theme }: Props) => `
-  height: calc(100vh + 16px);
-  scrollbar-width: none;
-  
-
   &.all-aleph-main {
     margin-top: 32px;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
   }
 
   .network-heading {

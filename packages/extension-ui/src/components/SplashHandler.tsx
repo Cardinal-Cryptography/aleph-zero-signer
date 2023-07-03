@@ -9,6 +9,7 @@ import { Transition, TransitionStatus } from 'react-transition-group';
 import styled, { CSSProperties } from 'styled-components';
 
 import { Video } from '@polkadot/extension-ui/components/index';
+import AuthManagement from '@polkadot/extension-ui/Popup/AuthManagement';
 
 import { Steps } from '../partials/HeaderWithSteps';
 import { Z_INDEX } from '../zindex';
@@ -75,15 +76,9 @@ export default styled(SplashHandler)`
   flex-direction: column;
   height: 100%;
 
-  > *:not(.splash):not(.header):not(${ScrollWrapper}):not(${Steps}) {
+  > *:not(.splash):not(.header):not(${ScrollWrapper}):not(${Steps}):not(${AuthManagement}) {
     padding-left: 16px;
     padding-right: 16px;
-  }
-  
-  > *:not(.splash):not(.header)${ScrollWrapper} {
-    scrollbar-gutter: stable both-edges;
-    padding-left: 8px;
-    padding-right: 8px;
   }
 
   .splash {

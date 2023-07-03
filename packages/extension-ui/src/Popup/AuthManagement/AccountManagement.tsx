@@ -8,11 +8,9 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
 import { AccountContext, ActionContext, Button, ButtonArea, RemoveAuth, ScrollWrapper } from '../../components';
-import Checkbox from '../../components/Checkbox';
 import useTranslation from '../../hooks/useTranslation';
 import { getAuthList, updateAuthorization } from '../../messaging';
 import { AccountSelection, Header } from '../../partials';
-import AccountsTree from '../Accounts/AccountsTree';
 
 interface Props extends RouteComponentProps, ThemeProps {
   className?: string;
@@ -128,10 +126,6 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
 
 const StyledScrollWrapper = styled(ScrollWrapper)`
   padding-top: 32px;
-  
-  & > * {
-    margin-inline: -16px;
-  }
 `;
 
 const MarginLessHeader = styled(Header)`
@@ -175,20 +169,9 @@ export default withRouter(styled(AccountManagement)`
   .accountSelection {
     flex-grow: 1;
     margin: 0px;
-    
-    ${Checkbox} {
-      margin-right: 32px;
-    }
 
     .accountList {
       height: 100%;
-
-      padding-right: 8px;
-
-      ${AccountsTree} {
-        width: calc(100% - 32px);
-        margin: 0 auto;
-      }
     }
   }
   
