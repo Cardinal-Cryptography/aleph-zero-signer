@@ -7,6 +7,8 @@ import type { ThemeProps } from '../../types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import useRequestsPagination from '@polkadot/extension-ui/hooks/useRequestsPagination';
+
 import { Loading, ScrollWrapper, SigningReqContext } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import Request from './Request';
@@ -19,26 +21,8 @@ interface Props extends ThemeProps {
 function Signing({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const requests = useContext(SigningReqContext);
-  const [requestIndex, setRequestIndex] = useState(0);
+  const { index: requestIndex, next, previous, request } = useRequestsPagination(requests);
 
-  const _onNextClick = useCallback(() => setRequestIndex((requestIndex) => requestIndex + 1), []);
-
-  const _onPreviousClick = useCallback(() => setRequestIndex((requestIndex) => requestIndex - 1), []);
-
-  useEffect(() => {
-    setRequestIndex((requestIndex) => (requestIndex < requests.length ? requestIndex : requests.length - 1));
-    setRequestIndex((requestIndex) => (requestIndex < requests.length ? requestIndex : requests.length - 1));
-  }, [requests]);
-
-  // protect against removal overflows/underflows
-  const request =
-    requests.length !== 0
-      ? requestIndex >= 0
-        ? requestIndex < requests.length
-          ? requests[requestIndex]
-          : requests[requests.length - 1]
-        : requests[0]
-      : null;
   const isTransaction = !!(request?.request?.payload as SignerPayloadJSON)?.blockNumber;
 
   return request ? (
@@ -48,8 +32,8 @@ function Signing({ className }: Props): React.ReactElement<Props> {
           <div className='centered'>
             <TransactionIndex
               index={requestIndex}
-              onNextClick={_onNextClick}
-              onPreviousClick={_onPreviousClick}
+              onNextClick={next}
+              onPreviousClick={previous}
               totalItems={requests.length}
             />
           </div>
