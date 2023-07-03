@@ -9,10 +9,9 @@ import styled from "styled-components";
 import { formatNumber } from "@polkadot/util";
 
 import helpIcon from '../../../assets/help.svg';
-import { Svg, Table } from '../../../components';
+import { ErrorBoundary, Svg, Table } from '../../../components';
 import useTranslation from '../../../hooks/useTranslation';
 import ExtrinsicTooltip from '../Tooltip';
-import ErrorBoundary from './ErrorBoundary';
 import TransactionDetails from './TransactionDetails';
 
 type Props = {
@@ -48,7 +47,9 @@ function Extrinsic({
         <div className='separator'></div>
         <td className='data'>{formatNumber(Number(requestPayload.nonce))}</td>
       </tr>
-      <ErrorBoundary Fallback={() => null}>
+      <ErrorBoundary
+        Fallback={() => <ErrorMessage>A problem occurred when decoding the transaction details.</ErrorMessage>}
+      >
         <TransactionDetails requestPayload={requestPayload} />
       </ErrorBoundary>
     </FullWidthTable>
@@ -59,4 +60,10 @@ export default Extrinsic;
 
 const FullWidthTable = styled(Table)`
   width: 100%;
+`;
+
+const ErrorMessage = styled.div`
+  font-style: italic;
+  text-align: center;
+  margin: 50px;
 `;

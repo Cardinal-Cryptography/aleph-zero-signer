@@ -17,7 +17,9 @@ const ArgumentValue = ({ children }: { children: Renderable | Renderable[] | und
   if (Array.isArray(children)) {
     return (
       <>
-        {children.map((child) => <RenderableValue key={child}>{child}</RenderableValue>)}
+        {children.map((child, i) =>
+          <RenderableValue key={`${child}-${i}`}>{child}</RenderableValue>
+        )}
       </>
     );
   }

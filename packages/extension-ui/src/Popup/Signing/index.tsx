@@ -81,6 +81,7 @@ export default React.memo(
     }
 
     .heading {
+      padding-top: 10px;
       font-family: ${theme.secondaryFontFamily};
       font-style: normal;
       font-weight: 700;

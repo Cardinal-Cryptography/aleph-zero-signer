@@ -8,10 +8,10 @@ import styled from 'styled-components';
 import { Call, WeightV2 } from "@polkadot/types/interfaces";
 import { Codec, SignerPayloadJSON } from "@polkadot/types/types";
 
+import { ErrorBoundary } from '../../../components';
 import useMetadata from '../../../hooks/useMetadata';
 import useTranslation from '../../../hooks/useTranslation';
 import ArgumentValue from './ArgumentValue';
-import ErrorBoundary from './ErrorBoundary';
 import { Renderable } from './types';
 
 type Props = {
@@ -96,6 +96,12 @@ const EllipsisCell = styled.td`
   }
 `;
 
+const ArgumentCell = styled(EllipsisCell)`
+  &&& { /* Override the intrusive <Table> styles */
+    text-transform: initial;
+  }
+`;
+
 const CallDefinitionRows = (props: {
   section: string,
   method: string,
@@ -125,11 +131,11 @@ const CallDefinitionRows = (props: {
         <tr key={arg.name}>
           <td className='label'>{arg.name}</td>
           <div className='separator'></div>
-          <EllipsisCell className='data'>
+          <ArgumentCell className='data'>
             <ErrorBoundary Fallback={() => <ErrorMessage>Value rendering error</ErrorMessage>}>
               <ArgumentValue>{arg.value}</ArgumentValue>
             </ErrorBoundary>
-          </EllipsisCell>
+          </ArgumentCell>
         </tr>
       ))}
     </ErrorBoundary>
