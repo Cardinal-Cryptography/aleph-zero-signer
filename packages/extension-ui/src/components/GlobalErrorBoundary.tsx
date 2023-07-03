@@ -22,7 +22,7 @@ interface State {
 }
 
 // NOTE: This is the only way to do an error boundary, via extend
-class ErrorBoundary extends React.Component<Props> {
+class GlobalErrorBoundary extends React.Component<Props> {
   public override state: State = { error: null };
 
   public static getDerivedStateFromError(error: Error): Partial<State> {
@@ -66,4 +66,4 @@ class ErrorBoundary extends React.Component<Props> {
   }
 }
 
-export default translate(ErrorBoundary);
+export default translate(GlobalErrorBoundary);
