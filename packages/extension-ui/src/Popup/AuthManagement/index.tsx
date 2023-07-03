@@ -144,6 +144,10 @@ export default styled(AuthManagement)`
   display: flex;
   flex-direction: column;
 
+  &&& {
+    padding-inline: 0 !important;
+  }
+
   .inputFilter {
     margin-bottom: 0.8rem;
     padding: 0 !important;
