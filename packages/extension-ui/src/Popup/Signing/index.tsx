@@ -4,15 +4,14 @@
 import type { SignerPayloadJSON } from '@polkadot/types/types';
 import type { ThemeProps } from '../../types';
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import useRequestsPagination from '@polkadot/extension-ui/hooks/useRequestsPagination';
 
-import { Loading, ScrollWrapper, SigningReqContext } from '../../components';
+import { Loading, RequestPagination, ScrollWrapper, SigningReqContext } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import Request from './Request';
-import TransactionIndex from './TransactionIndex';
 
 interface Props extends ThemeProps {
   className?: string;
@@ -30,10 +29,12 @@ function Signing({ className }: Props): React.ReactElement<Props> {
       <ScrollWrapper className={className}>
         {requests.length > 1 && (
           <div className='centered'>
-            <TransactionIndex
+            <RequestPagination
               index={requestIndex}
               onNextClick={next}
               onPreviousClick={previous}
+              pluralName={t<string>('transactions')}
+              singularName={t<string>('transaction')}
               totalItems={requests.length}
             />
           </div>
