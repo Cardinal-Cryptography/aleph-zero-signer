@@ -75,7 +75,6 @@ function ImportSeed(): React.ReactElement {
           step={step}
           text={t<string>('Import existing account')}
           total={2}
-          withMargin
         />
       )}
       <StyledScrollWrapper>
@@ -106,6 +105,8 @@ function ImportSeed(): React.ReactElement {
 }
 
 const StyledScrollWrapper = styled(ScrollWrapper)`
+  padding-top: 36px;
+  
   ${BottomWrapper} {
     margin-inline: -16px;
     padding-inline: 16px;
