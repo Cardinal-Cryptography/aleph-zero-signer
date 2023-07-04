@@ -18,7 +18,7 @@ import { canDerive } from '@polkadot/extension-base/utils';
 import localStorageStores from '@polkadot/extension-base/utils/localStorageStores';
 import uiSettings from '@polkadot/ui-settings';
 
-import { ErrorBoundary, Loading, SplashHandler } from '../components';
+import { GlobalErrorBoundary, Loading, SplashHandler } from '../components';
 import {
   AccountContext,
   ActionContext,
@@ -45,7 +45,6 @@ import NewAccount from './Accounts/NewAccount';
 import AccountManagement from './AuthManagement/AccountManagement';
 import DisconnectApp from './AuthManagement/DisconnectApp';
 import RestoreJson from './Restore/RestoreJson';
-import TransactionStatus from './Signing/TransactionStatus';
 import About from './About';
 import Accounts from './Accounts';
 import AuthList from './AuthManagement';
@@ -58,6 +57,7 @@ import Forget from './Forget';
 import ImportSeed from './ImportSeed';
 import Metadata from './Metadata';
 import PhishingDetected from './PhishingDetected';
+import RequestStatus from './RequestStatus';
 import Settings from './Settings';
 import Signing from './Signing';
 import Welcome from './Welcome';
@@ -122,7 +122,7 @@ export default function Popup(): React.ReactElement {
       }
 
       to === '..'
-        ? // if we can't go gack from there, go to the home
+        ? // if we can't go back from there, go to the home
           history.length === 1
           ? history.push('/')
           : history.goBack()
@@ -157,7 +157,7 @@ export default function Popup(): React.ReactElement {
   }, [cameraOn]);
 
   function wrapWithErrorBoundary(component: React.ReactElement, trigger?: string): React.ReactElement {
-    return <ErrorBoundary trigger={trigger}>{component}</ErrorBoundary>;
+    return <GlobalErrorBoundary trigger={trigger}>{component}</GlobalErrorBoundary>;
   }
 
   const Root = isWelcomeDone
@@ -204,8 +204,8 @@ export default function Popup(): React.ReactElement {
                                 <Route path='/account/edit-menu/:address'>
                                   {wrapWithErrorBoundary(<EditAccountMenu />, 'edit-menu')}
                                 </Route>
-                                <Route path='/transaction-status/:status'>
-                                  {wrapWithErrorBoundary(<TransactionStatus />, 'transaction-status')}
+                                <Route path='/request-status'>
+                                  {wrapWithErrorBoundary(<RequestStatus />, 'request-status')}
                                 </Route>
                                 <Route path='/account/edit-name/:address'>
                                   {wrapWithErrorBoundary(<EditName />, 'edit-name')}

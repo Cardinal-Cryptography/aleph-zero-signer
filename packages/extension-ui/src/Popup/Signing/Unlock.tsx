@@ -13,21 +13,12 @@ interface Props {
   className?: string;
   error?: string | null;
   isBusy: boolean;
-  onSign: () => void | Promise<void>;
   password: string;
   setError: (error: string | null) => void;
   setPassword: (password: string) => void;
 }
 
-function Unlock({
-  className,
-  error,
-  isBusy,
-  onSign,
-  password,
-  setError,
-  setPassword
-}: Props): React.ReactElement<Props> {
+function Unlock({ className, error, isBusy, password, setError, setPassword }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const _onChangePassword = useCallback(
     (password: string): void => {
@@ -46,7 +37,6 @@ function Unlock({
         isError={!password || !!error}
         isFocused
         label={t<string>('Password for this account')}
-        onEnter={onSign}
         onValidatedChange={_onChangePassword}
         type='password'
         validator={Result.ok}
@@ -67,6 +57,10 @@ function Unlock({
 const Container = styled.div`
   & > :not(:last-child) {
     margin-bottom: 8px;
+  }
+
+  &&& ${InputWithLabel} { /* overriding the intrusive <ScrollWrapper> styles */
+    width: 100%;
   }
 `;
 

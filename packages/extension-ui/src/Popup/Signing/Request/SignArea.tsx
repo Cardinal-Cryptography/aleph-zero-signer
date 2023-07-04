@@ -1,12 +1,12 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useEffect, useId, useState } from 'react';
 import styled from 'styled-components';
 
 import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 
-import { ActionContext, Button, ButtonArea, Checkbox } from '../../../components';
+import { ActionContext, BottomWrapper, Button, ButtonArea, Checkbox } from '../../../components';
 import useTranslation from '../../../hooks/useTranslation';
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../../messaging';
 import Unlock from '../Unlock';
@@ -29,6 +29,7 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
   const [isBusy, setIsBusy] = useState(false);
   const onAction = useContext(ActionContext);
   const { t } = useTranslation();
+  const formId = useId();
 
   useEffect(() => {
     setIsLocked(null);
@@ -54,26 +55,40 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
   }, [isExternal, signId]);
 
   const _onSign = useCallback(async () => {
+    const params = new URLSearchParams({
+      isLast: isLast.toString(),
+      isSuccess: 'true',
+      message: t<string>('Transaction signed')
+    });
+
     try {
       setIsBusy(true);
       await approveSignPassword(signId, savePass, password);
       setIsBusy(false);
-      onAction(`transaction-status/signed?isLast=${isLast.toString()}`);
+
+      onAction(`/request-status?${params.toString()}`);
     } catch (error) {
       setIsBusy(false);
       setError((error as Error).message);
       console.error(error);
     }
-  }, [isLast, onAction, password, savePass, setError, signId]);
+  }, [isLast, onAction, password, savePass, setError, signId, t]);
 
   const _onCancel = useCallback(async (): Promise<void> => {
+    const params = new URLSearchParams({
+      isLast: isLast.toString(),
+      isSuccess: 'false',
+      message: t<string>('Transaction declined')
+    });
+
     try {
       await cancelSignRequest(signId);
-      onAction(`transaction-status/declined?isLast=${isLast.toString()}`);
+
+      onAction(`/request-status?${params.toString()}`);
     } catch (error) {
       console.error(error);
     }
-  }, [isLast, onAction, signId]);
+  }, [isLast, onAction, signId, t]);
 
   const StyledCheckbox = styled(Checkbox)`
     margin-left: 8px;
@@ -95,11 +110,6 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
     />
   );
 
-  const CustomButtonArea = styled(ButtonArea)`
-    padding: 0px 24px;
-    margin-bottom: 0px;
-  `;
-
   const isFormValid = isFirst && !error && (!isLocked || password);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -111,24 +121,28 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <div className={className}>
-        {isFirst && !isExternal && (
-          <>
-            {isLocked && (
-              <Unlock
-                error={error}
-                isBusy={isBusy}
-                onSign={_onSign}
-                password={password}
-                setError={setError}
-                setPassword={setPassword}
-              />
-            )}
-            <RememberPasswordCheckbox />
-          </>
-        )}
-      </div>
+    <Container>
+      <form
+        id={formId}
+        onSubmit={onSubmit}
+      >
+        <div className={className}>
+          {isFirst && !isExternal && (
+            <>
+              {isLocked && (
+                <Unlock
+                  error={error}
+                  isBusy={isBusy}
+                  password={password}
+                  setError={setError}
+                  setPassword={setPassword}
+                />
+              )}
+              <RememberPasswordCheckbox />
+            </>
+          )}
+        </div>
+      </form>
       <CustomButtonArea>
         <Button
           data-decline-transaction
@@ -141,6 +155,7 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
         </Button>
         <Button
           data-sign-transaction
+          form={formId}
           isBusy={isBusy}
           isDisabled={!isFormValid}
           isSuccess
@@ -149,11 +164,22 @@ function SignArea({ buttonText, className, error, isExternal, isFirst, isLast, s
           {buttonText}
         </Button>
       </CustomButtonArea>
-    </form>
+    </Container>
   );
 }
 
 export default styled(SignArea)`
   flex-direction: column;
-  padding: 6px 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+`;
+
+const Container = styled.div`
+  & ${BottomWrapper} {
+    margin-inline: -16px;
+  }  
+`;
+
+const CustomButtonArea = styled(ButtonArea)`
+  margin-inline: 16px;
 `;
