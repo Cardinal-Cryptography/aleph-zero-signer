@@ -24,8 +24,8 @@ export default function Metadata(): React.ReactElement {
           index={requestIndex}
           onNextClick={next}
           onPreviousClick={previous}
-          pluralName={t('metadata updates')}
-          singularName={t('metadata update')}
+          pluralName={t<string>('metadata updates')}
+          singularName={t<string>('metadata update')}
           totalItems={requests.length}
         />
       )}
