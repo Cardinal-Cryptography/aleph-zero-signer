@@ -17,7 +17,6 @@ interface Props extends RouteComponentProps, ThemeProps {
 }
 
 const CustomButtonArea = styled(ButtonArea)`
-  padding-inline: 16px;
   padding-top: 16px;
   padding-bottom: 0px;
 `;
@@ -137,7 +136,7 @@ const StyledRemoveAuth = styled(RemoveAuth)`
 `;
 
 export default withRouter(styled(AccountManagement)`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 

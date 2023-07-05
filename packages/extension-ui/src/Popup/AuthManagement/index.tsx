@@ -116,6 +116,7 @@ function AuthManagement({ className }: Props): React.ReactElement<Props> {
 
 const StyledHero = styled(Hero)`
   margin-top: 64px;
+  margin-inline: 16px;
 `;
 
 const WebsiteListContainer = styled.div`

@@ -31,6 +31,10 @@ const Container = styled.div`
   height: 100%;
   overflow-y: scroll;
 
+  &&& {
+    padding-inline: 0 !important;
+  }
+
   ::-webkit-scrollbar-thumb {
     background:${({ theme }) => theme.boxBorderColor};
     border-radius: 50px;
