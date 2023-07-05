@@ -15,7 +15,6 @@ interface Props {
   total: number;
   withBackArrow?: boolean;
   withBackdrop?: boolean;
-  withMargin?: boolean;
 }
 
 interface StepProps extends ThemeProps {
@@ -33,10 +32,9 @@ const Step = styled.div<StepProps>`
   display: inline-block;
 `;
 
-export const Steps = styled.div<{ withMargin: boolean }>`
+export const Steps = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: ${({ withMargin }) => (withMargin ? '36px' : 0)};
   gap: 8px;
   position: sticky;
   z-index: ${Z_INDEX.HEADER};
@@ -56,17 +54,16 @@ function HeaderWithSteps({
   text,
   total,
   withBackArrow = false,
-  withMargin = false
 }: Props): React.ReactElement<Props> {
   return (
     <>
-      <MarginLessHeader
+      <Header
         text={text}
         withBackArrow={withBackArrow}
         withHelp
         withStepper
-      ></MarginLessHeader>
-      <Steps withMargin={withMargin}>
+      ></Header>
+      <Steps>
         {Array.from({ length: total }, (_, i) => (
           <Step
             current={step === i + 1}
@@ -82,7 +79,3 @@ function HeaderWithSteps({
 }
 
 export default React.memo(HeaderWithSteps);
-
-const MarginLessHeader = styled(Header)`
-  margin-bottom: 0;
-`;

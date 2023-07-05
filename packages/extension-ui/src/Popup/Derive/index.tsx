@@ -108,7 +108,6 @@ function Derive({ isLocked }: Props): React.ReactElement<Props> {
         text={t<string>('Derive sub-account')}
         total={2}
         withBackArrow
-        withMargin
       />
       <StyledScrollWrapper>
         {!account && step === 1 && (

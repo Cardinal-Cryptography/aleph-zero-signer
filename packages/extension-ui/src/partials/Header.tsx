@@ -167,7 +167,6 @@ export default React.memo(
   top: 0px;
   backdrop-filter: blur(10px);
   z-index: ${Z_INDEX.HEADER};
-  margin-bottom: 32px;
 
   && {
     padding: 0 0 0;

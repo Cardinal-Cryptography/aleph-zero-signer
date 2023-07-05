@@ -105,8 +105,6 @@ function ImportSeed(): React.ReactElement {
 }
 
 const StyledScrollWrapper = styled(ScrollWrapper)`
-  padding-top: 36px;
-  
   ${BottomWrapper} {
     margin-inline: -16px;
     padding-inline: 16px;

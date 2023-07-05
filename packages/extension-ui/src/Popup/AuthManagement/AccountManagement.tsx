@@ -76,7 +76,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
         withBackdrop
         withHelp
       />
-      <StyledScrollWrapper>
+      <ScrollWrapper>
         <form
           className={className}
           onSubmit={onSubmit}
@@ -118,14 +118,10 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
             </CustomButtonArea>
           )}
         </form>
-      </StyledScrollWrapper>
+      </ScrollWrapper>
     </>
   );
 }
-
-const StyledScrollWrapper = styled(ScrollWrapper)`
-  padding-top: 32px;
-`;
 
 const MarginLessHeader = styled(Header)`
   margin-bottom: 0

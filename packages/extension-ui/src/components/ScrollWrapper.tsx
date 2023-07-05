@@ -46,6 +46,7 @@ const ScrollWrapperContent = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 100%;
+  padding-top: 32px;
 
   padding-inline: 16px;
   width: 100vw;

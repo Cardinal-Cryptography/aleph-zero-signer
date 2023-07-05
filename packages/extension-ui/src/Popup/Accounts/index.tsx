@@ -143,7 +143,7 @@ function Accounts({ className }: Props): React.ReactElement {
         <AddAccount />
       ) : (
         <>
-          <MarginLessHeader
+          <Header
             className='header'
             onFilter={_onFilter}
             text={t<string>('Accounts')}
@@ -192,7 +192,3 @@ export default styled(Accounts)(
   }
 `
 );
-
-const MarginLessHeader = styled(Header)`
-  margin-bottom: 0
-`;

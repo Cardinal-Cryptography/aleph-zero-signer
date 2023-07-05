@@ -98,7 +98,7 @@ function EditNetwork({
 
   return (
     <>
-      <MarginLessHeader
+      <Header
         className='header'
         text={t<string>('Account network')}
         withBackArrow
@@ -146,8 +146,6 @@ function EditNetwork({
 }
 
 const StyledScrollWrapper = styled(ScrollWrapper)`
-  padding-top: 32px;
-  
   ${BottomWrapper} {
     margin-inline: -16px;
     padding-inline: 16px;
@@ -180,10 +178,6 @@ const CheckboxContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const MarginLessHeader = styled(Header)`
-  margin-bottom: 0
 `;
 
 export default withRouter(EditNetwork);
