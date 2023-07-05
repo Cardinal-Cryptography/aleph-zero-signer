@@ -261,7 +261,7 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
 }
 
 const StyledHeader = styled(Header)`
-  margin-bottom: 24px;
+  margin-bottom: 36px;
 `;
 
 const MnemonicWrapper = styled.div`
