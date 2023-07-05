@@ -85,14 +85,14 @@ function CreateAccount(): React.ReactElement {
         <Loading>
           {step === 1 && <StyledSafetyFirst onNextStep={_onNextStep} />}
           {seed && step === 2 && (
-            <StyledSaveMnemonic
+            <SaveMnemonic
               onNextStep={_onNextStep}
               onPreviousStep={_onPreviousStep}
               seed={seed}
             />
           )}
           {seed && step === 3 && (
-            <StyledAccountNamePasswordCreation
+            <AccountNamePasswordCreation
               address={address}
               buttonLabel={t<string>('Create')}
               genesisHash={genesisHash}
@@ -118,14 +118,6 @@ const StyledScrollWrapper = styled(ScrollWrapper)`
 
 const StyledSafetyFirst = styled(SafetyFirst)`
   margin-block: auto;
-`;
-
-const StyledSaveMnemonic = styled(SaveMnemonic)`
-  margin-top: 36px;
-`;
-
-const StyledAccountNamePasswordCreation = styled(AccountNamePasswordCreation)`
-  margin-top: 36px;
 `;
 
 export default styled(CreateAccount)`

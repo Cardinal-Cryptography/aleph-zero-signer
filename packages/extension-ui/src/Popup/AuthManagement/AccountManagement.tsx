@@ -70,7 +70,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
 
   return (
     <>
-      <MarginLessHeader
+      <Header
         text={t<string>('Connected accounts')}
         withBackArrow
         withBackdrop
@@ -122,10 +122,6 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
     </>
   );
 }
-
-const MarginLessHeader = styled(Header)`
-  margin-bottom: 0
-`;
 
 const StyledRemoveAuth = styled(RemoveAuth)`
   margin-bottom: 24px;
