@@ -13,15 +13,15 @@ const useRequestsPagination = <T>(requests: Array<T>) => {
 
   useEffect(() => {
     setIndex((currIndex) => getSafeIndex(currIndex, requests.length));
-  }, [requests]);
+  }, [requests.length]);
 
-  const finalIndex = getSafeIndex(index, requests.length);
+  const safeIndex = getSafeIndex(index, requests.length);
 
   return {
     next,
     previous,
-    index: finalIndex,
-    request: requests[finalIndex]
+    index: safeIndex,
+    request: requests[safeIndex]
   };
 };
 
