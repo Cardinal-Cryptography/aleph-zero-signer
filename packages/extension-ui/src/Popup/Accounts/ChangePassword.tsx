@@ -103,7 +103,7 @@ const EditPassword = () => {
               validator={Result.ok}
             />
             {isProvidedPassWrong && (
-              <StyleMessage messageType='critical'>{t('Unable to decode using the supplied passphrase')}</StyleMessage>
+              <StyleMessage messageType='critical'>{t('Unable to decode using the supplied passphrase.')}</StyleMessage>
             )}
           </InputWrapper>
           <Password
@@ -126,7 +126,6 @@ const EditPassword = () => {
             form={formId}
             isBusy={isBusy}
             isDisabled={!isFormValid}
-            onClick={saveChanges}
             type='submit'
           >
             {t<string>('Save')}
