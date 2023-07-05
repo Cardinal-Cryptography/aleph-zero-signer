@@ -53,7 +53,7 @@ const CustomFooter = styled(HelperFooter)`
     display: flex;
     gap: 8px;
     align-items: flex-start;
-    
+
   }
 
   ::before {
@@ -71,11 +71,16 @@ const StyledInputWithLabel = styled(InputWithLabel)`
   position: relative;
   margin-bottom: 4px;
 
+  & > input {
+    color: ${({ isLocked, theme }: StyledInputWithLabelProps) =>
+      isLocked ? theme.disabledTextColor : theme.textColor};
+  }
+
   label {
-  color: ${({ isLocked, theme }: StyledInputWithLabelProps) =>
-    isLocked ? theme.disabledTextColor : theme.subTextColor};
-  opacity: 1;
-}
+    color: ${({ isLocked, theme }: StyledInputWithLabelProps) =>
+      isLocked ? theme.disabledTextColor : theme.subTextColor};
+    opacity: 1;
+  }
 `;
 
 function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: Props): React.ReactElement {
