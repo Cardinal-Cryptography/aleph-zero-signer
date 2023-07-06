@@ -7,6 +7,7 @@ import type { AccountJson, AuthorizeRequest, MetadataRequest, RequestAuthorizeTa
 
 import { BehaviorSubject } from 'rxjs';
 
+import { getPromiseWithResolvers } from '@polkadot/extension-base/utils';
 import { getId } from '@polkadot/extension-base/utils/getId';
 import { addMetadata, knownMetadata } from '@polkadot/extension-chains';
 import { knownGenesis } from '@polkadot/networks/defaults';
@@ -26,6 +27,11 @@ interface AuthRequest extends Resolver<AuthResponse> {
   idStr: string;
   request: RequestAuthorizeTab;
   url: string;
+}
+
+interface AccountsListAuthRequests extends Resolver<void> {
+  origin: string;
+  promise: Promise<void>
 }
 
 export type AuthUrls = Record<string, AuthUrlInfo>;
@@ -139,6 +145,8 @@ export default class State {
   readonly #authUrls: AuthUrls = {};
 
   readonly #authRequests: Record<string, AuthRequest> = {};
+
+  readonly #accountsListAuthRequests: Record<string, AccountsListAuthRequests> = {};
 
   readonly #metaStore = new MetadataStore();
 
@@ -394,6 +402,23 @@ export default class State {
   private updateIconSign (): void {
     this.signSubject.next(this.allSignRequests);
     this.updateIcon();
+  }
+
+  public async tryToSettleAccountsAuthorization (url: string) {
+    const origin = new URL(url).origin;
+
+    if (this.#accountsListAuthRequests[origin]) {
+      return this.#accountsListAuthRequests[origin].promise;
+    }
+
+    this.#accountsListAuthRequests[origin] = {
+      origin,
+      ...getPromiseWithResolvers()
+    };
+
+    this.popupOpen();
+
+    return this.#accountsListAuthRequests[origin].promise;
   }
 
   public updateAuthorizedAccounts (authorizedAccountDiff: AuthorizedAccountsDiff): void {

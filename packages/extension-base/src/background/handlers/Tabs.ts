@@ -67,10 +67,25 @@ export default class Tabs {
     return this.#state.authorizeUrl(url, request);
   }
 
-  private accountsListAuthorized (url: string, { anyType }: RequestAccountList): InjectedAccount[] {
+  private async accountsListAuthorized (url: string, { anyType }: RequestAccountList): Promise<InjectedAccount[]> {
+    if (this.hasUndecidedAccounts(url)) {
+      await this.#state.tryToSettleAccountsAuthorization(url);
+    }
+
     const transformedAccounts = transformAccounts(accountsObservable.subject.getValue(), anyType);
 
     return this.filterForAuthorizedAccounts(transformedAccounts, url);
+  }
+
+  private hasUndecidedAccounts (url: string): boolean {
+    const origin = new URL(url).origin;
+
+    const { lastAuth } = this.#state.authUrls[origin];
+
+    const accounts = accountsObservable.subject.getValue();
+    const creationTimes = Object.values(accounts).map(({ json: { meta: { whenCreated } } }) => whenCreated);
+
+    return creationTimes.some((time) => time !== undefined && lastAuth < time);
   }
 
   private accountsSubscribeAuthorized (url: string, id: string, port: chrome.runtime.Port): string {

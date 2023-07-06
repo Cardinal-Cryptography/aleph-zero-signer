@@ -153,19 +153,8 @@ export default function Popup(): React.ReactElement {
     requestMediaAccess(cameraOn).then(setMediaAllowed).catch(console.error);
   }, [cameraOn]);
 
-  function wrapWithErrorBoundary(component: React.ReactElement, trigger?: string): React.ReactElement {
-    return <GlobalErrorBoundary trigger={trigger}>{component}</GlobalErrorBoundary>;
-  }
-
-  const Root = isWelcomeDone
-    ? authRequests && authRequests.length
-      ? wrapWithErrorBoundary(<Authorize />, 'authorize')
-      : metaRequests && metaRequests.length
-      ? wrapWithErrorBoundary(<Metadata />, 'metadata')
-      : signRequests && signRequests.length
-      ? wrapWithErrorBoundary(<Signing />, 'signing')
-      : wrapWithErrorBoundary(<Accounts />, 'accounts')
-    : wrapWithErrorBoundary(<Welcome />, 'welcome');
+  const [RootComponent, name] = getRootParams({ isWelcomeDone, authRequests, metaRequests, signRequests });
+  const Root = wrapWithErrorBoundary(<RootComponent />, name);
 
   return (
     <Loading>
@@ -264,3 +253,39 @@ export default function Popup(): React.ReactElement {
     </Loading>
   );
 }
+
+type Params = {
+  isWelcomeDone: boolean;
+  authRequests: Array<unknown> | null;
+  metaRequests: Array<unknown> | null;
+  signRequests: Array<unknown> | null;
+};
+
+const getRootParams = ({
+  authRequests,
+  isWelcomeDone,
+  metaRequests,
+  signRequests
+}: Params): [React.ComponentType, string] => {
+  if (!isWelcomeDone) {
+    return [Welcome, 'welcome'];
+  }
+
+  if (authRequests?.length) {
+    return [Authorize, 'authorize'];
+  }
+
+  if (metaRequests?.length) {
+    return [Metadata, 'metadata'];
+  }
+
+  if (signRequests?.length) {
+    return [Signing, 'signing'];
+  }
+
+  return [Accounts, 'accounts'];
+};
+
+const wrapWithErrorBoundary = (component: React.ReactElement, trigger?: string): React.ReactElement => (
+  <GlobalErrorBoundary trigger={trigger}>{component}</GlobalErrorBoundary>
+);
