@@ -5,24 +5,9 @@ import type { Signer as SignerInterface, SignerResult } from '@polkadot/api/type
 import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { SendRequest } from './types';
 
-import { localStorageStores } from '@polkadot/extension-base/utils';
-
-/**
- * Using getNextId() instead of accessing the local storage directly prevents
- * race condition causing generation of the same id for multiple "gets".
- */
-const getNextId = (() => {
-  let nextIdPromise = Promise.resolve(0); // "0" is just a placeholder - it'll never be returned from the function
-
-  return () => {
-    nextIdPromise = nextIdPromise.then(() => localStorageStores.signerRequestIds.update((lastId) => lastId + 1));
-
-    return nextIdPromise;
-  };
-})();
-
 // External to class, this.# is not private enough (yet)
 let sendRequest: SendRequest;
+let nextId = 0;
 
 export default class Signer implements SignerInterface {
   constructor (_sendRequest: SendRequest) {
@@ -30,7 +15,7 @@ export default class Signer implements SignerInterface {
   }
 
   public async signPayload (payload: SignerPayloadJSON): Promise<SignerResult> {
-    const id = await getNextId();
+    const id = ++nextId;
     const result = await sendRequest('pub(extrinsic.sign)', payload);
 
     // we add an internal id (number) - should have a mapping from the
@@ -43,7 +28,7 @@ export default class Signer implements SignerInterface {
   }
 
   public async signRaw (payload: SignerPayloadRaw): Promise<SignerResult> {
-    const id = await getNextId();
+    const id = ++nextId;
     const result = await sendRequest('pub(bytes.sign)', payload);
 
     return {
