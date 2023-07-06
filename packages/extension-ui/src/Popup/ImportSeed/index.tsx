@@ -32,7 +32,6 @@ function ImportSeed(): React.ReactElement {
   const [isBusy, setIsBusy] = useState(false);
   const [account, setAccount] = useState<AccountInfo | null>(null);
   const [step, setStep] = useState<number>(1);
-  const [genesis, setGenesis] = useState(ALEPH_ZERO_GENESIS_HASH);
 
   const chain = useMetadata(account && account.genesis, true);
 
@@ -64,43 +63,54 @@ function ImportSeed(): React.ReactElement {
 
   const _onPreviousStep = useCallback(() => setStep((step) => step - 1), []);
 
-  const _onChangeNetwork = useCallback((newGenesisHash: string) => setGenesis(newGenesisHash), []);
+  const _onChangeNetwork = useCallback(
+    (newGenesisHash: string) => {
+      if (!account) {
+        return;
+      }
+
+      setAccount({ ...account, genesis: newGenesisHash });
+    },
+    [account]
+  );
+
+  const genesisHash = account?.genesis || ALEPH_ZERO_GENESIS_HASH;
 
   const isLastStep = step === 3;
 
   return (
-    <StyledScrollWrapper>
+    <>
       {isLastStep || (
         <HeaderWithSteps
           step={step}
           text={t<string>('Import existing account')}
           total={2}
-          withBackdrop
-          withMargin
         />
       )}
-      {step === 1 && (
-        <SeedAndPath
-          genesis={genesis}
-          onAccountChange={setAccount}
-          onNextStep={_onNextStep}
-          type={type}
-        />
-      )}
-      {step === 2 && (
-        <AccountNamePasswordCreation
-          address={account?.address}
-          buttonLabel={t<string>('Import')}
-          genesisHash={genesis}
-          isBusy={isBusy}
-          isImporting
-          onBackClick={_onPreviousStep}
-          onCreate={_onCreate}
-          setGenesis={_onChangeNetwork}
-        />
-      )}
-      {step === 3 && <Success text={t('New account has been imported successfully!')} />}
-    </StyledScrollWrapper>
+      <StyledScrollWrapper>
+        {step === 1 && (
+          <SeedAndPath
+            genesis={genesisHash}
+            onAccountChange={setAccount}
+            onNextStep={_onNextStep}
+            type={type}
+          />
+        )}
+        {step === 2 && (
+          <AccountNamePasswordCreation
+            address={account?.address}
+            buttonLabel={t<string>('Import')}
+            genesisHash={genesisHash}
+            isBusy={isBusy}
+            isImporting
+            onBackClick={_onPreviousStep}
+            onCreate={_onCreate}
+            setGenesis={_onChangeNetwork}
+          />
+        )}
+        {step === 3 && <Success text={t('New account has been imported successfully!')} />}
+      </StyledScrollWrapper>
+    </>
   );
 }
 

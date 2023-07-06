@@ -9,7 +9,7 @@ import type { HexString } from '@polkadot/util/types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Address } from "@polkadot/extension-ui/components/index";
+import { Address } from '@polkadot/extension-ui/components/index';
 import { TypeRegistry } from '@polkadot/types';
 
 import { ActionContext, VerticalSpace, Warning } from '../../../components';
@@ -82,11 +82,11 @@ export default function Request({
       approveSignSignature(signId, signature)
         .then(() => onAction())
         .catch((error: Error): void => {
-          setError(error.message);
+          setError(t('Unable to decode using the supplied passphrase.'));
           console.error(error);
         });
     },
-    [onAction, signId]
+    [onAction, signId, t]
   );
 
   if (payload !== null) {
@@ -109,7 +109,7 @@ export default function Request({
             setError={setError}
           />
         )}
-        <StyledAddress
+        <Address
           address={requestPayload.address}
           genesisHash={requestPayload.genesisHash}
           isExternal={isExternal}
@@ -151,7 +151,7 @@ export default function Request({
             <VerticalSpace />
           </>
         )}
-        <StyledAddress
+        <Address
           address={address}
           isExternal={isExternal}
         />
@@ -170,12 +170,6 @@ export default function Request({
 
   return null;
 }
-
-const StyledAddress = styled(Address)`
-  &&& { /* overriding the intrusive <ScrollWrapper> styles */
-    width: initial;
-  }
-`;
 
 const FullHeightExtrinsic = styled(Extrinsic)`
   flex-grow: 1;

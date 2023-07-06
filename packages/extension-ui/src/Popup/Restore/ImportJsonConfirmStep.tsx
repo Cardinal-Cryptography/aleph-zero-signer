@@ -117,7 +117,7 @@ function ImportJsonConfirmStep({
                     isBelowInput
                     isDanger
                   >
-                    {t<string>('Unable to decode using the supplied passphrase')}
+                    {t<string>('Unable to decode using the supplied passphrase.')}
                   </StyledWarning>
                 )}
               </PasswordContainer>
@@ -187,7 +187,6 @@ const Hint = styled.span`
 `;
 
 export default styled(ImportJsonConfirmStep)`
-    margin-top: 32px;
     ${Label}:not(.label) {
       width: 100%;
     }
