@@ -378,5 +378,19 @@
   "Section": "",
   "Method": "",
   "Arguments": "",
-  "You have been redirected because you've entered a website that could compromise the security of your assets.": ""
+  "You have been redirected because you've entered a website that could compromise the security of your assets.": "",
+  "Metadata updated": "",
+  "Metadata update rejected": "",
+  "Transaction signed": "",
+  "Transaction declined": "",
+  "Awesome! Your password is really strong.": "",
+  "Account name is too short.": "",
+  "Passwords do not match.": "",
+  "Unable to decode using the supplied passphrase.": "",
+  "`///password` not supported for derivation.": "",
+  "Invalid derivation path.": "",
+  "Wrong password.": "",
+  "Derivation path is required.": "",
+  "Invalid secret phrase or path.": "",
+  "Invalid secret phrase.": ""
 }
