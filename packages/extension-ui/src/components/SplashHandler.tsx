@@ -10,6 +10,7 @@ import styled, { CSSProperties } from 'styled-components';
 
 import { Video } from '@polkadot/extension-ui/components/index';
 
+import useIsMounted from '../hooks/useIsMounted';
 import { Steps } from '../partials/HeaderWithSteps';
 import { Z_INDEX } from '../zindex';
 import ScrollWrapper from './ScrollWrapper';
@@ -21,9 +22,12 @@ interface SplashHandlerProps extends ThemeProps {
 
 function SplashHandler({ children, className }: SplashHandlerProps): React.ReactElement<SplashHandlerProps> {
   // Needs this graduality to avoid flashes on rendering contents between video and app
-  const [splashOn, setSplashState] = useState<boolean>(true);
-  const [contentVisible, setContentVisible] = useState<boolean>(false);
+  const [isSplashOn, setIsSplashOn] = useState<boolean>(true);
+  const [isContentVisible, setIsContentVisible] = useState<boolean>(false);
   const nodeRef = useRef(null);
+
+  const isMounted = useIsMounted();
+
   const duration = 250;
 
   const defaultStyle: Partial<CSSProperties> = {
@@ -40,10 +44,35 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
     exiting: { opacity: 0 }
   };
 
+  const turnOffSplashIfMounted = () => {
+    if (!isMounted) {
+      return;
+    }
+
+    const updateWithErrorLog = (prevIsSplashOn: boolean) => {
+      if (prevIsSplashOn) {
+        console.error('Fallback timeout needed to turn off splash video.');
+      }
+
+      return false;
+    };
+
+    setIsSplashOn(updateWithErrorLog);
+  };
+
+  const onVideoPlay = () => {
+    setIsContentVisible(true);
+    setTimeout(turnOffSplashIfMounted, 2000);
+  };
+
+  const onVideoEnd = () => {
+    setIsSplashOn(false);
+  };
+
   return (
     <div className={className}>
       <Transition
-        in={splashOn}
+        in={isSplashOn}
         nodeRef={nodeRef}
         timeout={duration}
       >
@@ -57,15 +86,15 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
             }}
           >
             <Video
-              onEnded={setSplashState}
-              onStarted={setContentVisible}
+              onEnded={onVideoEnd}
+              onStarted={onVideoPlay}
               source='videos/splash.mp4'
               type='video/mp4'
             />
           </div>
         )}
       </Transition>
-      {contentVisible && children}
+      {isContentVisible && children}
     </div>
   );
 }
