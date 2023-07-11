@@ -4,13 +4,12 @@
 import type { ReactNode } from 'react';
 import type { ThemeProps } from '@polkadot/extension-ui/types';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Transition, TransitionStatus } from 'react-transition-group';
 import styled, { CSSProperties } from 'styled-components';
 
 import { Video } from '@polkadot/extension-ui/components/index';
 
-import useIsMounted from '../hooks/useIsMounted';
 import { Steps } from '../partials/HeaderWithSteps';
 import { Z_INDEX } from '../zindex';
 import ScrollWrapper from './ScrollWrapper';
@@ -25,8 +24,6 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
   const [isSplashOn, setIsSplashOn] = useState<boolean>(true);
   const [isContentVisible, setIsContentVisible] = useState<boolean>(false);
   const nodeRef = useRef(null);
-
-  const isMounted = useIsMounted();
 
   const duration = 250;
 
@@ -44,8 +41,8 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
     exiting: { opacity: 0 }
   };
 
-  const turnOffSplashIfMounted = () => {
-    if (!isMounted) {
+  useEffect(() => {
+    if (!isContentVisible) {
       return;
     }
 
@@ -57,12 +54,13 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
       return false;
     };
 
-    setIsSplashOn(updateWithErrorLog);
-  };
+    const timeoutId = setTimeout(setIsSplashOn, 2000, updateWithErrorLog);
+
+    return () => clearTimeout(timeoutId);
+  }, [isContentVisible]);
 
   const onVideoPlay = () => {
     setIsContentVisible(true);
-    setTimeout(turnOffSplashIfMounted, 2000);
   };
 
   const onVideoEnd = () => {
