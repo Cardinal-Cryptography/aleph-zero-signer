@@ -2,15 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type {
-  AccountJson,
   AllowedPath,
-  AuthorizeRequest,
   ConnectedTabsUrlResponse,
   MessageTypes,
   MessageTypesWithNoSubscriptions,
   MessageTypesWithNullRequest,
-  MessageTypesWithSubscriptions,
-  MetadataRequest,
   RequestTypes,
   ResponseAuthorizeList,
   ResponseDeriveValidate,
@@ -18,10 +14,7 @@ import type {
   ResponseSigningIsLocked,
   ResponseTypes,
   SeedLengths,
-  SigningRequest,
-  SubscriptionMessageTypes
 } from '@polkadot/extension-base/background/types';
-import type { Message } from '@polkadot/extension-base/types';
 import type { Chain } from '@polkadot/extension-chains/types';
 import type { KeyringPair$Json } from '@polkadot/keyring/types';
 import type { KeyringPairs$Json } from '@polkadot/ui-keyring/types';
@@ -37,67 +30,20 @@ import { MetadataDef } from '@polkadot/extension-inject/types';
 import allChains from './util/chains';
 import { getSavedMeta, setSavedMeta } from './MetadataCache';
 
-interface Handler {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  resolve: (data: any) => void;
-  reject: (error: Error) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  subscriber?: (data: any) => void;
-}
-
-type Handlers = Record<string, Handler>;
-
-const port = chrome.runtime.connect({ name: PORT_EXTENSION });
-const handlers: Handlers = {};
-
-// setup a listener for messages, any incoming resolves the promise
-port.onMessage.addListener((data: Message['data']): void => {
-  const handler = handlers[data.id];
-
-  if (!handler) {
-    console.error(`Unknown response: ${JSON.stringify(data)}`);
-
-    return;
-  }
-
-  if (!handler.subscriber) {
-    delete handlers[data.id];
-  }
-
-  if (data.subscription) {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    (handler.subscriber as Function)(data.subscription);
-  } else if (data.error) {
-    handler.reject(new Error(data.error));
-  } else {
-    handler.resolve(data.response);
-  }
-});
-
 function sendMessage<TMessageType extends MessageTypesWithNullRequest>(
   message: TMessageType
 ): Promise<ResponseTypes[TMessageType]>;
 function sendMessage<TMessageType extends MessageTypesWithNoSubscriptions>(
   message: TMessageType,
-  request: RequestTypes[TMessageType]
+  data: RequestTypes[TMessageType]
 ): Promise<ResponseTypes[TMessageType]>;
-function sendMessage<TMessageType extends MessageTypesWithSubscriptions>(
+async function sendMessage<TMessageType extends MessageTypes>(
   message: TMessageType,
-  request: RequestTypes[TMessageType],
-  subscriber: (data: SubscriptionMessageTypes[TMessageType]) => void
-): Promise<ResponseTypes[TMessageType]>;
-function sendMessage<TMessageType extends MessageTypes>(
-  message: TMessageType,
-  request?: RequestTypes[TMessageType],
-  subscriber?: (data: unknown) => void
+  data?: RequestTypes[TMessageType],
 ): Promise<ResponseTypes[TMessageType]> {
-  return new Promise((resolve, reject): void => {
-    const id = uuid();
+  const { response } = await chrome.runtime.sendMessage({ id: uuid(), message, data });
 
-    handlers[id] = { reject, resolve, subscriber };
-
-    port.postMessage({ id, message, request: request || {} });
-  });
+  return response as ResponseTypes[TMessageType];
 }
 
 export async function editAccount(address: string, name: string): Promise<boolean> {
@@ -240,14 +186,6 @@ export async function rejectMetaRequest(id: string): Promise<boolean> {
   return sendMessage('pri(metadata.reject)', { id });
 }
 
-export async function subscribeAccounts(cb: (accounts: AccountJson[]) => void): Promise<boolean> {
-  return sendMessage('pri(accounts.subscribe)', null, cb);
-}
-
-export async function subscribeAuthorizeRequests(cb: (accounts: AuthorizeRequest[]) => void): Promise<boolean> {
-  return sendMessage('pri(authorize.requests)', null, cb);
-}
-
 export async function getAuthList(): Promise<ResponseAuthorizeList> {
   return sendMessage('pri(authorize.list)');
 }
@@ -266,14 +204,6 @@ export async function updateAuthorizationDate(url: string): Promise<void> {
 
 export async function deleteAuthRequest(requestId: string): Promise<void> {
   return sendMessage('pri(authorize.delete.request)', requestId);
-}
-
-export async function subscribeMetadataRequests(cb: (accounts: MetadataRequest[]) => void): Promise<boolean> {
-  return sendMessage('pri(metadata.requests)', null, cb);
-}
-
-export async function subscribeSigningRequests(cb: (accounts: SigningRequest[]) => void): Promise<boolean> {
-  return sendMessage('pri(signing.requests)', null, cb);
 }
 
 export async function validateSeed(suri: string, type?: KeypairType): Promise<{ address: string; suri: string }> {
@@ -327,6 +257,38 @@ export async function setNotification(notification: string): Promise<boolean> {
   return sendMessage('pri(settings.notification)', notification);
 }
 
-export async function ping(): Promise<boolean> {
-  return sendMessage('pri(ping)', null);
-}
+export const sendPopupReadyMessage = () => {
+  // Establishing a port connection for the background service worker to detect that popup is opened
+  chrome.runtime.connect({ name: PORT_EXTENSION });
+};
+
+const subscribers: { [message in keyof ResponseTypes]?: Set<((data: ResponseTypes[message]) => void)> } = {};
+
+const handleIncomingMessage = <Message extends keyof typeof subscribers>(
+  message: { message: Message, data: ResponseTypes[Message]},
+  sender: chrome.runtime.MessageSender,
+) => {
+  console.log('Message:', message, 'received from sender:', sender);
+
+  subscribers[message.message]?.forEach((listener) => listener(message.data));
+};
+
+const createSubscriber = <Message extends keyof typeof subscribers>(message: Message) => (cb: (data: ResponseTypes[Message]) => void) => {
+  if (!subscribers[message]) {
+    subscribers[message] = new Set() as typeof subscribers[typeof message];
+  }
+
+  subscribers[message]?.add(cb);
+
+  return () => subscribers[message]?.delete(cb);
+};
+
+export const subscribeAccounts = createSubscriber('pri(accounts.changed)');
+
+export const subscribeAuthorizeRequests = createSubscriber('pri(authorize.requests.changed)');
+
+export const subscribeMetadataRequests = createSubscriber('pri(metadata.requests.changed)');
+
+export const subscribeSigningRequests = createSubscriber('pri(signing.requests.changed)');
+
+chrome.runtime.onMessage.addListener(handleIncomingMessage);

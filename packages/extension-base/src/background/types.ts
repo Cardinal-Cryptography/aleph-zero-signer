@@ -86,13 +86,13 @@ export interface RequestSignatures {
   'pri(accounts.list)': [RequestAccountList, InjectedAccount[]];
   'pri(accounts.show)': [RequestAccountShow, boolean];
   'pri(accounts.tie)': [RequestAccountTie, boolean];
-  'pri(accounts.subscribe)': [RequestAccountSubscribe, boolean, AccountJson[]];
+  'pri(accounts.changed)': [RequestAccountSubscribe, AccountJson[]];
   'pri(accounts.validate)': [RequestAccountValidate, boolean];
   'pri(accounts.changePassword)': [RequestAccountChangePassword, boolean];
   'pri(authorize.approve)': [RequestAuthorizeApprove, boolean];
   'pri(authorize.reject)': [RequestAuthorizeReject, boolean];
   'pri(authorize.list)': [null, ResponseAuthorizeList];
-  'pri(authorize.requests)': [RequestAuthorizeSubscribe, boolean, AuthorizeRequest[]];
+  'pri(authorize.requests.changed)': [RequestAuthorizeSubscribe, AuthorizeRequest[]];
   'pri(authorize.remove)': [string, ResponseAuthorizeList];
   'pri(authorize.delete.request)': [string, void];
   'pri(authorizeDate.update)': [string, void];
@@ -107,9 +107,8 @@ export interface RequestSignatures {
   'pri(metadata.approve)': [RequestMetadataApprove, boolean];
   'pri(metadata.get)': [string | null, MetadataDef | null];
   'pri(metadata.reject)': [RequestMetadataReject, boolean];
-  'pri(metadata.requests)': [RequestMetadataSubscribe, boolean, MetadataRequest[]];
+  'pri(metadata.requests.changed)': [RequestMetadataSubscribe, MetadataRequest[]];
   'pri(metadata.list)': [null, MetadataDef[]];
-  'pri(ping)': [null, boolean];
   'pri(seed.create)': [RequestSeedCreate, ResponseSeedCreate];
   'pri(seed.validate)': [RequestSeedValidate, ResponseSeedValidate];
   'pri(settings.notification)': [string, boolean];
@@ -117,7 +116,7 @@ export interface RequestSignatures {
   'pri(signing.approve.signature)': [RequestSigningApproveSignature, boolean];
   'pri(signing.cancel)': [RequestSigningCancel, boolean];
   'pri(signing.isLocked)': [RequestSigningIsLocked, ResponseSigningIsLocked];
-  'pri(signing.requests)': [RequestSigningSubscribe, boolean, SigningRequest[]];
+  'pri(signing.requests.changed)': [RequestSigningSubscribe, SigningRequest[]];
   'pri(window.open)': [AllowedPath, boolean];
   // public/external requests, i.e. from a page
   'pub(accounts.list)': [RequestAccountList, InjectedAccount[]];
@@ -129,7 +128,6 @@ export interface RequestSignatures {
   'pub(metadata.list)': [null, InjectedMetadataKnown[]];
   'pub(metadata.provide)': [MetadataDef, boolean];
   'pub(phishing.redirectIfDenied)': [null, boolean];
-  'pub(ping)': [null, boolean];
   'pub(rpc.listProviders)': [void, ResponseRpcListProviders];
   'pub(rpc.send)': [RequestRpcSend, JsonRpcResponse];
   'pub(rpc.startProvider)': [string, ProviderMeta];
@@ -148,11 +146,11 @@ export type RequestTypes = {
 
 export type MessageTypesWithNullRequest = NullKeys<RequestTypes>
 
-export interface TransportRequestMessage<TMessageType extends MessageTypes> {
+export type TransportRequestMessage<TMessageType extends MessageTypes> = {
   id: string;
   message: TMessageType;
   origin: string;
-  request: RequestTypes[TMessageType];
+  data: RequestTypes[TMessageType];
 }
 
 export interface RequestAuthorizeTab {

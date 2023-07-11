@@ -1,16 +1,14 @@
 // Copyright 2019-2023 @polkadot/extension authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Subscription } from 'rxjs';
-import type { InjectedAccount, InjectedMetadataKnown, MetadataDef, ProviderMeta } from '@polkadot/extension-inject/types';
+import type { InjectedAccount, InjectedMetadataKnown, MetadataDef } from '@polkadot/extension-inject/types';
 import type { KeyringPair } from '@polkadot/keyring/types';
-import type { JsonRpcResponse } from '@polkadot/rpc-provider/types';
 import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
-import type { MessageTypes, RequestAccountList, RequestAccountUnsubscribe, RequestAuthorizeTab, RequestRpcSend, RequestRpcSubscribe, RequestRpcUnsubscribe, RequestTypes, ResponseRpcListProviders, ResponseSigning, ResponseTypes, SubscriptionMessageTypes } from '../types';
+import type { MessageTypes, RequestAccountList, RequestAccountUnsubscribe, RequestAuthorizeTab, RequestTypes, ResponseSigning, ResponseTypes } from '../types';
 
 import { PHISHING_PAGE_REDIRECT } from '@polkadot/extension-base/defaults';
-import { canDerive } from '@polkadot/extension-base/utils';
+import { canDerive, localStorageStores } from '@polkadot/extension-base/utils';
 import { checkIfDenied } from '@polkadot/phishing';
 import keyring from '@polkadot/ui-keyring';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
@@ -20,12 +18,6 @@ import RequestBytesSign from '../RequestBytesSign';
 import RequestExtrinsicSign from '../RequestExtrinsicSign';
 import { withErrorLog } from './helpers';
 import State, { AuthResponse } from './State';
-import { createSubscription, unsubscribe } from './subscriptions';
-
-interface AccountSub {
-  subscription: Subscription;
-  url: string;
-}
 
 function transformAccounts (accounts: SubjectInfo, anyType = false): InjectedAccount[] {
   return Object
@@ -42,12 +34,42 @@ function transformAccounts (accounts: SubjectInfo, anyType = false): InjectedAcc
 }
 
 export default class Tabs {
-  readonly #accountSubs: Record<string, AccountSub> = {};
-
   readonly #state: State;
 
   constructor (state: State) {
     this.#state = state;
+  }
+
+  public setupSubscriptions () {
+    accountsObservable.subject.subscribe((accounts: SubjectInfo): void => {
+      const transformedAccounts = transformAccounts(accounts);
+
+      localStorageStores.accountsAuthorizedSubscribingTabs.get()
+        .then((subscribingTabs) => Object.entries(subscribingTabs))
+        .then((subscribingTabsEntries) =>
+          Promise.all(subscribingTabsEntries.map(([tabId, { messageId, url }]) =>
+            this.filterForAuthorizedAccounts(transformedAccounts, url)
+              .then((accounts) =>
+                chrome.tabs.sendMessage(Number(tabId), { id: messageId, subscription: accounts })
+              )
+          ))
+        )
+        .catch((e) => {
+          console.error('Error handling authorized accounts subscription:', e);
+        });
+    });
+
+    chrome.tabs.onRemoved.addListener((removedTabId) => {
+      localStorageStores.accountsAuthorizedSubscribingTabs.update(({ [removedTabId]: messageToRemove, ...tabs }) => {
+        if (messageToRemove) {
+          console.log(`Removing the ${removedTabId} tab from the list of authorized accounts listeners.`);
+        } else {
+          console.error(`No ${removedTabId} tab on the list of authorized accounts listeners.`);
+        }
+
+        return tabs;
+      }).catch((e) => console.error('Error unsubscribing from subscription:', e));
+    });
   }
 
   private async filterForAuthorizedAccounts (accounts: InjectedAccount[], url: string): Promise<InjectedAccount[]> {
@@ -73,42 +95,36 @@ export default class Tabs {
     return this.filterForAuthorizedAccounts(transformedAccounts, url);
   }
 
-  private accountsSubscribeAuthorized (url: string, id: string, port: chrome.runtime.Port): string {
-    const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
+  private async accountsSubscribeAuthorized (url: string, messageId: string, tabId: number): Promise<number> {
+    await localStorageStores.accountsAuthorizedSubscribingTabs.update((subscribingTabs) => ({
+      ...subscribingTabs,
+      [tabId]: {
+        url,
+        messageId
+      }
+    }));
 
-    this.#accountSubs[id] = {
-      subscription: accountsObservable.subject.subscribe((accounts: SubjectInfo): void => {
-        const transformedAccounts = transformAccounts(accounts);
-
-        this.filterForAuthorizedAccounts(transformedAccounts, url).then(cb).catch((e) => {
-          console.error('Error filtering for authorized accounts:', e);
-
-          cb([]); // eslint-disable-line n/no-callback-literal
-        });
-      }),
-      url
-    };
-
-    port.onDisconnect.addListener((): void => {
-      this.accountsUnsubscribe(url, { id });
-    });
-
-    return id;
+    return tabId;
   }
 
-  private accountsUnsubscribe (url: string, { id }: RequestAccountUnsubscribe): boolean {
-    const sub = this.#accountSubs[id];
+  private async accountsUnsubscribe (url: string, { id: tabIdToRemove }: RequestAccountUnsubscribe): Promise<void> {
+    await localStorageStores.accountsAuthorizedSubscribingTabs.update((allSubs) => {
+      const { [tabIdToRemove]: subToRemove, ...otherSubs } = allSubs;
 
-    if (!sub || sub.url !== url) {
-      return false;
-    }
+      if (subToRemove) {
+        console.log(`Removing the ${tabIdToRemove} tab from the list of authorized accounts listeners.`);
+      } else {
+        console.error(`No ${tabIdToRemove} tab on the list of authorized accounts listeners.`);
+      }
 
-    delete this.#accountSubs[id];
+      if (subToRemove.url !== url) {
+        console.log(`The request tab url ("${url}") does not match the url registered in the subscription ("${subToRemove.url}").`);
 
-    unsubscribe(id);
-    sub.subscription.unsubscribe();
+        return allSubs;
+      }
 
-    return true;
+      return otherSubs;
+    }).catch((e) => console.error('Error unsubscribing from subscription:', e));
   }
 
   private getSigningPair (address: string): KeyringPair {
@@ -144,48 +160,54 @@ export default class Tabs {
       specVersion
     }));
   }
-
-  private rpcListProviders (): Promise<ResponseRpcListProviders> {
-    return this.#state.rpcListProviders();
-  }
-
-  private rpcSend (request: RequestRpcSend, port: chrome.runtime.Port): Promise<JsonRpcResponse> {
-    return this.#state.rpcSend(request, port);
-  }
-
-  private rpcStartProvider (key: string, port: chrome.runtime.Port): Promise<ProviderMeta> {
-    return this.#state.rpcStartProvider(key, port);
-  }
-
-  private async rpcSubscribe (request: RequestRpcSubscribe, id: string, port: chrome.runtime.Port): Promise<boolean> {
-    const innerCb = createSubscription<'pub(rpc.subscribe)'>(id, port);
-    const cb = (_error: Error | null, data: SubscriptionMessageTypes['pub(rpc.subscribe)']): void => innerCb(data);
-    const subscriptionId = await this.#state.rpcSubscribe(request, cb, port);
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      withErrorLog(() => this.rpcUnsubscribe({ ...request, subscriptionId }, port));
-    });
-
-    return true;
-  }
-
-  private rpcSubscribeConnected (request: null, id: string, port: chrome.runtime.Port): Promise<boolean> {
-    const innerCb = createSubscription<'pub(rpc.subscribeConnected)'>(id, port);
-    const cb = (_error: Error | null, data: SubscriptionMessageTypes['pub(rpc.subscribeConnected)']): void => innerCb(data);
-
-    this.#state.rpcSubscribeConnected(request, cb, port);
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-    });
-
-    return Promise.resolve(true);
-  }
-
-  private async rpcUnsubscribe (request: RequestRpcUnsubscribe, port: chrome.runtime.Port): Promise<boolean> {
-    return this.#state.rpcUnsubscribe(request, port);
-  }
+  //
+  // private rpcListProviders (): Promise<ResponseRpcListProviders> {
+  //   return this.#state.rpcListProviders();
+  // }
+  //
+  // private rpcSend (request: RequestRpcSend): Promise<JsonRpcResponse> {
+  //   return this.#state.rpcSend(request, port);
+  // }
+  //
+  // private rpcStartProvider (key: string): Promise<ProviderMeta> {
+  //   throw new Error('Not used?');
+  //
+  //   return this.#state.rpcStartProvider(key, port);
+  // }
+  //
+  // private async rpcSubscribe (request: RequestRpcSubscribe, id: string): Promise<boolean> {
+  //   throw new Error('Not used?');
+  //   const innerCb = createSubscription<'pub(rpc.subscribe)'>(id, port);
+  //   const cb = (_error: Error | null, data: SubscriptionMessageTypes['pub(rpc.subscribe)']): void => innerCb(data);
+  //   const subscriptionId = await this.#state.rpcSubscribe(request, cb, port);
+  //
+  //   port.onDisconnect.addListener((): void => {
+  //     unsubscribe(id);
+  //     withErrorLog(() => this.rpcUnsubscribe({ ...request, subscriptionId }, port));
+  //   });
+  //
+  //   return true;
+  // }
+  //
+  // private rpcSubscribeConnected (request: null, id: string): Promise<boolean> {
+  //   throw new Error('Not used?');
+  //   const innerCb = createSubscription<'pub(rpc.subscribeConnected)'>(id, port);
+  //   const cb = (_error: Error | null, data: SubscriptionMessageTypes['pub(rpc.subscribeConnected)']): void => innerCb(data);
+  //
+  //   this.#state.rpcSubscribeConnected(request, cb, port);
+  //
+  //   port.onDisconnect.addListener((): void => {
+  //     unsubscribe(id);
+  //   });
+  //
+  //   return Promise.resolve(true);
+  // }
+  //
+  // private async rpcUnsubscribe (request: RequestRpcUnsubscribe): Promise<boolean> {
+  //   throw new Error('Not used?');
+  //
+  //   return this.#state.rpcUnsubscribe(request, port);
+  // }
 
   private redirectPhishingLanding (phishingWebsite: string): void {
     const nonFragment = phishingWebsite.split('#')[0];
@@ -214,7 +236,7 @@ export default class Tabs {
     return false;
   }
 
-  public async handle<TMessageType extends MessageTypes> (id: string, type: TMessageType, request: RequestTypes[TMessageType], url: string, port?: chrome.runtime.Port): Promise<ResponseTypes[keyof ResponseTypes]> {
+  public async handle<TMessageType extends MessageTypes> (type: TMessageType, request: RequestTypes[TMessageType], messageId: string, url: string, tabId: number): Promise<ResponseTypes[keyof ResponseTypes]> {
     if (type === 'pub(phishing.redirectIfDenied)') {
       return this.redirectIfPhishing(url);
     }
@@ -231,7 +253,7 @@ export default class Tabs {
         return this.accountsListAuthorized(url, request as RequestAccountList);
 
       case 'pub(accounts.subscribe)':
-        return port && this.accountsSubscribeAuthorized(url, id, port);
+        return this.accountsSubscribeAuthorized(url, messageId, tabId);
 
       case 'pub(accounts.unsubscribe)':
         return this.accountsUnsubscribe(url, request as RequestAccountUnsubscribe);
@@ -248,26 +270,23 @@ export default class Tabs {
       case 'pub(metadata.provide)':
         return this.metadataProvide(url, request as MetadataDef);
 
-      case 'pub(ping)':
-        return Promise.resolve(true);
-
-      case 'pub(rpc.listProviders)':
-        return this.rpcListProviders();
-
-      case 'pub(rpc.send)':
-        return port && this.rpcSend(request as RequestRpcSend, port);
-
-      case 'pub(rpc.startProvider)':
-        return port && this.rpcStartProvider(request as string, port);
-
-      case 'pub(rpc.subscribe)':
-        return port && this.rpcSubscribe(request as RequestRpcSubscribe, id, port);
-
-      case 'pub(rpc.subscribeConnected)':
-        return port && this.rpcSubscribeConnected(request as null, id, port);
-
-      case 'pub(rpc.unsubscribe)':
-        return port && this.rpcUnsubscribe(request as RequestRpcUnsubscribe, port);
+        // case 'pub(rpc.listProviders)':
+        //   return this.rpcListProviders();
+        //
+        // case 'pub(rpc.send)':
+        //   return this.rpcSend(request as RequestRpcSend);
+        //
+        // case 'pub(rpc.startProvider)':
+        //   return this.rpcStartProvider(request as string);
+        //
+        // case 'pub(rpc.subscribe)':
+        //   return this.rpcSubscribe(request as RequestRpcSubscribe, messageId);
+        //
+        // case 'pub(rpc.subscribeConnected)':
+        //   return this.rpcSubscribeConnected(request as null, messageId);
+        //
+        // case 'pub(rpc.unsubscribe)':
+        //   return this.rpcUnsubscribe(request as RequestRpcUnsubscribe);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

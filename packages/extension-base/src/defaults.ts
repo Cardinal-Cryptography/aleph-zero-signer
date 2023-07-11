@@ -9,7 +9,7 @@ if (!EXTENSION_PREFIX && !process.env.PORT_PREFIX) {
 }
 
 const PORT_PREFIX = `${EXTENSION_PREFIX || 'unknown'}-${process.env.PORT_PREFIX || 'unknown'}`;
-const PORT_CONTENT = `${PORT_PREFIX}-content`;
+const PORT_CONTENT = `${PORT_PREFIX}-content`; // TODO: Delete obsolete consts
 const PORT_EXTENSION = `${PORT_PREFIX}-extension`;
 const MESSAGE_ORIGIN_PAGE = `${PORT_PREFIX}-page`;
 const MESSAGE_ORIGIN_CONTENT = `${PORT_PREFIX}-content`;

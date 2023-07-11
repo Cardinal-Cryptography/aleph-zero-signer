@@ -3,49 +3,57 @@
 
 import type { MessageTypes, TransportRequestMessage } from '../types';
 
-import { assert } from '@polkadot/util';
-
-import { PORT_EXTENSION } from '../../defaults';
 import Extension from './Extension';
 import State from './State';
 import Tabs from './Tabs';
 
 const state = new State();
-const extension = new Extension(state);
-const tabs = new Tabs(state);
 
-export default function handler<TMessageType extends MessageTypes> ({ id, message, request }: TransportRequestMessage<TMessageType>, port?: chrome.runtime.Port, extensionPortName = PORT_EXTENSION): void {
-  const isExtension = !port || port?.name === extensionPortName;
+export const extension = new Extension(state);
+export const tabs = new Tabs(state);
 
-  const sender = port?.sender as chrome.runtime.MessageSender;
+extension.setupSubscriptions();
+tabs.setupSubscriptions();
 
-  const from = isExtension
-    ? 'extension'
-    : (sender.tab && sender.tab.url) || sender.url || '<unknown>';
-  const source = `${from}: ${id}: ${message}`;
+export default async function handler<TMessageType extends MessageTypes> ({ data, id: messageId, message }: TransportRequestMessage<TMessageType>, sender: chrome.runtime.MessageSender) {
+  const from = isSenderExtension(sender)
+    ? 'extension popup'
+    : sender.tab?.url || sender.url || '<unknown>';
+  const source = `${from}: ${message}`;
 
   console.log(` [in] ${source}`); // :: ${JSON.stringify(request)}`);
 
-  const promise = isExtension
-    ? extension.handle(id, message, request, port)
-    : tabs.handle(id, message, request, from, port);
+  const handlerPromise =
+    isSenderTab(sender) && messageId
+      ? tabs.handle(message, data, messageId, from, sender.tab.id)
+      : isSenderExtension(sender)
+        ? extension.handle(message, data)
+        : undefined;
 
-  promise
-    .then((response): void => {
+  if (!handlerPromise) {
+    console.error('The message was not categorized as either an extension message or a tab message.');
+
+    return;
+  }
+
+  return handlerPromise
+    .then((response) => {
       console.log(`[out] ${source}`); // :: ${JSON.stringify(response)}`);
 
-      // between the start and the end of the promise, the user may have closed
-      // the tab, in which case port will be undefined
-      assert(port, 'Port has been disconnected');
-
-      port.postMessage({ id, response });
+      return { id: messageId, response };
     })
-    .catch((error: Error): void => {
-      console.log(`[err] ${source}:: ${error.message}`);
+    .catch((error: Error) => {
+      console.log(`[err] ${source}::`, error);
 
-      // only send message back to port if it's still connected
-      if (port) {
-        port.postMessage({ error: error.message, id });
-      }
+      return { error: error.message, id: messageId };
     });
 }
+
+const isSenderTab = (sender: chrome.runtime.MessageSender): sender is chrome.runtime.MessageSender & {
+  tab: chrome.tabs.Tab & { id: number }
+} => !!sender.tab;
+
+// https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/MessageSender#type
+const isSenderExtension = (sender: chrome.runtime.MessageSender): sender is chrome.runtime.MessageSender & {
+  id: string
+} => !!sender.id;

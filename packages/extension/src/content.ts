@@ -3,14 +3,11 @@
 
 import type { Message } from '@polkadot/extension-base/types';
 
-import { MESSAGE_ORIGIN_CONTENT, MESSAGE_ORIGIN_PAGE, PORT_CONTENT } from '@polkadot/extension-base/defaults';
+import { MESSAGE_ORIGIN_CONTENT, MESSAGE_ORIGIN_PAGE } from '@polkadot/extension-base/defaults';
 import { chrome } from '@polkadot/extension-inject/chrome';
 
-// connect to the extension
-const port = chrome.runtime.connect({ name: PORT_CONTENT });
-
 // send any messages from the extension back to the page
-port.onMessage.addListener((data): void => {
+chrome.runtime.onMessage.addListener((data): void => {
   window.postMessage({ ...data, origin: MESSAGE_ORIGIN_CONTENT }, '*');
 });
 
@@ -21,7 +18,9 @@ window.addEventListener('message', ({ data, source }: Message): void => {
     return;
   }
 
-  port.postMessage(data);
+  chrome.runtime.sendMessage(data).catch((e) =>
+    console.error('Error passing a message from page to the extension service worker:', e)
+  );
 });
 
 // inject our data injector

@@ -65,7 +65,16 @@ const STORES_DEFINITIONS = {
 
   theme: createStoreDefinition(z.enum(['dark', 'light'])),
 
-  signerRequestIds: createStoreDefinition(z.number(), 0)
+  signerRequestIds: createStoreDefinition(z.number(), 0),
+
+  // The keys of the record are tab ids
+  accountsAuthorizedSubscribingTabs: createStoreDefinition(z.record(z.object({
+    url: z.string(),
+    messageId: z.string()
+  })), {})
+  // authorizeSubscribingTabs: createStoreDefinition(z.record(z.string())),
+  // metadataSubscribingTabs: createStoreDefinition(z.record(z.string())),
+  // signingSubscribingTabs: createStoreDefinition(z.record(z.string()))
 
   // This is one of the rare cases where "any" is fine, as it describes a generic, not a particular value's type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

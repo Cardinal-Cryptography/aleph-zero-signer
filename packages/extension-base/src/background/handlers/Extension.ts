@@ -6,9 +6,9 @@ import type { KeyringPair, KeyringPair$Json, KeyringPair$Meta } from '@polkadot/
 import type { Registry, SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import type { KeypairType } from '@polkadot/util-crypto/types';
-import type { AccountJson, AllowedPath, AuthorizeRequest, MessageTypes, MetadataRequest, RequestAccountChangePassword, RequestAccountCreateHardware, RequestAccountCreateSuri, RequestAccountEdit, RequestAccountExport, RequestAccountForget, RequestAccountShow, RequestAccountTie, RequestAccountValidate, RequestActiveTabsUrlUpdate, RequestAuthorizeApprove, RequestAuthorizeReject, RequestBatchRestore, RequestDeriveCreate, RequestDeriveValidate, RequestJsonRestore, RequestMetadataApprove, RequestMetadataReject, RequestSeedCreate, RequestSeedValidate, RequestSigningApprovePassword, RequestSigningApproveSignature, RequestSigningCancel, RequestSigningIsLocked, RequestTypes, RequestUpdateAuthorizedAccounts, ResponseAccountExport, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSeedCreate, ResponseSeedValidate, ResponseSigningIsLocked, ResponseType, SigningRequest } from '../types';
+import type { AccountJson, AllowedPath, MessageTypes, RequestAccountChangePassword, RequestAccountCreateHardware, RequestAccountCreateSuri, RequestAccountEdit, RequestAccountExport, RequestAccountForget, RequestAccountShow, RequestAccountTie, RequestAccountValidate, RequestActiveTabsUrlUpdate, RequestAuthorizeApprove, RequestAuthorizeReject, RequestBatchRestore, RequestDeriveCreate, RequestDeriveValidate, RequestJsonRestore, RequestMetadataApprove, RequestMetadataReject, RequestSeedCreate, RequestSeedValidate, RequestSigningApprovePassword, RequestSigningApproveSignature, RequestSigningCancel, RequestSigningIsLocked, RequestTypes, RequestUpdateAuthorizedAccounts, ResponseAccountExport, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSeedCreate, ResponseSeedValidate, ResponseSigningIsLocked, ResponseType } from '../types';
 
-import { ALLOWED_PATH, PASSWORD_EXPIRY_MS } from '@polkadot/extension-base/defaults';
+import { ALLOWED_PATH, PASSWORD_EXPIRY_MS, PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { isJsonAuthentic, signJson } from '@polkadot/extension-base/utils/accountJsonIntegrity';
 import { metadataExpand } from '@polkadot/extension-chains';
 import { TypeRegistry } from '@polkadot/types';
@@ -19,7 +19,6 @@ import { keyExtractSuri, mnemonicGenerate, mnemonicValidate } from '@polkadot/ut
 
 import { withErrorLog } from './helpers';
 import State from './State';
-import { createSubscription, unsubscribe } from './subscriptions';
 
 type CachedUnlocks = Record<string, number>;
 
@@ -53,6 +52,48 @@ export default class Extension {
   constructor (state: State) {
     this.#cachedUnlocks = {};
     this.#state = state;
+  }
+
+  public setupSubscriptions () {
+    chrome.runtime.onConnect.addListener((port) => {
+      if (port.name === PORT_EXTENSION) {
+        console.log('Popup opened.');
+
+        const subscriptions = [
+          accountsObservable.subject.subscribe((accounts) => {
+            this.transformAccounts(accounts).then((accounts) =>
+              chrome.runtime.sendMessage({ message: 'pri(accounts.changed)', data: accounts })
+            ).catch((e) => {
+              console.error('Error handling accounts subscription:', e);
+            });
+          }),
+          this.#state.authSubject.subscribe((requests) => {
+            chrome.runtime.sendMessage({ message: 'pri(authorize.requests.changed)', data: requests })
+              .catch((e) => {
+                console.error('Error handling authorize subscription:', e);
+              });
+          }),
+          this.#state.metaSubject.subscribe((requests) => {
+            chrome.runtime.sendMessage({ message: 'pri(metadata.requests.changed)', data: requests })
+              .catch((e) => {
+                console.error('Error handling metadata subscription:', e);
+              });
+          }),
+          this.#state.signSubject.subscribe((requests) => {
+            chrome.runtime.sendMessage({ message: 'pri(signing.requests.changed)', data: requests })
+              .catch((e) => {
+                console.error('Error handling signing subscription:', e);
+              });
+          })
+        ];
+
+        port.onDisconnect.addListener(function () {
+          console.log('Popup closed.');
+
+          subscriptions.forEach((subscription) => subscription.unsubscribe());
+        });
+      }
+    });
   }
 
   private async transformAccounts (accounts: SubjectInfo): Promise<AccountJson[]> {
@@ -189,24 +230,6 @@ export default class Extension {
     }
   }
 
-  private accountsSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'pri(accounts.subscribe)'>(id, port);
-    const subscription = accountsObservable.subject.subscribe((accounts: SubjectInfo): void => {
-      this.transformAccounts(accounts).then(cb).catch((e) => {
-        console.error('Error subscribing for accounts:', e);
-
-        cb([]); // eslint-disable-line n/no-callback-literal
-      });
-    });
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      subscription.unsubscribe();
-    });
-
-    return true;
-  }
-
   private authorizeApprove ({ authorizedAccounts, id }: RequestAuthorizeApprove): boolean {
     const queued = this.#state.getAuthRequest(id);
 
@@ -243,18 +266,6 @@ export default class Extension {
     return { list: await this.#state.getAuthUrls() };
   }
 
-  private authorizeSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'pri(authorize.requests)'>(id, port);
-    const subscription = this.#state.authSubject.subscribe((requests: AuthorizeRequest[]): void => cb(requests));
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      subscription.unsubscribe();
-    });
-
-    return true;
-  }
-
   private async metadataApprove ({ id }: RequestMetadataApprove): Promise<boolean> {
     const queued = this.#state.getMetaRequest(id);
 
@@ -285,18 +296,6 @@ export default class Extension {
     const { reject } = queued;
 
     reject(new Error('Rejected'));
-
-    return true;
-  }
-
-  private metadataSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'pri(metadata.requests)'>(id, port);
-    const subscription = this.#state.metaSubject.subscribe((requests: MetadataRequest[]): void => cb(requests));
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      subscription.unsubscribe();
-    });
 
     return true;
   }
@@ -485,18 +484,6 @@ export default class Extension {
     };
   }
 
-  private signingSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'pri(signing.requests)'>(id, port);
-    const subscription = this.#state.signSubject.subscribe((requests: SigningRequest[]): void => cb(requests));
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      subscription.unsubscribe();
-    });
-
-    return true;
-  }
-
   // this method is called when we want to open up the popup from the ui
   private windowOpen (path: AllowedPath): boolean {
     const url = `${chrome.runtime.getURL('external.html')}#${path}`;
@@ -575,127 +562,112 @@ export default class Extension {
 
   // Weird thought, the eslint override is not needed in Tabs
   // eslint-disable-next-line @typescript-eslint/require-await
-  public async handle<TMessageType extends MessageTypes> (id: string, type: TMessageType, request: RequestTypes[TMessageType], port?: chrome.runtime.Port): Promise<ResponseType<TMessageType>> {
+  public async handle<TMessageType extends MessageTypes> (type: TMessageType, data: RequestTypes[TMessageType]): Promise<ResponseType<TMessageType>> {
     switch (type) {
       case 'pri(authorize.approve)':
-        return this.authorizeApprove(request as RequestAuthorizeApprove);
+        return this.authorizeApprove(data as RequestAuthorizeApprove);
 
       case 'pri(authorize.reject)':
-        return this.authorizeReject(request as RequestAuthorizeReject);
+        return this.authorizeReject(data as RequestAuthorizeReject);
 
       case 'pri(authorize.list)':
         return this.getAuthList();
 
       case 'pri(authorize.remove)':
-        return this.removeAuthorization(request as string);
+        return this.removeAuthorization(data as string);
 
       case 'pri(authorize.delete.request)':
-        return this.deleteAuthRequest(request as string);
-
-      case 'pri(authorize.requests)':
-        return port && this.authorizeSubscribe(id, port);
+        return this.deleteAuthRequest(data as string);
 
       case 'pri(authorize.update)':
-        return this.authorizeUpdate(request as RequestUpdateAuthorizedAccounts);
+        return this.authorizeUpdate(data as RequestUpdateAuthorizedAccounts);
 
       case 'pri(authorizeDate.update)':
-        return this.authorizeDateUpdate(request as string);
+        return this.authorizeDateUpdate(data as string);
 
       case 'pri(accounts.create.hardware)':
-        return this.accountsCreateHardware(request as RequestAccountCreateHardware);
+        return this.accountsCreateHardware(data as RequestAccountCreateHardware);
 
       case 'pri(accounts.create.suri)':
-        return this.accountsCreateSuri(request as RequestAccountCreateSuri);
+        return this.accountsCreateSuri(data as RequestAccountCreateSuri);
 
       case 'pri(accounts.changePassword)':
-        return this.accountsChangePassword(request as RequestAccountChangePassword);
+        return this.accountsChangePassword(data as RequestAccountChangePassword);
 
       case 'pri(accounts.edit)':
-        return this.accountsEdit(request as RequestAccountEdit);
+        return this.accountsEdit(data as RequestAccountEdit);
 
       case 'pri(accounts.export)':
-        return this.accountsExport(request as RequestAccountExport);
+        return this.accountsExport(data as RequestAccountExport);
 
       case 'pri(accounts.forget)':
-        return this.accountsForget(request as RequestAccountForget);
+        return this.accountsForget(data as RequestAccountForget);
 
       case 'pri(accounts.show)':
-        return this.accountsShow(request as RequestAccountShow);
-
-      case 'pri(accounts.subscribe)':
-        return port && this.accountsSubscribe(id, port);
+        return this.accountsShow(data as RequestAccountShow);
 
       case 'pri(accounts.tie)':
-        return this.accountsTie(request as RequestAccountTie);
+        return this.accountsTie(data as RequestAccountTie);
 
       case 'pri(accounts.validate)':
-        return this.accountsValidate(request as RequestAccountValidate);
+        return this.accountsValidate(data as RequestAccountValidate);
 
       case 'pri(metadata.approve)':
-        return this.metadataApprove(request as RequestMetadataApprove);
+        return this.metadataApprove(data as RequestMetadataApprove);
 
       case 'pri(metadata.get)':
-        return this.metadataGet(request as string);
+        return this.metadataGet(data as string);
 
       case 'pri(metadata.list)':
         return this.metadataList();
 
       case 'pri(metadata.reject)':
-        return this.metadataReject(request as RequestMetadataReject);
-
-      case 'pri(metadata.requests)':
-        return port && this.metadataSubscribe(id, port);
+        return this.metadataReject(data as RequestMetadataReject);
 
       case 'pri(activeTabsUrl.update)':
-        return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate);
+        return this.updateCurrentTabs(data as RequestActiveTabsUrlUpdate);
 
       case 'pri(connectedTabsUrl.get)':
         return this.getConnectedTabsUrl();
 
       case 'pri(derivation.create)':
-        return this.derivationCreate(request as RequestDeriveCreate);
+        return this.derivationCreate(data as RequestDeriveCreate);
 
       case 'pri(derivation.validate)':
-        return this.derivationValidate(request as RequestDeriveValidate);
+        return this.derivationValidate(data as RequestDeriveValidate);
 
       case 'pri(json.restore)':
-        return this.jsonRestore(request as RequestJsonRestore);
+        return this.jsonRestore(data as RequestJsonRestore);
 
       case 'pri(json.batchRestore)':
-        return this.batchRestore(request as RequestBatchRestore);
+        return this.batchRestore(data as RequestBatchRestore);
 
       case 'pri(json.account.info)':
-        return this.jsonGetAccountInfo(request as KeyringPair$Json);
-
-      case 'pri(ping)':
-        return Promise.resolve(true);
+        return this.jsonGetAccountInfo(data as KeyringPair$Json);
 
       case 'pri(seed.create)':
-        return this.seedCreate(request as RequestSeedCreate);
+        return this.seedCreate(data as RequestSeedCreate);
 
       case 'pri(seed.validate)':
-        return this.seedValidate(request as RequestSeedValidate);
+        return this.seedValidate(data as RequestSeedValidate);
 
       case 'pri(settings.notification)':
-        return this.#state.setNotification(request as string);
+        return this.#state.setNotification(data as string);
 
       case 'pri(signing.approve.password)':
-        return this.signingApprovePassword(request as RequestSigningApprovePassword);
+        return this.signingApprovePassword(data as RequestSigningApprovePassword);
 
       case 'pri(signing.approve.signature)':
-        return this.signingApproveSignature(request as RequestSigningApproveSignature);
+        return this.signingApproveSignature(data as RequestSigningApproveSignature);
 
       case 'pri(signing.cancel)':
-        return this.signingCancel(request as RequestSigningCancel);
+        return this.signingCancel(data as RequestSigningCancel);
 
       case 'pri(signing.isLocked)':
-        return this.signingIsLocked(request as RequestSigningIsLocked);
-
-      case 'pri(signing.requests)':
-        return port && this.signingSubscribe(id, port);
+        return this.signingIsLocked(data as RequestSigningIsLocked);
 
       case 'pri(window.open)':
-        return this.windowOpen(request as AllowedPath);
+        return this.windowOpen(data as AllowedPath);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

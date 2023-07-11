@@ -33,17 +33,17 @@ export function sendMessage<TMessageType extends MessageTypesWithNullRequest>(me
 export function sendMessage<TMessageType extends MessageTypesWithNoSubscriptions>(message: TMessageType, request: RequestTypes[TMessageType]): Promise<ResponseTypes[TMessageType]>;
 export function sendMessage<TMessageType extends MessageTypesWithSubscriptions>(message: TMessageType, request: RequestTypes[TMessageType], subscriber: (data: SubscriptionMessageTypes[TMessageType]) => void): Promise<ResponseTypes[TMessageType]>;
 
-export function sendMessage<TMessageType extends MessageTypes> (message: TMessageType, request?: RequestTypes[TMessageType], subscriber?: (data: unknown) => void): Promise<ResponseTypes[TMessageType]> {
+export function sendMessage<TMessageType extends MessageTypes> (message: TMessageType, data?: RequestTypes[TMessageType], subscriber?: (data: unknown) => void): Promise<ResponseTypes[TMessageType]> {
   return new Promise((resolve, reject): void => {
-    const id = uuid();
+    const messageId = uuid();
 
-    handlers[id] = { reject, resolve, subscriber };
+    handlers[messageId] = { reject, resolve, subscriber };
 
     const transportRequestMessage: TransportRequestMessage<TMessageType> = {
-      id,
+      id: messageId,
       message,
       origin: MESSAGE_ORIGIN_PAGE,
-      request: request || null as RequestTypes[TMessageType]
+      data: data || null as RequestTypes[TMessageType]
     };
 
     window.postMessage(transportRequestMessage, '*');

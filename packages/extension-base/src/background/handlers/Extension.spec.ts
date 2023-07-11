@@ -49,7 +49,7 @@ describe('Extension', () => {
   }
 
   const createAccount = async (type?: KeypairType): Promise<string> => {
-    await extension.handle('id', 'pri(accounts.create.suri)', type && type === 'ethereum'
+    await extension.handle('pri(accounts.create.suri)', type && type === 'ethereum'
       ? {
         name: 'parent',
         password,
@@ -60,15 +60,15 @@ describe('Extension', () => {
         name: 'parent',
         password,
         suri
-      }, {} as chrome.runtime.Port);
-    const { address } = await extension.handle('id', 'pri(seed.validate)', type && type === 'ethereum'
+      });
+    const { address } = await extension.handle('pri(seed.validate)', type && type === 'ethereum'
       ? {
         suri,
         type
       }
       : {
         suri
-      }, {} as chrome.runtime.Port);
+      });
 
     return address;
   };
@@ -88,10 +88,10 @@ describe('Extension', () => {
 
   test('exports account from keyring', async () => {
     const { pair: { address } } = keyring.addUri(suri, password);
-    const result = await extension.handle('id', 'pri(accounts.export)', {
+    const result = await extension.handle('pri(accounts.export)', {
       address,
       password
-    }, {} as chrome.runtime.Port);
+    });
 
     expect(result.exportedJson.address).toBe(address);
     expect(result.exportedJson.encoded).toBeDefined();
@@ -105,11 +105,11 @@ describe('Extension', () => {
     });
 
     test('pri(derivation.validate) passes for valid suri', async () => {
-      const result = await extension.handle('id', 'pri(derivation.validate)', {
+      const result = await extension.handle('pri(derivation.validate)', {
         parentAddress: address,
         parentPassword: password,
         suri: '//path'
-      }, {} as chrome.runtime.Port);
+      });
 
       expect(result).toStrictEqual({
         address: '5FP3TT3EruYBNh8YM8yoxsreMx7uZv1J1zNX7fFhoC5enwmN',
@@ -118,40 +118,40 @@ describe('Extension', () => {
     });
 
     test('pri(derivation.validate) throws for invalid suri', async () => {
-      await expect(extension.handle('id', 'pri(derivation.validate)', {
+      await expect(extension.handle('pri(derivation.validate)', {
         parentAddress: address,
         parentPassword: password,
         suri: 'invalid-path'
-      }, {} as chrome.runtime.Port)).rejects.toStrictEqual(new Error('"invalid-path" is not a valid derivation path'));
+      })).rejects.toStrictEqual(new Error('"invalid-path" is not a valid derivation path'));
     });
 
     test('pri(derivation.validate) throws for invalid password', async () => {
-      await expect(extension.handle('id', 'pri(derivation.validate)', {
+      await expect(extension.handle('pri(derivation.validate)', {
         parentAddress: address,
         parentPassword: 'invalid-password',
         suri: '//path'
-      }, {} as chrome.runtime.Port)).rejects.toStrictEqual(new Error('invalid password'));
+      })).rejects.toStrictEqual(new Error('invalid password'));
     });
 
     test('pri(derivation.create) adds a derived account', async () => {
-      await extension.handle('id', 'pri(derivation.create)', {
+      await extension.handle('pri(derivation.create)', {
         name: 'child',
         parentAddress: address,
         parentPassword: password,
         password,
         suri: '//path'
-      }, {} as chrome.runtime.Port);
+      });
       expect(keyring.getAccounts()).toHaveLength(2);
     });
 
     test('pri(derivation.create) saves parent address in meta', async () => {
-      await extension.handle('id', 'pri(derivation.create)', {
+      await extension.handle('pri(derivation.create)', {
         name: 'child',
         parentAddress: address,
         parentPassword: password,
         password,
         suri: '//path'
-      }, {} as chrome.runtime.Port);
+      });
       expect(keyring.getAccount('5FP3TT3EruYBNh8YM8yoxsreMx7uZv1J1zNX7fFhoC5enwmN')?.meta.parentAddress).toEqual(address);
     });
   });
@@ -167,17 +167,17 @@ describe('Extension', () => {
       const newPass = 'pa55word';
       const wrongPass = 'ZZzzZZzz';
 
-      await expect(extension.handle('id', 'pri(accounts.changePassword)', {
+      await expect(extension.handle('pri(accounts.changePassword)', {
         address,
         newPass,
         oldPass: wrongPass
-      }, {} as chrome.runtime.Port)).rejects.toStrictEqual(new Error('oldPass is invalid'));
+      })).rejects.toStrictEqual(new Error('oldPass is invalid'));
 
-      await expect(extension.handle('id', 'pri(accounts.changePassword)', {
+      await expect(extension.handle('pri(accounts.changePassword)', {
         address,
         newPass,
         oldPass: password
-      }, {} as chrome.runtime.Port)).resolves.toEqual(true);
+      })).resolves.toEqual(true);
 
       const pair = keyring.getPair(address);
 
@@ -220,7 +220,7 @@ describe('Extension', () => {
       const signatureExpected = registry
         .createType('ExtrinsicPayload', payload, { version: payload.version }).sign(pair);
 
-      const signRequestPromise = tabs.handle('1615191860871.5', 'pub(extrinsic.sign)', payload, 'http://localhost:3000', {} as chrome.runtime.Port)
+      const signRequestPromise = tabs.handle('pub(extrinsic.sign)', payload, '1615191860871.5', 'http://localhost:3000', 1)
         .then((result) => {
           expect((result as ResponseSigning)?.signature).toEqual(signatureExpected.signature);
         }).catch((err) => console.log(err));
@@ -228,11 +228,11 @@ describe('Extension', () => {
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise, we cannot await yet
       await new Promise((resolve) => setTimeout(resolve));
 
-      await expect(extension.handle('1615192072290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('pri(signing.approve.password)', {
         id: state.allSignRequests[0].id,
         password,
         savePass: false
-      }, {} as chrome.runtime.Port)).resolves.toEqual(true);
+      })).resolves.toEqual(true);
 
       // This promise consists some expectations, but couldn't have been awaited earlier, because the previous expectation resolves it
       await signRequestPromise;
@@ -272,7 +272,7 @@ describe('Extension', () => {
       const signatureExpected = registry
         .createType('ExtrinsicPayload', ethPayload, { version: ethPayload.version }).sign(ethPair);
 
-      const signRequestPromise = tabs.handle('1615191860871.5', 'pub(extrinsic.sign)', ethPayload, 'http://localhost:3000', {} as chrome.runtime.Port)
+      const signRequestPromise = tabs.handle('pub(extrinsic.sign)', ethPayload, '1615191860871.5', 'http://localhost:3000', 1)
         .then((result) => {
           expect((result as ResponseSigning)?.signature).toEqual(signatureExpected.signature);
         }).catch((err) => console.log(err));
@@ -280,11 +280,11 @@ describe('Extension', () => {
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise, we cannot await yet
       await new Promise((resolve) => setTimeout(resolve));
 
-      await expect(extension.handle('1615192072290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('pri(signing.approve.password)', {
         id: state.allSignRequests[0].id,
         password,
         savePass: false
-      }, {} as chrome.runtime.Port)).resolves.toEqual(true);
+      })).resolves.toEqual(true);
 
       // This promise consists some expectations, but couldn't have been awaited earlier, because the previous expectation resolves it
       await signRequestPromise;
@@ -345,7 +345,7 @@ describe('Extension', () => {
       const signatureExpected = registry
         .createType('ExtrinsicPayload', payload, { version: payload.version }).sign(pair);
 
-      const signRequestPromise = tabs.handle('1615191860771.5', 'pub(extrinsic.sign)', payload, 'http://localhost:3000', {} as chrome.runtime.Port)
+      const signRequestPromise = tabs.handle('pub(extrinsic.sign)', payload, '1615191860771.5', 'http://localhost:3000', 1)
         .then((result) => {
           expect((result as ResponseSigning)?.signature).toEqual(signatureExpected.signature);
         });
@@ -353,11 +353,11 @@ describe('Extension', () => {
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise, we cannot await yet
       await new Promise((resolve) => setTimeout(resolve));
 
-      await expect(extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('pri(signing.approve.password)', {
         id: state.allSignRequests[0].id,
         password,
         savePass: false
-      }, {} as chrome.runtime.Port)).resolves.toEqual(true);
+      })).resolves.toEqual(true);
 
       // This promise consists some expectations, but couldn't have been awaited earlier, because the previous expectation resolves it
       await signRequestPromise;
@@ -412,7 +412,7 @@ describe('Extension', () => {
       const signatureExpected = registry
         .createType('ExtrinsicPayload', payload, { version: payload.version }).sign(pair);
 
-      const signRequestPromise = tabs.handle('1615191860771.5', 'pub(extrinsic.sign)', payload, 'http://localhost:3000', {} as chrome.runtime.Port)
+      const signRequestPromise = tabs.handle('pub(extrinsic.sign)', payload, '1615191860771.5', 'http://localhost:3000', 1)
         .then((result) => {
           expect((result as ResponseSigning)?.signature).toEqual(signatureExpected.signature);
         });
@@ -420,11 +420,11 @@ describe('Extension', () => {
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise, we cannot await yet
       await new Promise((resolve) => setTimeout(resolve));
 
-      await expect(extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('pri(signing.approve.password)', {
         id: state.allSignRequests[0].id,
         password,
         savePass: false
-      }, {} as chrome.runtime.Port)).resolves.toEqual(true);
+      })).resolves.toEqual(true);
 
       // This promise consists some expectations, but couldn't have been awaited earlier, because the previous expectation resolves it
       await signRequestPromise;
@@ -490,7 +490,7 @@ describe('Extension', () => {
       const signatureExpected = registry
         .createType('ExtrinsicPayload', payload, { version: payload.version }).sign(pair);
 
-      const signRequestPromise = tabs.handle('1615191860771.5', 'pub(extrinsic.sign)', payload, 'http://localhost:3000', {} as chrome.runtime.Port)
+      const signRequestPromise = tabs.handle('pub(extrinsic.sign)', payload, '1615191860771.5', 'http://localhost:3000', 1)
         .then((result) => {
           expect((result as ResponseSigning)?.signature).toEqual(signatureExpected.signature);
         });
@@ -498,11 +498,11 @@ describe('Extension', () => {
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise (we cannot await yet)
       await new Promise((resolve) => setTimeout(resolve));
 
-      await expect(extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('pri(signing.approve.password)', {
         id: state.allSignRequests[0].id,
         password,
         savePass: false
-      }, {} as chrome.runtime.Port)).resolves.toEqual(true);
+      })).resolves.toEqual(true);
 
       // This promise consists some expectations, but couldn't have been awaited earlier, because the previous expectation resolves it
       await signRequestPromise;

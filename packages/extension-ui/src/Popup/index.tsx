@@ -30,6 +30,7 @@ import {
 } from '../components/contexts';
 import ToastProvider from '../components/Toast/ToastProvider';
 import {
+  sendPopupReadyMessage,
   subscribeAccounts,
   subscribeAuthorizeRequests,
   subscribeMetadataRequests,
@@ -131,14 +132,20 @@ export default function Popup(): React.ReactElement {
     [history]
   );
 
-  useEffect((): void => {
-    Promise.all([
+  useEffect(() => {
+    const unsubscribers = [
       subscribeAccounts(setAccounts),
       subscribeAuthorizeRequests(setAuthRequests),
       subscribeMetadataRequests(setMetaRequests),
       subscribeSigningRequests(setSignRequests)
-    ]).catch(console.error);
+    ];
 
+    sendPopupReadyMessage();
+
+    return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
+  }, []);
+
+  useEffect((): void => {
     uiSettings.on('change', (settings): void => {
       setSettingsCtx(settings);
       setCameraOn(settings.camera === 'on');
