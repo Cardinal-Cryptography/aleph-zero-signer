@@ -41,7 +41,7 @@ const POPUP_WINDOW_OPTS: chrome.windows.CreateData = {
   left: 150,
   state: 'normal',
   top: 150,
-  type: 'panel',
+  type: 'popup',
   width: 376
 };
 
