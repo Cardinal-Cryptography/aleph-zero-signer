@@ -59,14 +59,6 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
     return () => clearTimeout(timeoutId);
   }, [isContentVisible]);
 
-  const onVideoPlay = () => {
-    setIsContentVisible(true);
-  };
-
-  const onVideoEnd = () => {
-    setIsSplashOn(false);
-  };
-
   return (
     <div className={className}>
       <Transition
@@ -84,8 +76,8 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
             }}
           >
             <Video
-              onEnded={onVideoEnd}
-              onStarted={onVideoPlay}
+              onEnded={() => setIsSplashOn(false)}
+              onStarted={() => setIsContentVisible(true)}
               source='videos/splash.mp4'
               type='video/mp4'
             />
