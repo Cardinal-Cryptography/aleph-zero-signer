@@ -5,8 +5,8 @@ import React, { FormEvent, useCallback, useContext, useId, useState } from 'reac
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 
+import { Message } from '@polkadot/extension-ui/components';
 import { getUserInputs } from '@polkadot/extension-ui/components/PasswordField/getFeedback';
-import Message from '@polkadot/extension-ui/components/PasswordField/Message';
 import useAccountName from '@polkadot/extension-ui/hooks/useAccountName';
 
 import {

@@ -12,10 +12,10 @@ type Props = {
   in: boolean;
   messageType: MessageType;
   text: string;
-  duration: number;
+  duration?: number;
 };
 
-const AnimatedMessage = ({ className = '', duration, in: show, messageType, text }: Props) => {
+const AnimatedMessage = ({ className = '', duration = 500, in: show, messageType, text }: Props) => {
   const nodeRef = useRef(null);
   const [currentText, setCurrentText] = useState<string>();
 
