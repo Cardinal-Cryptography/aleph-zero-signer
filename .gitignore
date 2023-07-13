@@ -17,8 +17,8 @@ NOTES.md
 .pnp.*
 cc-test-reporter
 lerna-debug.log*
-master-build-chrome.zip
-master-build-firefox.zip
+extension-chrome.zip
+extension-firefox.zip
 master-src.zip
 npm-debug.log*
 tsconfig.*buildinfo
