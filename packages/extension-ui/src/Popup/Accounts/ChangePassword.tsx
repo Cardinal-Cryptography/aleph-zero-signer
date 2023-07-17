@@ -145,8 +145,8 @@ const Form = styled.form`
 `;
 
 const InputWrapper = styled.div`
-  & > :not(:last-child) {
-    margin-bottom: 8px;
+  & > * + * {
+    margin-top: 8px;
   }
 `;
 

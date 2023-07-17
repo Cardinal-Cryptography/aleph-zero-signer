@@ -38,6 +38,7 @@ function Unlock({ className, error, isBusy, password, setError, setPassword }: P
         isFocused
         label={t<string>('Password for this account')}
         onValidatedChange={_onChangePassword}
+        shouldCheckCapsLock
         type='password'
         validator={Result.ok}
         value={password}
@@ -52,8 +53,8 @@ function Unlock({ className, error, isBusy, password, setError, setPassword }: P
 }
 
 const Container = styled.div`
-  & > :not(:last-child) {
-    margin-bottom: 8px;
+  & > * + * {
+    margin-top: 8px;
   }
 `;
 

@@ -277,8 +277,8 @@ const InputWrapper = styled.div`
     margin-bottom: 16px;
   }
 
-  & > :not(:last-child) {
-    margin-bottom: 8px;
+  & > * + * {
+    margin-top: 8px;
   }
 `;
 
