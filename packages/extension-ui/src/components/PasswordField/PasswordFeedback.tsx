@@ -84,7 +84,7 @@ const StyledAnimatedMessage = styled(AnimatedMessage)`
 `;
 
 export default styled(PasswordFeedback)`
-  & > :not(:last-child) {
-    margin-bottom: 8px;
+  & > * + * {
+    margin-top: 8px;
   }
 `;

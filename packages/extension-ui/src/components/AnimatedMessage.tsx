@@ -44,8 +44,10 @@ const AnimatedMessage = ({ className = '', duration = 500, in: show, messageType
     <Transition
       appear
       in={show && text === currentText}
+      mountOnEnter
       nodeRef={nodeRef}
       timeout={duration}
+      unmountOnExit
     >
       {(state) => (
         <Wrapper
