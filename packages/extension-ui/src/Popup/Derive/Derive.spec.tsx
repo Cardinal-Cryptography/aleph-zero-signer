@@ -157,7 +157,7 @@ describe('Derive', () => {
 
       expect(button.prop('disabled')).toBe(false);
       expect(
-        wrapper.findWhere((comp) => comp.prop('messageType') === 'critical' && comp.prop('in') === true)
+        wrapper.findWhere((node) => node.prop('messageType') === 'critical' && node.prop('in') === true)
       ).toHaveLength(0);
     });
 
@@ -168,7 +168,7 @@ describe('Derive', () => {
 
       expect(button.prop('disabled')).toBe(false);
       expect(
-        wrapper.findWhere((comp) => comp.prop('messageType') === 'critical' && comp.prop('in') === true)
+        wrapper.findWhere((node) => node.prop('messageType') === 'critical' && node.prop('in') === true)
       ).toHaveLength(0);
     });
 
@@ -227,7 +227,7 @@ describe('Derive', () => {
 
       expect(button.prop('disabled')).toBe(false);
       expect(
-        wrapper.findWhere((comp) => comp.prop('messageType') === 'critical' && comp.prop('in') === true)
+        wrapper.findWhere((node) => node.prop('messageType') === 'critical' && node.prop('in') === true)
       ).toHaveLength(0);
     });
 
