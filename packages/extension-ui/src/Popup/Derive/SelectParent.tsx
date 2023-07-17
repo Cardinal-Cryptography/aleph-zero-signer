@@ -84,7 +84,7 @@ function SelectParent({
     }
 
     if (!allowSoftDerivation && suriPath && singleSlashRegex.test(suriPath)) {
-      setPathError(t('Soft derivation is only allowed for sr25519 accounts'));
+      setPathError(t('Soft derivation is only allowed for sr25519 accounts.'));
     }
   }, [allowSoftDerivation, suriPath, t]);
 

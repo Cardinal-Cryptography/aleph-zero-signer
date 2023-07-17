@@ -24,9 +24,11 @@ const AnimatedMessage = ({ className = '', duration = 500, in: show, messageType
       return;
     }
 
-    const timeout = currentText ? 150 : 0;
+    if (!currentText) {
+      setCurrentText(text);
+    }
 
-    setTimeout(setCurrentText, timeout, text);
+    setTimeout(setCurrentText, 150, text);
   }, [setCurrentText, currentText, text]);
 
   const expandedStyles = { opacity: 1, gridTemplateRows: '1fr' };
