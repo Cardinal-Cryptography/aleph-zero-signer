@@ -1,7 +1,7 @@
 // Copyright 2019-2023 @polkadot/extension-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
+import type { AuthorizeTabRequestPayload } from '@polkadot/extension-base/background/types';
 import type { ThemeProps } from '../../types';
 
 import React, { FormEvent, useCallback, useContext, useEffect, useId } from 'react';
@@ -30,7 +30,7 @@ interface Props extends ThemeProps {
   authId: string;
   className?: string;
   isFirst: boolean;
-  request: RequestAuthorizeTab;
+  payload: AuthorizeTabRequestPayload;
   url: string;
 }
 

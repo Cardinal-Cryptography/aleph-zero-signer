@@ -13,12 +13,12 @@ function Authorize(): React.ReactElement {
   return (
     <Container>
       {requests.map(
-        ({ id, request, url }, index): React.ReactNode => (
+        ({ id, payload, url }, index): React.ReactNode => (
           <Request
             authId={id}
             isFirst={index === 0}
             key={id}
-            request={request}
+            payload={payload}
             url={url}
           />
         )

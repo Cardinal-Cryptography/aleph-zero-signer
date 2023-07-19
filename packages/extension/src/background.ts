@@ -18,10 +18,21 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 // setup the notification (same a FF default background, white text)
 withErrorLog(() => chrome.action.setBadgeBackgroundColor({ color: '#d90000' }));
 
+const ports: {
+  contentPort?: chrome.runtime.Port | undefined,
+  extensionPort?: chrome.runtime.Port | undefined,
+} = {};
+
 // listen to all messages and handle appropriately
 chrome.runtime.onConnect.addListener((port): void => {
   // shouldn't happen, however... only listen to what we know about
   assert([PORT_CONTENT, PORT_EXTENSION].includes(port.name), `Unknown connection from ${port.name}`);
+
+  if (port.name === PORT_CONTENT) {
+    ports.contentPort = port;
+  } else {
+    ports.extensionPort = port;
+  }
 
   /**
    * Trigger reconnection every < 5 minutes to maintain the communication with
@@ -34,7 +45,7 @@ chrome.runtime.onConnect.addListener((port): void => {
   }, 250e3);
 
   // message and disconnect handlers
-  port.onMessage.addListener((data: TransportRequestMessage<keyof RequestSignatures>) => handlers(data, port));
+  port.onMessage.addListener((data: TransportRequestMessage<keyof RequestSignatures>) => handlers(data, port, ports));
   port.onDisconnect.addListener(() => {
     clearTimeout(timer);
 
@@ -59,7 +70,7 @@ function getActiveTabs () {
       request: { urls }
     };
 
-    handlers(request);
+    handlers(request, undefined, ports);
   });
 }
 
