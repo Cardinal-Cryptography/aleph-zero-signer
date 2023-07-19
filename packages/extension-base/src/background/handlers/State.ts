@@ -54,23 +54,23 @@ interface SignRequest {
 
 const NOTIFICATION_URL = chrome.runtime.getURL('notification.html');
 
-const POPUP_WINDOW_OPTS: chrome.windows.CreateData = {
+const POPUP_WINDOW_OPTS = {
   focused: true,
   height: 640,
   state: 'normal',
   type: 'popup',
   url: NOTIFICATION_URL,
   width: 376
-};
+} satisfies chrome.windows.CreateData;
 
-const NORMAL_WINDOW_OPTS: chrome.windows.CreateData = {
+const NORMAL_WINDOW_OPTS = {
   focused: true,
   height: 640,
   state: 'normal',
   type: 'normal',
   url: NOTIFICATION_URL,
   width: 376
-};
+} satisfies chrome.windows.CreateData;
 
 export enum NotificationOptions {
   None,
@@ -123,12 +123,26 @@ export default class State {
     return localStorageStores.defaultAuthAccounts.get();
   }
 
-  private popupOpen (): void {
+  private async popupOpen (): Promise<void> {
+    const windowOpts = this.#notification === 'window'
+      ? NORMAL_WINDOW_OPTS
+      : POPUP_WINDOW_OPTS;
+
+    const isExtensionWindowOpened = await chrome.windows.getAll({
+      populate: true,
+      windowTypes: [windowOpts.type]
+    })
+      .then((windows) => windows.flatMap((window) => window.tabs))
+      .then((tabs) => tabs.filter((tab) => tab?.url?.startsWith(windowOpts.url)))
+      .then((extensionNotificationPopups) => !!extensionNotificationPopups.length);
+
+    if (isExtensionWindowOpened) {
+      return;
+    }
+
     this.#notification !== 'extension' &&
       chrome.windows.create(
-        this.#notification === 'window'
-          ? NORMAL_WINDOW_OPTS
-          : POPUP_WINDOW_OPTS,
+        windowOpts,
         (window): void => {
           if (window) {
             this.#windows.push(window.id || 0);
@@ -311,7 +325,7 @@ export default class State {
     ]);
 
     await this.updateIconAuth();
-    this.popupOpen();
+    await this.popupOpen();
   }
 
   public async ensureUrlAuthorized (url: string): Promise<boolean> {
@@ -339,7 +353,7 @@ export default class State {
     ]);
 
     await this.updateIconMeta();
-    this.popupOpen();
+    await this.popupOpen();
   }
 
   public async getAuthRequest (id: string): Promise<AuthRequest | undefined> {
@@ -486,6 +500,6 @@ export default class State {
     ]);
 
     await this.updateIconSign();
-    this.popupOpen();
+    await this.popupOpen();
   }
 }
