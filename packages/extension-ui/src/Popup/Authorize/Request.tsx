@@ -97,7 +97,7 @@ function Request({ authId, className, isFirst, isLast, url }: Props): React.Reac
     } catch (error) {
       console.error(error);
     }
-  }, [authId, selectedAccounts, show, t]);
+  }, [authId, isLast, onAction, selectedAccounts, show, t]);
 
   const _onClose = useCallback(async () => {
     try {
@@ -114,7 +114,7 @@ function Request({ authId, className, isFirst, isLast, url }: Props): React.Reac
       console.error(error);
     }
 
-  }, [authId]);
+  }, [authId, isLast, onAction, t]);
 
   if (!accounts.length) {
     return <NoAccount authId={authId} />;
