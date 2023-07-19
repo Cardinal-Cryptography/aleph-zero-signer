@@ -55,7 +55,7 @@ const connect = (): chrome.runtime.Port => {
     const handler = handlers[data.id];
 
     if (!handler) {
-      console.error(`Unknown response: ${JSON.stringify(data)}`);
+      console.warn(`Unknown response: ${JSON.stringify(data)}`);
 
       return;
     }

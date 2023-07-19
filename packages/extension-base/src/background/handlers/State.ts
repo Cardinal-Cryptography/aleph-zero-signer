@@ -10,7 +10,8 @@ import { assert } from '@polkadot/util';
 
 import localStorageStores from '../../utils/localStorageStores';
 import { SignerPayloadJSONWithType, SignerPayloadRawWithType } from '../types';
-import { withErrorLog } from './helpers';
+import { NORMAL_CREATE_WINDOW_DATA, POPUP_CREATE_WINDOW_DATA } from './consts';
+import { openCenteredWindow, withErrorLog } from './helpers';
 
 interface AuthRequest {
   id: string;
@@ -54,24 +55,6 @@ interface SignRequest {
 
 const NOTIFICATION_URL = chrome.runtime.getURL('notification.html');
 
-const POPUP_WINDOW_OPTS = {
-  focused: true,
-  height: 640,
-  state: 'normal',
-  type: 'popup',
-  url: NOTIFICATION_URL,
-  width: 376
-} satisfies chrome.windows.CreateData;
-
-const NORMAL_WINDOW_OPTS = {
-  focused: true,
-  height: 640,
-  state: 'normal',
-  type: 'normal',
-  url: NOTIFICATION_URL,
-  width: 376
-} satisfies chrome.windows.CreateData;
-
 export enum NotificationOptions {
   None,
   Normal,
@@ -86,8 +69,6 @@ export default class State {
 
   // Map of all providers exposed by the extension, they are retrievable by key
   readonly #providers: Providers;
-
-  #windows: number[] = [];
 
   #connectedTabsUrl: string[] = [];
 
@@ -124,34 +105,30 @@ export default class State {
   }
 
   private async popupOpen (): Promise<void> {
-    const windowOpts = this.#notification === 'window'
-      ? NORMAL_WINDOW_OPTS
-      : POPUP_WINDOW_OPTS;
+    if (this.#notification === 'extension') {
+      return;
+    }
+
+    const createData = this.#notification === 'window'
+      ? NORMAL_CREATE_WINDOW_DATA
+      : POPUP_CREATE_WINDOW_DATA;
 
     const isExtensionWindowOpened = await chrome.windows.getAll({
       populate: true,
-      windowTypes: [windowOpts.type]
+      windowTypes: [createData.type]
     })
       .then((windows) => windows.flatMap((window) => window.tabs))
-      .then((tabs) => tabs.filter((tab) => tab?.url?.startsWith(windowOpts.url)))
+      .then((tabs) => tabs.filter((tab) => tab?.url?.startsWith(NOTIFICATION_URL)))
       .then((extensionNotificationPopups) => !!extensionNotificationPopups.length);
 
     if (isExtensionWindowOpened) {
       return;
     }
 
-    this.#notification !== 'extension' &&
-      chrome.windows.create(
-        windowOpts,
-        (window): void => {
-          if (window) {
-            this.#windows.push(window.id || 0);
-
-            // We're adding chrome.windows.update to make sure that the extension popup is not fullscreened
-            // There is a bug in Chrome that causes the extension popup to be fullscreened when user has any fullscreened browser window opened on the main screen
-            chrome.windows.update(window.id || 0, { state: 'normal' }).catch(console.error);
-          }
-        });
+    openCenteredWindow({
+      ...createData,
+      url: NOTIFICATION_URL
+    }).catch(console.error);
   }
 
   public async addAuthorizedUrl (idStr: string, origin: string, url: string, authorizedAccounts: string[]) {
