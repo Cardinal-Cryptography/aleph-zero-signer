@@ -31,6 +31,8 @@ const authUrls = {
   }
 };
 
+chromeStub.windows.getAll.resolves([]);
+
 const stubChromeStorage = (data: Record<string, unknown> = {}) => chromeStub.storage.local.get.resolves({
   authUrls,
   ...data

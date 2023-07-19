@@ -4,7 +4,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { AuthorizeReqContext, RequestPagination, ScrollWrapper } from '../../components';
+import { AuthorizeReqContext, Loading, RequestPagination, ScrollWrapper } from '../../components';
 import useRequestsPagination from '../../hooks/useRequestsPagination';
 import useTranslation from '../../hooks/useTranslation';
 import Request from './Request';
@@ -14,7 +14,8 @@ function Authorize(): React.ReactElement {
   const requests = useContext(AuthorizeReqContext);
   const { index: requestIndex, next, previous, request } = useRequestsPagination(requests);
 
-  return (
+  return request ? (
+    <>
     <ScrollWrapper>
       {requests.length > 1 && (
         <Centered>
@@ -37,6 +38,9 @@ function Authorize(): React.ReactElement {
         url={request.url}
       />
     </ScrollWrapper>
+    </>
+  ) :  (
+    <Loading />
   );
 }
 
