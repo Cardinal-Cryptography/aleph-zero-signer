@@ -73,16 +73,6 @@ interface SignRequest extends Resolver<ResponseSigning> {
 
 const NOTIFICATION_URL = chrome.runtime.getURL('notification.html');
 
-const POPUP_WINDOW_OPTS = {
-  ...POPUP_CREATE_WINDOW_DATA,
-  url: NOTIFICATION_URL
-} satisfies chrome.windows.CreateData;
-
-const NORMAL_WINDOW_OPTS = {
-  ...NORMAL_CREATE_WINDOW_DATA,
-  url: NOTIFICATION_URL
-} satisfies chrome.windows.CreateData;
-
 export enum NotificationOptions {
   None,
   Normal,
@@ -164,10 +154,13 @@ export default class State {
     }
 
     const createData = this.#notification === 'window'
-      ? NORMAL_WINDOW_OPTS
-      : POPUP_WINDOW_OPTS;
+      ? NORMAL_CREATE_WINDOW_DATA
+      : POPUP_CREATE_WINDOW_DATA;
 
-    openCenteredWindow(createData).catch(console.error);
+    openCenteredWindow({
+      ...createData,
+      url: NOTIFICATION_URL
+    }).catch(console.error);
   }
 
   private authComplete = (id: string, resolve: (resValue: AuthResponse) => void, reject: (error: Error) => void): Resolver<AuthResponse> => {
