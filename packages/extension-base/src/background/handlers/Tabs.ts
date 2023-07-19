@@ -5,9 +5,8 @@ import type { Subscription } from 'rxjs';
 import type { InjectedAccount, InjectedMetadataKnown, MetadataDef, ProviderMeta } from '@polkadot/extension-inject/types';
 import type { KeyringPair } from '@polkadot/keyring/types';
 import type { JsonRpcResponse } from '@polkadot/rpc-provider/types';
-import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
-import type { MessageTypes, RequestAccountList, RequestAccountUnsubscribe, RequestAuthorizeTab, RequestRpcSend, RequestRpcSubscribe, RequestRpcUnsubscribe, RequestTypes, ResponseRpcListProviders, ResponseSigning, ResponseTypes, SubscriptionMessageTypes } from '../types';
+import type { AuthorizeTabRequestPayload, MessageTypes, RequestAccountList, RequestAccountUnsubscribe, RequestRpcSend, RequestRpcSubscribe, RequestRpcUnsubscribe, RequestTypes, ResponseRpcListProviders, SignerPayloadJSONWithType, SignerPayloadRawWithType, SubscriptionMessageTypes } from '../types';
 
 import { PHISHING_PAGE_REDIRECT } from '@polkadot/extension-base/defaults';
 import { canDerive } from '@polkadot/extension-base/utils';
@@ -16,10 +15,8 @@ import keyring from '@polkadot/ui-keyring';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { assert, isNumber } from '@polkadot/util';
 
-import RequestBytesSign from '../RequestBytesSign';
-import RequestExtrinsicSign from '../RequestExtrinsicSign';
 import { withErrorLog } from './helpers';
-import State, { AuthResponse } from './State';
+import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 
 interface AccountSub {
@@ -63,8 +60,8 @@ export default class Tabs {
     );
   }
 
-  private authorize (url: string, request: RequestAuthorizeTab): Promise<AuthResponse> {
-    return this.#state.authorizeUrl(url, request);
+  private async authorize (url: string, messageId: string, request: AuthorizeTabRequestPayload, respondImmediately: (response: unknown) => void): Promise<void> {
+    await this.#state.authorizeUrl(url, messageId, request, respondImmediately);
   }
 
   private accountsListAuthorized (url: string, { anyType }: RequestAccountList): Promise<InjectedAccount[]> {
@@ -119,22 +116,22 @@ export default class Tabs {
     return pair;
   }
 
-  private bytesSign (url: string, request: SignerPayloadRaw): Promise<ResponseSigning> {
-    const address = request.address;
+  private async bytesSign (url: string, messageId: string, payload: SignerPayloadRawWithType): Promise<void> {
+    const address = payload.address;
     const pair = this.getSigningPair(address);
 
-    return this.#state.sign(url, new RequestBytesSign(request), { address, ...pair.meta });
+    await this.#state.invokeSignatureRequest(url, payload, { address, ...pair.meta }, messageId);
   }
 
-  private extrinsicSign (url: string, request: SignerPayloadJSON): Promise<ResponseSigning> {
-    const address = request.address;
+  private async extrinsicSign (url: string, messageId: string, payload: SignerPayloadJSONWithType): Promise<void> {
+    const address = payload.address;
     const pair = this.getSigningPair(address);
 
-    return this.#state.sign(url, new RequestExtrinsicSign(request), { address, ...pair.meta });
+    await this.#state.invokeSignatureRequest(url, payload, { address, ...pair.meta }, messageId);
   }
 
-  private metadataProvide (url: string, request: MetadataDef): Promise<boolean> {
-    return this.#state.injectMetadata(url, request);
+  private async metadataProvide (url: string, messageId: string, payload: MetadataDef): Promise<void> {
+    await this.#state.injectMetadata(url, payload, messageId);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -214,9 +211,16 @@ export default class Tabs {
     return false;
   }
 
-  public async handle<TMessageType extends MessageTypes> (id: string, type: TMessageType, request: RequestTypes[TMessageType], url: string, port?: chrome.runtime.Port): Promise<ResponseTypes[keyof ResponseTypes]> {
+  public async handle<TMessageType extends MessageTypes> (
+    messageId: string,
+    type: TMessageType,
+    request: RequestTypes[TMessageType],
+    respondImmediately: (response: unknown) => void,
+    url: string,
+    port?: chrome.runtime.Port
+  ): Promise<unknown> {
     if (type === 'pub(phishing.redirectIfDenied)') {
-      return this.redirectIfPhishing(url);
+      return this.redirectIfPhishing(url).then(respondImmediately);
     }
 
     if (type !== 'pub(authorize.tab)') {
@@ -225,46 +229,46 @@ export default class Tabs {
 
     switch (type) {
       case 'pub(authorize.tab)':
-        return this.authorize(url, request as RequestAuthorizeTab);
+        return this.authorize(url, messageId, request as AuthorizeTabRequestPayload, respondImmediately);
 
       case 'pub(accounts.list)':
-        return this.accountsListAuthorized(url, request as RequestAccountList);
+        return this.accountsListAuthorized(url, request as RequestAccountList).then(respondImmediately);
 
       case 'pub(accounts.subscribe)':
-        return port && this.accountsSubscribeAuthorized(url, id, port);
+        return respondImmediately(port && this.accountsSubscribeAuthorized(url, messageId, port));
 
       case 'pub(accounts.unsubscribe)':
-        return this.accountsUnsubscribe(url, request as RequestAccountUnsubscribe);
+        return respondImmediately(this.accountsUnsubscribe(url, request as RequestAccountUnsubscribe));
 
       case 'pub(bytes.sign)':
-        return this.bytesSign(url, request as SignerPayloadRaw);
+        return this.bytesSign(url, messageId, request as SignerPayloadRawWithType);
 
       case 'pub(extrinsic.sign)':
-        return this.extrinsicSign(url, request as SignerPayloadJSON);
+        return this.extrinsicSign(url, messageId, request as SignerPayloadJSONWithType);
 
       case 'pub(metadata.list)':
-        return this.metadataList(url);
+        return this.metadataList(url).then(respondImmediately);
 
       case 'pub(metadata.provide)':
-        return this.metadataProvide(url, request as MetadataDef);
+        return this.metadataProvide(url, messageId, request as MetadataDef);
 
       case 'pub(rpc.listProviders)':
-        return this.rpcListProviders();
+        return this.rpcListProviders().then(respondImmediately);
 
       case 'pub(rpc.send)':
-        return port && this.rpcSend(request as RequestRpcSend, port);
+        return port && this.rpcSend(request as RequestRpcSend, port).then(respondImmediately);
 
       case 'pub(rpc.startProvider)':
-        return port && this.rpcStartProvider(request as string, port);
+        return port && this.rpcStartProvider(request as string, port).then(respondImmediately);
 
       case 'pub(rpc.subscribe)':
-        return port && this.rpcSubscribe(request as RequestRpcSubscribe, id, port);
+        return port && this.rpcSubscribe(request as RequestRpcSubscribe, messageId, port).then(respondImmediately);
 
       case 'pub(rpc.subscribeConnected)':
-        return port && this.rpcSubscribeConnected(request as null, id, port);
+        return port && this.rpcSubscribeConnected(request as null, messageId, port).then(respondImmediately);
 
       case 'pub(rpc.unsubscribe)':
-        return port && this.rpcUnsubscribe(request as RequestRpcUnsubscribe, port);
+        return port && this.rpcUnsubscribe(request as RequestRpcUnsubscribe, port).then(respondImmediately);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

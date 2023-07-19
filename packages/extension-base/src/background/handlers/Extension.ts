@@ -6,15 +6,16 @@ import type { KeyringPair, KeyringPair$Json, KeyringPair$Meta } from '@polkadot/
 import type { Registry, SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import type { KeypairType } from '@polkadot/util-crypto/types';
-import type { AccountJson, AllowedPath, AuthorizeRequest, MessageTypes, MetadataRequest, RequestAccountChangePassword, RequestAccountCreateHardware, RequestAccountCreateSuri, RequestAccountEdit, RequestAccountExport, RequestAccountForget, RequestAccountShow, RequestAccountTie, RequestAccountValidate, RequestActiveTabsUrlUpdate, RequestAuthorizeApprove, RequestAuthorizeReject, RequestBatchRestore, RequestDeriveCreate, RequestDeriveValidate, RequestJsonRestore, RequestMetadataApprove, RequestMetadataReject, RequestSeedCreate, RequestSeedValidate, RequestSigningApprovePassword, RequestSigningApproveSignature, RequestSigningCancel, RequestSigningIsLocked, RequestTypes, RequestUpdateAuthorizedAccounts, ResponseAccountExport, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSeedCreate, ResponseSeedValidate, ResponseSigningIsLocked, ResponseType, SigningRequest } from '../types';
+import type { AccountJson, AllowedPath, MessageTypes, RequestAccountChangePassword, RequestAccountCreateHardware, RequestAccountCreateSuri, RequestAccountEdit, RequestAccountExport, RequestAccountForget, RequestAccountShow, RequestAccountTie, RequestAccountValidate, RequestActiveTabsUrlUpdate, RequestAuthorizeApprove, RequestAuthorizeReject, RequestBatchRestore, RequestDeriveCreate, RequestDeriveValidate, RequestJsonRestore, RequestMetadataApprove, RequestMetadataReject, RequestSeedCreate, RequestSeedValidate, RequestSigningApprovePassword, RequestSigningApproveSignature, RequestSigningCancel, RequestSigningIsLocked, RequestTypes, RequestUpdateAuthorizedAccounts, ResponseAccountExport, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSeedCreate, ResponseSeedValidate, ResponseSigningIsLocked } from '../types';
 
 import { ALLOWED_PATH, PASSWORD_EXPIRY_MS } from '@polkadot/extension-base/defaults';
 import { isJsonAuthentic, signJson } from '@polkadot/extension-base/utils/accountJsonIntegrity';
 import { metadataExpand } from '@polkadot/extension-chains';
+import { wrapBytes } from '@polkadot/extension-dapp';
 import { TypeRegistry } from '@polkadot/types';
 import keyring from '@polkadot/ui-keyring';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
-import { assert, isHex } from '@polkadot/util';
+import { assert, isHex, u8aToHex } from '@polkadot/util';
 import { keyExtractSuri, mnemonicGenerate, mnemonicValidate } from '@polkadot/util-crypto';
 
 import { withErrorLog } from './helpers';
@@ -207,26 +208,26 @@ export default class Extension {
     return true;
   }
 
-  private authorizeApprove ({ authorizedAccounts, id }: RequestAuthorizeApprove): boolean {
-    const queued = this.#state.getAuthRequest(id);
+  private async authorizeApprove ({ authorizedAccounts, id }: RequestAuthorizeApprove, contentPort: chrome.runtime.Port): Promise<{ authorizedAccounts: string[] }> {
+    const queued = await this.#state.getAuthRequest(id);
 
     assert(queued, 'Unable to find request');
 
-    const { resolve } = queued;
+    await this.#state.addAuthorizedUrl(queued.idStr, queued.payload.origin, queued.url, authorizedAccounts);
 
-    resolve({ authorizedAccounts, result: true });
+    await this.#state.removeAuthRequest(id);
+    contentPort.postMessage({ id, response: { authorizedAccounts } });
 
-    return true;
+    return { authorizedAccounts };
   }
 
-  private authorizeReject ({ id }: RequestAuthorizeReject): boolean {
+  private async authorizeReject ({ id }: RequestAuthorizeReject, contentPort: chrome.runtime.Port): Promise<boolean> {
     const queued = this.#state.getAuthRequest(id);
 
     assert(queued, 'Unable to find request');
 
-    const { reject } = queued;
-
-    reject(new Error('Rejected'));
+    await this.#state.removeAuthRequest(id);
+    contentPort.postMessage({ id, error: 'Rejected' });
 
     return true;
   }
@@ -243,28 +244,15 @@ export default class Extension {
     return { list: await this.#state.getAuthUrls() };
   }
 
-  private authorizeSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'pri(authorize.requests)'>(id, port);
-    const subscription = this.#state.authSubject.subscribe((requests: AuthorizeRequest[]): void => cb(requests));
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      subscription.unsubscribe();
-    });
-
-    return true;
-  }
-
-  private async metadataApprove ({ id }: RequestMetadataApprove): Promise<boolean> {
-    const queued = this.#state.getMetaRequest(id);
+  private async metadataApprove ({ id }: RequestMetadataApprove, contentPort: chrome.runtime.Port): Promise<boolean> {
+    const queued = await this.#state.getMetaRequest(id);
 
     assert(queued, 'Unable to find request');
 
-    const { request, resolve } = queued;
+    await this.#state.saveMetadata(queued.payload);
 
-    await this.#state.saveMetadata(request);
-
-    resolve(true);
+    await this.#state.removeMetadataRequest(id);
+    contentPort.postMessage({ id });
 
     return true;
   }
@@ -277,26 +265,13 @@ export default class Extension {
     return this.#state.getKnownMetadata();
   }
 
-  private metadataReject ({ id }: RequestMetadataReject): boolean {
+  private async metadataReject ({ id }: RequestMetadataReject, contentPort: chrome.runtime.Port): Promise<boolean> {
     const queued = this.#state.getMetaRequest(id);
 
     assert(queued, 'Unable to find request');
 
-    const { reject } = queued;
-
-    reject(new Error('Rejected'));
-
-    return true;
-  }
-
-  private metadataSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'pri(metadata.requests)'>(id, port);
-    const subscription = this.#state.metaSubject.subscribe((requests: MetadataRequest[]): void => cb(requests));
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      subscription.unsubscribe();
-    });
+    await this.#state.removeMetadataRequest(id);
+    contentPort.postMessage({ id, error: 'Rejected' });
 
     return true;
   }
@@ -369,25 +344,33 @@ export default class Extension {
     };
   }
 
-  private async signingApprovePassword ({ id, password, savePass }: RequestSigningApprovePassword): Promise<boolean> {
-    const queued = this.#state.getSignRequest(id);
+  private async signingApprovePassword ({ id, password, savePass }: RequestSigningApprovePassword, contentPort: chrome.runtime.Port): Promise<boolean> {
+    const queued = await this.#state.getSignRequest(id);
 
     assert(queued, 'Unable to find request');
 
-    const { reject, request, resolve } = queued;
+    const { payload } = queued;
     const pair = keyring.getPair(queued.account.address);
 
     if (!pair) {
-      reject(new Error('Unable to find pair'));
+      const error = new Error('Unable to find pair');
 
-      return false;
+      await this.#state.removeSignRequest(id);
+      contentPort.postMessage({ id, error: error.message });
+
+      throw error;
     }
 
     this.refreshAccountPasswordCache(pair);
 
     // if the keyring pair is locked, the password is needed
     if (pair.isLocked && !password) {
-      reject(new Error('Password needed to unlock the account'));
+      const error = new Error('Password needed to unlock the account');
+
+      await this.#state.removeSignRequest(id);
+      contentPort.postMessage({ id, error: error.message });
+
+      throw error;
     }
 
     if (pair.isLocked) {
@@ -400,7 +383,6 @@ export default class Extension {
 
     // construct a new registry (avoiding pollution), between requests
     let registry: Registry;
-    const { payload } = request;
 
     if (isJsonPayload(payload)) {
       // Get the metadata for the genesisHash
@@ -424,7 +406,17 @@ export default class Extension {
       registry = new TypeRegistry();
     }
 
-    const result = request.sign(registry, pair);
+    const result = payload.signType === 'bytes'
+      ? {
+        signature: u8aToHex(
+          pair.sign(
+            wrapBytes(payload.data)
+          )
+        )
+      }
+      : registry
+        .createType('ExtrinsicPayload', payload, { version: payload.version })
+        .sign(pair);
 
     if (savePass) {
       // unlike queued.account.address the following
@@ -435,44 +427,40 @@ export default class Extension {
       pair.lock();
     }
 
-    resolve({
-      id,
-      ...result
-    });
+    await this.#state.removeSignRequest(id);
+    contentPort.postMessage({ id, response: result });
 
     return true;
   }
 
-  private signingApproveSignature ({ id, signature }: RequestSigningApproveSignature): boolean {
+  private async signingApproveSignature ({ id, signature }: RequestSigningApproveSignature, contentPort: chrome.runtime.Port): Promise<boolean> {
     const queued = this.#state.getSignRequest(id);
 
     assert(queued, 'Unable to find request');
 
-    const { resolve } = queued;
-
-    resolve({ id, signature });
+    await this.#state.removeSignRequest(id);
+    contentPort.postMessage({ id, response: { signature } });
 
     return true;
   }
 
-  private signingCancel ({ id }: RequestSigningCancel): boolean {
-    const queued = this.#state.getSignRequest(id);
+  private async signingCancel ({ id }: RequestSigningCancel, contentPort: chrome.runtime.Port): Promise<boolean> {
+    const queued = await this.#state.getSignRequest(id);
 
     assert(queued, 'Unable to find request');
 
-    const { reject } = queued;
-
-    reject(new Error('Cancelled'));
+    await this.#state.removeSignRequest(id);
+    contentPort.postMessage({ id, error: 'Cancelled' });
 
     return true;
   }
 
-  private signingIsLocked ({ id }: RequestSigningIsLocked): ResponseSigningIsLocked {
-    const queued = this.#state.getSignRequest(id);
+  private async signingIsLocked ({ id }: RequestSigningIsLocked): Promise<ResponseSigningIsLocked> {
+    const queued = await this.#state.getSignRequest(id);
 
     assert(queued, 'Unable to find request');
 
-    const address = queued.request.payload.address;
+    const address = queued.payload.address;
     const pair = keyring.getPair(address);
 
     assert(pair, 'Unable to find pair');
@@ -483,18 +471,6 @@ export default class Extension {
       isLocked: pair.isLocked,
       remainingTime
     };
-  }
-
-  private signingSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'pri(signing.requests)'>(id, port);
-    const subscription = this.#state.signSubject.subscribe((requests: SigningRequest[]): void => cb(requests));
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      subscription.unsubscribe();
-    });
-
-    return true;
   }
 
   // this method is called when we want to open up the popup from the ui
@@ -561,8 +537,8 @@ export default class Extension {
     return { list: await this.#state.removeAuthorization(url) };
   }
 
-  private deleteAuthRequest (requestId: string): void {
-    return this.#state.deleteAuthRequest(requestId);
+  private deleteAuthRequest (requestId: string): Promise<void> {
+    return this.#state.removeAuthRequest(requestId);
   }
 
   private async updateCurrentTabs ({ urls }: RequestActiveTabsUrlUpdate) {
@@ -575,124 +551,138 @@ export default class Extension {
 
   // Weird thought, the eslint override is not needed in Tabs
   // eslint-disable-next-line @typescript-eslint/require-await
-  public async handle<TMessageType extends MessageTypes> (id: string, type: TMessageType, request: RequestTypes[TMessageType], port?: chrome.runtime.Port): Promise<ResponseType<TMessageType>> {
+  public async handle<TMessageType extends MessageTypes> (
+    messageId: string,
+    type: TMessageType,
+    request: RequestTypes[TMessageType],
+    respondImmediately: (response: unknown) => void,
+    port: chrome.runtime.Port | undefined,
+    { contentPort }: { contentPort?: chrome.runtime.Port | undefined }
+  ): Promise<unknown> {
     switch (type) {
       case 'pri(authorize.approve)':
-        return this.authorizeApprove(request as RequestAuthorizeApprove);
+        assert(contentPort, 'Connection with the content script is not open.');
+
+        return this.authorizeApprove(request as RequestAuthorizeApprove, contentPort).then(respondImmediately);
 
       case 'pri(authorize.reject)':
-        return this.authorizeReject(request as RequestAuthorizeReject);
+        assert(contentPort, 'Connection with the content script is not open.');
+
+        return this.authorizeReject(request as RequestAuthorizeReject, contentPort).then(respondImmediately);
 
       case 'pri(authorize.list)':
-        return this.getAuthList();
+        return this.getAuthList().then(respondImmediately);
 
       case 'pri(authorize.remove)':
-        return this.removeAuthorization(request as string);
+        return this.removeAuthorization(request as string).then(respondImmediately);
 
       case 'pri(authorize.delete.request)':
-        return this.deleteAuthRequest(request as string);
-
-      case 'pri(authorize.requests)':
-        return port && this.authorizeSubscribe(id, port);
+        return this.deleteAuthRequest(request as string).then(respondImmediately);
 
       case 'pri(authorize.update)':
-        return this.authorizeUpdate(request as RequestUpdateAuthorizedAccounts);
+        return this.authorizeUpdate(request as RequestUpdateAuthorizedAccounts).then(respondImmediately);
 
       case 'pri(authorizeDate.update)':
-        return this.authorizeDateUpdate(request as string);
+        return this.authorizeDateUpdate(request as string).then(respondImmediately);
 
       case 'pri(accounts.create.hardware)':
-        return this.accountsCreateHardware(request as RequestAccountCreateHardware);
+        return respondImmediately(this.accountsCreateHardware(request as RequestAccountCreateHardware));
 
       case 'pri(accounts.create.suri)':
-        return this.accountsCreateSuri(request as RequestAccountCreateSuri);
+        return respondImmediately(this.accountsCreateSuri(request as RequestAccountCreateSuri));
 
       case 'pri(accounts.changePassword)':
-        return this.accountsChangePassword(request as RequestAccountChangePassword);
+        return respondImmediately(this.accountsChangePassword(request as RequestAccountChangePassword));
 
       case 'pri(accounts.edit)':
-        return this.accountsEdit(request as RequestAccountEdit);
+        return respondImmediately(this.accountsEdit(request as RequestAccountEdit));
 
       case 'pri(accounts.export)':
-        return this.accountsExport(request as RequestAccountExport);
+        return this.accountsExport(request as RequestAccountExport).then(respondImmediately);
 
       case 'pri(accounts.forget)':
-        return this.accountsForget(request as RequestAccountForget);
+        return this.accountsForget(request as RequestAccountForget).then(respondImmediately);
 
       case 'pri(accounts.show)':
-        return this.accountsShow(request as RequestAccountShow);
+        return respondImmediately(this.accountsShow(request as RequestAccountShow));
 
       case 'pri(accounts.subscribe)':
-        return port && this.accountsSubscribe(id, port);
+        return respondImmediately(port && this.accountsSubscribe(messageId, port));
 
       case 'pri(accounts.tie)':
-        return this.accountsTie(request as RequestAccountTie);
+        return respondImmediately(this.accountsTie(request as RequestAccountTie));
 
       case 'pri(accounts.validate)':
-        return this.accountsValidate(request as RequestAccountValidate);
+        return respondImmediately(this.accountsValidate(request as RequestAccountValidate));
 
       case 'pri(metadata.approve)':
-        return this.metadataApprove(request as RequestMetadataApprove);
+
+        assert(contentPort, 'Connection with the content script is not open.');
+
+        return this.metadataApprove(request as RequestMetadataApprove, contentPort).then(respondImmediately);
 
       case 'pri(metadata.get)':
-        return this.metadataGet(request as string);
+        return this.metadataGet(request as string).then(respondImmediately);
 
       case 'pri(metadata.list)':
-        return this.metadataList();
+        return this.metadataList().then(respondImmediately);
 
       case 'pri(metadata.reject)':
-        return this.metadataReject(request as RequestMetadataReject);
 
-      case 'pri(metadata.requests)':
-        return port && this.metadataSubscribe(id, port);
+        assert(contentPort, 'Connection with the content script is not open.');
+
+        return this.metadataReject(request as RequestMetadataReject, contentPort).then(respondImmediately);
 
       case 'pri(activeTabsUrl.update)':
-        return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate);
+        return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate).then(respondImmediately);
 
       case 'pri(connectedTabsUrl.get)':
-        return this.getConnectedTabsUrl();
+        return respondImmediately(this.getConnectedTabsUrl());
 
       case 'pri(derivation.create)':
-        return this.derivationCreate(request as RequestDeriveCreate);
+        return respondImmediately(this.derivationCreate(request as RequestDeriveCreate));
 
       case 'pri(derivation.validate)':
-        return this.derivationValidate(request as RequestDeriveValidate);
+        return respondImmediately(this.derivationValidate(request as RequestDeriveValidate));
 
       case 'pri(json.restore)':
-        return this.jsonRestore(request as RequestJsonRestore);
+        return this.jsonRestore(request as RequestJsonRestore).then(respondImmediately);
 
       case 'pri(json.batchRestore)':
-        return this.batchRestore(request as RequestBatchRestore);
+        return this.batchRestore(request as RequestBatchRestore).then(respondImmediately);
 
       case 'pri(json.account.info)':
-        return this.jsonGetAccountInfo(request as KeyringPair$Json);
+        return respondImmediately(this.jsonGetAccountInfo(request as KeyringPair$Json));
 
       case 'pri(seed.create)':
-        return this.seedCreate(request as RequestSeedCreate);
+        return respondImmediately(this.seedCreate(request as RequestSeedCreate));
 
       case 'pri(seed.validate)':
-        return this.seedValidate(request as RequestSeedValidate);
+        return respondImmediately(this.seedValidate(request as RequestSeedValidate));
 
       case 'pri(settings.notification)':
-        return this.#state.setNotification(request as string);
+        return respondImmediately(this.#state.setNotification(request as string));
 
       case 'pri(signing.approve.password)':
-        return this.signingApprovePassword(request as RequestSigningApprovePassword);
+        assert(contentPort, 'Connection with the content script is not open.');
+
+        return this.signingApprovePassword(request as RequestSigningApprovePassword, contentPort).then(respondImmediately);
 
       case 'pri(signing.approve.signature)':
-        return this.signingApproveSignature(request as RequestSigningApproveSignature);
+        assert(contentPort, 'Connection with the content script is not open.');
+
+        return this.signingApproveSignature(request as RequestSigningApproveSignature, contentPort).then(respondImmediately);
 
       case 'pri(signing.cancel)':
-        return this.signingCancel(request as RequestSigningCancel);
+        assert(contentPort, 'Connection with the content script is not open.');
+
+        return this.signingCancel(request as RequestSigningCancel, contentPort).then(respondImmediately);
 
       case 'pri(signing.isLocked)':
-        return this.signingIsLocked(request as RequestSigningIsLocked);
-
-      case 'pri(signing.requests)':
-        return port && this.signingSubscribe(id, port);
+        return this.signingIsLocked(request as RequestSigningIsLocked).then(respondImmediately);
 
       case 'pri(window.open)':
-        return this.windowOpen(request as AllowedPath);
+        return respondImmediately(this.windowOpen(request as AllowedPath));
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

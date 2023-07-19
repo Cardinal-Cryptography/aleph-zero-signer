@@ -4,15 +4,15 @@
 /* eslint-disable no-use-before-define */
 
 import type { InjectedAccount, InjectedMetadataKnown, MetadataDef, ProviderList, ProviderMeta } from '@polkadot/extension-inject/types';
-import type { KeyringPair, KeyringPair$Json, KeyringPair$Meta } from '@polkadot/keyring/types';
+import type { KeyringPair$Json, KeyringPair$Meta } from '@polkadot/keyring/types';
 import type { JsonRpcResponse } from '@polkadot/rpc-provider/types';
-import type { Registry, SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
+import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { KeyringPairs$Json } from '@polkadot/ui-keyring/types';
 import type { HexString } from '@polkadot/util/types';
 import type { KeypairType } from '@polkadot/util-crypto/types';
 
 import { ALLOWED_PATH } from '../defaults';
-import { AuthResponse, AuthUrls } from './handlers/State';
+import { AuthUrls } from './handlers/State';
 
 type KeysWithDefinedValues<T> = {
   [K in keyof T]: T[K] extends undefined ? never : K
@@ -56,20 +56,20 @@ export type AccountsContext = {
 
 export interface AuthorizeRequest {
   id: string;
-  request: RequestAuthorizeTab;
+  payload: AuthorizeTabRequestPayload;
   url: string;
 }
 
 export interface MetadataRequest {
   id: string;
-  request: MetadataDef;
+  payload: MetadataDef;
   url: string;
 }
 
 export interface SigningRequest {
   account: AccountJson;
   id: string;
-  request: RequestSign;
+  payload: RequestPayload;
   url: string;
 }
 
@@ -92,7 +92,6 @@ export interface RequestSignatures {
   'pri(authorize.approve)': [RequestAuthorizeApprove, boolean];
   'pri(authorize.reject)': [RequestAuthorizeReject, boolean];
   'pri(authorize.list)': [null, ResponseAuthorizeList];
-  'pri(authorize.requests)': [RequestAuthorizeSubscribe, boolean, AuthorizeRequest[]];
   'pri(authorize.remove)': [string, ResponseAuthorizeList];
   'pri(authorize.delete.request)': [string, void];
   'pri(authorizeDate.update)': [string, void];
@@ -107,7 +106,6 @@ export interface RequestSignatures {
   'pri(metadata.approve)': [RequestMetadataApprove, boolean];
   'pri(metadata.get)': [string | null, MetadataDef | null];
   'pri(metadata.reject)': [RequestMetadataReject, boolean];
-  'pri(metadata.requests)': [RequestMetadataSubscribe, boolean, MetadataRequest[]];
   'pri(metadata.list)': [null, MetadataDef[]];
   'pri(seed.create)': [RequestSeedCreate, ResponseSeedCreate];
   'pri(seed.validate)': [RequestSeedValidate, ResponseSeedValidate];
@@ -116,15 +114,14 @@ export interface RequestSignatures {
   'pri(signing.approve.signature)': [RequestSigningApproveSignature, boolean];
   'pri(signing.cancel)': [RequestSigningCancel, boolean];
   'pri(signing.isLocked)': [RequestSigningIsLocked, ResponseSigningIsLocked];
-  'pri(signing.requests)': [RequestSigningSubscribe, boolean, SigningRequest[]];
   'pri(window.open)': [AllowedPath, boolean];
   // public/external requests, i.e. from a page
   'pub(accounts.list)': [RequestAccountList, InjectedAccount[]];
   'pub(accounts.subscribe)': [RequestAccountSubscribe, string, InjectedAccount[]];
   'pub(accounts.unsubscribe)': [RequestAccountUnsubscribe, boolean];
-  'pub(authorize.tab)': [RequestAuthorizeTab, Promise<AuthResponse>];
-  'pub(bytes.sign)': [SignerPayloadRaw, ResponseSigning];
-  'pub(extrinsic.sign)': [SignerPayloadJSON, ResponseSigning];
+  'pub(authorize.tab)': [AuthorizeTabRequestPayload, Promise<void>];
+  'pub(bytes.sign)': [SignerPayloadRawWithType, ResponseSigning];
+  'pub(extrinsic.sign)': [SignerPayloadJSONWithType, ResponseSigning];
   'pub(metadata.list)': [null, InjectedMetadataKnown[]];
   'pub(metadata.provide)': [MetadataDef, boolean];
   'pub(phishing.redirectIfDenied)': [null, boolean];
@@ -153,9 +150,16 @@ export interface TransportRequestMessage<TMessageType extends MessageTypes> {
   request: RequestTypes[TMessageType];
 }
 
-export interface RequestAuthorizeTab {
+export interface AuthorizeTabRequestPayload {
   origin: string;
 }
+
+export type SignerPayloadRawWithType =
+  SignerPayloadRaw &
+  { signType: 'bytes' }
+export type SignerPayloadJSONWithType =
+  SignerPayloadJSON &
+  { signType: 'extrinsic'}
 
 export interface RequestAuthorizeApprove {
   id: string;
@@ -380,11 +384,7 @@ export type SubscriptionMessageTypes = NoUndefinedValues<{
 export type MessageTypesWithSubscriptions = keyof SubscriptionMessageTypes;
 export type MessageTypesWithNoSubscriptions = Exclude<MessageTypes, keyof SubscriptionMessageTypes>
 
-export interface RequestSign {
-  readonly payload: SignerPayloadJSON | SignerPayloadRaw;
-
-  sign (registry: Registry, pair: KeyringPair): { signature: HexString };
-}
+export type RequestPayload = SignerPayloadJSONWithType | SignerPayloadRawWithType
 
 export interface RequestJsonRestore {
   file: KeyringPair$Json;

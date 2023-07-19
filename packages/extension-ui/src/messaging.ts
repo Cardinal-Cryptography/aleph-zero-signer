@@ -4,13 +4,11 @@
 import type {
   AccountJson,
   AllowedPath,
-  AuthorizeRequest,
   ConnectedTabsUrlResponse,
   MessageTypes,
   MessageTypesWithNoSubscriptions,
   MessageTypesWithNullRequest,
   MessageTypesWithSubscriptions,
-  MetadataRequest,
   RequestTypes,
   ResponseAuthorizeList,
   ResponseDeriveValidate,
@@ -18,7 +16,6 @@ import type {
   ResponseSigningIsLocked,
   ResponseTypes,
   SeedLengths,
-  SigningRequest,
   SubscriptionMessageTypes
 } from '@polkadot/extension-base/background/types';
 import type { Message } from '@polkadot/extension-base/types';
@@ -255,10 +252,6 @@ export async function subscribeAccounts(cb: (accounts: AccountJson[]) => void): 
   return sendMessage('pri(accounts.subscribe)', null, cb);
 }
 
-export async function subscribeAuthorizeRequests(cb: (accounts: AuthorizeRequest[]) => void): Promise<boolean> {
-  return sendMessage('pri(authorize.requests)', null, cb);
-}
-
 export async function getAuthList(): Promise<ResponseAuthorizeList> {
   return sendMessage('pri(authorize.list)');
 }
@@ -277,14 +270,6 @@ export async function updateAuthorizationDate(url: string): Promise<void> {
 
 export async function deleteAuthRequest(requestId: string): Promise<void> {
   return sendMessage('pri(authorize.delete.request)', requestId);
-}
-
-export async function subscribeMetadataRequests(cb: (accounts: MetadataRequest[]) => void): Promise<boolean> {
-  return sendMessage('pri(metadata.requests)', null, cb);
-}
-
-export async function subscribeSigningRequests(cb: (accounts: SigningRequest[]) => void): Promise<boolean> {
-  return sendMessage('pri(signing.requests)', null, cb);
 }
 
 export async function validateSeed(suri: string, type?: KeypairType): Promise<{ address: string; suri: string }> {
