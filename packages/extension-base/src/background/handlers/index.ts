@@ -14,15 +14,12 @@ const tabs = new Tabs(state);
 
 export default function handler<TMessageType extends MessageTypes> (
   { id: messageId, message, request }: TransportRequestMessage<TMessageType>,
-  receivingPort: chrome.runtime.Port | undefined,
-  allPorts: {
-    contentPort?: chrome.runtime.Port | undefined,
-    extensionPort?: chrome.runtime.Port | undefined,
-  }
+  getCurrentPort: () => chrome.runtime.Port,
+  getPort: (portAlias: 'content' | 'extension') => chrome.runtime.Port
 ): void {
-  const isExtension = !receivingPort || receivingPort?.name === PORT_EXTENSION;
+  const isExtension = getCurrentPort().name === PORT_EXTENSION;
 
-  const sender = receivingPort?.sender as chrome.runtime.MessageSender;
+  const sender = getCurrentPort().sender as chrome.runtime.MessageSender;
 
   const from = isExtension
     ? 'extension'
@@ -32,20 +29,17 @@ export default function handler<TMessageType extends MessageTypes> (
   console.log(` [in] ${source}`); // :: ${JSON.stringify(request)}`);
 
   const respond = (response: unknown) => {
-    receivingPort?.postMessage({ id: messageId, response });
+    getCurrentPort().postMessage({ id: messageId, response });
   };
 
   const promise = isExtension
-    ? extension.handle(messageId, message, request, respond, receivingPort, allPorts)
-    : tabs.handle(messageId, message, request, respond, from, receivingPort);
+    ? extension.handle(messageId, message, request, respond, getCurrentPort, getPort)
+    : tabs.handle(messageId, message, request, respond, from, getCurrentPort());
 
   promise
     .catch((error: Error): void => {
       console.log(`[err] ${source}:: ${error.message}`);
 
-      // only send message back to port if it's still connected
-      if (receivingPort) {
-        receivingPort.postMessage({ error: error.message, id: messageId });
-      }
+      getCurrentPort().postMessage({ error: error.message, id: messageId });
     });
 }

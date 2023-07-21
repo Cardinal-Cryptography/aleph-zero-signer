@@ -69,7 +69,7 @@ describe('Extension', () => {
         name: 'parent',
         password,
         suri
-      }, () => undefined, {} as chrome.runtime.Port, {});
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port));
     const { address } = await new Promise<any>((resolve) => extension.handle('id', 'pri(seed.validate)', type && type === 'ethereum'
       ? {
         suri,
@@ -77,7 +77,7 @@ describe('Extension', () => {
       }
       : {
         suri
-      }, resolve, {} as chrome.runtime.Port, {}));
+      }, resolve, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port)));
 
     return address;
   };
@@ -100,7 +100,7 @@ describe('Extension', () => {
     const result = await new Promise<any>((resolve) => extension.handle('id', 'pri(accounts.export)', {
       address,
       password
-    }, resolve, {} as chrome.runtime.Port, {}));
+    }, resolve, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port)));
 
     expect(result.exportedJson.address).toBe(address);
     expect(result.exportedJson.encoded).toBeDefined();
@@ -118,7 +118,7 @@ describe('Extension', () => {
         parentAddress: address,
         parentPassword: password,
         suri: '//path'
-      }, resolve, {} as chrome.runtime.Port, {}));
+      }, resolve, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port)));
 
       expect(result).toStrictEqual({
         address: '5FP3TT3EruYBNh8YM8yoxsreMx7uZv1J1zNX7fFhoC5enwmN',
@@ -131,7 +131,7 @@ describe('Extension', () => {
         parentAddress: address,
         parentPassword: password,
         suri: 'invalid-path'
-      }, () => undefined, {} as chrome.runtime.Port, {})).rejects.toStrictEqual(new Error('"invalid-path" is not a valid derivation path'));
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port))).rejects.toStrictEqual(new Error('"invalid-path" is not a valid derivation path'));
     });
 
     test('pri(derivation.validate) throws for invalid password', async () => {
@@ -139,7 +139,7 @@ describe('Extension', () => {
         parentAddress: address,
         parentPassword: 'invalid-password',
         suri: '//path'
-      }, () => undefined, {} as chrome.runtime.Port, {})).rejects.toStrictEqual(new Error('invalid password'));
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port))).rejects.toStrictEqual(new Error('invalid password'));
     });
 
     test('pri(derivation.create) adds a derived account', async () => {
@@ -149,7 +149,7 @@ describe('Extension', () => {
         parentPassword: password,
         password,
         suri: '//path'
-      }, () => undefined, {} as chrome.runtime.Port, {});
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port));
       expect(keyring.getAccounts()).toHaveLength(2);
     });
 
@@ -160,7 +160,7 @@ describe('Extension', () => {
         parentPassword: password,
         password,
         suri: '//path'
-      }, () => undefined, {} as chrome.runtime.Port, {});
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port));
       expect(keyring.getAccount('5FP3TT3EruYBNh8YM8yoxsreMx7uZv1J1zNX7fFhoC5enwmN')?.meta.parentAddress).toEqual(address);
     });
   });
@@ -180,13 +180,13 @@ describe('Extension', () => {
         address,
         newPass,
         oldPass: wrongPass
-      }, () => undefined, {} as chrome.runtime.Port, {})).rejects.toStrictEqual(new Error('oldPass is invalid'));
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port))).rejects.toStrictEqual(new Error('oldPass is invalid'));
 
       await expect(new Promise((resolve) => extension.handle('id', 'pri(accounts.changePassword)', {
         address,
         newPass,
         oldPass: password
-      }, resolve, {} as chrome.runtime.Port, {}))).resolves.toEqual(true);
+      }, resolve, () => ({} as unknown as chrome.runtime.Port), () => ({} as unknown as chrome.runtime.Port)))).resolves.toEqual(true);
 
       const pair = keyring.getPair(address);
 
@@ -239,15 +239,15 @@ describe('Extension', () => {
 
       registry.setSignedExtensions(payload.signedExtensions);
 
-      await tabs.handle('1615191860871.5', 'pub(extrinsic.sign)', payload, () => undefined, 'http://localhost:3000', {} as chrome.runtime.Port);
+      await tabs.handle('1615191860871.5', 'pub(extrinsic.sign)', payload, () => undefined, 'http://localhost:3000', () => ({} as unknown as chrome.runtime.Port));
 
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise, we cannot await yet
       await new Promise((resolve) => setTimeout(resolve));
-      await expect(new Promise((resolve) => extension.handle('1615192072290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('1615192072290.7', 'pri(signing.approve.password)', {
         id: generatedRequest.id,
         password,
         savePass: false
-      }, resolve, {} as chrome.runtime.Port, { contentPort: { postMessage: () => undefined } as unknown as chrome.runtime.Port }))).resolves.toEqual(true);
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({ postMessage: () => undefined } as unknown as chrome.runtime.Port))).resolves.toEqual(undefined);
     });
 
     test('signs with default signed extensions - ethereum', async () => {
@@ -294,16 +294,16 @@ describe('Extension', () => {
 
       registry.setSignedExtensions(payload.signedExtensions);
 
-      await tabs.handle('1615191860871.5', 'pub(extrinsic.sign)', ethPayload, () => undefined, 'http://localhost:3000', {} as chrome.runtime.Port);
+      await tabs.handle('1615191860871.5', 'pub(extrinsic.sign)', ethPayload, () => undefined, 'http://localhost:3000', () => ({} as unknown as chrome.runtime.Port));
 
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise, we cannot await yet
       await new Promise((resolve) => setTimeout(resolve));
 
-      await expect(new Promise((resolve) => extension.handle('1615192072290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('1615192072290.7', 'pri(signing.approve.password)', {
         id: generatedRequest.id,
         password,
         savePass: false
-      }, resolve, {} as chrome.runtime.Port, { contentPort: { postMessage: () => undefined } as unknown as chrome.runtime.Port }))).resolves.toEqual(true);
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({ postMessage: () => undefined } as unknown as chrome.runtime.Port))).resolves.toEqual(undefined);
     });
 
     test('signs with user extensions, known types', async () => {
@@ -371,16 +371,16 @@ describe('Extension', () => {
       registry.setSignedExtensions(payload.signedExtensions, userExtensions);
       registry.register(types);
 
-      await tabs.handle('1615191860771.5', 'pub(extrinsic.sign)', payload, () => undefined, 'http://localhost:3000', {} as chrome.runtime.Port);
+      await tabs.handle('1615191860771.5', 'pub(extrinsic.sign)', payload, () => undefined, 'http://localhost:3000', () => ({} as unknown as chrome.runtime.Port));
 
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise, we cannot await yet
       await new Promise((resolve) => setTimeout(resolve));
 
-      await expect(new Promise((resolve) => extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
         id: generatedRequest.id,
         password,
         savePass: false
-      }, resolve, {} as chrome.runtime.Port, { contentPort: { postMessage: () => undefined } as unknown as chrome.runtime.Port }))).resolves.toEqual(true);
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({ postMessage: () => undefined } as unknown as chrome.runtime.Port))).resolves.toEqual(undefined);
     });
 
     test('override default signed extension', async () => {
@@ -440,16 +440,16 @@ describe('Extension', () => {
       registry.setSignedExtensions(payload.signedExtensions, userExtensions);
       registry.register(types);
 
-      await tabs.handle('1615191860771.5', 'pub(extrinsic.sign)', payload, () => undefined, 'http://localhost:3000', {} as chrome.runtime.Port);
+      await tabs.handle('1615191860771.5', 'pub(extrinsic.sign)', payload, () => undefined, 'http://localhost:3000', () => ({} as unknown as chrome.runtime.Port));
 
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise, we cannot await yet
       await new Promise((resolve) => setTimeout(resolve));
 
-      await expect(new Promise((resolve) => extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
         id: generatedRequest.id,
         password,
         savePass: false
-      }, resolve, {} as chrome.runtime.Port, { contentPort: { postMessage: () => undefined } as unknown as chrome.runtime.Port }))).resolves.toEqual(true);
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({ postMessage: () => undefined } as unknown as chrome.runtime.Port))).resolves.toEqual(undefined);
     });
 
     test('signs with user extensions, additional types', async () => {
@@ -521,16 +521,16 @@ describe('Extension', () => {
       registry.setSignedExtensions(payload.signedExtensions, userExtensions);
       registry.register(types);
 
-      await tabs.handle('1615191860771.5', 'pub(extrinsic.sign)', payload, () => undefined, 'http://localhost:3000', {} as chrome.runtime.Port);
+      await tabs.handle('1615191860771.5', 'pub(extrinsic.sign)', payload, () => undefined, 'http://localhost:3000', () => ({} as unknown as chrome.runtime.Port));
 
       // Waiting for the "state.allSignRequests" variable to get populated in the previous promise (we cannot await yet)
       await new Promise((resolve) => setTimeout(resolve));
 
-      await expect(new Promise((resolve) => extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
+      await expect(extension.handle('1615192062290.7', 'pri(signing.approve.password)', {
         id: generatedRequest.id,
         password,
         savePass: false
-      }, resolve, {} as chrome.runtime.Port, { contentPort: { postMessage: () => undefined } as unknown as chrome.runtime.Port }))).resolves.toEqual(true);
+      }, () => undefined, () => ({} as unknown as chrome.runtime.Port), () => ({ postMessage: () => undefined } as unknown as chrome.runtime.Port))).resolves.toEqual(undefined);
     });
   });
 });
