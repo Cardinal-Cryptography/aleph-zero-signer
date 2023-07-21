@@ -45,6 +45,7 @@ function Signing({ className }: Props): React.ReactElement<Props> {
           buttonText={isTransaction ? t('Sign') : t('Sign the message')}
           isFirst={requestIndex === 0}
           isLast={requests.length === 1}
+          key={request.id}
           requestPayload={request.payload}
           signId={request.id}
           url={request.url}

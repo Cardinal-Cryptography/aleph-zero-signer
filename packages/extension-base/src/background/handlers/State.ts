@@ -15,6 +15,7 @@ import { openCenteredWindow, withErrorLog } from './helpers';
 
 interface AuthRequest {
   id: string;
+  requestingTabId: number,
   idStr: string;
   payload: AuthorizeTabRequestPayload;
   url: string;
@@ -48,7 +49,8 @@ type Providers = Record<string, {
 
 interface SignRequest {
   account: AccountJson;
-  id: string;
+  id: string,
+  requestingTabId: number,
   payload: RequestPayload;
   url: string;
 }
@@ -255,7 +257,7 @@ export default class State {
     }));
   }
 
-  public async authorizeUrl (url: string, messageId: string, payload: AuthorizeTabRequestPayload, respond: (response: unknown) => void): Promise<void> {
+  public async authorizeUrl (url: string, messageId: string, requestingTabId: number, payload: AuthorizeTabRequestPayload, respond: (response: unknown) => void): Promise<void> {
     const idStr = new URL(url).origin;
 
     // Do not enqueue duplicate authorization requests.
@@ -279,6 +281,7 @@ export default class State {
       ...authRequests,
       {
         id: messageId,
+        requestingTabId,
         idStr,
         payload,
         url
@@ -297,13 +300,14 @@ export default class State {
     return true;
   }
 
-  public async injectMetadata (url: string, { types, ...restPayload }: MetadataDef, messageId: string): Promise<void> {
+  public async injectMetadata (url: string, { types, ...restPayload }: MetadataDef, messageId: string, requestingTabId: number): Promise<void> {
     type TypesType = ReturnType<Parameters<typeof localStorageStores.chainMetadata.update>[0]>[string]['types']
 
     await localStorageStores.metadataRequests.update((signRequests) => [
       ...signRequests,
       {
         id: messageId,
+        requestingTabId,
         payload: {
           ...restPayload,
           // Type assertion, because "MetadataDef.types" can contain the CodecClass which should not appear here (and is not serializable anyway, so no use of it in local storage)
@@ -436,13 +440,15 @@ export default class State {
     url: string,
     payload: SignerPayloadRawWithType | SignerPayloadJSONWithType,
     account: AccountJson,
-    messageId: string
+    messageId: string,
+    requestingTabId: number
   ): Promise<void> {
     await localStorageStores.signRequests.update((signRequests) => [
       ...signRequests,
       {
         account,
         id: messageId,
+        requestingTabId,
         payload,
         url
       }

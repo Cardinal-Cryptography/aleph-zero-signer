@@ -3,54 +3,62 @@
 
 import { PORT_CONTENT, PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 
-const PORTS_NAMES_TO_ALIASES = {
-  [PORT_CONTENT]: 'content',
-  [PORT_EXTENSION]: 'extension'
-} as const;
-
 /**
  * @return Always use the port directly returned from this function to keep the
  * reference up to date - never reassign it.
  */
-type GetPort = (portName: 'content' | 'extension') => chrome.runtime.Port
+type GetContentPort = (tabId: number) => chrome.runtime.Port
 /**
  * @return Always use the port directly returned from this function to keep the
  * reference up to date - never reassign it.
  */
 type GetCurrentPort = () => chrome.runtime.Port
 
-export default (cb: (getPort: GetPort, getCurrentPort: GetCurrentPort) => void) => {
-  const ports: {
-    [key in typeof PORTS_NAMES_TO_ALIASES[keyof typeof PORTS_NAMES_TO_ALIASES]]?: chrome.runtime.Port | undefined
+export default (cb: (getContentPort: GetContentPort, getCurrentPort: GetCurrentPort) => void) => {
+  const contentPorts: {
+    [tabId: string]: chrome.runtime.Port
+  } = {};
+  const extensionPorts: {
+    // There is a special case in which the key is "undefined" representing the native extension popup
+    [tabId: string]: chrome.runtime.Port
   } = {};
 
-  const isKnownPort = (port: chrome.runtime.Port): port is chrome.runtime.Port & { name: keyof typeof ports } =>
-    Object.keys(PORTS_NAMES_TO_ALIASES).includes(port.name);
-
-  const getPort = (portAlias: keyof typeof ports) => {
-    const port = ports[portAlias];
+  const getContentPort = (tabId: number) => {
+    const port = contentPorts[tabId];
 
     if (!port) {
-      throw new Error('Connection with the content script is not open.');
+      throw new Error(`Connection with the content script from tab "${tabId}" is not open.`);
     }
 
     return port;
   };
 
   chrome.runtime.onConnect.addListener((port) => {
-    // shouldn't happen, however... only listen to what we know about
-    if (!isKnownPort(port)) {
+    if (![PORT_CONTENT, PORT_EXTENSION].includes(port.name)) {
+      // shouldn't happen, however... only listen to what we know about
       throw new Error(`Unknown connection from ${port.name}`);
     }
 
-    ports[PORTS_NAMES_TO_ALIASES[port.name]] = port;
+    const portsMap = port.name === PORT_CONTENT ? contentPorts : extensionPorts;
+
+    console.log(`[dupa] ${port.name === PORT_CONTENT ? 'content' : 'extension'} port changed`);
+    portsMap[getPortTabAsString(port)] = port;
+    port.onDisconnect.addListener(() => {
+      delete portsMap[getPortTabAsString(port)];
+    });
 
     /**
      * Not returning "port" directly in order to always return the fresh instance
      * of the port (i.e. with the same name).
      */
-    const getCurrentPort = () => getPort(PORTS_NAMES_TO_ALIASES[port.name]);
+    const getCurrentPort = () => portsMap[getPortTabAsString(port)];
 
-    cb(getPort, getCurrentPort);
+    cb(getContentPort, getCurrentPort);
   });
 };
+
+/**
+ * @return If the port is not attached to any tab, the "undefined" string is returned.
+ */
+const getPortTabAsString = (port: chrome.runtime.Port): string =>
+  (port.sender?.tab?.id as number || undefined)?.toString() || 'undefined';

@@ -55,7 +55,7 @@ const connect = (): chrome.runtime.Port => {
     const handler = handlers[data.id];
 
     if (!handler) {
-      console.warn(`Unknown response: ${JSON.stringify(data)}`);
+      console.info(`Unknown response: ${JSON.stringify(data)}`);
 
       return;
     }
@@ -248,7 +248,7 @@ export async function rejectMetaRequest(id: string): Promise<void> {
   return sendMessage('pri(metadata.reject)', { id });
 }
 
-export async function subscribeAccounts(cb: (accounts: AccountJson[]) => void): Promise<boolean> {
+export async function subscribeAccounts(cb: (accounts: AccountJson[]) => void): Promise<void> {
   return sendMessage('pri(accounts.subscribe)', null, cb);
 }
 

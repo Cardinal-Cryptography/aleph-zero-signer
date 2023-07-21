@@ -19,7 +19,7 @@ import listenOnPort from './listenOnPort';
 // setup the notification (same a FF default background, white text)
 withErrorLog(() => chrome.action.setBadgeBackgroundColor({ color: '#d90000' }));
 
-listenOnPort((getPort, getCurrentPort) => {
+listenOnPort((getContentPort, getCurrentPort) => {
   /**
    * Trigger reconnection every < 5 minutes to maintain the communication with
    * the volatile service worker.
@@ -31,7 +31,7 @@ listenOnPort((getPort, getCurrentPort) => {
   }, 250e3);
 
   // message and disconnect handlers
-  getCurrentPort().onMessage.addListener((data: TransportRequestMessage<keyof RequestSignatures>) => handlers(data, getCurrentPort, getPort));
+  getCurrentPort().onMessage.addListener((data: TransportRequestMessage<keyof RequestSignatures>) => handlers(data, getCurrentPort, getContentPort));
   getCurrentPort().onDisconnect.addListener(() => {
     clearTimeout(timer);
 

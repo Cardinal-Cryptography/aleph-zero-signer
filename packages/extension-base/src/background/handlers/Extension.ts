@@ -25,7 +25,7 @@ import { createSubscription, unsubscribe } from './subscriptions';
 
 type CachedUnlocks = Record<string, number>;
 
-type GetPort = (portAlias: 'content') => chrome.runtime.Port
+type GetContentPort = (tabId: number) => chrome.runtime.Port
 
 const SEED_DEFAULT_LENGTH = 12;
 const SEED_LENGTHS = [12, 15, 18, 21, 24];
@@ -183,7 +183,7 @@ export default class Extension {
     }
   }
 
-  private accountsSubscribe (id: string, getCurrentPort: () => chrome.runtime.Port): boolean {
+  private accountsSubscribe (id: string, getCurrentPort: () => chrome.runtime.Port): void {
     const cb = createSubscription<'pri(accounts.subscribe)'>(id, getCurrentPort);
     const subscription = accountsObservable.subject.subscribe((accounts: SubjectInfo): void => {
       this.transformAccounts(accounts).then(cb).catch((e) => {
@@ -202,11 +202,9 @@ export default class Extension {
         subscription.unsubscribe();
       }
     });
-
-    return true;
   }
 
-  private async authorizeApprove ({ authorizedAccounts, id }: RequestAuthorizeApprove, getPort: GetPort): Promise<void> {
+  private async authorizeApprove ({ authorizedAccounts, id }: RequestAuthorizeApprove, getContentPort: GetContentPort): Promise<void> {
     const queued = await this.#state.getAuthRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -214,16 +212,16 @@ export default class Extension {
     await this.#state.addAuthorizedUrl(queued.idStr, queued.payload.origin, queued.url, authorizedAccounts);
 
     await this.#state.removeAuthRequest(id);
-    getPort('content').postMessage({ id, response: { authorizedAccounts } });
+    getContentPort(queued.requestingTabId).postMessage({ id, response: { authorizedAccounts } });
   }
 
-  private async authorizeReject ({ id }: RequestAuthorizeReject, getPort: GetPort): Promise<void> {
-    const queued = this.#state.getAuthRequest(id);
+  private async authorizeReject ({ id }: RequestAuthorizeReject, getContentPort: GetContentPort): Promise<void> {
+    const queued = await this.#state.getAuthRequest(id);
 
     assert(queued, 'Unable to find request');
 
     await this.#state.removeAuthRequest(id);
-    getPort('content').postMessage({ id, error: 'Rejected' });
+    getContentPort(queued.requestingTabId).postMessage({ id, error: 'Rejected' });
   }
 
   private async authorizeUpdate ({ authorizedAccounts, url }: RequestUpdateAuthorizedAccounts): Promise<void> {
@@ -238,7 +236,7 @@ export default class Extension {
     return { list: await this.#state.getAuthUrls() };
   }
 
-  private async metadataApprove ({ id }: RequestMetadataApprove, getPort: GetPort): Promise<void> {
+  private async metadataApprove ({ id }: RequestMetadataApprove, getContentPort: GetContentPort): Promise<void> {
     const queued = await this.#state.getMetaRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -246,7 +244,7 @@ export default class Extension {
     await this.#state.saveMetadata(queued.payload);
 
     await this.#state.removeMetadataRequest(id);
-    getPort('content').postMessage({ id });
+    getContentPort(queued.requestingTabId).postMessage({ id });
   }
 
   private async metadataGet (genesisHash: string | null): Promise<MetadataDef | null> {
@@ -257,13 +255,13 @@ export default class Extension {
     return this.#state.getKnownMetadata();
   }
 
-  private async metadataReject ({ id }: RequestMetadataReject, getPort: GetPort): Promise<boolean> {
-    const queued = this.#state.getMetaRequest(id);
+  private async metadataReject ({ id }: RequestMetadataReject, getContentPort: GetContentPort): Promise<boolean> {
+    const queued = await this.#state.getMetaRequest(id);
 
     assert(queued, 'Unable to find request');
 
     await this.#state.removeMetadataRequest(id);
-    getPort('content').postMessage({ id, error: 'Rejected' });
+    getContentPort(queued.requestingTabId).postMessage({ id, error: 'Rejected' });
 
     return true;
   }
@@ -336,7 +334,7 @@ export default class Extension {
     };
   }
 
-  private async signingApprovePassword ({ id, password, savePass }: RequestSigningApprovePassword, getPort: GetPort): Promise<void> {
+  private async signingApprovePassword ({ id, password, savePass }: RequestSigningApprovePassword, getContentPort: GetContentPort): Promise<void> {
     const queued = await this.#state.getSignRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -348,7 +346,7 @@ export default class Extension {
       const error = new Error('Unable to find pair');
 
       await this.#state.removeSignRequest(id);
-      getPort('content').postMessage({ id, error: error.message });
+      getContentPort(queued.requestingTabId).postMessage({ id, error: error.message });
 
       throw error;
     }
@@ -360,7 +358,7 @@ export default class Extension {
       const error = new Error('Password needed to unlock the account');
 
       await this.#state.removeSignRequest(id);
-      getPort('content').postMessage({ id, error: error.message });
+      getContentPort(queued.requestingTabId).postMessage({ id, error: error.message });
 
       throw error;
     }
@@ -420,25 +418,26 @@ export default class Extension {
     }
 
     await this.#state.removeSignRequest(id);
-    getPort('content').postMessage({ id, response: result });
+    console.log(`[dupa] responding to password sign message "${id}":`, result);
+    getContentPort(queued.requestingTabId).postMessage({ id, response: result });
   }
 
-  private async signingApproveSignature ({ id, signature }: RequestSigningApproveSignature, getPort: GetPort): Promise<void> {
-    const queued = this.#state.getSignRequest(id);
-
-    assert(queued, 'Unable to find request');
-
-    await this.#state.removeSignRequest(id);
-    getPort('content').postMessage({ id, response: { signature } });
-  }
-
-  private async signingCancel ({ id }: RequestSigningCancel, getPort: GetPort): Promise<void> {
+  private async signingApproveSignature ({ id, signature }: RequestSigningApproveSignature, getContentPort: GetContentPort): Promise<void> {
     const queued = await this.#state.getSignRequest(id);
 
     assert(queued, 'Unable to find request');
 
     await this.#state.removeSignRequest(id);
-    getPort('content').postMessage({ id, error: 'Cancelled' });
+    getContentPort(queued.requestingTabId).postMessage({ id, response: { signature } });
+  }
+
+  private async signingCancel ({ id }: RequestSigningCancel, getContentPort: GetContentPort): Promise<void> {
+    const queued = await this.#state.getSignRequest(id);
+
+    assert(queued, 'Unable to find request');
+
+    await this.#state.removeSignRequest(id);
+    getContentPort(queued.requestingTabId).postMessage({ id, error: 'Cancelled' });
   }
 
   private async signingIsLocked ({ id }: RequestSigningIsLocked): Promise<ResponseSigningIsLocked> {
@@ -536,14 +535,14 @@ export default class Extension {
     request: RequestTypes[TMessageType],
     respondImmediately: (response: unknown) => void,
     getCurrentPort: () => chrome.runtime.Port,
-    getPort: GetPort
+    getContentPort: GetContentPort
   ): Promise<unknown> {
     switch (type) {
       case 'pri(authorize.approve)':
-        return this.authorizeApprove(request as RequestAuthorizeApprove, getPort);
+        return this.authorizeApprove(request as RequestAuthorizeApprove, getContentPort);
 
       case 'pri(authorize.reject)':
-        return this.authorizeReject(request as RequestAuthorizeReject, getPort);
+        return this.authorizeReject(request as RequestAuthorizeReject, getContentPort);
 
       case 'pri(authorize.list)':
         return this.getAuthList().then(respondImmediately);
@@ -582,7 +581,7 @@ export default class Extension {
         return respondImmediately(this.accountsShow(request as RequestAccountShow));
 
       case 'pri(accounts.subscribe)':
-        return respondImmediately(this.accountsSubscribe(messageId, getCurrentPort));
+        return this.accountsSubscribe(messageId, getCurrentPort);
 
       case 'pri(accounts.tie)':
         return respondImmediately(this.accountsTie(request as RequestAccountTie));
@@ -591,7 +590,7 @@ export default class Extension {
         return respondImmediately(this.accountsValidate(request as RequestAccountValidate));
 
       case 'pri(metadata.approve)':
-        return this.metadataApprove(request as RequestMetadataApprove, getPort);
+        return this.metadataApprove(request as RequestMetadataApprove, getContentPort);
 
       case 'pri(metadata.get)':
         return this.metadataGet(request as string).then(respondImmediately);
@@ -600,7 +599,7 @@ export default class Extension {
         return this.metadataList().then(respondImmediately);
 
       case 'pri(metadata.reject)':
-        return this.metadataReject(request as RequestMetadataReject, getPort);
+        return this.metadataReject(request as RequestMetadataReject, getContentPort);
 
       case 'pri(activeTabsUrl.update)':
         return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate);
@@ -633,13 +632,13 @@ export default class Extension {
         return respondImmediately(this.#state.setNotification(request as string));
 
       case 'pri(signing.approve.password)':
-        return this.signingApprovePassword(request as RequestSigningApprovePassword, getPort);
+        return this.signingApprovePassword(request as RequestSigningApprovePassword, getContentPort);
 
       case 'pri(signing.approve.signature)':
-        return this.signingApproveSignature(request as RequestSigningApproveSignature, getPort);
+        return this.signingApproveSignature(request as RequestSigningApproveSignature, getContentPort);
 
       case 'pri(signing.cancel)':
-        return this.signingCancel(request as RequestSigningCancel, getPort);
+        return this.signingCancel(request as RequestSigningCancel, getContentPort);
 
       case 'pri(signing.isLocked)':
         return this.signingIsLocked(request as RequestSigningIsLocked).then(respondImmediately);

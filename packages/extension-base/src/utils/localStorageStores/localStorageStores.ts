@@ -42,6 +42,7 @@ const STORES_DEFINITIONS = {
 
   signRequests: createStoreDefinition(z.array(z.object({
     id: z.string(),
+    requestingTabId: z.number(),
     url: z.string(),
     account: z.object({
       address: z.string(),
@@ -83,12 +84,14 @@ const STORES_DEFINITIONS = {
 
   metadataRequests: createStoreDefinition(z.array(z.object({
     id: z.string(),
+    requestingTabId: z.number(),
     url: z.string(),
     payload: commonSchemas.metadata
   })), []),
 
   authRequests: createStoreDefinition(z.array(z.object({
     id: z.string(),
+    requestingTabId: z.number(),
     idStr: z.string(),
     url: z.string(),
     payload: z.object({

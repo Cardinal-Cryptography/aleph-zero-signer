@@ -60,8 +60,8 @@ export default class Tabs {
     );
   }
 
-  private async authorize (url: string, messageId: string, request: AuthorizeTabRequestPayload, respondImmediately: (response: unknown) => void): Promise<void> {
-    await this.#state.authorizeUrl(url, messageId, request, respondImmediately);
+  private async authorize (url: string, messageId: string, requestingTabId: number, request: AuthorizeTabRequestPayload, respondImmediately: (response: unknown) => void): Promise<void> {
+    await this.#state.authorizeUrl(url, messageId, requestingTabId, request, respondImmediately);
   }
 
   private accountsListAuthorized (url: string, { anyType }: RequestAccountList): Promise<InjectedAccount[]> {
@@ -121,22 +121,22 @@ export default class Tabs {
     return pair;
   }
 
-  private async bytesSign (url: string, messageId: string, payload: SignerPayloadRawWithType): Promise<void> {
+  private async bytesSign (url: string, messageId: string, requestingTabId: number, payload: SignerPayloadRawWithType): Promise<void> {
     const address = payload.address;
     const pair = this.getSigningPair(address);
 
-    await this.#state.invokeSignatureRequest(url, payload, { address, ...pair.meta }, messageId);
+    await this.#state.invokeSignatureRequest(url, payload, { address, ...pair.meta }, messageId, requestingTabId);
   }
 
-  private async extrinsicSign (url: string, messageId: string, payload: SignerPayloadJSONWithType): Promise<void> {
+  private async extrinsicSign (url: string, messageId: string, requestingTabId: number, payload: SignerPayloadJSONWithType): Promise<void> {
     const address = payload.address;
     const pair = this.getSigningPair(address);
 
-    await this.#state.invokeSignatureRequest(url, payload, { address, ...pair.meta }, messageId);
+    await this.#state.invokeSignatureRequest(url, payload, { address, ...pair.meta }, messageId, requestingTabId);
   }
 
-  private async metadataProvide (url: string, messageId: string, payload: MetadataDef): Promise<void> {
-    await this.#state.injectMetadata(url, payload, messageId);
+  private async metadataProvide (url: string, messageId: string, requestingTabId: number, payload: MetadataDef): Promise<void> {
+    await this.#state.injectMetadata(url, payload, messageId, requestingTabId);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -244,7 +244,7 @@ export default class Tabs {
 
     switch (type) {
       case 'pub(authorize.tab)':
-        return this.authorize(url, messageId, request as AuthorizeTabRequestPayload, respondImmediately);
+        return this.authorize(url, messageId, ensureTabId(getCurrentPort().sender?.tab?.id), request as AuthorizeTabRequestPayload, respondImmediately);
 
       case 'pub(accounts.list)':
         return this.accountsListAuthorized(url, request as RequestAccountList).then(respondImmediately);
@@ -256,16 +256,16 @@ export default class Tabs {
         return respondImmediately(this.accountsUnsubscribe(url, request as RequestAccountUnsubscribe));
 
       case 'pub(bytes.sign)':
-        return this.bytesSign(url, messageId, request as SignerPayloadRawWithType);
+        return this.bytesSign(url, messageId, ensureTabId(getCurrentPort().sender?.tab?.id), request as SignerPayloadRawWithType);
 
       case 'pub(extrinsic.sign)':
-        return this.extrinsicSign(url, messageId, request as SignerPayloadJSONWithType);
+        return this.extrinsicSign(url, messageId, ensureTabId(getCurrentPort().sender?.tab?.id), request as SignerPayloadJSONWithType);
 
       case 'pub(metadata.list)':
         return this.metadataList(url).then(respondImmediately);
 
       case 'pub(metadata.provide)':
-        return this.metadataProvide(url, messageId, request as MetadataDef);
+        return this.metadataProvide(url, messageId, ensureTabId(getCurrentPort().sender?.tab?.id), request as MetadataDef);
 
       case 'pub(rpc.listProviders)':
         return this.rpcListProviders().then(respondImmediately);
@@ -290,3 +290,9 @@ export default class Tabs {
     }
   }
 }
+
+const ensureTabId = (possibleTabId: number | undefined) => {
+  assert(possibleTabId, 'Sender tab id not available');
+
+  return possibleTabId;
+};

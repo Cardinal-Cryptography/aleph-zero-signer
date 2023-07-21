@@ -15,7 +15,7 @@ const tabs = new Tabs(state);
 export default function handler<TMessageType extends MessageTypes> (
   { id: messageId, message, request }: TransportRequestMessage<TMessageType>,
   getCurrentPort: () => chrome.runtime.Port,
-  getPort: (portAlias: 'content' | 'extension') => chrome.runtime.Port
+  getContentPort: (tabId: number) => chrome.runtime.Port
 ): void {
   const isExtension = getCurrentPort().name === PORT_EXTENSION;
 
@@ -33,7 +33,7 @@ export default function handler<TMessageType extends MessageTypes> (
   };
 
   const promise = isExtension
-    ? extension.handle(messageId, message, request, respond, getCurrentPort, getPort)
+    ? extension.handle(messageId, message, request, respond, getCurrentPort, getContentPort)
     : tabs.handle(messageId, message, request, respond, from, getCurrentPort);
 
   promise

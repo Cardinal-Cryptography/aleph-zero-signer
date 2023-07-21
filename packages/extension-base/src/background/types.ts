@@ -62,6 +62,7 @@ export interface AuthorizeRequest {
 
 export interface MetadataRequest {
   id: string;
+  requestingTabId: number,
   payload: MetadataDef;
   url: string;
 }
@@ -69,6 +70,7 @@ export interface MetadataRequest {
 export interface SigningRequest {
   account: AccountJson;
   id: string;
+  requestingTabId: number;
   payload: RequestPayload;
   url: string;
 }
@@ -86,7 +88,7 @@ export interface RequestSignatures {
   'pri(accounts.list)': [RequestAccountList, InjectedAccount[]];
   'pri(accounts.show)': [RequestAccountShow, boolean];
   'pri(accounts.tie)': [RequestAccountTie, boolean];
-  'pri(accounts.subscribe)': [RequestAccountSubscribe, boolean, AccountJson[]];
+  'pri(accounts.subscribe)': [RequestAccountSubscribe, void, AccountJson[]];
   'pri(accounts.validate)': [RequestAccountValidate, boolean];
   'pri(accounts.changePassword)': [RequestAccountChangePassword, boolean];
   'pri(authorize.approve)': [RequestAuthorizeApprove, void];
