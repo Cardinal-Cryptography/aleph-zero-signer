@@ -183,8 +183,8 @@ export default class Extension {
     }
   }
 
-  private accountsSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'pri(accounts.subscribe)'>(id, port);
+  private accountsSubscribe (id: string, getCurrentPort: () => chrome.runtime.Port): boolean {
+    const cb = createSubscription<'pri(accounts.subscribe)'>(id, getCurrentPort);
     const subscription = accountsObservable.subject.subscribe((accounts: SubjectInfo): void => {
       this.transformAccounts(accounts).then(cb).catch((e) => {
         console.error('Error subscribing for accounts:', e);
@@ -193,9 +193,14 @@ export default class Extension {
       });
     });
 
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      subscription.unsubscribe();
+    getCurrentPort().onDisconnect.addListener((): void => {
+      try {
+        // Test if the closed port hasn't been replaced with a new one - if no, postMessage fails, and we can unsubscribe
+        getCurrentPort().postMessage({});
+      } catch (e) {
+        unsubscribe(id);
+        subscription.unsubscribe();
+      }
     });
 
     return true;
@@ -577,7 +582,7 @@ export default class Extension {
         return respondImmediately(this.accountsShow(request as RequestAccountShow));
 
       case 'pri(accounts.subscribe)':
-        return respondImmediately(this.accountsSubscribe(messageId, getCurrentPort()));
+        return respondImmediately(this.accountsSubscribe(messageId, getCurrentPort));
 
       case 'pri(accounts.tie)':
         return respondImmediately(this.accountsTie(request as RequestAccountTie));

@@ -70,8 +70,8 @@ export default class Tabs {
     return this.filterForAuthorizedAccounts(transformedAccounts, url);
   }
 
-  private accountsSubscribeAuthorized (url: string, id: string, port: chrome.runtime.Port): string {
-    const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
+  private accountsSubscribeAuthorized (url: string, id: string, getCurrentPort: () => chrome.runtime.Port): string {
+    const cb = createSubscription<'pub(accounts.subscribe)'>(id, getCurrentPort);
 
     this.#accountSubs[id] = {
       subscription: accountsObservable.subject.subscribe((accounts: SubjectInfo): void => {
@@ -86,8 +86,13 @@ export default class Tabs {
       url
     };
 
-    port.onDisconnect.addListener((): void => {
-      this.accountsUnsubscribe(url, { id });
+    getCurrentPort().onDisconnect.addListener((): void => {
+      try {
+        // Test if the closed port hasn't been replaced with a new one - if no, postMessage fails, and we can unsubscribe
+        getCurrentPort().postMessage({});
+      } catch (e) {
+        this.accountsUnsubscribe(url, { id });
+      }
     });
 
     return id;
@@ -146,42 +151,52 @@ export default class Tabs {
     return this.#state.rpcListProviders();
   }
 
-  private rpcSend (request: RequestRpcSend, port: chrome.runtime.Port): Promise<JsonRpcResponse> {
-    return this.#state.rpcSend(request, port);
+  private rpcSend (request: RequestRpcSend, getCurrentPort: () => chrome.runtime.Port): Promise<JsonRpcResponse> {
+    return this.#state.rpcSend(request, getCurrentPort());
   }
 
-  private rpcStartProvider (key: string, port: chrome.runtime.Port): Promise<ProviderMeta> {
-    return this.#state.rpcStartProvider(key, port);
+  private rpcStartProvider (key: string, getCurrentPort: () => chrome.runtime.Port): Promise<ProviderMeta> {
+    return this.#state.rpcStartProvider(key, getCurrentPort());
   }
 
-  private async rpcSubscribe (request: RequestRpcSubscribe, id: string, port: chrome.runtime.Port): Promise<boolean> {
-    const innerCb = createSubscription<'pub(rpc.subscribe)'>(id, port);
+  private async rpcSubscribe (request: RequestRpcSubscribe, id: string, getCurrentPort: () => chrome.runtime.Port): Promise<boolean> {
+    const innerCb = createSubscription<'pub(rpc.subscribe)'>(id, getCurrentPort);
     const cb = (_error: Error | null, data: SubscriptionMessageTypes['pub(rpc.subscribe)']): void => innerCb(data);
-    const subscriptionId = await this.#state.rpcSubscribe(request, cb, port);
+    const subscriptionId = await this.#state.rpcSubscribe(request, cb, getCurrentPort());
 
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      withErrorLog(() => this.rpcUnsubscribe({ ...request, subscriptionId }, port));
+    getCurrentPort().onDisconnect.addListener((): void => {
+      try {
+        // Test if the closed port hasn't been replaced with a new one - if no, postMessage fails, and we can unsubscribe
+        getCurrentPort().postMessage({});
+      } catch (e) {
+        unsubscribe(id);
+        withErrorLog(() => this.rpcUnsubscribe({ ...request, subscriptionId }, getCurrentPort));
+      }
     });
 
     return true;
   }
 
-  private rpcSubscribeConnected (request: null, id: string, port: chrome.runtime.Port): Promise<boolean> {
-    const innerCb = createSubscription<'pub(rpc.subscribeConnected)'>(id, port);
+  private rpcSubscribeConnected (request: null, id: string, getCurrentPort: () => chrome.runtime.Port): Promise<boolean> {
+    const innerCb = createSubscription<'pub(rpc.subscribeConnected)'>(id, getCurrentPort);
     const cb = (_error: Error | null, data: SubscriptionMessageTypes['pub(rpc.subscribeConnected)']): void => innerCb(data);
 
-    this.#state.rpcSubscribeConnected(request, cb, port);
+    this.#state.rpcSubscribeConnected(request, cb, getCurrentPort());
 
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
+    getCurrentPort().onDisconnect.addListener((): void => {
+      try {
+        // Test if the closed port hasn't been replaced with a new one - if no, postMessage fails, and we can unsubscribe
+        getCurrentPort().postMessage({});
+      } catch (e) {
+        unsubscribe(id);
+      }
     });
 
     return Promise.resolve(true);
   }
 
-  private async rpcUnsubscribe (request: RequestRpcUnsubscribe, port: chrome.runtime.Port): Promise<boolean> {
-    return this.#state.rpcUnsubscribe(request, port);
+  private async rpcUnsubscribe (request: RequestRpcUnsubscribe, getCurrentPort: () => chrome.runtime.Port): Promise<boolean> {
+    return this.#state.rpcUnsubscribe(request, getCurrentPort());
   }
 
   private redirectPhishingLanding (phishingWebsite: string): void {
@@ -217,7 +232,7 @@ export default class Tabs {
     request: RequestTypes[TMessageType],
     respondImmediately: (response: unknown) => void,
     url: string,
-    port?: chrome.runtime.Port
+    getCurrentPort: () => chrome.runtime.Port
   ): Promise<unknown> {
     if (type === 'pub(phishing.redirectIfDenied)') {
       return this.redirectIfPhishing(url).then(respondImmediately);
@@ -235,7 +250,7 @@ export default class Tabs {
         return this.accountsListAuthorized(url, request as RequestAccountList).then(respondImmediately);
 
       case 'pub(accounts.subscribe)':
-        return respondImmediately(port && this.accountsSubscribeAuthorized(url, messageId, port));
+        return respondImmediately(this.accountsSubscribeAuthorized(url, messageId, getCurrentPort));
 
       case 'pub(accounts.unsubscribe)':
         return respondImmediately(this.accountsUnsubscribe(url, request as RequestAccountUnsubscribe));
@@ -256,19 +271,19 @@ export default class Tabs {
         return this.rpcListProviders().then(respondImmediately);
 
       case 'pub(rpc.send)':
-        return port && this.rpcSend(request as RequestRpcSend, port).then(respondImmediately);
+        return this.rpcSend(request as RequestRpcSend, getCurrentPort).then(respondImmediately);
 
       case 'pub(rpc.startProvider)':
-        return port && this.rpcStartProvider(request as string, port).then(respondImmediately);
+        return this.rpcStartProvider(request as string, getCurrentPort).then(respondImmediately);
 
       case 'pub(rpc.subscribe)':
-        return port && this.rpcSubscribe(request as RequestRpcSubscribe, messageId, port).then(respondImmediately);
+        return this.rpcSubscribe(request as RequestRpcSubscribe, messageId, getCurrentPort).then(respondImmediately);
 
       case 'pub(rpc.subscribeConnected)':
-        return port && this.rpcSubscribeConnected(request as null, messageId, port).then(respondImmediately);
+        return this.rpcSubscribeConnected(request as null, messageId, getCurrentPort).then(respondImmediately);
 
       case 'pub(rpc.unsubscribe)':
-        return port && this.rpcUnsubscribe(request as RequestRpcUnsubscribe, port).then(respondImmediately);
+        return this.rpcUnsubscribe(request as RequestRpcUnsubscribe, getCurrentPort).then(respondImmediately);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

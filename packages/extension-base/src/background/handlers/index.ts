@@ -34,7 +34,7 @@ export default function handler<TMessageType extends MessageTypes> (
 
   const promise = isExtension
     ? extension.handle(messageId, message, request, respond, getCurrentPort, getPort)
-    : tabs.handle(messageId, message, request, respond, from, getCurrentPort());
+    : tabs.handle(messageId, message, request, respond, from, getCurrentPort);
 
   promise
     .catch((error: Error): void => {
