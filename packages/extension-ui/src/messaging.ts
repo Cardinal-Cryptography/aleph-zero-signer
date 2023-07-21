@@ -136,19 +136,19 @@ export async function forgetAccount(address: string): Promise<boolean> {
   return sendMessage('pri(accounts.forget)', { address });
 }
 
-export async function approveAuthRequest(id: string, authorizedAccounts: string[]): Promise<boolean> {
+export async function approveAuthRequest(id: string, authorizedAccounts: string[]): Promise<void> {
   return sendMessage('pri(authorize.approve)', { authorizedAccounts, id });
 }
 
-export async function rejectAuthRequest(id: string): Promise<boolean> {
+export async function rejectAuthRequest(id: string): Promise<void> {
   return sendMessage('pri(authorize.reject)', { id });
 }
 
-export async function approveMetaRequest(id: string): Promise<boolean> {
+export async function approveMetaRequest(id: string): Promise<void> {
   return sendMessage('pri(metadata.approve)', { id });
 }
 
-export async function cancelSignRequest(id: string): Promise<boolean> {
+export async function cancelSignRequest(id: string): Promise<void> {
   return sendMessage('pri(signing.cancel)', { id });
 }
 
@@ -156,11 +156,11 @@ export async function isSignLocked(id: string): Promise<ResponseSigningIsLocked>
   return sendMessage('pri(signing.isLocked)', { id });
 }
 
-export async function approveSignPassword(id: string, savePass: boolean, password?: string): Promise<boolean> {
+export async function approveSignPassword(id: string, savePass: boolean, password?: string): Promise<void> {
   return sendMessage('pri(signing.approve.password)', { id, password, savePass });
 }
 
-export async function approveSignSignature(id: string, signature: HexString): Promise<boolean> {
+export async function approveSignSignature(id: string, signature: HexString): Promise<void> {
   return sendMessage('pri(signing.approve.signature)', { id, signature });
 }
 
@@ -244,7 +244,7 @@ export async function getConnectedTabsUrl(): Promise<ConnectedTabsUrlResponse> {
   return sendMessage('pri(connectedTabsUrl.get)', null);
 }
 
-export async function rejectMetaRequest(id: string): Promise<boolean> {
+export async function rejectMetaRequest(id: string): Promise<void> {
   return sendMessage('pri(metadata.reject)', { id });
 }
 

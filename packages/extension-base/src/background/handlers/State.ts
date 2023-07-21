@@ -104,7 +104,7 @@ export default class State {
     return localStorageStores.defaultAuthAccounts.get();
   }
 
-  private async popupOpen (): Promise<void> {
+  private async openSingletonPopup (): Promise<void> {
     if (this.#notification === 'extension') {
       return;
     }
@@ -113,19 +113,21 @@ export default class State {
       ? NORMAL_CREATE_WINDOW_DATA
       : POPUP_CREATE_WINDOW_DATA;
 
-    const isExtensionWindowOpened = await chrome.windows.getAll({
+    const [extensionTabWindow] = await chrome.windows.getAll({
       populate: true,
       windowTypes: [createData.type]
-    })
-      .then((windows) => windows.flatMap((window) => window.tabs))
-      .then((tabs) => tabs.filter((tab) => tab?.url?.startsWith(NOTIFICATION_URL)))
-      .then((extensionNotificationPopups) => !!extensionNotificationPopups.length);
+    });
+    const [extensionTab] = extensionTabWindow?.tabs?.filter((tab) => tab?.url?.startsWith(NOTIFICATION_URL)) || [];
 
-    if (isExtensionWindowOpened) {
+    // The popup already exists, so let's bring it to focus instead of creating a new one
+    if (extensionTabWindow?.id && extensionTab?.id) {
+      await chrome.windows.update(extensionTabWindow.id, { focused: true });
+      await chrome.tabs.update(extensionTab.id, { active: true });
+
       return;
     }
 
-    openCenteredWindow({
+    await openCenteredWindow({
       ...createData,
       url: NOTIFICATION_URL
     }).catch(console.error);
@@ -178,17 +180,11 @@ export default class State {
   }
 
   public async removeAuthRequest (id: string) {
-    await localStorageStores.authRequests.update((authRequests) => {
-      const requestToRemoveIndex = authRequests.findIndex((authRequest) => authRequest.id === id);
+    await localStorageStores.authRequests.update((authRequests) =>
+      authRequests.filter((authRequest) => authRequest.id !== id)
+    );
 
-      if (requestToRemoveIndex < 0) {
-        return authRequests;
-      }
-
-      return [...authRequests.slice(0, requestToRemoveIndex), ...authRequests.slice(requestToRemoveIndex + 1)];
-    });
-
-    await this.updateIconAuth();
+    await this.updateIcon();
   }
 
   public async updateDefaultAuthAccounts (newList: string[]) {
@@ -223,18 +219,6 @@ export default class State {
 
       return otherAuthUrls;
     });
-  }
-
-  private async updateIconAuth (): Promise<void> {
-    await this.updateIcon();
-  }
-
-  private async updateIconMeta (): Promise<void> {
-    await this.updateIcon();
-  }
-
-  private async updateIconSign (): Promise<void> {
-    await this.updateIcon();
   }
 
   public async updateAuthorizedAccounts (authorizedAccountDiff: AuthorizedAccountsDiff): Promise<void> {
@@ -301,8 +285,8 @@ export default class State {
       }
     ]);
 
-    await this.updateIconAuth();
-    await this.popupOpen();
+    await this.updateIcon();
+    await this.openSingletonPopup();
   }
 
   public async ensureUrlAuthorized (url: string): Promise<boolean> {
@@ -329,8 +313,8 @@ export default class State {
       }
     ]);
 
-    await this.updateIconMeta();
-    await this.popupOpen();
+    await this.updateIcon();
+    await this.openSingletonPopup();
   }
 
   public async getAuthRequest (id: string): Promise<AuthRequest | undefined> {
@@ -346,31 +330,19 @@ export default class State {
   }
 
   public async removeSignRequest (id: string): Promise<void> {
-    await localStorageStores.signRequests.update((signRequests) => {
-      const requestToRemoveIndex = signRequests.findIndex((signRequest) => signRequest.id === id);
+    await localStorageStores.signRequests.update((signRequests) =>
+      signRequests.filter((signRequest) => signRequest.id !== id)
+    );
 
-      if (requestToRemoveIndex < 0) {
-        return signRequests;
-      }
-
-      return [...signRequests.slice(0, requestToRemoveIndex), ...signRequests.slice(requestToRemoveIndex + 1)];
-    });
-
-    await this.updateIconSign();
+    await this.updateIcon();
   }
 
   public async removeMetadataRequest (id: string): Promise<void> {
-    await localStorageStores.metadataRequests.update((metadataRequests) => {
-      const requestToRemoveIndex = metadataRequests.findIndex((metadataRequest) => metadataRequest.id === id);
+    await localStorageStores.metadataRequests.update((metadataRequests) =>
+      metadataRequests.filter((metadataRequest) => metadataRequest.id !== id)
+    );
 
-      if (requestToRemoveIndex < 0) {
-        return metadataRequests;
-      }
-
-      return [...metadataRequests.slice(0, requestToRemoveIndex), ...metadataRequests.slice(requestToRemoveIndex + 1)];
-    });
-
-    await this.updateIconMeta();
+    await this.updateIcon();
   }
 
   // List all providers the extension is exposing
@@ -476,7 +448,7 @@ export default class State {
       }
     ]);
 
-    await this.updateIconSign();
-    await this.popupOpen();
+    await this.updateIcon();
+    await this.openSingletonPopup();
   }
 }

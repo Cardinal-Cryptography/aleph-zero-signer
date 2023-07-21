@@ -15,7 +15,6 @@ function Authorize(): React.ReactElement {
   const { index: requestIndex, next, previous, request } = useRequestsPagination(requests);
 
   return request ? (
-    <>
     <ScrollWrapper>
       {requests.length > 1 && (
         <Centered>
@@ -38,7 +37,6 @@ function Authorize(): React.ReactElement {
         url={request.url}
       />
     </ScrollWrapper>
-    </>
   ) :  (
     <Loading />
   );

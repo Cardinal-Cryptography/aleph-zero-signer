@@ -89,8 +89,8 @@ export interface RequestSignatures {
   'pri(accounts.subscribe)': [RequestAccountSubscribe, boolean, AccountJson[]];
   'pri(accounts.validate)': [RequestAccountValidate, boolean];
   'pri(accounts.changePassword)': [RequestAccountChangePassword, boolean];
-  'pri(authorize.approve)': [RequestAuthorizeApprove, boolean];
-  'pri(authorize.reject)': [RequestAuthorizeReject, boolean];
+  'pri(authorize.approve)': [RequestAuthorizeApprove, void];
+  'pri(authorize.reject)': [RequestAuthorizeReject, void];
   'pri(authorize.list)': [null, ResponseAuthorizeList];
   'pri(authorize.remove)': [string, ResponseAuthorizeList];
   'pri(authorize.delete.request)': [string, void];
@@ -103,16 +103,16 @@ export interface RequestSignatures {
   'pri(json.restore)': [RequestJsonRestore, void];
   'pri(json.batchRestore)': [RequestBatchRestore, void];
   'pri(json.account.info)': [KeyringPair$Json, ResponseJsonGetAccountInfo];
-  'pri(metadata.approve)': [RequestMetadataApprove, boolean];
+  'pri(metadata.approve)': [RequestMetadataApprove, void];
   'pri(metadata.get)': [string | null, MetadataDef | null];
-  'pri(metadata.reject)': [RequestMetadataReject, boolean];
+  'pri(metadata.reject)': [RequestMetadataReject, void];
   'pri(metadata.list)': [null, MetadataDef[]];
   'pri(seed.create)': [RequestSeedCreate, ResponseSeedCreate];
   'pri(seed.validate)': [RequestSeedValidate, ResponseSeedValidate];
   'pri(settings.notification)': [string, boolean];
-  'pri(signing.approve.password)': [RequestSigningApprovePassword, boolean];
-  'pri(signing.approve.signature)': [RequestSigningApproveSignature, boolean];
-  'pri(signing.cancel)': [RequestSigningCancel, boolean];
+  'pri(signing.approve.password)': [RequestSigningApprovePassword, void];
+  'pri(signing.approve.signature)': [RequestSigningApproveSignature, void];
+  'pri(signing.cancel)': [RequestSigningCancel, void];
   'pri(signing.isLocked)': [RequestSigningIsLocked, ResponseSigningIsLocked];
   'pri(window.open)': [AllowedPath, boolean];
   // public/external requests, i.e. from a page

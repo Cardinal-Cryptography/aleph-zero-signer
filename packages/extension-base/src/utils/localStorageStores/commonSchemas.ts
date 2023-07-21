@@ -8,8 +8,7 @@ export const metadata = z.object({
   genesisHash: z.string(),
   icon: z.string(),
   ss58Format: z.number(),
-  chainType: z.enum(['substrate', 'ethereum']).optional()
-}).extend({
+  chainType: z.enum(['substrate', 'ethereum']).optional(),
   color: z.string().optional(),
   specVersion: z.number(),
   tokenDecimals: z.number(),

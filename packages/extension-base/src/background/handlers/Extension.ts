@@ -199,7 +199,7 @@ export default class Extension {
     return true;
   }
 
-  private async authorizeApprove ({ authorizedAccounts, id }: RequestAuthorizeApprove, contentPort: chrome.runtime.Port): Promise<{ authorizedAccounts: string[] }> {
+  private async authorizeApprove ({ authorizedAccounts, id }: RequestAuthorizeApprove, contentPort: chrome.runtime.Port): Promise<void> {
     const queued = await this.#state.getAuthRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -208,19 +208,15 @@ export default class Extension {
 
     await this.#state.removeAuthRequest(id);
     contentPort.postMessage({ id, response: { authorizedAccounts } });
-
-    return { authorizedAccounts };
   }
 
-  private async authorizeReject ({ id }: RequestAuthorizeReject, contentPort: chrome.runtime.Port): Promise<boolean> {
+  private async authorizeReject ({ id }: RequestAuthorizeReject, contentPort: chrome.runtime.Port): Promise<void> {
     const queued = this.#state.getAuthRequest(id);
 
     assert(queued, 'Unable to find request');
 
     await this.#state.removeAuthRequest(id);
     contentPort.postMessage({ id, error: 'Rejected' });
-
-    return true;
   }
 
   private async authorizeUpdate ({ authorizedAccounts, url }: RequestUpdateAuthorizedAccounts): Promise<void> {
@@ -235,7 +231,7 @@ export default class Extension {
     return { list: await this.#state.getAuthUrls() };
   }
 
-  private async metadataApprove ({ id }: RequestMetadataApprove, contentPort: chrome.runtime.Port): Promise<boolean> {
+  private async metadataApprove ({ id }: RequestMetadataApprove, contentPort: chrome.runtime.Port): Promise<void> {
     const queued = await this.#state.getMetaRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -244,8 +240,6 @@ export default class Extension {
 
     await this.#state.removeMetadataRequest(id);
     contentPort.postMessage({ id });
-
-    return true;
   }
 
   private async metadataGet (genesisHash: string | null): Promise<MetadataDef | null> {
@@ -335,7 +329,7 @@ export default class Extension {
     };
   }
 
-  private async signingApprovePassword ({ id, password, savePass }: RequestSigningApprovePassword, contentPort: chrome.runtime.Port): Promise<boolean> {
+  private async signingApprovePassword ({ id, password, savePass }: RequestSigningApprovePassword, contentPort: chrome.runtime.Port): Promise<void> {
     const queued = await this.#state.getSignRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -420,30 +414,24 @@ export default class Extension {
 
     await this.#state.removeSignRequest(id);
     contentPort.postMessage({ id, response: result });
-
-    return true;
   }
 
-  private async signingApproveSignature ({ id, signature }: RequestSigningApproveSignature, contentPort: chrome.runtime.Port): Promise<boolean> {
+  private async signingApproveSignature ({ id, signature }: RequestSigningApproveSignature, contentPort: chrome.runtime.Port): Promise<void> {
     const queued = this.#state.getSignRequest(id);
 
     assert(queued, 'Unable to find request');
 
     await this.#state.removeSignRequest(id);
     contentPort.postMessage({ id, response: { signature } });
-
-    return true;
   }
 
-  private async signingCancel ({ id }: RequestSigningCancel, contentPort: chrome.runtime.Port): Promise<boolean> {
+  private async signingCancel ({ id }: RequestSigningCancel, contentPort: chrome.runtime.Port): Promise<void> {
     const queued = await this.#state.getSignRequest(id);
 
     assert(queued, 'Unable to find request');
 
     await this.#state.removeSignRequest(id);
     contentPort.postMessage({ id, error: 'Cancelled' });
-
-    return true;
   }
 
   private async signingIsLocked ({ id }: RequestSigningIsLocked): Promise<ResponseSigningIsLocked> {
@@ -547,12 +535,12 @@ export default class Extension {
       case 'pri(authorize.approve)':
         assert(contentPort, 'Connection with the content script is not open.');
 
-        return this.authorizeApprove(request as RequestAuthorizeApprove, contentPort).then(respondImmediately);
+        return this.authorizeApprove(request as RequestAuthorizeApprove, contentPort);
 
       case 'pri(authorize.reject)':
         assert(contentPort, 'Connection with the content script is not open.');
 
-        return this.authorizeReject(request as RequestAuthorizeReject, contentPort).then(respondImmediately);
+        return this.authorizeReject(request as RequestAuthorizeReject, contentPort);
 
       case 'pri(authorize.list)':
         return this.getAuthList().then(respondImmediately);
@@ -603,7 +591,7 @@ export default class Extension {
 
         assert(contentPort, 'Connection with the content script is not open.');
 
-        return this.metadataApprove(request as RequestMetadataApprove, contentPort).then(respondImmediately);
+        return this.metadataApprove(request as RequestMetadataApprove, contentPort);
 
       case 'pri(metadata.get)':
         return this.metadataGet(request as string).then(respondImmediately);
@@ -615,10 +603,10 @@ export default class Extension {
 
         assert(contentPort, 'Connection with the content script is not open.');
 
-        return this.metadataReject(request as RequestMetadataReject, contentPort).then(respondImmediately);
+        return this.metadataReject(request as RequestMetadataReject, contentPort);
 
       case 'pri(activeTabsUrl.update)':
-        return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate).then(respondImmediately);
+        return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate);
 
       case 'pri(connectedTabsUrl.get)':
         return respondImmediately(this.getConnectedTabsUrl());
@@ -650,17 +638,17 @@ export default class Extension {
       case 'pri(signing.approve.password)':
         assert(contentPort, 'Connection with the content script is not open.');
 
-        return this.signingApprovePassword(request as RequestSigningApprovePassword, contentPort).then(respondImmediately);
+        return this.signingApprovePassword(request as RequestSigningApprovePassword, contentPort);
 
       case 'pri(signing.approve.signature)':
         assert(contentPort, 'Connection with the content script is not open.');
 
-        return this.signingApproveSignature(request as RequestSigningApproveSignature, contentPort).then(respondImmediately);
+        return this.signingApproveSignature(request as RequestSigningApproveSignature, contentPort);
 
       case 'pri(signing.cancel)':
         assert(contentPort, 'Connection with the content script is not open.');
 
-        return this.signingCancel(request as RequestSigningCancel, contentPort).then(respondImmediately);
+        return this.signingCancel(request as RequestSigningCancel, contentPort);
 
       case 'pri(signing.isLocked)':
         return this.signingIsLocked(request as RequestSigningIsLocked).then(respondImmediately);

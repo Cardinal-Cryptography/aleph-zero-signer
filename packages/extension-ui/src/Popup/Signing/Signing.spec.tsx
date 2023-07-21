@@ -62,8 +62,8 @@ describe('Signing requests', () => {
   const check = (input: ReactWrapper): unknown => input.simulate('change', { target: { checked: true } });
 
   beforeEach(async () => {
-    jest.spyOn(messaging, 'cancelSignRequest').mockResolvedValue(true);
-    jest.spyOn(messaging, 'approveSignPassword').mockResolvedValue(true);
+    jest.spyOn(messaging, 'cancelSignRequest').mockResolvedValue();
+    jest.spyOn(messaging, 'approveSignPassword').mockResolvedValue();
     jest.spyOn(messaging, 'isSignLocked').mockResolvedValue({ isLocked: true, remainingTime: 0 });
     jest.spyOn(MetadataCache, 'getSavedMeta').mockResolvedValue(westendMetadata);
 
