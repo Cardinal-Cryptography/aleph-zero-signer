@@ -539,10 +539,10 @@ export default class Extension {
   ): Promise<unknown> {
     switch (type) {
       case 'pri(authorize.approve)':
-        return this.authorizeApprove(request as RequestAuthorizeApprove, getContentPort);
+        return this.authorizeApprove(request as RequestAuthorizeApprove, getContentPort).then(respondImmediately);
 
       case 'pri(authorize.reject)':
-        return this.authorizeReject(request as RequestAuthorizeReject, getContentPort);
+        return this.authorizeReject(request as RequestAuthorizeReject, getContentPort).then(respondImmediately);
 
       case 'pri(authorize.list)':
         return this.getAuthList().then(respondImmediately);
@@ -581,7 +581,7 @@ export default class Extension {
         return respondImmediately(this.accountsShow(request as RequestAccountShow));
 
       case 'pri(accounts.subscribe)':
-        return this.accountsSubscribe(messageId, getCurrentPort);
+        return respondImmediately(this.accountsSubscribe(messageId, getCurrentPort));
 
       case 'pri(accounts.tie)':
         return respondImmediately(this.accountsTie(request as RequestAccountTie));
@@ -590,7 +590,7 @@ export default class Extension {
         return respondImmediately(this.accountsValidate(request as RequestAccountValidate));
 
       case 'pri(metadata.approve)':
-        return this.metadataApprove(request as RequestMetadataApprove, getContentPort);
+        return this.metadataApprove(request as RequestMetadataApprove, getContentPort).then(respondImmediately);
 
       case 'pri(metadata.get)':
         return this.metadataGet(request as string).then(respondImmediately);
@@ -599,10 +599,10 @@ export default class Extension {
         return this.metadataList().then(respondImmediately);
 
       case 'pri(metadata.reject)':
-        return this.metadataReject(request as RequestMetadataReject, getContentPort);
+        return this.metadataReject(request as RequestMetadataReject, getContentPort).then(respondImmediately);
 
       case 'pri(activeTabsUrl.update)':
-        return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate);
+        return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate).then(respondImmediately);
 
       case 'pri(connectedTabsUrl.get)':
         return respondImmediately(this.getConnectedTabsUrl());
@@ -632,13 +632,13 @@ export default class Extension {
         return respondImmediately(this.#state.setNotification(request as string));
 
       case 'pri(signing.approve.password)':
-        return this.signingApprovePassword(request as RequestSigningApprovePassword, getContentPort);
+        return this.signingApprovePassword(request as RequestSigningApprovePassword, getContentPort).then(respondImmediately);
 
       case 'pri(signing.approve.signature)':
-        return this.signingApproveSignature(request as RequestSigningApproveSignature, getContentPort);
+        return this.signingApproveSignature(request as RequestSigningApproveSignature, getContentPort).then(respondImmediately);
 
       case 'pri(signing.cancel)':
-        return this.signingCancel(request as RequestSigningCancel, getContentPort);
+        return this.signingCancel(request as RequestSigningCancel, getContentPort).then(respondImmediately);
 
       case 'pri(signing.isLocked)':
         return this.signingIsLocked(request as RequestSigningIsLocked).then(respondImmediately);
