@@ -41,7 +41,6 @@ export default (cb: (getContentPort: GetContentPort, getCurrentPort: GetCurrentP
 
     const portsMap = port.name === PORT_CONTENT ? contentPorts : extensionPorts;
 
-    console.log(`[dupa] ${port.name === PORT_CONTENT ? 'content' : 'extension'} port changed`);
     portsMap[getPortTabAsString(port)] = port;
     port.onDisconnect.addListener(() => {
       delete portsMap[getPortTabAsString(port)];

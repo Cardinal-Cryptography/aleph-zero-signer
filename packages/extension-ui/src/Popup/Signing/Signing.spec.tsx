@@ -79,6 +79,7 @@ describe('Signing requests', () => {
           whenCreated: 1602001346486
         },
         id: '1607347015530.2',
+        requestingTabId: 1,
         payload: {
           signType: 'extrinsic',
           address: '5D4bqjQRPgdMBK8bNvhX4tSuCtSGZS7rZjD5XH5SoKcFeKn5',
@@ -114,6 +115,7 @@ describe('Signing requests', () => {
           whenCreated: 1602001346486
         },
         id: '1607356155395.3',
+        requestingTabId: 1,
         payload: {
           signType: 'extrinsic',
           address: '5Ggap6soAPaP5UeNaiJsgqQwdVhhNnm6ez7Ba1w9jJ62LM2Q',

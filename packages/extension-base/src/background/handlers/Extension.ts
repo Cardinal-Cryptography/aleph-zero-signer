@@ -418,7 +418,6 @@ export default class Extension {
     }
 
     await this.#state.removeSignRequest(id);
-    console.log(`[dupa] responding to password sign message "${id}":`, result);
     getContentPort(queued.requestingTabId).postMessage({ id, response: result });
   }
 
@@ -519,7 +518,7 @@ export default class Extension {
     return this.#state.removeAuthRequest(requestId);
   }
 
-  public async updateCurrentTabs ({ urls }: RequestActiveTabsUrlUpdate) {
+  private async updateCurrentTabs ({ urls }: RequestActiveTabsUrlUpdate) {
     await this.#state.updateCurrentTabsUrl(urls);
   }
 

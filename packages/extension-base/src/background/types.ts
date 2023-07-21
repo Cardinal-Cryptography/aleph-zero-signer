@@ -62,7 +62,7 @@ export interface AuthorizeRequest {
 
 export interface MetadataRequest {
   id: string;
-  requestingTabId: number,
+  requestingTabId: number;
   payload: MetadataDef;
   url: string;
 }

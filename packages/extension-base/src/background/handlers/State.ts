@@ -15,7 +15,7 @@ import { openCenteredWindow, withErrorLog } from './helpers';
 
 interface AuthRequest {
   id: string;
-  requestingTabId: number,
+  requestingTabId: number;
   idStr: string;
   payload: AuthorizeTabRequestPayload;
   url: string;
@@ -50,7 +50,7 @@ type Providers = Record<string, {
 interface SignRequest {
   account: AccountJson;
   id: string,
-  requestingTabId: number,
+  requestingTabId: number;
   payload: RequestPayload;
   url: string;
 }
