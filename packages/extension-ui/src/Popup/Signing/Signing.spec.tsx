@@ -218,6 +218,7 @@ describe('Signing requests', () => {
     it('correctly displays request 2', async () => {
       wrapper.find('FontAwesomeIcon.arrowRight').simulate('click');
       await act(flushAllPromises);
+      wrapper.update();
 
       expect(
         wrapper
