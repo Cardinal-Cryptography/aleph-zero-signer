@@ -518,12 +518,12 @@ export default class Extension {
     return this.#state.removeAuthRequest(requestId);
   }
 
-  private async updateCurrentTabs ({ urls }: RequestActiveTabsUrlUpdate) {
-    await this.#state.updateCurrentTabsUrl(urls);
+  private updateActiveTabUrl ({ url }: RequestActiveTabsUrlUpdate) {
+    this.#state.updateActiveTabUrl(url);
   }
 
-  private getConnectedTabsUrl () {
-    return this.#state.getConnectedTabsUrl();
+  private getConnectedActiveTabUrl () {
+    return this.#state.getConnectedActiveTabUrl();
   }
 
   // Weird thought, the eslint override is not needed in Tabs
@@ -600,11 +600,11 @@ export default class Extension {
       case 'pri(metadata.reject)':
         return this.metadataReject(request as RequestMetadataReject, getContentPort).then(respondImmediately);
 
-      case 'pri(activeTabsUrl.update)':
-        return this.updateCurrentTabs(request as RequestActiveTabsUrlUpdate).then(respondImmediately);
+      case 'pri(activeTabUrl.update)':
+        return respondImmediately(this.updateActiveTabUrl(request as RequestActiveTabsUrlUpdate));
 
       case 'pri(connectedTabsUrl.get)':
-        return respondImmediately(this.getConnectedTabsUrl());
+        return this.getConnectedActiveTabUrl().then(respondImmediately);
 
       case 'pri(derivation.create)':
         return respondImmediately(this.derivationCreate(request as RequestDeriveCreate));
