@@ -98,7 +98,7 @@ export interface RequestSignatures {
   'pri(authorize.delete.request)': [string, void];
   'pri(authorizeDate.update)': [string, void];
   'pri(authorize.update)': [RequestUpdateAuthorizedAccounts, void];
-  'pri(activeTabUrl.update)': [RequestActiveTabsUrlUpdate, void];
+  'pri(activeTabUrl.update)': [RequestActiveTabUrlUpdate, void];
   'pri(connectedTabsUrl.get)': [null, ConnectedTabsUrlResponse];
   'pri(derivation.create)': [RequestDeriveCreate, boolean];
   'pri(derivation.validate)': [RequestDeriveValidate, ResponseDeriveValidate];
@@ -263,7 +263,7 @@ export interface RequestAccountList {
 
 export type RequestAccountSubscribe = null;
 
-export interface RequestActiveTabsUrlUpdate {
+export interface RequestActiveTabUrlUpdate {
   url: string | undefined;
 }
 

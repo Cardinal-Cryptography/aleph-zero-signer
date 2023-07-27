@@ -6,7 +6,7 @@ import type { KeyringPair, KeyringPair$Json, KeyringPair$Meta } from '@polkadot/
 import type { Registry, SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import type { KeypairType } from '@polkadot/util-crypto/types';
-import type { AccountJson, AllowedPath, MessageTypes, RequestAccountChangePassword, RequestAccountCreateHardware, RequestAccountCreateSuri, RequestAccountEdit, RequestAccountExport, RequestAccountForget, RequestAccountShow, RequestAccountTie, RequestAccountValidate, RequestActiveTabsUrlUpdate, RequestAuthorizeApprove, RequestAuthorizeReject, RequestBatchRestore, RequestDeriveCreate, RequestDeriveValidate, RequestJsonRestore, RequestMetadataApprove, RequestMetadataReject, RequestSeedCreate, RequestSeedValidate, RequestSigningApprovePassword, RequestSigningApproveSignature, RequestSigningCancel, RequestSigningIsLocked, RequestTypes, RequestUpdateAuthorizedAccounts, ResponseAccountExport, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSeedCreate, ResponseSeedValidate, ResponseSigningIsLocked } from '../types';
+import type { AccountJson, AllowedPath, MessageTypes, RequestAccountChangePassword, RequestAccountCreateHardware, RequestAccountCreateSuri, RequestAccountEdit, RequestAccountExport, RequestAccountForget, RequestAccountShow, RequestAccountTie, RequestAccountValidate, RequestActiveTabUrlUpdate, RequestAuthorizeApprove, RequestAuthorizeReject, RequestBatchRestore, RequestDeriveCreate, RequestDeriveValidate, RequestJsonRestore, RequestMetadataApprove, RequestMetadataReject, RequestSeedCreate, RequestSeedValidate, RequestSigningApprovePassword, RequestSigningApproveSignature, RequestSigningCancel, RequestSigningIsLocked, RequestTypes, RequestUpdateAuthorizedAccounts, ResponseAccountExport, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSeedCreate, ResponseSeedValidate, ResponseSigningIsLocked } from '../types';
 
 import { ALLOWED_PATH, PASSWORD_EXPIRY_MS } from '@polkadot/extension-base/defaults';
 import { isJsonAuthentic, signJson } from '@polkadot/extension-base/utils/accountJsonIntegrity';
@@ -518,7 +518,7 @@ export default class Extension {
     return this.#state.removeAuthRequest(requestId);
   }
 
-  private updateActiveTabUrl ({ url }: RequestActiveTabsUrlUpdate) {
+  private updateActiveTabUrl ({ url }: RequestActiveTabUrlUpdate) {
     this.#state.updateActiveTabUrl(url);
   }
 
@@ -601,7 +601,7 @@ export default class Extension {
         return this.metadataReject(request as RequestMetadataReject, getContentPort).then(respondImmediately);
 
       case 'pri(activeTabUrl.update)':
-        return respondImmediately(this.updateActiveTabUrl(request as RequestActiveTabsUrlUpdate));
+        return respondImmediately(this.updateActiveTabUrl(request as RequestActiveTabUrlUpdate));
 
       case 'pri(connectedTabsUrl.get)':
         return this.getConnectedActiveTabUrl().then(respondImmediately);
