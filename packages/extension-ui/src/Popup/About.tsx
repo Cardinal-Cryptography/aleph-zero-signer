@@ -7,6 +7,8 @@ import useTranslation from '../hooks/useTranslation';
 import { LINKS } from '../links';
 import Header from '../partials/Header';
 
+const SIGNER_VERSION = '{{signer-version}}';
+
 const About = () => {
   const { t } = useTranslation();
 
@@ -22,7 +24,7 @@ const About = () => {
           headerText={t<string>('Aleph Zero Signer')}
           iconType='aleph'
         >
-          {t<string>('Version')}&nbsp;{t<string>('version-number')}
+          {t<string>('Version')}&nbsp;{SIGNER_VERSION}
         </StyledHero>
         <nav>
           <LinksList.Group>
