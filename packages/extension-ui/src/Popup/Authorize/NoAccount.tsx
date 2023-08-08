@@ -118,13 +118,15 @@ const StyledLink = styled(Link)`
   display: inline;
 
   vertical-align: baseline;
-
-  color: ${({ theme }) => theme.primaryColor};
   cursor: pointer;
+
+
+  &, :hover, :visited {
+    color: ${({ theme }) => theme.primaryColor};
+  }
 
   :hover {
     text-decoration: underline;
-    color: ${({ theme }) => theme.primaryColor};
   }
 `;
 
