@@ -36,6 +36,7 @@
     "download-chains-metadata": "ts-node --esm scripts/downloadMetadata.mts",
     "lint": "polkadot-dev-run-lint",
     "postinstall": "polkadot-dev-yarn-only",
+    "set-signer-version": "ts-node --esm scripts/setSignerVersion.mts",
     "start": "yarn watch",
     "storybook": "storybook dev -p 6006",
     "test": "EXTENSION_PREFIX='test' polkadot-dev-run-test --detectOpenHandles",
@@ -61,6 +62,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-storybook": "^0.6.12",
     "i18next-scanner": "^4.1.0",
+    "replace-in-file": "^7.0.1",
     "sinon-chrome": "^3.0.1",
     "storybook": "^7.0.12",
     "ts-node": "^10.9.1"

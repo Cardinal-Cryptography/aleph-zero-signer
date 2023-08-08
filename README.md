@@ -112,7 +112,7 @@ window.injectedWeb3 = {
   // each with their own keys, here `aleph-zero-signer` is for this extension
   'aleph-zero-signer': {
     // semver for the package
-    version: '1.0.0',
+    version: '{{signer-version}}',
 
     // this is called to enable the injection, and returns an injected
     // object containing the accounts, signer and provider interfaces

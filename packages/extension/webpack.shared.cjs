@@ -83,7 +83,7 @@ module.exports = (entry, alias = {}) => ({
       config: {
         base: manifest,
         extend: {
-          version: pkgJson.version.split('-')[0] // remove possible -beta.xx
+          version: pkgJson.version
         }
       }
     })
