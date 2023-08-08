@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { approveAuthRequest } from '@polkadot/extension-ui/messaging';
 
 import helpIcon from '../../assets/help.svg';
-import { Button, ButtonArea, HelperFooter, Hero, LearnMore, Link, Svg } from '../../components';
+import { BottomWrapper, Button, ButtonArea, HelperFooter, Hero, LearnMore, Link, Svg } from '../../components';
 import { LINKS } from '../../links';
 
 type Props = {
@@ -104,6 +104,10 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  ${BottomWrapper} {
+    margin-inline: -16px;
+  }
 `;
 
 const Description = styled.p`
