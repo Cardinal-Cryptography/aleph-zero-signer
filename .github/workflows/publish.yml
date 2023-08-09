@@ -31,7 +31,7 @@ jobs:
       - uses: actions/cache/save@v3
         id: cache-build
         with:
-          key: ${{ hashFiles('packages/extension/build/**') }}-build
+          key: build-${{ github.ref_name }}-${{ hashFiles('packages/extension/build/**') }}
           path: |
             extension-chrome.zip
             extension-firefox.zip
