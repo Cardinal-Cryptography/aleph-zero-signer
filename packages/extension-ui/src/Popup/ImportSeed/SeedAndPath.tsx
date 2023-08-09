@@ -119,7 +119,7 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
       return;
     }
 
-    const seed = seedWords.join(' ');
+    const seed = seedWords.join(' ').toLowerCase();
     const suri = seed + path;
 
     validateSeed(suri, type)
@@ -207,7 +207,7 @@ function SeedAndPath({ className, genesis, onAccountChange, onNextStep, type }: 
           title={t<string>('Enter your 12-word secret phrase')}
         />
         <MnemonicWrapper>
-          <MnemonicInput
+          <StyledMnemonicInput
             onChange={onSeedWordsChange}
             seedWords={seedWords}
             showError={!!error}
@@ -271,6 +271,12 @@ const MnemonicWrapper = styled.div`
 
   & > :last-child:not(:only-child) {
     margin-bottom: 8px;
+  }
+`;
+
+const StyledMnemonicInput = styled(MnemonicInput)`
+  input {
+    text-transform: lowercase;
   }
 `;
 
