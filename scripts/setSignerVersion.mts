@@ -6,7 +6,7 @@ const VERSION_PARAM_NAME = 'version'
 
 const { values: { [VERSION_PARAM_NAME]: version = '' }} = parseArgs({
   options: {
-    version: {
+    [VERSION_PARAM_NAME]: {
       type: 'string',
     }
   }

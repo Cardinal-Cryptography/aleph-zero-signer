@@ -36,6 +36,7 @@
     "download-chains-metadata": "ts-node --esm scripts/downloadMetadata.mts",
     "lint": "polkadot-dev-run-lint",
     "postinstall": "polkadot-dev-yarn-only",
+    "publish-chrome": "ts-node --esm scripts/publishToChromeWebStore.mts",
     "set-signer-version": "ts-node --esm scripts/setSignerVersion.mts",
     "start": "yarn watch",
     "storybook": "storybook dev -p 6006",
