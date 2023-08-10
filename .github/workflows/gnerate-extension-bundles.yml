@@ -1,0 +1,35 @@
+name: Generate extension bundles
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  generate-extension-bundles:
+    name: Build and zip the extension
+    id: build
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js version from .nvmrc
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: yarn
+
+      - run: yarn install --immutable | grep -v 'YN0013' # as in the polkadot workflows
+
+      - run: yarn download-chains-metadata
+      - run: yarn polkadot-dev-build-ts
+      - run: yarn set-signer-version --version=${{ github.ref_name }}
+      - run: yarn build:zip
+
+      - uses: actions/upload-artifact@v3
+        with:
+          retention-days: 30
+          path: |
+            extension-chrome.zip
+            extension-firefox.zip
+            source-code.zip
