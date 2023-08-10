@@ -27,7 +27,9 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
+          name: signer-extension-bundles-v${{ github.ref_name }}
           retention-days: 30
+          if-no-files-found: error
           path: |
             extension-chrome.zip
             extension-firefox.zip
