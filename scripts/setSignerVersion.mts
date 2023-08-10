@@ -4,13 +4,15 @@ import replace from 'replace-in-file'
 
 const VERSION_PARAM_NAME = 'version'
 
-const { values: { [VERSION_PARAM_NAME]: version = '' }} = parseArgs({
+const { values: { [VERSION_PARAM_NAME]: version_temp = '' }} = parseArgs({
   options: {
     [VERSION_PARAM_NAME]: {
       type: 'string',
     }
   }
 })
+
+const version = version_temp.replace('-test', '')
 
 assert(/\d\.\d\.\d/.test(version), `The "${VERSION_PARAM_NAME}" argument: "${version}" does not match the "x.x.x" format.`)
 
