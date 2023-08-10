@@ -1,25 +1,29 @@
-import type { ReactNode } from 'react';
-import type { ThemeProps } from '@polkadot/extension-ui/types';
-
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { Transition, TransitionStatus } from 'react-transition-group';
 import styled, { CSSProperties } from 'styled-components';
 
+import { localStorageStores } from '@polkadot/extension-base/utils';
 import { Video } from '@polkadot/extension-ui/components/index';
 
+import useIsSplashThrottled from '../hooks/useIsSplashThrottled';
 import { Steps } from '../partials/HeaderWithSteps';
 import { Z_INDEX } from '../zindex';
 import ScrollWrapper from './ScrollWrapper';
 
-interface SplashHandlerProps extends ThemeProps {
+type SplashHandlerProps = {
   className?: string;
   children: ReactNode;
-}
+  isSplashShown: boolean;
+};
 
-function SplashHandler({ children, className }: SplashHandlerProps): React.ReactElement<SplashHandlerProps> {
+function SplashHandler({
+  children,
+  className,
+  isSplashShown
+}: SplashHandlerProps): React.ReactElement<SplashHandlerProps> {
   // Needs this graduality to avoid flashes on rendering contents between video and app
-  const [isSplashOn, setIsSplashOn] = useState<boolean>(true);
-  const [isContentVisible, setIsContentVisible] = useState<boolean>(false);
+  const [isSplashOn, setIsSplashOn] = useState<boolean>(isSplashShown);
+  const [isContentVisible, setIsContentVisible] = useState<boolean>(!isSplashShown);
   const nodeRef = useRef(null);
 
   const duration = 250;
@@ -51,10 +55,20 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
       return false;
     };
 
-    const timeoutId = setTimeout(setIsSplashOn, 2000, updateWithErrorLog);
+    const endVideo = () => {
+      setIsSplashOn(updateWithErrorLog);
+      localStorageStores.splashLastShownMs.set(Date.now());
+    };
+
+    const timeoutId = setTimeout(endVideo, 2000);
 
     return () => clearTimeout(timeoutId);
   }, [isContentVisible]);
+
+  const onEnded = () => {
+    setIsSplashOn(false);
+    localStorageStores.splashLastShownMs.set(Date.now());
+  };
 
   return (
     <div className={className}>
@@ -73,7 +87,7 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
             }}
           >
             <Video
-              onEnded={() => setIsSplashOn(false)}
+              onEnded={onEnded}
               onStarted={() => setIsContentVisible(true)}
               source='videos/splash.mp4'
               type='video/mp4'
@@ -86,7 +100,24 @@ function SplashHandler({ children, className }: SplashHandlerProps): React.React
   );
 }
 
-export default styled(SplashHandler)`
+const WrappedSplashHandler = ({ children, className }: Omit<SplashHandlerProps, 'isSplashShown'>) => {
+  const isSplashThrottled = useIsSplashThrottled();
+
+  if (isSplashThrottled === undefined) {
+    return null;
+  }
+
+  return (
+    <SplashHandler
+      className={className}
+      isSplashShown={!isSplashThrottled}
+    >
+      {children}
+    </SplashHandler>
+  );
+};
+
+export default styled(WrappedSplashHandler)`
   display: flex;
   flex-direction: column;
   height: 100%;

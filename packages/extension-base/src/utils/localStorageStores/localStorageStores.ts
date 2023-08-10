@@ -94,7 +94,9 @@ const STORES_DEFINITIONS = {
     payload: z.object({
       origin: z.string()
     })
-  })), [])
+  })), []),
+
+  splashLastShownMs: createStoreDefinition(z.number(), 0)
 
   // This is one of the rare cases where "any" is fine, as it describes a generic, not a particular value's type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
