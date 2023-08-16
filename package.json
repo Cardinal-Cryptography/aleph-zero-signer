@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "adapt-build-to-ff": "ts-node --esm scripts/adaptBuildToFf.mts",
-    "build": "polkadot-dev-build-ts && yarn build:zip",
+    "build": "yarn download-chains-metadata && polkadot-dev-build-ts && yarn build:zip",
     "build-storybook": "storybook build",
     "build:extra": "yarn build:i18n && yarn build:ui",
     "build:i18n": "i18next-scanner --config i18next-scanner.config.js",
