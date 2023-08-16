@@ -13,7 +13,7 @@ const { values: { [VERSION_PARAM_NAME]: version = '' }} = parseArgs({
   }
 })
 
-assert(/^\d+\.\d+\.\d+(-alpha.\d+)?$/.test(version), `The "${VERSION_PARAM_NAME}" argument: "${version}" does not match the "x.x.x" format.`)
+assert(/^\d+\.\d+\.\d+(-alpha\.\d+)?$/.test(version), `The "${VERSION_PARAM_NAME}" argument: "${version}" does not match the "x.x.x" (optionally "x.x.x-alpha.x") format.`)
 
 const currentPackageJsonContent = await readFile(EXTENSION_PACKAGE_JSON_PATH, 'utf8')
 
