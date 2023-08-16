@@ -18268,19 +18268,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"replace-in-file@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "replace-in-file@npm:7.0.1"
-  dependencies:
-    chalk: ^4.1.2
-    glob: ^8.1.0
-    yargs: ^17.7.2
-  bin:
-    replace-in-file: bin/cli.js
-  checksum: da6115387bf79ac7fb2057a4212da4159cc85889e34212df62d86cc3b5ceb23167a7c22ce0dc0cebfe55c01a08ccd99fd496398375dfa29e30f173013c81579a
-  languageName: node
-  linkType: hard
-
 "request@npm:^2.88.2":
   version: 2.88.2
   resolution: "request@npm:2.88.2"
@@ -18652,7 +18639,6 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-storybook: ^0.6.12
     i18next-scanner: ^4.1.0
-    replace-in-file: ^7.0.1
     sinon-chrome: ^3.0.1
     storybook: ^7.0.12
     ts-node: ^10.9.1
@@ -21540,21 +21526,6 @@ __metadata:
     y18n: ^5.0.5
     yargs-parser: ^21.1.1
   checksum: 3d8a43c336a4942bc68080768664aca85c7bd406f018bad362fd255c41c8f4e650277f42fd65d543fce99e084124ddafee7bbfc1a5c6a8fda4cec78609dcf8d4
-  languageName: node
-  linkType: hard
-
-"yargs@npm:^17.7.2":
-  version: 17.7.2
-  resolution: "yargs@npm:17.7.2"
-  dependencies:
-    cliui: ^8.0.1
-    escalade: ^3.1.1
-    get-caller-file: ^2.0.5
-    require-directory: ^2.1.1
-    string-width: ^4.2.3
-    y18n: ^5.0.5
-    yargs-parser: ^21.1.1
-  checksum: 73b572e863aa4a8cbef323dd911d79d193b772defd5a51aab0aca2d446655216f5002c42c5306033968193bdbf892a7a4c110b0d77954a7fdf563e653967b56a
   languageName: node
   linkType: hard
 

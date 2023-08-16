@@ -21,8 +21,10 @@ jobs:
       - run: yarn install --immutable | grep -v 'YN0013' # as in the polkadot workflows
 
       - run: yarn download-chains-metadata
-      - run: yarn polkadot-dev-build-ts
+      # we are setting the version on the source code (before the build phase), because the source code
+      # is zipped and sent to mozilla for verification, so that the actual bundle needs to be buildable from it
       - run: yarn set-signer-version --version=${{ github.ref_name }}
+      - run: yarn polkadot-dev-build-ts
       - run: yarn build:zip
 
       - uses: actions/upload-artifact@v3

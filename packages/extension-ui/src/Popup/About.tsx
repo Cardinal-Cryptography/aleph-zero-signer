@@ -7,7 +7,7 @@ import useTranslation from '../hooks/useTranslation';
 import { LINKS } from '../links';
 import Header from '../partials/Header';
 
-const SIGNER_VERSION = '{{signer-version}}';
+const SIGNER_VERSION = process.env.SIGNER_VERSION;
 
 const About = () => {
   const { t } = useTranslation();

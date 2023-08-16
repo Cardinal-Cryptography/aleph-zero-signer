@@ -75,7 +75,8 @@ module.exports = (entry, alias = {}) => ({
       'process.env': {
         EXTENSION_PREFIX: JSON.stringify(process.env.EXTENSION_PREFIX || EXT_NAME),
         NODE_ENV: JSON.stringify('production'),
-        PORT_PREFIX: JSON.stringify(blake2AsHex(JSON.stringify(manifest), 64))
+        PORT_PREFIX: JSON.stringify(blake2AsHex(JSON.stringify(manifest), 64)),
+        SIGNER_VERSION: JSON.stringify(pkgJson.version)
       }
     }),
     new CopyPlugin({ patterns: [{ from: 'public' }] }),

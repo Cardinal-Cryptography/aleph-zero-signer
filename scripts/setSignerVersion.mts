@@ -1,8 +1,9 @@
-import { parseArgs } from 'node:util'
+import { readFile, writeFile } from 'node:fs/promises';
+import { parseArgs } from 'node:util';
 import assert from 'node:assert';
-import replace from 'replace-in-file'
 
 const VERSION_PARAM_NAME = 'version'
+const EXTENSION_PACKAGE_JSON_PATH = './packages/extension/package.json';
 
 const { values: { [VERSION_PARAM_NAME]: version = '' }} = parseArgs({
   options: {
@@ -12,15 +13,15 @@ const { values: { [VERSION_PARAM_NAME]: version = '' }} = parseArgs({
   }
 })
 
-assert(/\d\.\d\.\d/.test(version), `The "${VERSION_PARAM_NAME}" argument: "${version}" does not match the "x.x.x" format.`)
+assert(/^\d+\.\d+\.\d+(-alpha.\d+)?$/.test(version), `The "${VERSION_PARAM_NAME}" argument: "${version}" does not match the "x.x.x" format.`)
 
-const replacementResult = await replace.replaceInFile({
-  files: 'packages/extension/build/**',
-  from: /{{signer-version}}/g,
-  to: version,
-  countMatches: true,
-})
+const currentPackageJsonContent = await readFile(EXTENSION_PACKAGE_JSON_PATH, 'utf8')
 
-const replacements = replacementResult.filter(({ hasChanged }) => hasChanged).map(({ hasChanged, ...rest }) => rest)
+const newPackageJsonContent = {
+  ...JSON.parse(currentPackageJsonContent),
+  version: version,
+};
 
-console.log(JSON.stringify(replacements, undefined, 2))
+await writeFile(EXTENSION_PACKAGE_JSON_PATH, JSON.stringify(newPackageJsonContent, undefined, 2))
+
+console.log(`Version changed to ${newPackageJsonContent.version}`)
