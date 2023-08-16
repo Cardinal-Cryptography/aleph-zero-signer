@@ -13,8 +13,8 @@ This project builds on [polkadot-js/extension](https://github.com/polkadot-js/ex
 
 ## Installation
 
-- On Chrome, install via [Chrome web store](TODO)
-- On Firefox, install via [Firefox add-ons](TODO)
+- On Chrome, install via [Chrome web store](https://chrome.google.com/webstore/detail/opbinaebpmphpefcimknblieddamhmol)
+- On Firefox, install via [Firefox add-ons](https://addons.mozilla.org/en-US/firefox/addon/aleph-zero-signer/)
 
 ## Documentation and examples
 
