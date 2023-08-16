@@ -1,5 +1,8 @@
 import React from 'react';
 
+import chrome from 'sinon-chrome/extensions';
+
+import '../jest/mockLocalStorage';
 import { withThemeFromJSXProvider } from '@storybook/addon-styling';
 import { ThemeProvider } from 'styled-components';
 import { themes } from '../packages/extension-ui/src/components/themes'
@@ -66,38 +69,18 @@ export const decorators = [
     defaultTheme: 'dark'
   }),
   (Story) => {
-    window.localStorage.clear();
-    window.localStorage.setItem('welcome_read', 'ok');
-
-    return <Story />;
-  },
-  (Story) => {
     subscribeAccounts.setMockImpl((cb: Function) => cb([]));
 
     return <Story />;
   },
 ] satisfies Preview['decorators'];
 
-window.chrome = {
-  runtime: {
-    connect() {
-      return {
-        onMessage: {
-          addListener() {}
-        },
-        onDisconnect: {
-          addListener() {}
-        },
-        postMessage() {}
-      };
-    }
+chrome.runtime.connect.callsFake(() => ({
+  onMessage: {
+    addListener() {}
   },
-  storage: {
-    local: {},
-    onChanged: {
-      hasListener: () => false,
-      addListener: () => undefined,
-      removeListener: () => undefined,
-    }
-  }
-} as unknown as typeof window.chrome;
+  onDisconnect: {
+    addListener() {}
+  },
+  postMessage() {}
+}));

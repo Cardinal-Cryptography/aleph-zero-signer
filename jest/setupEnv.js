@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/extension authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const chrome = require('sinon-chrome');
+require('./mockLocalStorage');
 
 const nodeCrypto = require('crypto');
 const { TextDecoder } = require('@polkadot/x-textencoder/node');
@@ -17,5 +17,3 @@ global.TextEncoder = TextEncoder;
 global.prompt = jest.fn();
 
 document.execCommand = jest.fn();
-
-chrome.storage.local.get.callsFake(() => ({ splashLastShownMs: Date.now()}))
