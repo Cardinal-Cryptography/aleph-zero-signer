@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { Transition, TransitionStatus } from 'react-transition-group';
 import styled, { CSSProperties } from 'styled-components';
 
@@ -43,11 +43,7 @@ function SplashHandler({
   };
 
   useEffect(() => {
-    if (!isContentVisible) {
-      return;
-    }
-
-    const updateWithErrorLog = (prevIsSplashOn: boolean) => {
+    const setFalseWithErrorLog = (prevIsSplashOn: boolean) => {
       if (prevIsSplashOn) {
         console.error('Fallback timeout needed to turn off splash video.');
       }
@@ -56,14 +52,15 @@ function SplashHandler({
     };
 
     const endVideo = () => {
-      setIsSplashOn(updateWithErrorLog);
+      setIsContentVisible(true);
+      setIsSplashOn(setFalseWithErrorLog);
       localStorageStores.splashLastShownMs.set(Date.now());
     };
 
     const timeoutId = setTimeout(endVideo, 2000);
 
     return () => clearTimeout(timeoutId);
-  }, [isContentVisible]);
+  }, []);
 
   const onEnded = () => {
     setIsSplashOn(false);
