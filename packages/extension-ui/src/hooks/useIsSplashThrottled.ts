@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { localStorageStores } from '@polkadot/extension-base/utils';
 
 const DAY_MS = 1000 * 60 * 60 * 24;
+
 const splashLastShownMsPromise = localStorageStores.splashLastShownMs.get();
 
 const useIsSplashThrottled = () => {
@@ -13,6 +14,8 @@ const useIsSplashThrottled = () => {
       .then((splashLastShownMs) => setIsSplashThrottled(splashLastShownMs + DAY_MS > Date.now()))
       .catch(() => setIsSplashThrottled(false));
   }, []);
+
+  console.log({ isSplashThrottled });
 
   return isSplashThrottled;
 };
