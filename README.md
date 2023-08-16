@@ -155,3 +155,15 @@ The path will be added to the mnemonic phrase of the parent account.
 * `Module not found: Error: Can't resolve './chains-metadata.json'`
   
   The Signer bundles in the most recent (for the time of building) metadata for the production and testnet Aleph Zero chains. Apparently, the json file containing them is absent, so make sure to generate it by executing `yarn download-chains-metadata` before bundling the application.
+
+
+## Signer icons
+
+Feel free to use those icon when integrating your app with Signer
+
+![Signer icon 16px](docs/A0_Signer_icon_16.png)
+![Signer icon 20px](docs/A0_Signer_icon_20.png)
+![Signer icon 32px](docs/A0_Signer_icon_32.png)
+![Signer icon 48px](docs/A0_Signer_icon_48.png)
+![Signer icon 64px](docs/A0_Signer_icon_64.png)
+![Signer icon 128px](docs/A0_Signer_icon_128.png)
