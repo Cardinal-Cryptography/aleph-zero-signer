@@ -21,8 +21,9 @@ import {
 } from '../../components';
 import { ActionContext } from '../../components/contexts';
 import { ALEPH_ZERO_GENESIS_HASH } from '../../constants';
+import useConnectedActiveTabUrl from '../../hooks/useConnectedActiveTabUrl';
 import useTranslation from '../../hooks/useTranslation';
-import { getAuthList, getConnectedTabsUrl } from '../../messaging';
+import { getAuthList } from '../../messaging';
 import { Header } from '../../partials';
 import { createGroupedAccountData } from '../../util/createGroupedAccountData';
 import AccountsTree from './AccountsTree';
@@ -54,7 +55,7 @@ function Accounts({ className }: Props): React.ReactElement {
   const [filter, setFilter] = useState('');
   const [filteredAccount, setFilteredAccount] = useState<AccountWithChildren[]>([]);
   const [authList, setAuthList] = useState<AuthUrls | null>(null);
-  const [connectedActiveTabUrl, setConnectedActiveTabUrl] = useState<string | undefined>();
+  const connectedActiveTabUrl = useConnectedActiveTabUrl();
   const { hierarchy } = useContext(AccountContext);
   const onAction = useContext(ActionContext);
   const networkMap = useMemo(() => getNetworkMap(), []);
@@ -69,9 +70,6 @@ function Accounts({ className }: Props): React.ReactElement {
     getAuthList()
       .then(({ list }) => setAuthList(list))
       .catch((e) => console.error(e));
-    getConnectedTabsUrl()
-      .then(setConnectedActiveTabUrl)
-      .catch(console.error);
   }, []);
 
   useEffect(() => {

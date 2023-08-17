@@ -16,6 +16,7 @@ import forgetIcon from '../../assets/vanish.svg';
 import { Svg } from '../../components';
 import { AccountContext, SettingsContext } from '../../components/contexts';
 import * as LinksList from '../../components/LinksList';
+import useConnectedActiveTabUrl from '../../hooks/useConnectedActiveTabUrl';
 import { useGoTo } from '../../hooks/useGoTo';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
@@ -38,6 +39,7 @@ function EditAccountMenu({
 }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { accounts, master } = useContext(AccountContext);
+  const connectedActiveTabUrl = useConnectedActiveTabUrl();
 
   const { show } = useToast();
 
@@ -137,6 +139,13 @@ function EditAccountMenu({
           />
         </LinksList.Group>
         <LinksList.Group>
+          {connectedActiveTabUrl && (
+            <LinksList.Item
+              onClick={goTo(`/url/manage?url=${connectedActiveTabUrl}`)}
+              rightIcon='chevron'
+              title={t<string>('Disconnect account')}
+            />
+          )}
           <ForgetListItem
             onClick={goTo(`/account/forget/${address}`)}
             preIcon={
@@ -160,6 +169,7 @@ export default React.memo(
   overflow-y: scroll;
   scrollbar-width: none;
   padding-top: 32px;
+  padding-bottom: 16px;
       
   .identityIcon {
     display: flex;

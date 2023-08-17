@@ -3,7 +3,7 @@
 
 import type { ThemeProps } from '../types';
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import connectionStatus from '../assets/anim_connection_status.svg';
@@ -13,9 +13,9 @@ import helpIcon from '../assets/help.svg';
 import notConnected from '../assets/not_connected.svg';
 import settingsIcon from '../assets/settings.svg';
 import { ActionContext, Link, Svg, Tooltip } from '../components';
+import useConnectedActiveTabUrl from '../hooks/useConnectedActiveTabUrl';
 import useTranslation from '../hooks/useTranslation';
 import { LINKS } from '../links';
-import { getConnectedTabsUrl } from '../messaging';
 import { triggerOnEnterSpace } from '../util/keyDownWrappers';
 import { Z_INDEX } from '../zindex';
 
@@ -45,21 +45,11 @@ function Header({
   withHelp,
   withSettings
 }: Props): React.ReactElement<Props> {
-  const [connectedActiveTabUrl, setConnectedActiveTabUrl] = useState<string | undefined>();
+  const connectedActiveTabUrl = useConnectedActiveTabUrl();
   const { t } = useTranslation();
 
-  const isConnected = !!connectedActiveTabUrl;
+  const isConnected = !!(withConnectedAccounts && connectedActiveTabUrl);
   const onAction = useContext(ActionContext);
-
-  useEffect(() => {
-    if (!withConnectedAccounts) {
-      return;
-    }
-
-    getConnectedTabsUrl()
-      .then(setConnectedActiveTabUrl)
-      .catch(console.error);
-  }, [withConnectedAccounts]);
 
   const _onBackArrowClick = useCallback(() => onAction('..'), [onAction]);
 

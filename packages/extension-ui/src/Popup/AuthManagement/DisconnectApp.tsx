@@ -1,12 +1,11 @@
 import type { ThemeProps } from '../../types';
 
 import React, { useCallback, useContext } from 'react';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import styled from 'styled-components';
 
 import { Button, ButtonArea, FaviconBox, Hero } from '../../components';
 import { ActionContext } from '../../components/contexts';
-import { useGoTo } from '../../hooks/useGoTo';
 import useToast from '../../hooks/useToast';
 import useTranslation from '../../hooks/useTranslation';
 import { removeAuthorization } from '../../messaging';
@@ -31,8 +30,7 @@ function DisconnectApp(): React.ReactElement {
   const decodedUrl = decodeURIComponent(url);
   const onAction = useContext(ActionContext);
   const { show } = useToast();
-
-  const { goTo } = useGoTo();
+  const history = useHistory();
 
   const handleDisconnect = useCallback(() => {
     show(t<string>('App disconnected'), 'success');
@@ -59,7 +57,7 @@ function DisconnectApp(): React.ReactElement {
       <CustomFaviconBox url={decodedUrl} />
       <ButtonArea>
         <Button
-          onClick={goTo(`/url/manage?url=${url}`)}
+          onClick={() => history.goBack()}
           secondary
         >
           {t<string>('Cancel')}
