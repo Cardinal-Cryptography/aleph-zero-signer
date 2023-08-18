@@ -12,6 +12,7 @@ import { IconTheme } from '@polkadot/react-identicon/types';
 
 import exportAccountIcon from '../../assets/export.svg';
 import subAccountIcon from '../../assets/subAccount.svg';
+import unlinkIcon from '../../assets/unlink.svg';
 import forgetIcon from '../../assets/vanish.svg';
 import { Svg } from '../../components';
 import { AccountContext, SettingsContext } from '../../components/contexts';
@@ -114,12 +115,7 @@ function EditAccountMenu({
           <LinksList.Group>
             <LinksList.Item
               onClick={goTo(`/account/derive/${address}/locked`)}
-              preIcon={
-                <Svg
-                  className='icon'
-                  src={subAccountIcon}
-                />
-              }
+              preIcon={<Icon src={subAccountIcon} />}
               rightIcon='chevron'
               title={t<string>('Derive sub-account')}
             />
@@ -128,12 +124,7 @@ function EditAccountMenu({
         <LinksList.Group>
           <LinksList.Item
             onClick={goTo(`/account/export/${address}`)}
-            preIcon={
-              <Svg
-                className='icon'
-                src={exportAccountIcon}
-              />
-            }
+            preIcon={<Icon src={exportAccountIcon} />}
             rightIcon='chevron'
             title={t<string>('Export account')}
           />
@@ -142,8 +133,9 @@ function EditAccountMenu({
           {connectedActiveTabUrl && (
             <LinksList.Item
               onClick={goTo(`/url/manage?url=${connectedActiveTabUrl}`)}
+              preIcon={<Icon src={unlinkIcon} />}
               rightIcon='chevron'
-              title={t<string>('Disconnect account')}
+              title={t<string>('Connect / disconnect account')}
             />
           )}
           <ForgetListItem
@@ -194,9 +186,12 @@ export default React.memo(
   )
 );
 
-const ForgetIcon = styled(Svg)`
+const Icon = styled(Svg)`
   width: 20px;
   height: 20px;
+`;
+
+const ForgetIcon = styled(Icon)`
   background: ${({ theme }) => theme.iconDangerColor};
 `;
 

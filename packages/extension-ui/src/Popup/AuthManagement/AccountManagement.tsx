@@ -4,7 +4,7 @@
 import type { ThemeProps } from '../../types';
 
 import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
-import { RouteComponentProps, useHistory, withRouter } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components';
 
 import { AccountContext, ActionContext, Button, ButtonArea, RemoveAuth, ScrollWrapper } from '../../components';
@@ -28,7 +28,6 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
   const searchParams = new URLSearchParams(search);
   const url = searchParams.get('url');
   const [selectedAccountsChanged, setSelectedAccountsChanged] = useState(false);
-  const history = useHistory();
 
   useEffect(() => {
     getAuthList()
@@ -51,7 +50,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
     }
 
     updateAuthorization(selectedAccounts, url)
-      .then(() => onAction('/auth-list'))
+      .then(() => onAction('..'))
       .catch(console.error);
   }, [onAction, selectedAccounts, url]);
 
@@ -99,7 +98,7 @@ function AccountManagement({ className, location: { search } }: Props): React.Re
           {hierarchy.length > 0 && (
             <CustomButtonArea>
               <Button
-                onClick={() => history.goBack()}
+                onClick={() => onAction('..')}
                 secondary
                 type='button'
               >
