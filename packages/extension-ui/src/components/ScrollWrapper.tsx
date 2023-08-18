@@ -3,6 +3,16 @@ import styled from 'styled-components';
 
 import { ThemeProps } from '../types';
 
+const getScrollIntoViewCenter = (elem: HTMLElement) => {
+  elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
+
+document.addEventListener(
+  'focus',
+  (event: FocusEvent) => event.target && getScrollIntoViewCenter(event.target as HTMLElement),
+  true
+);
+
 interface Props extends ThemeProps {
   className?: string;
   children: React.ReactNode;
