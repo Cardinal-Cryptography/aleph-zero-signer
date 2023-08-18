@@ -8,7 +8,7 @@ import Svg from './Svg';
 interface Props extends ThemeProps {
   className?: string;
   title: string;
-  description: string;
+  description: string | React.ReactElement;
 }
 
 function WarningBox({ className, description, title }: Props): React.ReactElement<Props> {
