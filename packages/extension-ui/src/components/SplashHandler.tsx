@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { Transition, TransitionStatus } from 'react-transition-group';
 import styled, { CSSProperties } from 'styled-components';
 
@@ -23,7 +23,8 @@ function SplashHandler({
 }: SplashHandlerProps): React.ReactElement<SplashHandlerProps> {
   // Needs this graduality to avoid flashes on rendering contents between video and app
   const [isSplashOn, setIsSplashOn] = useState<boolean>(isSplashShown);
-  const [isContentVisible, setIsContentVisible] = useState<boolean>(!isSplashShown);
+  const [isContentRendered, setIsContentRendered] = useState<boolean>(!isSplashShown);
+
   const nodeRef = useRef(null);
 
   const duration = 250;
@@ -42,28 +43,28 @@ function SplashHandler({
     exiting: { opacity: 0 }
   };
 
-  useEffect(() => {
-    const setFalseWithErrorLog = (prevIsSplashOn: boolean) => {
-      if (prevIsSplashOn) {
-        console.error('Fallback timeout needed to turn off splash video.');
-      }
-
-      return false;
-    };
-
-    const endVideo = () => {
-      setIsContentVisible(true);
-      setIsSplashOn(setFalseWithErrorLog);
-      localStorageStores.splashLastShownMs.set(Date.now());
-    };
-
-    const timeoutId = setTimeout(endVideo, 2000);
-
-    return () => clearTimeout(timeoutId);
+  const showContent = useCallback(() => {
+    setIsContentRendered(true);
+    setIsSplashOn(false);
   }, []);
 
-  const onEnded = () => {
-    setIsSplashOn(false);
+  useEffect(() => {
+    const endVideoAndLogError = () => {
+      if (isSplashOn) {
+        console.error('Fallback timeout needed to turn off splash video.');
+        localStorageStores.splashLastShownMs.set(Date.now());
+      }
+
+      showContent();
+    };
+
+    const timeoutId = setTimeout(endVideoAndLogError, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [isSplashOn, showContent]);
+
+  const onVideoEnded = () => {
+    showContent();
     localStorageStores.splashLastShownMs.set(Date.now());
   };
 
@@ -84,15 +85,15 @@ function SplashHandler({
             }}
           >
             <Video
-              onEnded={onEnded}
-              onStarted={() => setIsContentVisible(true)}
+              onEnded={onVideoEnded}
+              onStarted={() => setIsContentRendered(true)}
               source='videos/splash.mp4'
               type='video/mp4'
             />
           </div>
         )}
       </Transition>
-      {isContentVisible && children}
+      {isContentRendered && children}
     </div>
   );
 }

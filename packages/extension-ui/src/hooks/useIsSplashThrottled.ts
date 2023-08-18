@@ -15,8 +15,6 @@ const useIsSplashThrottled = () => {
       .catch(() => setIsSplashThrottled(false));
   }, []);
 
-  console.log({ isSplashThrottled });
-
   return isSplashThrottled;
 };
 
