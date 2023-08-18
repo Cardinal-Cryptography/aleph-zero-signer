@@ -161,9 +161,15 @@ The path will be added to the mnemonic phrase of the parent account.
 
 Feel free to use those icon when integrating your app with Signer
 
-![Signer icon 16px](docs/A0_Signer_icon_16.png)
-![Signer icon 20px](docs/A0_Signer_icon_20.png)
-![Signer icon 32px](docs/A0_Signer_icon_32.png)
-![Signer icon 48px](docs/A0_Signer_icon_48.png)
-![Signer icon 64px](docs/A0_Signer_icon_64.png)
-![Signer icon 128px](docs/A0_Signer_icon_128.png)
+PNG:
+
+![Signer icon 16px png](packages/extension/public/images/icon-16.png)
+![Signer icon 20px png](packages/extension/public/images/icon-20.png)
+![Signer icon 32px png](packages/extension/public/images/icon-32.png)
+![Signer icon 48px png](packages/extension/public/images/icon-48.png)
+![Signer icon 64px png](packages/extension/public/images/icon-64.png)
+![Signer icon 128px png](packages/extension/public/images/icon-128.png)
+
+SVG:
+
+![Signer icon 16px svg](docs/A0_Signer_icon_16.svg)
