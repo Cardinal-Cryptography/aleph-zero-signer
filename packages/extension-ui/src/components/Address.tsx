@@ -14,6 +14,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import copyIcon from '../assets/copy.svg';
 import details from '../assets/details.svg';
 import exportIcon from '../assets/export.svg';
 import subAccountIcon from '../assets/subAccount.svg';
@@ -242,6 +243,7 @@ function Address({
                 onClick={onCopyClickStopPropagation}
               >
                 {ellipsisName(formatted || address) || t('<unknown>')}
+                <StyledCopyIconSvg src={copyIcon} />
               </div>
             </CopyToClipboard>
           </div>
@@ -504,9 +506,13 @@ export default styled(Address)(
   }
 
   .fullAddress {
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 162px;
+    max-width: 178px;
     color: ${theme.subTextColor};
     font-size: 14px;
     line-height: 145%;
@@ -563,3 +569,14 @@ export default styled(Address)(
   }
 `
 );
+
+const StyledCopyIconSvg = styled(Svg)`
+  width: 12px;
+  height: 12px;
+
+  background: ${({ theme }) => theme.headerIconBackground};
+
+  .fullAddress:hover > & {
+    background: ${({ theme }) => theme.headerIconBackgroundHover};
+  }
+`;
