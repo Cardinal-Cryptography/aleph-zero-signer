@@ -3,6 +3,7 @@
 
 import type { ThemeProps } from '../types';
 
+import { FocusEvent } from 'react';
 import styled, { css } from 'styled-components';
 
 interface Props extends ThemeProps {
@@ -48,5 +49,15 @@ const TextInput = css(
 `
 );
 
-export const TextArea = styled.textarea<Props>`${TextInput}`;
-export const Input = styled.input<Props>`${TextInput}`;
+const scrollIntoViewCenter = (event: FocusEvent<HTMLElement>) => event.target.scrollIntoView({
+  behavior: 'smooth',
+  block: 'center',
+});
+
+export const TextArea = styled.textarea.attrs({
+  onFocus: scrollIntoViewCenter
+})<Props>`${TextInput}`;
+
+export const Input = styled.input.attrs({
+  onFocus: scrollIntoViewCenter
+})<Props>`${TextInput}`;
