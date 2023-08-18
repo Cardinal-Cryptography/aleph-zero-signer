@@ -86,8 +86,13 @@ function Export({
       />
       <div className={className}>
         <WarningBox
-          description={t<string>('If someone has your JSON file they will have full control of your accounts.')}
-          title={t<string>('Do not share your JSON file!')}
+          description={
+            <WarningList>
+              <li>{t<string>('Do not share your JSON file - whoever gets hold of it, gains full control of your accounts.')}</li>
+              <li>{t<string>('Store your password safely - you are going to need it to import the account.')}</li>
+            </WarningList>
+          }
+          title={t<string>('Keep in mind!')}
         />
         <Address address={address} />
         <form
@@ -169,3 +174,7 @@ export default withRouter(styled(Export)`
     margin-top: 4px;
   }
 `);
+
+const WarningList = styled.ul`
+  padding: 0;
+`;
