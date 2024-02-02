@@ -20,7 +20,7 @@
     "packages/*"
   ],
   "scripts": {
-    "adapt-build-to-ff": "ts-node --esm scripts/adaptBuildToFf.mts",
+    "adapt-build-to-ff": "tsx scripts/adaptBuildToFf.mts",
     "build": "yarn download-chains-metadata && polkadot-dev-build-ts && yarn build:zip",
     "build-storybook": "storybook build",
     "build:extra": "yarn build:i18n && yarn build:ui",
@@ -33,10 +33,10 @@
     "build:zip:dst:firefox": "rm -rf ./extension-firefox.zip && cd packages/extension/build && zip -r -FS ../../../extension-firefox.zip .",
     "build:zip:src": "rm -rf ./source-code.zip && zip -r -x '*build/*' -x '*node_modules*' -FS ./source-code.zip packages .editorconfig .eslintignore .eslintrc.js babel.config.cjs CHANGELOG.md CONTRIBUTING.md i18next-scanner.config.js jest.config.cjs LICENSE package.json README.md tsconfig.json tsconfig.base.json tsconfig.build.json rollup.config.mjs yarn.lock .yarnrc.yml .yarn/patches .yarn/plugins .yarn/releases scripts",
     "clean": "polkadot-dev-clean-build",
-    "download-chains-metadata": "ts-node --esm scripts/downloadMetadata.mts",
+    "download-chains-metadata": "tsx scripts/downloadMetadata.mts",
     "lint": "polkadot-dev-run-lint",
     "postinstall": "polkadot-dev-yarn-only",
-    "set-signer-version": "ts-node --esm scripts/setSignerVersion.mts",
+    "set-signer-version": "tsx scripts/setSignerVersion.mts",
     "start": "yarn watch",
     "storybook": "storybook dev -p 6006",
     "test": "EXTENSION_PREFIX='test' polkadot-dev-run-test --detectOpenHandles",
@@ -64,7 +64,7 @@
     "i18next-scanner": "^4.1.0",
     "sinon-chrome": "^3.0.1",
     "storybook": "^7.0.12",
-    "ts-node": "^10.9.1"
+    "tsx": "^4.7.0"
   },
   "resolutions": {
     "@polkadot/api": "^10.5.1",
