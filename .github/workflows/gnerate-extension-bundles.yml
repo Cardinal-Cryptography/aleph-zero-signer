@@ -11,10 +11,10 @@ jobs:
     name: Generate extension bundles
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Use Node.js version from .nvmrc
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: yarn
@@ -28,7 +28,7 @@ jobs:
       - run: yarn polkadot-dev-build-ts
       - run: yarn build:zip
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: signer-extension-bundles-v${{ github.ref_name }}
           retention-days: 30
